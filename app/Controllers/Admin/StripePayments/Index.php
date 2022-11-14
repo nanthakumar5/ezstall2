@@ -19,7 +19,9 @@ class Index extends BaseController
 	
 	public function index()
 	{
-		return view('admin/stripepayments/index');
+		$data['balance'] = $this->stripe->retrieveBalance();
+		$data['currencysymbol'] = $this->config->currencysymbol;
+		return view('admin/stripepayments/index', $data);
 	}
 
 	public function DTstripepayments()
@@ -58,27 +60,29 @@ class Index extends BaseController
 			$amount 			= $requestdata['amount'];
 			$userdetail 		= getUserDetails($userid);
 			$stripeaccountId 	= $userdetail['stripe_account_id'];
+			
 			if($stripeaccountId!=''){            	
-				$transfer = $this->stripe->createTransfer($stripeaccountId, $amount); //echo $transfer;die;
+				$result = $this->stripe->createTransfer($stripeaccountId, $amount);
+				if($result['status']=='1'){ 
+					$requestdata['userid'] = getAdminUserID();
+					$requestdata['status'] = '1';
+					
+					$this->stripepayments->action($requestdata);
+					
+					$this->session->setFlashdata('success', 'Paid successfully.');
+					return redirect()->to(getAdminUrl().'/stripepayments'); 
+				}else{
+					$this->session->setFlashdata('danger', $result['message']);
+					return redirect()->to(getAdminUrl().'/stripepayments'); 
+				}
 			}else{
 				$this->session->setFlashdata('danger', 'Please Connect your Email ID to Stripe account.');
 				return redirect()->to(getAdminUrl().'/stripepayments/action'); 
 			}
-			
-			if($transfer){
-				$requestdata['userid'] = getAdminUserID();
-				$requestdata['status'] = '1';
-				
-				$this->stripepayments->action($requestdata);
-				
-				$this->session->setFlashdata('success', 'Paid successfully.');
-				return redirect()->to(getAdminUrl().'/stripepayments'); 
-			}else{
-				$this->session->setFlashdata('danger', 'Please add Connect Stripe Connected Account ID or updated your email id.');
-				return redirect()->to(getAdminUrl().'/stripepayments'); 
-			}
         }
-
-		return view('admin/stripepayments/action');
+		
+		$data['balance'] = $this->stripe->retrieveBalance();
+		$data['currencysymbol'] = $this->config->currencysymbol;
+		return view('admin/stripepayments/action', $data);
 	}		
 }

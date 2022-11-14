@@ -9,7 +9,7 @@ use App\Models\Booking;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class Index extends BaseController
+class EventReport extends BaseController
 {
 	public function __construct()
 	{  
@@ -17,39 +17,7 @@ class Index extends BaseController
 		$this->booking 	= new Booking();
     }
 	
-	public function eventreport()
-    {	
-		if ($this->request->getMethod()=='post')
-        {
-			$requestdata 		= $this->request->getPost();
-			$condition 			= ($requestdata['eventid']=='all') ? ['status' => ['1'], 'type' => '1'] : ['id' => $requestdata['eventid'], ['status' => ['1'], 'type' => '1']]; 
-			$bookingcondition 	= ($requestdata['eventid']=='all') ? ['status' => ['1'], 'type' => '1'] : ['eventid' => $requestdata['eventid'], ['status' => ['1'], 'type' => '1']];
-		
-        	$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
-			$data['events']		        = $this->event->getEvent('all', ['event', 'barn', 'stall', 'bookedstall'], $condition);	 
-		    $data['currencysymbol']  	= $this->config->currencysymbol;
-			$bookingtotalamount	= $this->booking->getBooking('all', ['booking'], $bookingcondition); 
-			
-			$totalamount = 0;
-	    	foreach($bookingtotalamount as $bkam){
-				$totalamount +=  $bkam['amount'];
-	    	}
-        	$data['totalamount']    = $totalamount;
-        	
-    		$html =  view('site/common/pdf/invoice', $data);
-    		
-	    	$mpdf = new \Mpdf\Mpdf();
-    		$mpdf->WriteHTML($html);
-    		$this->response->setHeader('Content-Type', 'application/pdf');
-    		$mpdf->Output('Invoice.pdf','D');
-			die;
-		}
-		
-		$data['event'] = $this->event->getEvent('all', ['event'], ['status' => ['1'], 'type' => '1']);
-		return view('admin/report/eventreport', $data);
-    }
-    
-	public function eventreportexcel()
+	public function index()
     {	
 		if ($this->request->getMethod()=='post')
         {

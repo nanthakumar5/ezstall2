@@ -5,17 +5,17 @@ use App\Models\BaseModel;
 
 class Report extends BaseModel
 {
-	public function getReport($type, $querydata=[], $requestdata=[], $extras=[])
+	public function getFinancialReport($type, $querydata=[], $requestdata=[], $extras=[])
     {  
     	$select 		= [];
 		
 		if(in_array('booking', $querydata)){
-			$data		= 	['bk.*'];							
+			$data		= 	['SUM(bk.amount) as totalamount'];							
 			$select[] 	= 	implode(',', $data);
 		}
 		
 		if(in_array('event', $querydata)){
-			$data		= 	['e.name eventname, e.zipcode'];							
+			$data		= 	['e.id AS eventid, e.name AS eventname, e.start_date AS startdate, e.end_date AS enddate'];							
 			$select[] 	= 	implode(',', $data);
 		}
 
@@ -26,15 +26,11 @@ class Report extends BaseModel
 		if(isset($extras['select'])) 					$query->select($extras['select']);
 		else											$query->select(implode(',', $select));
 		
-		if(isset($requestdata['id'])) 					$query->where('bk.id', $requestdata['id']);
-		if(isset($requestdata['status'])) 				$query->where('bk.status', $requestdata['status']);
-
-		if(isset($requestdata['financialcheckin'])) 	$query->where('bk.created_at >=', $requestdata['financialcheckin']);	
-		if(isset($requestdata['financialcheckout'])) 	$query->where('bk.created_at <=', $requestdata['financialcheckout']);
-
-		
-		if(isset($extras['groupby'])) 	$query->groupBy($extras['groupby']);
-		if(isset($extras['orderby'])) 	$query->orderBy($extras['orderby']);
+		if(isset($requestdata['eventid'])) 										$query->where('bk.event_id', $requestdata['eventid']);		
+		if(isset($requestdata['type'])) 										$query->where('e.type', $requestdata['type']);		
+		if(isset($requestdata['checkin']) && isset($requestdata['checkout'])) 	$query->groupStart()->where("bk.check_in BETWEEN '".$requestdata['checkin']."' AND '".$requestdata['checkout']."'")->orWhere("bk.check_out BETWEEN '".$requestdata['checkin']."' AND '".$requestdata['checkout']."'")->groupEnd();
+			
+		$query->groupBy('bk.event_id');
 
 		if($type=='count'){
 			$result = $query->countAllResults(); 
@@ -47,16 +43,16 @@ class Report extends BaseModel
 				$result = $query->getRowArray();
 			}
 			
-			$result = $this->getReportEventdetails($type, $querydata, ['result' => $result, 'type' => '1','barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall']);
-			$result = $this->getReportEventdetails($type, $querydata, ['result' => $result, 'type' => '2', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall']);
-
-			$result = $this->getReportProducts($type, $querydata, ['result' => $result, 'type' => '1', 'productname' => 'feed']);
-			$result = $this->getReportProducts($type, $querydata, ['result' => $result, 'type' => '2', 'productname' => 'shaving']);
+			$result = $this->getFinancialReportEventdetails($type, $querydata, ['result' => $result, 'type' => '1','barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall']);
+			$result = $this->getFinancialReportEventdetails($type, $querydata, ['result' => $result, 'type' => '2', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall']);
+			$result = $this->getFinancialReportProducts($type, $querydata, ['result' => $result, 'type' => '1', 'productname' => 'feed', 'bookedproduct' => 'feedbooked']);
+			$result = $this->getFinancialReportProducts($type, $querydata, ['result' => $result, 'type' => '2', 'productname' => 'shaving', 'bookedproduct' => 'shavingbooked']);
 		}
+		
 		return $result;
     }
 
-    public function getReportEventdetails($type, $querydata, $extras)
+    public function getFinancialReportEventdetails($type, $querydata, $extras)
     { 
 		$result = $extras['result'];
 		$barnname = $extras['barnname'];
@@ -72,18 +68,18 @@ class Report extends BaseModel
 
 						if(in_array($stallname, $querydata) && count($barndatas) > 0){ 
 							foreach($barndatas as $barnkey => $barndata){
-								$stalldatas = $this->db->table('stall s')->where(['s.status' => '1', 's.event_id' => $barndata['event_id'], 's.type' => $extras['type']])->get()->getResultArray();
+								$stalldatas = $this->db->table('stall s')->where(['s.status' => '1', 's.event_id' => $barndata['event_id'], 's.barn_id' => $barndata['id'], 's.type' => $extras['type']])->get()->getResultArray();
 								$result[$key][$barnname][$barnkey][$stallname] = $stalldatas;
 
 								if(in_array($bookedstall, $querydata)){
 									foreach($stalldatas as $stallkey => $stalldata){
 										$bookedstalls = 	$this->db->table('booking_details bd')
-																->join('booking bks', 'bd.booking_id = bks.id', 'left')
-																->join('payment_method pm','bks.paymentmethod_id = pm.id')
-																->select('(pm.name) paymentmethod, (pm.id) paymentid, bks.paid_unpaid As paidunpaid')
-																->where(['bd.stall_id' => $stalldata['id'], 'bd.barn_id' => $barndata['id']])
-																->get()
-																->getResultArray();
+															->join('booking bks', 'bd.booking_id = bks.id', 'left')
+															->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.total')
+															->where(['bd.barn_id' => $stalldata['barn_id'], 'bd.stall_id' => $stalldata['id']])
+															->get()
+															->getResultArray();
+															
 										$result[$key][$barnname][$barnkey][$stallname][$stallkey][$bookedstall] = $bookedstalls;
 									}
 								}
@@ -95,62 +91,88 @@ class Report extends BaseModel
     	}else if($type=='row'){
     		if($result){
 				if(in_array($bookingname, $querydata)){
-						$barndatas = $this->db->table('barn b')->where(['b.status' => '1', 'b.event_id' => $eventdata['eventid'], 'b.type' => $extras['type']])->get()->getResultArray();						
-						$result[$key][$barnname] = $barndatas;
+					$barndatas = $this->db->table('barn b')->where(['b.status' => '1', 'b.event_id' => $eventdata['eventid'], 'b.type' => $extras['type']])->get()->getResultArray();						
+					$result[$key][$barnname] = $barndatas;
 
-						if(in_array($stallname, $querydata) && count($barndatas) > 0){ 
-							foreach($barndatas as $barnkey => $barndata){
-								$stalldatas = $this->db->table('stall s')->where(['s.status' => '1', 's.event_id' => $barndata['event_id'], 's.type' => $extras['type']])->get()->getResultArray();
-								$result[$key][$barnname][$barnkey][$stallname] = $stalldatas;
+					if(in_array($stallname, $querydata) && count($barndatas) > 0){ 
+						foreach($barndatas as $barnkey => $barndata){
+							$stalldatas = $this->db->table('stall s')->where(['s.status' => '1', 's.event_id' => $barndata['event_id'], 's.barn_id' => $barndata['id'], 's.type' => $extras['type']])->get()->getResultArray();
+							$result[$key][$barnname][$barnkey][$stallname] = $stalldatas;
 
-								if(in_array($bookedstall, $querydata)){
-									foreach($stalldatas as $stallkey => $stalldata){
-										$bookedstalls = 	$this->db->table('booking_details bd')
-																->join('booking bks', 'bd.booking_id = bks.id', 'left')
-																->join('payment_method pm','bks.paymentmethod_id = pm.id' )
-																->select('(pm.name) paymentmethod, (pm.id) paymentid, bks.paid_unpaid As paidunpaid')
-																->where(['bd.stall_id' => $stalldata['id'], 'bd.barn_id' => $barndata['id']])
-																->get()
-																->getResultArray();
-										$result[$key][$barnname][$barnkey][$stallname][$stallkey][$bookedstall] = $bookedstalls;
-									}
+							if(in_array($bookedstall, $querydata)){
+								foreach($stalldatas as $stallkey => $stalldata){
+									$bookedstalls = 	$this->db->table('booking_details bd')
+														->join('booking bks', 'bd.booking_id = bks.id', 'left')
+														->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.total')
+														->where(['bd.barn_id' => $stalldata['barn_id'], 'bd.stall_id' => $stalldata['id']])
+														->get()
+														->getResultArray();
+														
+									$result[$key][$barnname][$barnkey][$stallname][$stallkey][$bookedstall] = $bookedstalls;
 								}
 							}
 						}
 					}
 				}
 			}
+		}
 		
 		return $result;
     }
 
-	public function getReportProducts($type, $querydata, $extras)
+	public function getFinancialReportProducts($type, $querydata, $extras)
     {	
 		$result 		= $extras['result'];
 		$productname 	= $extras['productname'];
+		$bookedproduct 	= $extras['bookedproduct'];
+		
     	if($type=='all'){
 			if(in_array($productname, $querydata) && count($result) > 0){
 				foreach ($result as $key => $eventdata) {
-					$productsdata = 	$this->db->table('products pds')
-										->join('booking_details pbd', 'pds.id = pbd.product_id', 'left')
-										->select('pbd.price As productprice, pbd.quantity As productquantity, SUM(pbd.total) As total, pds.quantity As totalquantity')
-										->where(['pds.status' => '1', 'pds.event_id' => $eventdata['eventid'], 'pds.type' => $extras['type']])
-										->groupBy('pds.id')
+					$productsdata = 	$this->db->table('products p')
+										->select('p.id, p.name as productname, p.quantity as productquantity')
+										->where(['p.status' => '1', 'p.event_id' => $eventdata['eventid'], 'p.type' => $extras['type']])
 										->get()
 										->getResultArray();
+										
 					$result[$key][$productname] = $productsdata;
-
+					
+					if(in_array($bookedproduct, $querydata)){
+						foreach($productsdata as $productkey => $productdata){
+							$bookedproducts = 	$this->db->table('booking_details bd')
+												->join('booking bks', 'bd.booking_id = bks.id', 'left')
+												->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.quantity, bd.total')
+												->where(['bd.product_id' => $productdata['id']])
+												->get()
+												->getResultArray();
+												
+							$result[$key][$productname][$productkey][$bookedproduct] = $bookedproducts;
+						}
+					}
 				}
 			}
     	}else if($type=='row'){
 			if(in_array($productname, $querydata) && $result){
-				$productsdata = 	$this->db->table('products pds')
-										->join('booking_details pbd', 'pds.id = pbd.product_id', 'left')
-										->select('pbd.price As productprice, pbd.quantity As productquantity, pbd.total As total, p.quantity As totalquantity')
-										->where(['p.status' => '1', 'p.event_id' => $eventdata['eventid'], 'p.type' => $extras['type']])
-										->get()
-										->getResultArray();
+				$productsdata = 	$this->db->table('products p')
+									->select('p.name as productname, p.quantity as productquantity')
+									->where(['p.status' => '1', 'p.event_id' => $eventdata['eventid'], 'p.type' => $extras['type']])
+									->get()
+									->getResultArray();
+									
 				$result[$productname] = $productsdata;
+				
+				if(in_array($bookedproduct, $querydata)){
+					foreach($productsdata as $productkey => $productdata){
+						$bookedproducts = 	$this->db->table('booking_details bd')
+											->join('booking bks', 'bd.booking_id = bks.id', 'left')
+											->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.quantity, bd.total')
+											->where(['bd.product_id' => $productdata['id']])
+											->get()
+											->getResultArray();
+											
+						$result[$key][$productname][$productkey][$bookedproduct] = $bookedproducts;
+					}
+				}
 			}
 		}
 		

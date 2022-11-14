@@ -29,6 +29,7 @@
 							<th>Name</th>
 							<th>Email</th>	
 							<th>Type</th>
+							<th>Created At</th>
 							<th>Action</th>	
 						</thead>
 					</table>
@@ -41,16 +42,18 @@
 		$(function(){
 			var options = {	
 				url 		: 	'<?php echo getAdminUrl()."/users/DTusers"; ?>',	
-				data		:	{ 'page' : 'adminusers' },				
+				data		:	{ 'page' : 'adminusers' },			
 				columns 	: 	[
     				                { 'data' : 'name' },
                     				{ 'data' : 'email' },
                     				{ 'data' : 'type' },									
+                    				{ 'data' : 'created_at' },									
                     				{ 'data' : 'action' }								
                 				],
-				columndefs	:	[{"sortable": false, "targets": [2,3]}]											
-			};				
-				ajaxdatatables('.datatables', options);		
+				columndefs	:	[{"sortable": false, "targets": [2,4]}]											
+			};	
+			
+			ajaxdatatables('.datatables', options);		
 		});
 		
     	$(document).on('click','.delete',function(){

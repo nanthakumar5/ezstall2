@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Admin\FinancialReport;
+namespace App\Controllers\Admin\Report;
 
 use App\Controllers\BaseController;
 
@@ -10,7 +10,7 @@ use App\Models\Report;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class Index extends BaseController
+class FinancialReport extends BaseController
 {
 	public function __construct()
 	{  
@@ -19,7 +19,39 @@ class Index extends BaseController
 		$this->report 	= new Report();
     }
 	
-	public function financialreport()
+	public function index()
+    {	
+		if ($this->request->getMethod()=='post')
+        {
+			$requestdata 	= $this->request->getPost(); 			
+			$checkin  		= formatdate($requestdata['checkin']);
+			$checkout  		= formatdate($requestdata['checkout']);
+			$type  			= $requestdata['type'];
+
+			$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
+			$data['currencysymbol']  	= $this->config->currencysymbol;
+        	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['checkin' => $checkin, 'checkout' => $checkout, 'type' => $type]);
+        	$data['type']		    	= $type;
+		    
+			if(empty($data['events'])){
+				$this->session->setFlashdata('danger', 'No Record Found.');
+				return redirect()->to(getAdminUrl().'/financialreport'); 
+			}
+			
+			$html =  view('site/common/pdf/financialreport', $data);
+    		
+	    	$mpdf = new \Mpdf\Mpdf();
+    		$mpdf->WriteHTML($html);
+    		$this->response->setHeader('Content-Type', 'application/pdf');
+    		$mpdf->Output('Invoice.pdf','D');
+			die;
+		}
+		
+		$data['frtype']   = $this->config->frtype;
+		return view('admin/report/financialreport', $data);
+	}
+	
+	public function financialreportexcel()
     {	
 		if ($this->request->getMethod()=='post')
         {

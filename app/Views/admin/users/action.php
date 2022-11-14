@@ -70,13 +70,6 @@
 									<?php ?>
 								</div>
 							</div>
-							<div class="col-md-12 stripaccountid">
-								<div class="form-group">
-									<label>Stripe Email ID</label>
-									 <input type ="email" name="stripe_email" id="stripe_email" class="form-control" value="<?php echo $stripe_email;?>">
-							 		<input type ="hidden" name="stripe_account_id" id="stripe_account_id" class="form-control" value="<?php echo $stripe_account_id;?>">
-								</div>
-							</div>
 							<div class="col-md-12 parentid">
 								<div class="form-group">
 									<label>Parent ID</label>
@@ -109,7 +102,6 @@
 
 		$(function(){ 
 			parentid(type);
-			stripaccountid(type);
 			validation(
 				'#form',
 				{
@@ -154,7 +146,6 @@
 
 		$('.usertype').change(function(){ 
 			parentid($(this).val());
-			stripaccountid($(this).val());
 		});	
 
 		function parentid(val){ 
@@ -164,14 +155,6 @@
                 $('.parentid').addClass('displaynone');
             }           
         }
-
-		function stripaccountid(val){ 
-            if(val=='2' || val=='3'){ 
-                $('.stripaccountid').removeClass('displaynone');
-            }else{
-                $('.stripaccountid').addClass('displaynone');
-            }           
-        }	
 	</script>
 <?php $this->endSection(); ?>
 

@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Booking;
 use App\Models\Stripe;
 use App\Models\Products;
+use App\Models\Report;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -19,6 +20,7 @@ class Index extends BaseController
 		$this->booking 	= new Booking(); 
 		$this->stripe 	= new Stripe();
 		$this->product 	= new Products();
+		$this->report 	= new Report();
 	}
     
     public function index()
@@ -263,5 +265,26 @@ class Index extends BaseController
 		$mpdf->WriteHTML($html);
 		$this->response->setHeader('Content-Type', 'application/pdf');
 		$mpdf->Output('Eventreport.pdf','D');
+    }
+	
+   	public function financialreport($id)
+   	{
+		$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
+		$data['currencysymbol']  	= $this->config->currencysymbol;
+		$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['eventid' => $id, 'type' => '1']);
+		$data['type']		    	= '1';
+		
+		if(empty($data['events'])){
+			$this->session->setFlashdata('danger', 'Booking not found.');
+			return redirect()->to(base_url().'/myaccount/events'); 
+		}
+		
+		$html =  view('site/common/pdf/financialreport', $data);
+		
+		$mpdf = new \Mpdf\Mpdf();
+		$mpdf->WriteHTML($html);
+		$this->response->setHeader('Content-Type', 'application/pdf');
+		$mpdf->Output('Invoice.pdf','D');
+		die;
     }
 }

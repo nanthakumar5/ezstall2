@@ -41,6 +41,11 @@ $currentdate 					= date("Y-m-d");
 							</a>
 						<?php } ?>
 				    <?php } ?>
+					<p class="mt-3"></p>
+				    <a href="<?php echo base_url().'/myaccount/facility/financialreport/'.$data['id']; ?>" 
+						class="dash-export-event fs-7 mx-2">
+						Financial Report <i class="far fa-eye i-white-icon"></i>
+					</a>
 				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" 
 						class="dash-export-event fs-7 mx-2">
 						Inventories <i class="far fa-eye i-white-icon"></i>

@@ -13,7 +13,6 @@ class Index extends BaseController
 	{  
 		$this->users  = new Users();
 		$this->stripe  = new Stripe();
-
     }
 	
 	public function index()
@@ -55,6 +54,7 @@ class Index extends BaseController
 										'name' 				=> 	$result['name'],
 										'email'             =>  $result['email'],
 										'type'              =>  $this->config->usertype[$result['type']],
+										'created_at'        =>  date('m-d-Y H:i:s', strtotime($result['created_at'])),
 										'action'			=> 	'
 																	<div class="table-action">
 																		'.$action.'
@@ -87,20 +87,8 @@ class Index extends BaseController
 		}
 		
 		if ($this->request->getMethod()=='post')
-        { echo "fasd";die;
+        { 
 			$requestdata = $this->request->getPost();
-			$stripeemailId	= (isset($requestdata['stripe_email'])) ? $requestdata['stripe_email'] : '';
-
-			if($stripeemailId!=''){
-				$stripeconnect = $this->stripe->stripeconnect($requestdata);
-				if($stripeconnect!='0'){
-				    $requestdata['stripe_account_id'] = $stripeconnect;
-				}else{
-				    $this->session->setFlashdata('danger', 'Please add stripe connected account id.');
-				    return redirect()->to(getAdminUrl().'/users'); 
-				}
-			}
-		
 			$requestdata['userid'] = getAdminUserID();
             $result = $this->users->action($requestdata);
   

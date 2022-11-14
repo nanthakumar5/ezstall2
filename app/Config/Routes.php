@@ -100,6 +100,7 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function($route
     $routes->get('events/inventories/(:num)', 'Site\Myaccount\Event\Index::inventories/$1'); 
     $routes->get('events/export/(:num)', 'Site\Myaccount\Event\Index::export/$1');
     $routes->get('events/eventreport/(:num)', 'Site\Myaccount\Event\Index::eventreport/$1');
+    $routes->get('events/financialreport/(:num)', 'Site\Myaccount\Event\Index::financialreport/$1');
 
     $routes->match(['get','post'], 'facility', 'Site\Myaccount\Facility\Index::index');
     $routes->match(['get','post'], 'facility/add', 'Site\Myaccount\Facility\Index::action'); 
@@ -107,6 +108,7 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function($route
     $routes->get('facility/view/(:num)', 'Site\Myaccount\Facility\Index::view/$1');
     $routes->get('facility/inventories/(:num)', 'Site\Myaccount\Facility\Index::inventories/$1');
     $routes->get('facility/export/(:num)', 'Site\Myaccount\Facility\Index::export/$1');
+    $routes->get('facility/financialreport/(:num)', 'Site\Myaccount\Facility\Index::financialreport/$1');
 
     $routes->match(['get','post'], 'stallmanager', 'Site\Myaccount\Stallmanager\Index::index');
     $routes->match(['get','post'], 'stallmanager/add', 'Site\Myaccount\Stallmanager\Index::action'); 
@@ -221,10 +223,10 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function($
     $routes->post('newsletter/DTnewsletter', 'Admin\Newsletter\Index::DTnewsletter');
 
     // Report
-    $routes->match(['get','post'],'eventreport', 'Admin\Report\Index::eventreport');
+    $routes->match(['get','post'],'eventreport', 'Admin\Report\EventReport::index');
     
     // Financial Report
-    $routes->match(['get','post'],'financialreport', 'Admin\FinancialReport\Index::financialreport');
+    $routes->match(['get','post'],'financialreport', 'Admin\Report\FinancialReport::index');
 
     // Email Template
     $routes->match(['get', 'post'], 'emailtemplate', 'Admin\EmailTemplate\Index::index');

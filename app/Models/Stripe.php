@@ -324,34 +324,36 @@ class Stripe extends BaseModel
 
     function stripeconnect($requestData)
     {
-		$stripe_account_id 	= isset($result['stripe_account_id']) ? $result['stripe_account_id'] : '';
-		$stripeemailId		= $requestData['stripe_email'];
-
-		if($stripe_account_id == ''){
-			$connectedaccount = $this->createConnectedAccounts($stripeemailId);
-			return $accountid = isset($connectedaccount['id']) ? $connectedaccount['id'] : 0;			
+		$stripeemailid		= $requestData['stripe_email'];
+		$stripeaccountid 	= $requestData['stripe_account_id'];
+		
+		if($stripeaccountid == ''){
+			$connectedaccount = $this->createAccount($stripeemailid);
+			return $connectedaccount ? $connectedaccount['id'] : false;			
 		}else{ 
-			$retrieveaccount = $this->retriveAccount($accountid);
+			$retrieveaccount = $this->retrieveAccount($stripeaccountid);
 			
 			if(!$retrieveaccount){
-				$connectedaccount = $this->createConnectedAccounts($stripeemailId);
-				return $accountid = $connectedaccount['id'];			
+				$connectedaccount = $this->createAccount($stripeemailid);
+				return $connectedaccount ? $connectedaccount['id'] : false;
+			}else{
+				return $retrieveaccount ? $retrieveaccount['id'] : false;
 			}
 		}
     }
 
-	function createConnectedAccounts($stripeEmail)
+	function createAccount($stripeemail)
 	{
 		try{ 
 
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']); 
+
 			$data = $stripe->accounts->create([
-				'type' => 'standard',
-				'country' => 'US',
-				'email' => $stripeEmail,
-				
+				'type' 	=> 'standard',
+				'email' => $stripeemail
 			]);
+			
 			return $data;	
 		}catch(Exception $e){ 
 			return false;
@@ -361,23 +363,42 @@ class Stripe extends BaseModel
     
 	}
 
-    function retriveAccount($accountId)
+    function retrieveAccount($accountid)
     {
-		try{
-			
+		try{			
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 
-			$data = $stripe->accounts->retrieve($accountId,[]);
+			$data = $stripe->accounts->retrieve($accountid, []);
 
 			return $data;
-
 		}catch(Exception $e){
 			return false;
 		}
     }
+	
+    function createAccountLink($accountid, $refreshurl, $returnurl)
+    {
+		try{			
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 
-    function createTransfer($accountId, $amount)
+			$data = $stripe->accountLinks->create([
+						'account' => $accountid,
+						'refresh_url' => $refreshurl,
+						'return_url' => $returnurl,
+						'type' => 'account_onboarding',
+					]);
+
+			return $data;
+		}catch(Exception $e){
+			return false;
+		}catch (\Stripe\Exception\InvalidRequestException $e) {
+		    return false;
+        }
+    }
+
+    function createTransfer($accountid, $amount)
     {
         try{
 
@@ -387,15 +408,28 @@ class Stripe extends BaseModel
 	            $data = $stripe->transfers->create([
 	  				'amount' 			=> $amount * 100,
 	  				'currency' 			=> $currency,
-	  				'destination' 		=> $accountId
+	  				'destination' 		=> $accountid
 				]);
 
-			return $data;
+			return ['status' => '1', 'message' => '', 'result' => $data];
+        }catch(Exception $e){
+            return ['status' => '0', 'message' => $e->getMessage(),  'result' => []];
+        }catch (\Stripe\Exception\InvalidRequestException $e) {
+            return ['status' => '0', 'message' => $e->getMessage(),  'result' => []];
+        }
+    }
+	
+    function retrieveBalance()
+    {
+        try{
 
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+	        $data = $stripe->balance->retrieve([]);
+
+			return array_sum(array_column($data['available'], 'amount'));
         }catch(Exception $e){
             return false;
-        }catch (\Stripe\Exception\InvalidRequestException $e) {
-		    return false;
         }
     }
 }

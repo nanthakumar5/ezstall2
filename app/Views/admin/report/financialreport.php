@@ -26,16 +26,22 @@
 				<form method="post" id="form">
 					<div class="col-md-12">
 						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Type</label>
+									<?php echo form_dropdown('type', $frtype, '1', ['class' => 'form-control']); ?>						
+								</div>
+							</div>
 							<div class="col-md-6">
 								<div class="form-group">
 									<label>From Date</label>
-									<input type="text" name="financialcheckin" autocomplete="off" class="form-control"  id="financialcheckin">	
+									<input type="text" name="checkin" autocomplete="off" class="form-control" id="checkin">	
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
 									<label>To Date</label>
-									<input type="text" name="financialcheckout" autocomplete="off" class="form-control"  id="financialcheckout">		
+									<input type="text" name="checkout" autocomplete="off" class="form-control" id="checkout">		
 								</div>
 							</div>
 							<div class="col-md-12 exportup" align="right">
@@ -51,23 +57,23 @@
 <?php $this->Section('js'); ?>
 <script>
 $(function(){
+	dateformat('#checkin, #checkout');
     validation(
-    	'#form',
-    	{
-    		financialcheckin 	     : {
-    			required	: 	true
-    		},
-    		financialcheckout  : {	
-    			required	: 	true
-    		}
-    	},
-    	{},
-    	{
-    		ignore : []
-    	}
-    );
+		'#form',
+		{
+			checkin 	     : {
+				required	: 	true
+			},
+			checkout  : {	
+				required	: 	true
+			}
+		},
+		{},
+		{
+			ignore : []
+		}
+	);
 });
-	dateformat('#financialcheckin, #financialcheckout');
 </script>
 
 <?php $this->endSection(); ?>

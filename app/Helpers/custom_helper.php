@@ -75,7 +75,7 @@ function checkEvent($data)
 	if($currentdate >= $strstartdate && $currentdate <= $strenddate){
 		$btn = "Book now";
 		$status = "1";
-		if(in_array($usertype, [2, 3])){
+		if(in_array($usertype, [2, 3, 4])){
 			if($userid == $data['user_id']){
 				$btn = "Book now";
 				$status = "1";
@@ -86,15 +86,14 @@ function checkEvent($data)
 				$btn = "Booking Not Available";
 				$status = "0";
 			}
-		}elseif($usertype==5 && $currentdate > $userplanend){
-			$btn = "Subscription Expired";
-			$status = "0";
-		}
+		}//elseif($usertype==5 && $currentdate > $userplanend){
+			//$btn = "Subscription Expired";
+			//$status = "0";
+		//}
 	}elseif($currentdate <= $strstartdate && $currentdate <= $strenddate){
 		$btn = "Upcoming";
 		$status = "1";
-	}
-	else{
+	}else{
 		$btn = "Closed";
 		$status = "0";
 	}

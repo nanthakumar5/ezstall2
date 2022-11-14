@@ -41,7 +41,13 @@
 							<div class="col-md-12">
 								<div class="form-group"> 
 									<label>Amount</label>								
-									<input type="number" name="amount" class="form-control" id="amount" placeholder="Enter Amount">
+									<input type="number" name="amount" min="1" class="form-control" id="amount" placeholder="Enter Amount">
+								</div>
+							</div>	
+							<div class="col-md-12">
+								<div class="form-group"> 
+									<label>Balance - </label>		
+									<?php echo $currencysymbol.(number_format(($balance/100), 2, '.', '')); ?>
 								</div>
 							</div>	
 							<div class="col-md-12">

@@ -16,7 +16,8 @@
 			</div>
 		</section>
 		<section class="content">
-			<div class="page-action">			
+			<div class="page-action">	
+				<b>(<?php echo 'Balance - '.$currencysymbol.(number_format(($balance/100), 2, '.', '')); ?>)</b>
 				<a href="<?php echo getAdminUrl(); ?>/stripepayments/action" class="btn btn-primary">Pay</a>
 			</div>
 			<div class="card">			

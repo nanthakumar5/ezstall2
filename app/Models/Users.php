@@ -40,7 +40,7 @@ class Users extends BaseModel
 		}
 		if(isset($requestdata['order']['0']['column']) && isset($requestdata['order']['0']['dir'])){
 			if(isset($requestdata['page']) && $requestdata['page']=='adminusers'){
-				$column = ['u.name', 'u.email', 'u.type'];
+				$column = ['u.name', 'u.email', 'u.created_at', 'u.type'];
 				$query->orderBy($column[$requestdata['order']['0']['column']], $requestdata['order']['0']['dir']);
 			}
 		}
@@ -55,6 +55,7 @@ class Users extends BaseModel
 						$query->like('u.name', $searchvalue);
 						$query->orLike('u.email', $searchvalue);
 						$query->orLike('u.type', $searchvalue);
+						$query->orLike('u.created_at', $searchvalue);
 					}
 				$query->groupEnd();
 			}			

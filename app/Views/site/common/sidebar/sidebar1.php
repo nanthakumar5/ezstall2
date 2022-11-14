@@ -76,14 +76,15 @@
 		</li>
 		<?php } ?>
 		<?php if($role=='2' || $role=='3'){ ?>
-		<li>
-			<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/transactions">
-				<i class="side-nav-i bi bi-arrow-left-right"></i>
-				<p>Transactions</p>
-			</a>
-		</li>
-	<?php }  ?>
-		<?php if($role=='2' || $role=='5'){ ?>
+			<li>
+				<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/transactions">
+					<i class="side-nav-i bi bi-arrow-left-right"></i>
+					<p>Transactions</p>
+				</a>
+			</li>
+		<?php }  ?>
+		<?php //if($role=='2' || $role=='5'){ ?>
+		<?php if($role=='2'){ ?>
 			<li>
 				<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/subscription">
 					<i class="side-nav-i bi bi-box"></i>

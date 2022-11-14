@@ -55,14 +55,19 @@ $currentdate 	= date("Y-m-d");
 							<?php }?>
 					    <?php }?>
 					 <?php }?>
-					 	<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" 
-							class="dash-export-event fs-7 mx-2">
-							Report <i class="fas fa-file-export i-white-icon"></i> 
-						</a>
-						<a href="<?php echo base_url().'/myaccount/events/inventories/'.$data['id']; ?>" 
-							class="dash-export-event fs-7 mx-2">
-							Inventories <i class="far fa-eye i-white-icon"></i>
-						</a>
+					<a href="<?php echo base_url().'/myaccount/events/inventories/'.$data['id']; ?>" 
+						class="dash-export-event fs-7 mx-2">
+						Inventories <i class="far fa-eye i-white-icon"></i>
+					</a>
+					<p class="mt-3"></p>
+					<a href="<?php echo base_url().'/myaccount/events/financialreport/'.$data['id']; ?>" 
+						class="dash-export-event fs-7 mx-2">
+						Financial Report <i class="fas fa-file-export i-white-icon"></i> 
+					</a>
+					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" 
+						class="dash-export-event fs-7 mx-2">
+						Report <i class="fas fa-file-export i-white-icon"></i> 
+					</a>
 					<?php if($usertype !='4'){ ?>
 						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" 
 							class="dash-export-event fs-7 mx-2">

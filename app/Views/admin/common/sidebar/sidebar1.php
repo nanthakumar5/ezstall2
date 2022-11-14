@@ -114,13 +114,13 @@
 				<p>Export Event</p>
 			</a>
 		</li>
+		<li class="nav-item">
+			<a href="<?php echo getAdminUrl().'/financialreport'; ?>" class="nav-link nav-hov">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Financial Report</p>
+			</a>
+		</li>
 	</ul>
-</li>
-<li class="nav-item">
-	<a href="<?php echo getAdminUrl().'/financialreport'; ?>" class="nav-link nav-hov">
-		<i class="nav-icon far fa-newspaper"></i>
-		<p>Financial Report</p>
-	</a>
 </li>
 <li class="nav-item">
 	<a href="<?php echo getAdminUrl().'/tax'; ?>" class="nav-link nav-hov">
