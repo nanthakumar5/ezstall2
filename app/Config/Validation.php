@@ -24,7 +24,7 @@ class Validation
         FormatRules::class,
         FileRules::class,
         CreditCardRules::class,  
-	    \App\Validation\Userrules::class, // here we have registered
+	    //\App\Validation\Userrules::class, // here we have registered
 
     ];
 
