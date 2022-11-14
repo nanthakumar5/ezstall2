@@ -35,8 +35,11 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 
+//Api
+$routes->post('api/login', 'Api\Login\Index::index');
+
 // Ajax
-$routes->post('ajax/fileupload', 'Common\Ajax::fileupload'); 
+$routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
 $routes->post('ajax/ajaxoccupied', 'Common\Ajax::ajaxoccupied');
 $routes->post('ajax/ajaxreserved', 'Common\Ajax::ajaxreserved');
 $routes->post('ajax/ajaxstripepayment', 'Common\Ajax::ajaxstripepayment');
@@ -49,32 +52,32 @@ $routes->post('ajaxsearchevents', 'Common\Ajax::ajaxsearchevents');
 $routes->post('ajaxsearchfacility', 'Common\Ajax::ajaxsearchfacility');
 
 // Cron
-$routes->get('cartremoval', 'Common\Cron::cartremoval');    
-$routes->get('bookingenddate', 'Common\Cron::bookingenddate');	
+$routes->get('cartremoval', 'Common\Cron::cartremoval');
+$routes->get('bookingenddate', 'Common\Cron::bookingenddate');
 
 // Validation
 $routes->post('validation/emailvalidation', 'Common\Validation::emailvalidation');
 
 // event updatereservation
-$routes->match(['get','post'], 'events/updatereservation/(:num)/(:num)', 'Site\Event\Index::updatereservation/$1');
-$routes->match(['get','post'], 'events/updatestall/action', 'Site\Event\Index::updatereservation');
+$routes->match(['get', 'post'], 'events/updatereservation/(:num)/(:num)', 'Site\Event\Index::updatereservation/$1');
+$routes->match(['get', 'post'], 'events/updatestall/action', 'Site\Event\Index::updatereservation');
 
 // facility updatereservation
-$routes->match(['get','post'], 'facility/updatereservation/(:num)/(:num)', 'Site\Facility\Index::updatereservation/$1');
-$routes->match(['get','post'], 'facility/updatestall/action', 'Site\Facility\Index::updatereservation');
+$routes->match(['get', 'post'], 'facility/updatereservation/(:num)/(:num)', 'Site\Facility\Index::updatereservation/$1');
+$routes->match(['get', 'post'], 'facility/updatestall/action', 'Site\Facility\Index::updatereservation');
 
 $routes->get('event/pdf/(:any)', 'Site\Event\Index::downloadeventflyer/$1');
 $routes->get('event/downloadstallmap/(:any)', 'Site\Event\Index::downloadstallmap/$1');
 $routes->get('facility/download/(:any)', 'Site\Facility\Index::download/$1');
-$routes->match(['get', 'post'], '/', 'Site\Home\Index::index');	
-$routes->match(['get','post'], 'login', 'Site\Login\Index::index', ['filter' => 'siteauthentication1']);
-$routes->match(['get','post'], 'register', 'Site\Register\Index::index', ['filter' => 'siteauthentication1']);
+$routes->match(['get', 'post'], '/', 'Site\Home\Index::index');
+$routes->match(['get', 'post'], 'login', 'Site\Login\Index::index', ['filter' => 'siteauthentication1']);
+$routes->match(['get', 'post'], 'register', 'Site\Register\Index::index', ['filter' => 'siteauthentication1']);
 $routes->get('verification/(:any)', 'Site\Register\Index::verification/$1');
-$routes->match(['get','post'], 'events', 'Site\Event\Index::lists');
-$routes->match(['get','post'], 'events/latlong', 'Site\Event\Index::latlong'); 
-$routes->match(['get','post'], 'events/detail/(:num)', 'Site\Event\Index::detail/$1');
-$routes->match(['get','post'], 'facility', 'Site\Facility\Index::lists');
-$routes->match(['get','post'], 'facility/detail/(:num)', 'Site\Facility\Index::detail/$1');
+$routes->match(['get', 'post'], 'events', 'Site\Event\Index::lists');
+$routes->match(['get', 'post'], 'events/latlong', 'Site\Event\Index::latlong');
+$routes->match(['get', 'post'], 'events/detail/(:num)', 'Site\Event\Index::detail/$1');
+$routes->match(['get', 'post'], 'facility', 'Site\Facility\Index::lists');
+$routes->match(['get', 'post'], 'facility/detail/(:num)', 'Site\Facility\Index::detail/$1');
 $routes->get('aboutus', 'Site\Aboutus\Index::index');
 $routes->get('aboutus/detail/(:num)', 'Site\Aboutus\Index::detail/$1');
 $routes->get('faq', 'Site\Faq\Index::index');
@@ -82,72 +85,71 @@ $routes->get('banner', 'Site\Banner\Index::index');
 $routes->get('contactus', 'Site\Contactus\Index::index');
 $routes->get('termsandconditions', 'Site\Termsandconditions\Index::index');
 $routes->get('privacypolicy', 'Site\Privacypolicy\Index::index');
-$routes->match(['get','post'], 'checkout', 'Site\Checkout\Index::index', ['filter' => 'siteauthentication2']);
+$routes->match(['get', 'post'], 'checkout', 'Site\Checkout\Index::index', ['filter' => 'siteauthentication2']);
 $routes->get('paymentsuccess', 'Site\Checkout\Index::success');
-$routes->match(['get','post'], 'cart', 'Site\Cart\Index::action');
-$routes->match(['get','post'], 'contactus', 'Site\Contactus\Index::index');
+$routes->match(['get', 'post'], 'cart', 'Site\Cart\Index::action');
+$routes->match(['get', 'post'], 'contactus', 'Site\Contactus\Index::index');
 
 $routes->get('logout', 'Site\Logout\Index::index');
 
-$routes->group('myaccount', ['filter' => 'siteauthentication2'], function($routes){
-	$routes->match(['get','post'], 'dashboard', 'Site\Myaccount\Dashboard\Index::index');
-    $routes->match(['get','post'], 'updatedata','Site\Myaccount\Dashboard\Index::updatedata');
-	
-    $routes->match(['get','post'], 'events', 'Site\Myaccount\Event\Index::index');
-    $routes->match(['get','post'], 'events/add', 'Site\Myaccount\Event\Index::action'); 
-    $routes->match(['get','post'], 'events/edit/(:num)', 'Site\Myaccount\Event\Index::action/$1');
-    $routes->get('events/view/(:num)', 'Site\Myaccount\Event\Index::view/$1'); 
-    $routes->get('events/inventories/(:num)', 'Site\Myaccount\Event\Index::inventories/$1'); 
+$routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($routes) {
+    $routes->match(['get', 'post'], 'dashboard', 'Site\Myaccount\Dashboard\Index::index');
+    $routes->match(['get', 'post'], 'updatedata', 'Site\Myaccount\Dashboard\Index::updatedata');
+
+    $routes->match(['get', 'post'], 'events', 'Site\Myaccount\Event\Index::index');
+    $routes->match(['get', 'post'], 'events/add', 'Site\Myaccount\Event\Index::action');
+    $routes->match(['get', 'post'], 'events/edit/(:num)', 'Site\Myaccount\Event\Index::action/$1');
+    $routes->get('events/view/(:num)', 'Site\Myaccount\Event\Index::view/$1');
+    $routes->get('events/inventories/(:num)', 'Site\Myaccount\Event\Index::inventories/$1');
     $routes->get('events/export/(:num)', 'Site\Myaccount\Event\Index::export/$1');
     $routes->get('events/eventreport/(:num)', 'Site\Myaccount\Event\Index::eventreport/$1');
     $routes->get('events/financialreport/(:num)', 'Site\Myaccount\Event\Index::financialreport/$1');
 
-    $routes->match(['get','post'], 'facility', 'Site\Myaccount\Facility\Index::index');
-    $routes->match(['get','post'], 'facility/add', 'Site\Myaccount\Facility\Index::action'); 
-    $routes->match(['get','post'], 'facility/edit/(:num)', 'Site\Myaccount\Facility\Index::action/$1');
+    $routes->match(['get', 'post'], 'facility', 'Site\Myaccount\Facility\Index::index');
+    $routes->match(['get', 'post'], 'facility/add', 'Site\Myaccount\Facility\Index::action');
+    $routes->match(['get', 'post'], 'facility/edit/(:num)', 'Site\Myaccount\Facility\Index::action/$1');
     $routes->get('facility/view/(:num)', 'Site\Myaccount\Facility\Index::view/$1');
     $routes->get('facility/inventories/(:num)', 'Site\Myaccount\Facility\Index::inventories/$1');
     $routes->get('facility/export/(:num)', 'Site\Myaccount\Facility\Index::export/$1');
     $routes->get('facility/financialreport/(:num)', 'Site\Myaccount\Facility\Index::financialreport/$1');
 
-    $routes->match(['get','post'], 'stallmanager', 'Site\Myaccount\Stallmanager\Index::index');
-    $routes->match(['get','post'], 'stallmanager/add', 'Site\Myaccount\Stallmanager\Index::action'); 
-    $routes->match(['get','post'], 'stallmanager/edit/(:num)', 'Site\Myaccount\Stallmanager\Index::action/$1');
-    $routes->match(['get','post'], 'subscription', 'Site\Myaccount\Subscription\Index::index');
-    $routes->match(['get','post'], 'account','Site\Myaccount\AccountInfo\Index::index');
+    $routes->match(['get', 'post'], 'stallmanager', 'Site\Myaccount\Stallmanager\Index::index');
+    $routes->match(['get', 'post'], 'stallmanager/add', 'Site\Myaccount\Stallmanager\Index::action');
+    $routes->match(['get', 'post'], 'stallmanager/edit/(:num)', 'Site\Myaccount\Stallmanager\Index::action/$1');
+    $routes->match(['get', 'post'], 'subscription', 'Site\Myaccount\Subscription\Index::index');
+    $routes->match(['get', 'post'], 'account', 'Site\Myaccount\AccountInfo\Index::index');
 
-    $routes->match(['get','post'], 'operators', 'Site\Myaccount\Operators\Index::index');
-    $routes->match(['get','post'], 'operators/add', 'Site\Myaccount\Operators\Index::action'); 
-    $routes->match(['get','post'], 'operators/edit/(:num)', 'Site\Myaccount\Operators\Index::action/$1');
+    $routes->match(['get', 'post'], 'operators', 'Site\Myaccount\Operators\Index::index');
+    $routes->match(['get', 'post'], 'operators/add', 'Site\Myaccount\Operators\Index::action');
+    $routes->match(['get', 'post'], 'operators/edit/(:num)', 'Site\Myaccount\Operators\Index::action/$1');
 
-    $routes->match(['get','post'], 'bookings','Site\Myaccount\Reservation\Index::index');
-    $routes->match(['get', 'post'], 'stripe/(:any)', 'Site\Myaccount\Reservation\Index::index/$1'); 
+    $routes->match(['get', 'post'], 'bookings', 'Site\Myaccount\Reservation\Index::index');
+    $routes->match(['get', 'post'], 'stripe/(:any)', 'Site\Myaccount\Reservation\Index::index/$1');
     $routes->get('bookings/view/(:num)', 'Site\Myaccount\Reservation\Index::view/$1');
     $routes->post('bookings/searchbookeduser', 'Site\Myaccount\Reservation\Index::bookeduser');
-    $routes->match(['get','post'], 'paidunpaid','Site\Myaccount\Reservation\Index::paidunpaid');
+    $routes->match(['get', 'post'], 'paidunpaid', 'Site\Myaccount\Reservation\Index::paidunpaid');
 
-    $routes->match(['get','post'], 'pastactivity','Site\Myaccount\PastActivity\Index::index');
+    $routes->match(['get', 'post'], 'pastactivity', 'Site\Myaccount\PastActivity\Index::index');
     $routes->get('pastactivity/view/(:num)', 'Site\Myaccount\PastActivity\Index::view/$1');
 
-    $routes->match(['get','post'], 'payments','Site\Myaccount\PaymentInfo\Index::index');
+    $routes->match(['get', 'post'], 'payments', 'Site\Myaccount\PaymentInfo\Index::index');
     $routes->get('payments/view/(:num)', 'Site\Myaccount\PaymentInfo\Index::view/$1');
 
-    $routes->match(['get','post'], 'transactions','Site\Myaccount\TransactionInfo\Index::index');
-
+    $routes->match(['get', 'post'], 'transactions', 'Site\Myaccount\TransactionInfo\Index::index');
 });
 
-$routes->match(['get', 'post'], '/administrator', 'Admin\Login\Index::index', ['filter' => 'adminauthentication1']);	
-$routes->group('administrator', ['filter' => 'adminauthentication2'], function($routes){    
-	$routes->get('logout', 'Admin\Logout\Index::index');
+$routes->match(['get', 'post'], '/administrator', 'Admin\Login\Index::index', ['filter' => 'adminauthentication1']);
+$routes->group('administrator', ['filter' => 'adminauthentication2'], function ($routes) {
+    $routes->get('logout', 'Admin\Logout\Index::index');
     $routes->match(['get', 'post'], 'profile', 'Admin\Profile\Index::index');
 
-	// Users
+    // Users
     $routes->match(['get', 'post'], 'users', 'Admin\Users\Index::index');
     $routes->match(['get', 'post'], 'users/action', 'Admin\Users\Index::action');
     $routes->get('users/action/(:num)', 'Admin\Users\Index::action/$1');
     $routes->post('users/DTusers', 'Admin\Users\Index::DTusers');
-	
-	// Event
+
+    // Event
     $routes->match(['get', 'post'], 'event', 'Admin\Event\Index::index');
     $routes->match(['get', 'post'], 'event/action', 'Admin\Event\Index::action');
     $routes->get('event/action/(:num)', 'Admin\Event\Index::action/$1');
@@ -157,7 +159,7 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function($
     // Facility
     $routes->match(['get', 'post'], 'facility', 'Admin\Facility\Index::index');
     $routes->match(['get', 'post'], 'facility/action', 'Admin\Facility\Index::action');
-    $routes->match(['get', 'post'],'facility/action/(:num)', 'Admin\Facility\Index::action/$1');
+    $routes->match(['get', 'post'], 'facility/action/(:num)', 'Admin\Facility\Index::action/$1');
     $routes->post('facility/DTfacility', 'Admin\Facility\Index::DTfacility');
     $routes->get('facility/view/(:num)', 'Admin\Facility\Index::view/$1');
 
@@ -182,13 +184,13 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function($
     $routes->get('aboutus/action/(:num)', 'Admin\Aboutus\Index::action/$1');
     $routes->post('aboutus/DTaboutus', 'Admin\Aboutus\Index::DTaboutus');
 
-     // Terms and Conditions
+    // Terms and Conditions
     $routes->match(['get', 'post'], 'termsandconditions', 'Admin\Termsandconditions\Index::index');
 
     // Privacy Policy
     $routes->match(['get', 'post'], 'privacypolicy', 'Admin\Privacypolicy\Index::index');
 
-     //Contactus
+    //Contactus
     $routes->match(['get', 'post'], 'contactus', 'Admin\Contactus\Index::index');
     $routes->match(['get', 'post'], 'contactus/DTcontactus', 'Admin\Contactus\Index::DTcontactus');
 
@@ -197,7 +199,7 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function($
     $routes->match(['get', 'post'], 'plan/action', 'Admin\Plan\Index::action');
     $routes->get('plan/action/(:num)', 'Admin\Plan\Index::action/$1');
     $routes->post('plan/DTplan', 'Admin\Plan\Index::DTplan');
-    
+
     //Payments
     $routes->get('payments', 'Admin\Payments\Index::index');
     $routes->post('payments/DTpayments', 'Admin\Payments\Index::DTpayments');
@@ -209,12 +211,12 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function($
     $routes->post('stripepayments/DTstripepayments', 'Admin\StripePayments\Index::DTstripepayments');
 
     //Reservations
-    $routes->match(['get','post'],'reservations', 'Admin\Reservations\Index::index');
+    $routes->match(['get', 'post'], 'reservations', 'Admin\Reservations\Index::index');
     $routes->post('reservations/DTreservations', 'Admin\Reservations\Index::DTreservations');
     $routes->get('reservations/view/(:num)', 'Admin\Reservations\Index::view/$1');
 
     //Comments
-    $routes->match(['get', 'post'],'comments/(:num)', 'Admin\Comments\Index::index/$1');
+    $routes->match(['get', 'post'], 'comments/(:num)', 'Admin\Comments\Index::index/$1');
     $routes->match(['get', 'post'], 'comments/action', 'Admin\Comments\Index::action');
     $routes->get('comments/action/(:num)', 'Admin\Comments\Index::action/$1');
 
@@ -223,23 +225,23 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function($
     $routes->post('newsletter/DTnewsletter', 'Admin\Newsletter\Index::DTnewsletter');
 
     // Report
-    $routes->match(['get','post'],'eventreport', 'Admin\Report\EventReport::index');
-    
+    $routes->match(['get', 'post'], 'eventreport', 'Admin\Report\EventReport::index');
+
     // Financial Report
-    $routes->match(['get','post'],'financialreport', 'Admin\Report\FinancialReport::index');
+    $routes->match(['get', 'post'], 'financialreport', 'Admin\Report\FinancialReport::index');
 
     // Email Template
     $routes->match(['get', 'post'], 'emailtemplate', 'Admin\EmailTemplate\Index::index');
-    $routes->match(['get', 'post'],'emailtemplate/action/(:num)', 'Admin\EmailTemplate\Index::action/$1');
+    $routes->match(['get', 'post'], 'emailtemplate/action/(:num)', 'Admin\EmailTemplate\Index::action/$1');
     $routes->post('emailtemplate/DTtemplates', 'Admin\EmailTemplate\Index::DTtemplates');
-    
+
     // Tax
     $routes->match(['get', 'post'], 'tax', 'Admin\Tax\Index::index');
     $routes->match(['get', 'post'], 'tax/action', 'Admin\Tax\Index::action');
     $routes->get('tax/action/(:num)', 'Admin\Tax\Index::action/$1');
     $routes->post('tax/DTtax', 'Admin\Tax\Index::DTtax');
 
-	// Settings
+    // Settings
     $routes->match(['get', 'post'], 'settings', 'Admin\Settings\Index::index');
 });
 
