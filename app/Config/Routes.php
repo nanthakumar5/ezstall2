@@ -37,6 +37,7 @@ $routes->setAutoRoute(true);
 
 //Api
 $routes->post('api/login', 'Api\Login\Index::index');
+$routes->post('api/register', 'Api\Register\Index::action');
 
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
