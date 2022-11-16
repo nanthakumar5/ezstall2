@@ -289,10 +289,12 @@ function getCart($type=''){
 					'price' 		=> $res['price'],
 					'chargingid' 	=> $res['chargingid'],
 					'interval' 		=> $interval,
-					'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
+					//'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
+					'total' 		=> 0
 				];
 				
-				$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
+				//$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
+				$price += 0;
 
 			}else if($res['flag']=='2'){
 				$rvbarnstall[] = [
@@ -303,10 +305,12 @@ function getCart($type=''){
 					'price' 		=> $res['price'],
 					'chargingid' 	=> $res['chargingid'],
 					'interval' 		=> $interval,
-					'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
+					//'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
+					'total' 		=> 0
 				];
 				
-				$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
+				//$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
+				$price += 0;
 			}else if($res['flag']=='3'){
 				$feed[] = [
 					'product_id'	=> $res['product_id'], 
