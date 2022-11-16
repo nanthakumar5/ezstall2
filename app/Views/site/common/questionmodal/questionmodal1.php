@@ -6,7 +6,7 @@
 	}
 </style>
 <div class="modal" id="questionmodal" data-bs-backdrop="static">
-	<div class="modal-dialog" style="top: 35%;">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-body modalcarousel active first">
 				Will you be selling feed at this event?
@@ -49,6 +49,41 @@
 					<?php } ?>
 				</div>
 			</div>
+			<?php if($usertype=='2'){ ?>
+				<div class="modal-body modalcarousel displaynone">
+					<div align="center">
+						<div class="col-md-10 mt-3 bblg-2 pb-3">	
+							<div class="row">	
+								<div class="col-md-2">
+									<input type="checkbox" class="questionmodal_priceflagall_modal">
+								</div>
+								<div class="col-md-4">
+									Rates
+								</div>
+								<div class="col-md-6">
+									$
+								</div>
+							</div>
+						</div>
+						<?php foreach($pricelist as $key => $data){ ?>
+							<div class="col-md-10 mt-3">	
+								<div class="row">	
+									<div class="col-md-2">
+										<input type="checkbox" class="questionmodal_priceflag_modal" data-key="<?php echo $key; ?>" value="1">
+									</div>
+									<div class="col-md-4">
+										<?php echo $data; ?>
+									</div>
+									<div class="col-md-6">
+										<input type="number" min="0" class="questionmodal_pricefee_modal form-control" data-key="<?php echo $key; ?>" disabled>
+									</div>
+								</div>
+							</div>
+						<?php } ?>
+						<button type="button" data-type="pricelist" class="btn questionmodal_pricelist model_btn questionmodal_btn mt-3" value="1">OK</button>
+					</div>
+				</div>
+			<?php } ?>
 			<div class="modal-body modalcarousel displaynone last">
 				Thank You Fill out your custom event form with your stalls,
 				and let your customers rest EZ!
@@ -99,5 +134,41 @@
 		$('.modalcarousel_prev').removeClass('displaynone');
 		if(nextsibling.hasClass('last')) $('.modalcarousel_next').addClass('displaynone');
 	})
+	
+	
+	$('.questionmodal_priceflagall_modal').click(function(){
+		if($(this).is(':checked')){
+			$('.questionmodal_priceflagall').prop('checked', true);
+		}else{
+			$('.questionmodal_priceflagall').prop('checked', false);
+		}
+		
+		$('.questionmodal_priceflag_modal').each(function(){
+			$(this).click();
+		});
+	})
+	
+	$('.questionmodal_priceflag_modal').click(function(){ 
+		var key = $(this).attr('data-key');
+			
+		if($(this).is(':checked')){
+			var pricefeemodal = $(this).parent().parent().find('.questionmodal_pricefee_modal');
+			pricefeemodal.removeAttr('disabled');
+			
+			$('.questionmodal_priceflag'+key).prop('checked', true);
+			$('.questionmodal_pricefee'+key).val(pricefeemodal.val()).removeAttr('disabled');
+		}else{
+			var pricefeemodal = $(this).parent().parent().find('.questionmodal_pricefee_modal');
+			pricefeemodal.attr('disabled', 'disabled');
+			
+			$('.questionmodal_priceflag'+key).prop('checked', false);
+			$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
+		}
+    });
+	
+	$('.questionmodal_pricefee_modal').keyup(function(){
+		var key = $(this).attr('data-key');
+		$('.questionmodal_pricefee'+key).val($(this).val());
+	})	
 </script>
 

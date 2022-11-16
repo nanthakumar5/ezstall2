@@ -2,9 +2,9 @@ function baseurl(){
 	var base = window.location;
 
 	if(base.host=='localhost'){
-		return base.protocol + "//" + base.host + "/ezstall2/";
+		return base.protocol + "//" + base.host + "/ezstall/";
 	}else{
-		return base.protocol + "//" + base.host + "/";
+		return base.protocol + "//" + base.host + "/ezstall3/";
 	}
 }
 
@@ -336,9 +336,21 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	var stall_append 		= barnstallitem[1][1];
 	var barnIndex 			= barnstallitem[2][0];
 	var stallIndex 			= barnstallitem[2][1];
-	var barn_validation 	= barnstallitem[3][0];
-	var charging_flagdata	= barnstallitem[4][0];  
-	var usertype			= barnstallitem[4][1];  
+	var barn_validation 	= barnstallitem[3][0];  
+	var usertype			= barnstallitem[4][0]; 
+	var charging_flagdata	= barnstallitem[4][1]; 
+	
+	var price_flagdata		= []; 
+	var price_feedata		= [];  	
+	if($(document).find("#price_flag").length && $(document).find("#price_fee").length){
+		price_flagdata 	= $(document).find("#price_flag").val().split(',');
+		price_feedata 	= $(document).find("#price_fee").val().split(',');
+			
+		$(document).on("change", "#price_flag, #price_fee", function() {
+			price_flagdata 	= $(document).find("#price_flag").val().split(',');
+			price_feedata 	= $(document).find("#price_fee").val().split(',');
+		});
+	}
 	
 	var bsresult = barnstallresult[0] ? barnstallresult[0] : [];
 	var occupied = barnstallresult[1] ? barnstallresult[1] : [];
@@ -359,22 +371,31 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	});
 
 	/*place holder name*/
-    		var srheading  		= 'Stalls';
-    		var srrate     		= 'Stalls Rate';
-    		var srname     		= 'Stalls Name';
-    		var srprice    		= 'Stalls Price';
-    		var srimage    		= 'Stalls Image';
-    		var srtotalnumber 	= 'Total Number of Stalls';
-    		var srfirstnumber 	= 'First Stalls Number';
-    	if(barnstallname=='rvhookups'){
-    		var srheading  		= 'RV Lots';
-    		var srrate     		= 'RV Lots Rate';
-    		var srname     		= 'RV Lots Name';
-    		var srprice    		= 'RV Lots Price';
-    		var srimage    		= 'RV Lots Image';
-    		var srtotalnumber 	= 'Total Number of RV Lots';
-    		var srfirstnumber 	= 'First RV Lots Number';
-    	}
+	var srheading  		= 'Stalls';
+	var srrate     		= 'Stalls Rate';
+	var srname     		= 'Stalls Name';
+	var srprice    		= 'Stalls Price';
+	var srnightprice    = 'Stalls Night Price';
+	var srweekprice    	= 'Stalls Week Price';
+	var srmonthprice    = 'Stalls Month Price';
+	var srflatprice    	= 'Stalls Flat Price';
+	var srimage    		= 'Stalls Image';
+	var srtotalnumber 	= 'Total Number of Stalls';
+	var srfirstnumber 	= 'First Stalls Number';
+	
+	if(barnstallname=='rvhookups'){
+		var srheading  		= 'RV Lots';
+		var srrate     		= 'RV Lots Rate';
+		var srname     		= 'RV Lots Name';
+		var srprice    		= 'RV Lots Price';
+		var srnightprice    = 'RV Lots Night Price';
+		var srweekprice    	= 'RV Lots Week Price';
+		var srmonthprice    = 'RV Lots Month Price';
+		var srflatprice    	= 'RV Lots Flat Price';
+		var srimage    		= 'RV Lots Image';
+		var srtotalnumber 	= 'Total Number of RV Lots';
+		var srfirstnumber 	= 'First RV Lots Number';
+	}
 	/*place holder name*/
 
 	function barndata(result=[], type=''){ 
@@ -449,10 +470,14 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var charging_flags      = result['charging_id'] ? result['charging_id'] : ''; 
 		var stallName     		= result['name'] ? result['name'] : '';
 		var stallPrice    		= result['price'] ? result['price'] : '';
+		var stallNightPrice    	= result['night_price'] ? result['night_price'] : (price_feedata[0] ? price_feedata[0] : '');
+		var stallWeekPrice    	= result['week_price'] ? result['week_price'] : (price_feedata[1] ? price_feedata[1] : '');
+		var stallMonthPrice    	= result['month_price'] ? result['month_price'] : (price_feedata[2] ? price_feedata[2] : '');
+		var stallFlatPrice    	= result['flat_price'] ? result['flat_price'] : (price_feedata[3] ? price_feedata[3] : '');
 		var stallImage    		= result['image'] ? result['image'] : '';
 		var stallBulkImage    	= result['bulkimage'] ? result['bulkimage'] : '';
 		var block_unblock      	= result['block_unblock'] ? result['block_unblock'] : ''; 
-		var checked	= (block_unblock=='1') ? 'checked' : '';
+		var checked				= (block_unblock=='1') ? 'checked' : '';
 		
 		if(stallImage!='' && stallBulkImage==''){
 			var stallImages   	= baseurl()+'assets/uploads/stall/'+stallImage;
@@ -461,35 +486,55 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		}else{
 			var stallImages   	= baseurl()+'assets/images/upload.png';
 		}
-			var charging_flag= '';
-			$.each(charging_flagdata, function(i,v){
-	        	var selected = i==charging_flags ? 'selected' : '';
-	            charging_flag += '<option value='+i+' '+selected+'>'+v+'</option>';
-	        })
+		
+		var charging_flag= '';
+		$.each(charging_flagdata, function(i,v){
+			var selected = i==charging_flags ? 'selected' : '';
+			charging_flag += '<option value='+i+' '+selected+'>'+v+'</option>';
+		})
 
-			var blockunblock = '';
-			
-			var blockunblock = '<div class="col-md-6 mb-3">\
-					<input type="checkbox" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+checked+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
-				</div>';
+		var blockunblock = 	'<div class="col-md-6 mb-3">\
+								<input type="checkbox" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+checked+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
+							</div>';
 		
 		var availability = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
 		if($.inArray(stallId, occupied) !== -1)	availability = '<span class="red-box"></span>';
 		if($.inArray(stallId, reserved) !== -1)	availability = '<span class="yellow-box"></span>';
-
+		
+		var stallbox = '';
+		if(usertype==2){
+			var stallbox = 	'<div class="col-md-6 mb-3">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+							</div>\
+							<div class="col-md-6 mb-3 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_night_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][night_price]" class="form-control fs-7" placeholder="Enter Your '+srnightprice+'" value="'+stallNightPrice+'">\
+							</div>\
+							<div class="col-md-6 mb-3 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_week_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][week_price]" class="form-control fs-7" placeholder="Enter Your '+srweekprice+'" value="'+stallWeekPrice+'">\
+							</div>\
+							<div class="col-md-6 mb-3 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][month_price]" class="form-control fs-7" placeholder="Enter Your '+srmonthprice+'" value="'+stallMonthPrice+'">\
+							</div>\
+							<div class="col-md-6 mb-3 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="Enter Your '+srflatprice+'" value="'+stallFlatPrice+'">\
+							</div>';
+		}else if(usertype==3){
+			var stallbox = 	'<div class="col-md-6 mb-3">\
+								<select class="form-control" id="stall_'+barnstallname+'_'+stallIndex+'_chargingflag" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][chargingflag]">\
+								'+charging_flag+'\
+								</select>\
+							</div>\
+							<div class="col-md-6 mb-3">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+							</div>\
+							<div class="col-md-6 mb-3">\
+								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="Enter Your '+srprice+'" value="'+stallPrice+'">\
+							</div>';
+		}
+		
 		var data='\
 		<div class="row mb-2 dash-stall-base">\
-			<div class="col-md-6 mb-3">\
-			    <select class="form-control" id="stall_'+barnstallname+'_'+stallIndex+'_chargingflag" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][chargingflag]">\
-			    '+charging_flag+'\
-			    </select>\
-			</div>\
-			<div class="col-md-6 mb-3">\
-				<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
-			</div>\
-			<div class="col-md-6 mb-3">\
-				<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="Enter Your '+srprice+'" value="'+stallPrice+'">\
-			</div>\
+			'+stallbox+'\
 			<div class="col-md-3 mb-3">\
 				<a href="'+stallImages+'" target="_blank">\
 					<img src="'+stallImages+'" class="stall_image_source_'+barnstallname+'_'+stallIndex+'" width="40" height="35">\
@@ -721,7 +766,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 
 		var name          	= $('.stall_name_'+barnstallname).val();
 		var price        	= $('.stall_price_'+barnstallname).val();
-		var charging_id    = $('.stall_charging_id_'+barnstallname).val(); 
+		var charging_id    	= $('.stall_charging_id_'+barnstallname).val(); 
 		var image        	= $('.stall_image_'+barnstallname).val();
 		var stalltotal    	= $('.stall_total_'+barnstallname).val();
 		var stallnumber 	= $('.stall_number_'+barnstallname).val(); 

@@ -213,9 +213,9 @@ class Event extends BaseModel
 		$request['status'] 	= '1';
 		if(isset($data['name']) && $data['name']!='')      		        		$request['name'] 				= $data['name'];
 		if(isset($data['description']) && $data['description']!='')     		$request['description']    	 	= $data['description'];
-		if(isset($data['location']) && $data['location']!='')           				$request['location'] 			= $data['location'];
-		if(isset($data['city']) && $data['city']!='')           				$request['city'] 			= $data['city'];
-		if(isset($data['state']) && $data['state']!='')           				$request['state'] 			= $data['state'];
+		if(isset($data['location']) && $data['location']!='')           		$request['location'] 			= $data['location'];
+		if(isset($data['city']) && $data['city']!='')           				$request['city'] 				= $data['city'];
+		if(isset($data['state']) && $data['state']!='')           				$request['state'] 				= $data['state'];
 		if(isset($data['zipcode']) && $data['zipcode']!='')           			$request['zipcode'] 			= $data['zipcode'];
 		if(isset($data['latitude']) && $data['latitude']!='')           		$request['latitude'] 			= $data['latitude'];
 		if(isset($data['longitude']) && $data['longitude']!='')           		$request['longitude'] 			= $data['longitude'];
@@ -231,9 +231,18 @@ class Event extends BaseModel
 		if(isset($data['rv_flag']) && $data['rv_flag']!='') 					$request['rv_flag'] 			= $data['rv_flag'];
 		if(isset($data['charging_flag']) && $data['charging_flag']!='') 		$request['charging_flag'] 		= $data['charging_flag'];
 		if(isset($data['notification_flag']) && $data['notification_flag']!='') $request['notification_flag'] 	= $data['notification_flag'];
-		if(isset($data['cleaning_flag']) && $data['cleaning_flag']!='') 		$request['cleaning_flag'] 	= $data['cleaning_flag'];
-		if(isset($data['cleaning_fee']) && $data['cleaning_fee']!='') 			$request['cleaning_fee'] 	= $data['cleaning_fee'];
+		if(isset($data['cleaning_flag']) && $data['cleaning_flag']!='') 		$request['cleaning_flag'] 		= $data['cleaning_flag'];
+		if(isset($data['cleaning_fee']) && $data['cleaning_fee']!='') 			$request['cleaning_fee'] 		= $data['cleaning_fee'];
 		if(isset($data['type']) && $data['type']!='')    		 				$request['type'] 				= $data['type'];
+		
+		$priceflag 	= [];
+		$pricefee 	= [];
+		for($i=1; $i<5; $i++){
+			$priceflag[] 	= isset($data['price_flag'][$i]) ? $data['price_flag'][$i] : 0;
+			$pricefee[] 	= isset($data['price_fee'][$i]) ? $data['price_fee'][$i] : 0;
+		}		
+		$request['price_flag'] 				= implode(',', $priceflag);
+		$request['price_fee'] 				= implode(',', $pricefee);
 		
 		if(isset($data['image']) && $data['image']!=''){
 		   // if(filemove($data['image'], './assets/uploads/temp')!= $data['image']){
@@ -342,7 +351,11 @@ class Event extends BaseModel
 					$stall['barn_id']    	= $barninsertid;
 					$stall['charging_id']  	= isset($stalldata['chargingflag']) ? $stalldata['chargingflag'] : '' ;
 					$stall['name']       	= $stalldata['name'];
-					$stall['price']      	= $stalldata['price'];
+					$stall['price']      	= isset($stalldata['price']) ? $stalldata['price'] : 0;
+					$stall['night_price']   = isset($stalldata['night_price']) ? $stalldata['night_price'] : 0;
+					$stall['week_price']    = isset($stalldata['week_price']) ? $stalldata['week_price'] : 0;
+					$stall['month_price']   = isset($stalldata['month_price']) ? $stalldata['month_price'] : 0;
+					$stall['flat_price']    = isset($stalldata['flat_price']) ? $stalldata['flat_price'] : 0;
 					$stall['block_unblock'] = isset($stalldata['block_unblock']) ? $stalldata['block_unblock'] : 0;
 					$stall['status']     	= $stalldata['status'];
 					$stall['type']		 	= $extras[2];

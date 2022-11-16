@@ -123,7 +123,8 @@ class Index extends BaseController
 		$data['stripe'] 		= view('site/common/stripe/stripe1');
 		$data['yesno'] 			= $this->config->yesno;
 		$data['chargingflag'] 	= $this->config->chargingflag;
-		$data['questionmodal'] 	= view('site/common/questionmodal/questionmodal1', ['yesno' => $data['yesno'], 'facility_status' => '1']);
+		$data['pricelist'] 		= $this->config->pricelist;
+		$data['questionmodal'] 	= view('site/common/questionmodal/questionmodal1', ['yesno' => $data['yesno'], 'pricelist' => $data['pricelist'], 'usertype' => $data['usertype']]);
 		$data['settings'] 		= $settings;
 		
 		return view('site/myaccount/facility/action', $data);
@@ -229,6 +230,7 @@ class Index extends BaseController
 		$data['currencysymbol']  	= $this->config->currencysymbol;
 		$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['eventid' => $id, 'type' => '2']);
 		$data['type']		    	= '2';
+		$data['usertype']		    = '2';
 		
 		if(empty($data['events'])){
 			$this->session->setFlashdata('danger', 'Booking not found.');

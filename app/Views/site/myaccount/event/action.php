@@ -336,6 +336,7 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 	var charging_flag			= '<?php echo $charging_flag ?>';
 	var cleaning_flag			= '<?php echo $cleaning_flag ?>';
 	var notification_flag		= '<?php echo $notification_flag ?>';
+	var usertype				= '<?php echo $usertype ?>';
 
 	$(function(){
 		if(id==""){
@@ -411,8 +412,8 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 		questionpopup1(2, 'charging', charging_flag)
 		questionpopup1(2, 'notification', notification_flag)
 		
-		barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[chargingflag, 3]], [barn, occupied, reserved])
-		barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [chargingflag, 3]], [rvbarn, occupied, reserved])
+		barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[usertype, chargingflag]], [barn, occupied, reserved])
+		barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag]], [rvbarn, occupied, reserved])
 		products('feed', [['.feedbtn'], ['.feedlist'], [0]], [feed])
 		products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0]], [shaving])
 	});

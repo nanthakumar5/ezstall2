@@ -7,10 +7,13 @@ class Report extends BaseModel
 {
 	public function getFinancialReport($type, $querydata=[], $requestdata=[], $extras=[])
     {  
+		$checkin 		= isset($requestdata['checkin']) ? $requestdata['checkin'] : '';
+		$checkout 		= isset($requestdata['checkout']) ? $requestdata['checkout'] : '';
+		
     	$select 		= [];
 		
 		if(in_array('booking', $querydata)){
-			$data		= 	['SUM(bk.amount) as totalamount'];							
+			$data		= 	['SUM(bk.amount) as totalamount, SUM(bk.price) as totalprice, SUM(bk.transaction_fee) as totaltransactionfee, SUM(bk.cleaning_fee) as totalcleaningfee, SUM(bk.event_tax) as totaltax'];							
 			$select[] 	= 	implode(',', $data);
 		}
 		
@@ -26,9 +29,9 @@ class Report extends BaseModel
 		if(isset($extras['select'])) 					$query->select($extras['select']);
 		else											$query->select(implode(',', $select));
 		
-		if(isset($requestdata['eventid'])) 										$query->where('bk.event_id', $requestdata['eventid']);		
-		if(isset($requestdata['type'])) 										$query->where('e.type', $requestdata['type']);		
-		if(isset($requestdata['checkin']) && isset($requestdata['checkout'])) 	$query->groupStart()->where("bk.check_in BETWEEN '".$requestdata['checkin']."' AND '".$requestdata['checkout']."'")->orWhere("bk.check_out BETWEEN '".$requestdata['checkin']."' AND '".$requestdata['checkout']."'")->groupEnd();
+		if(isset($requestdata['eventid'])) 				$query->where('bk.event_id', $requestdata['eventid']);		
+		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);		
+		if($checkin!='' && $checkout!='') 				$query->groupStart()->where("bk.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bk.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();
 			
 		$query->groupBy('bk.event_id');
 
@@ -43,10 +46,10 @@ class Report extends BaseModel
 				$result = $query->getRowArray();
 			}
 			
-			$result = $this->getFinancialReportEventdetails($type, $querydata, ['result' => $result, 'type' => '1','barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall']);
-			$result = $this->getFinancialReportEventdetails($type, $querydata, ['result' => $result, 'type' => '2', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall']);
-			$result = $this->getFinancialReportProducts($type, $querydata, ['result' => $result, 'type' => '1', 'productname' => 'feed', 'bookedproduct' => 'feedbooked']);
-			$result = $this->getFinancialReportProducts($type, $querydata, ['result' => $result, 'type' => '2', 'productname' => 'shaving', 'bookedproduct' => 'shavingbooked']);
+			$result = $this->getFinancialReportEventdetails($type, $querydata, ['result' => $result, 'type' => '1','barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall', 'checkin' => $checkin, 'checkout' => $checkout]);
+			$result = $this->getFinancialReportEventdetails($type, $querydata, ['result' => $result, 'type' => '2', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall', 'checkin' => $checkin, 'checkout' => $checkout]);
+			$result = $this->getFinancialReportProducts($type, $querydata, ['result' => $result, 'type' => '1', 'productname' => 'feed', 'bookedproduct' => 'feedbooked', 'checkin' => $checkin, 'checkout' => $checkout]);
+			$result = $this->getFinancialReportProducts($type, $querydata, ['result' => $result, 'type' => '2', 'productname' => 'shaving', 'bookedproduct' => 'shavingbooked', 'checkin' => $checkin, 'checkout' => $checkout]);
 		}
 		
 		return $result;
@@ -58,6 +61,8 @@ class Report extends BaseModel
 		$barnname = $extras['barnname'];
 		$stallname = $extras['stallname'];
 		$bookedstall = $extras['bookedstall'];
+		$checkin = $extras['checkin'];
+		$checkout = $extras['checkout'];
 		
     	if($type=='all'){
     		if(count($result) > 0){
@@ -76,9 +81,10 @@ class Report extends BaseModel
 										$bookedstalls = 	$this->db->table('booking_details bd')
 															->join('booking bks', 'bd.booking_id = bks.id', 'left')
 															->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.total')
-															->where(['bd.barn_id' => $stalldata['barn_id'], 'bd.stall_id' => $stalldata['id']])
-															->get()
-															->getResultArray();
+															->where(['bd.barn_id' => $stalldata['barn_id'], 'bd.stall_id' => $stalldata['id']]);
+															
+										if($checkin!='' && $checkout!='') $bookedstalls->groupStart()->where("bks.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bks.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();									
+										$bookedstalls = $bookedstalls->get()->getResultArray();
 															
 										$result[$key][$barnname][$barnkey][$stallname][$stallkey][$bookedstall] = $bookedstalls;
 									}
@@ -104,9 +110,10 @@ class Report extends BaseModel
 									$bookedstalls = 	$this->db->table('booking_details bd')
 														->join('booking bks', 'bd.booking_id = bks.id', 'left')
 														->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.total')
-														->where(['bd.barn_id' => $stalldata['barn_id'], 'bd.stall_id' => $stalldata['id']])
-														->get()
-														->getResultArray();
+														->where(['bd.barn_id' => $stalldata['barn_id'], 'bd.stall_id' => $stalldata['id']]);
+									
+									if($checkin!='' && $checkout!='') $bookedstalls->groupStart()->where("bks.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bks.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();										
+									$bookedstalls = $bookedstalls->get()->getResultArray();
 														
 									$result[$key][$barnname][$barnkey][$stallname][$stallkey][$bookedstall] = $bookedstalls;
 								}
@@ -125,6 +132,8 @@ class Report extends BaseModel
 		$result 		= $extras['result'];
 		$productname 	= $extras['productname'];
 		$bookedproduct 	= $extras['bookedproduct'];
+		$checkin 		= $extras['checkin'];
+		$checkout 		= $extras['checkout'];
 		
     	if($type=='all'){
 			if(in_array($productname, $querydata) && count($result) > 0){
@@ -142,9 +151,10 @@ class Report extends BaseModel
 							$bookedproducts = 	$this->db->table('booking_details bd')
 												->join('booking bks', 'bd.booking_id = bks.id', 'left')
 												->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.quantity, bd.total')
-												->where(['bd.product_id' => $productdata['id']])
-												->get()
-												->getResultArray();
+												->where(['bd.product_id' => $productdata['id']]);
+									
+							if($checkin!='' && $checkout!='') $bookedproducts->groupStart()->where("bks.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bks.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();
+							$bookedproducts = $bookedproducts->get()->getResultArray();
 												
 							$result[$key][$productname][$productkey][$bookedproduct] = $bookedproducts;
 						}
@@ -166,9 +176,10 @@ class Report extends BaseModel
 						$bookedproducts = 	$this->db->table('booking_details bd')
 											->join('booking bks', 'bd.booking_id = bks.id', 'left')
 											->select('bks.paymentmethod_id as paymentmethodid, bks.paid_unpaid as paidunpaid, bd.quantity, bd.total')
-											->where(['bd.product_id' => $productdata['id']])
-											->get()
-											->getResultArray();
+											->where(['bd.product_id' => $productdata['id']]);
+											
+						if($checkin!='' && $checkout!='') $bookedproducts->groupStart()->where("bks.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bks.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();								
+						$bookedproducts = $bookedproducts->get()->getResultArray();
 											
 						$result[$key][$productname][$productkey][$bookedproduct] = $bookedproducts;
 					}

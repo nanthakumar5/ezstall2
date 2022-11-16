@@ -22,10 +22,16 @@ table tr td {
 		    <div style="text-align:center;padding:0;"><img src="<?php echo $logo; ?>" width="500"></div>
 		    <?php foreach($events as $key => $data){ ?>
                 <?php
-                    $eventname  	= $data['eventname'];
-                    $startdate 		= formatdate($data['startdate'], 1);
-                 	$enddate 		= formatdate($data['enddate'], 1);
-					$totalamount 	= $data['totalamount'];
+                    $eventname  			= $data['eventname'];
+                    $startdate 				= formatdate($data['startdate'], 1);
+                 	$enddate 				= formatdate($data['enddate'], 1);
+					$totalamount 			= $data['totalamount'];
+					$totalprice 			= $data['totalprice'];
+					$totaltransactionfee 	= $data['totaltransactionfee'];
+					$totalcleaningfee 		= $data['totalcleaningfee'];
+					$totaltax 				= $data['totaltax'];
+					$totalamountadmin		= $totalprice+$totaltransactionfee+$totalcleaningfee+$totaltax;
+					$totalamountuser		= $totalprice+$totalcleaningfee+$totaltax;
 					
 					$totalstallavailable = 0;
 					$totalstallrented = 0;
@@ -68,10 +74,10 @@ table tr td {
 							foreach($barn['rvstall'] as $stall){
 								$totallotsavailable++;
 								
-								if(!empty($stall['bookedstall'])){
+								if(!empty($stall['rvbookedstall'])){
 									$totallotsrented++;
 									
-									foreach($stall['bookedstall'] as $bookedstall){
+									foreach($stall['rvbookedstall'] as $bookedstall){
 										$totallotsamount += $bookedstall['total'];
 										
 										if($bookedstall['paymentmethodid']=='1'){
@@ -106,7 +112,7 @@ table tr td {
 							
 							if(!empty($data['feed'][$i]['feedbooked'])){
 								foreach($data['feed'][$i]['feedbooked'] as $bookedstall){
-									$feedsold += $bookedstall['total'];
+									$feedsold += $bookedstall['quantity'];
 									$totalfeedamount += $bookedstall['total'];
 									
 									if($bookedstall['paymentmethodid']=='1'){
@@ -123,7 +129,7 @@ table tr td {
 							
 							if(!empty($data['shaving'][$i]['shavingbooked'])){
 								foreach($data['shaving'][$i]['shavingbooked'] as $bookedstall){
-									$shavingsold += $bookedstall['total'];
+									$shavingsold += $bookedstall['quantity'];
 									$totalshavingamount += $bookedstall['total'];
 									
 									if($bookedstall['paymentmethodid']=='1'){
@@ -146,18 +152,18 @@ table tr td {
 					}
                 ?>
     	        <h2 style="font-size:14px"><?php echo $eventname;?></h2>
-    	        <table style="border-bottom:2px solid #000;margin-bottom:20px;">
+    	        <table style="border-bottom:2px solid #000;margin-bottom:10px;">
     	            <tr>
 						<?php if($type=='1'){ ?>
 							<td style="padding-left:0px;"><?php echo 'Start Date: '.$startdate; ?></td>
 							<td><?php echo 'End Date: '.$enddate; ?></td>
-							<td><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.$totalamount; ?></td>
+							<td><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
 						<?php }elseif($type=='2'){ ?>
-							<td style="padding-left:0px;"><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.$totalamount; ?></td>
+							<td style="padding-left:0px;"><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
 						<?php } ?>
     	            </tr>
     	        </table>
-    	        <table style="border-bottom:2px solid #000; padding-bottom:10px;">
+    	        <table style="border-bottom:2px solid #000;padding-bottom:5px;">
     	            <tr>
     	                <td width="50%" style="padding-left:0;"><h2 style="font-size:30px;">STALLS</h2></td>
     	                <td width="50%" style="padding-left:0;"><h2 style="font-size:30px;">RV HOOKUPS</h2></td>
@@ -179,7 +185,7 @@ table tr td {
     	                <td style="padding:0px;">Percentage Occupied: <?php echo $totallotsrented==0 ? 0 : number_format((($totallotsrented/$totallotsavailable)*100), '2').'%'; ?></td>
     	            </tr>
 				</table>
-				<table style="margin-bottom:40px;">
+				<table style="margin-bottom:15px;">
     	            <tr>
     	                <td width="50%" style="font-weight:bold;padding:0px;padding-bottom:15px;padding-top:5px;">TOTAL STALL REVENUE: <?php echo $currencysymbol.$totalstallamount; ?></td>
     	                <td width="50%" style="font-weight:bold;padding:0px;padding-bottom:15px;padding-top:5px;">TOTAL LOT REVENUE: <?php echo $currencysymbol.$totallotsamount; ?></td>
@@ -193,14 +199,14 @@ table tr td {
     	                <td style="padding:0px;">CASH ON DELIVERY: <?php echo $currencysymbol.$totallotscodamount; ?></td>
     	            </tr>
     	        </table>
-    	        <table style="padding-bottom:20px;border-bottom:2px solid #000;">
+    	        <table style="border-bottom:2px solid #000;padding-bottom:5px;">
     	            <tr>
     	                <td width="50%" style="padding-left:0;"><h2 style="font-size:30px;">FEED</h2></td>
     	                <td width="50%" style="padding-left:0;"><h2 style="font-size:30px;">SHAVINGS</h2></td>
     	            </tr>
 					<?php echo $feedshavingdatas; ?>
 				</table>
-				<table>
+				<table style="margin-bottom:15px;">
     	            <tr>
     	                <td width="50%" style="font-weight:bold;padding:0px;padding-bottom:15px;padding-top:5px;">TOTAL FEED REVENUE: <?php echo $currencysymbol.$totalfeedamount; ?></td>
     	                <td width="50%" style="font-weight:bold;padding:0px;padding-bottom:15px;padding-top:5px;">TOTAL SHAVINGS REVENUE: <?php echo $currencysymbol.$totalshavingamount; ?></td>
@@ -214,7 +220,25 @@ table tr td {
     	                <td style="padding:0px;">CASH ON DELIVERY: <?php echo $currencysymbol.$totalshavingcodamount; ?></td>
     	            </tr>
     	        </table>
-    	        <h2 style="font-size:18px;padding-top:30px;padding-bottom:20px;"><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.$totalamount; ?></h2>
+    	        <table style="border-bottom:2px solid #000;padding-bottom:5px;">
+    	            <tr>
+    	                <td width="<?php echo $usertype=='1' ? '33%' : '50%'; ?>" style="padding-left:0;padding-bottom:0px;"><h2 style="font-size:30px;">CLEANING</h2></td>
+    	                <td width="<?php echo $usertype=='1' ? '33%' : '50%'; ?>" style="padding-left:0;padding-bottom:0px;"><h2 style="font-size:30px;">TAX</h2></td>
+						<?php if($usertype=='1'){ ?>
+							<td width="34%" style="padding-left:0;padding-bottom:0px;"><h2 style="font-size:30px;">TRANSACTION</h2></td>
+						<?php } ?>
+    	            </tr>
+				</table>
+				<table>
+    	            <tr>
+    	                <td width="<?php echo $usertype=='1' ? '33%' : '50%'; ?>" style="padding:0px;">TOTAL: <?php echo $currencysymbol.$totalcleaningfee; ?></td>
+    	                <td width="<?php echo $usertype=='1' ? '33%' : '50%'; ?>" style="padding:0px;">TOTAL: <?php echo $currencysymbol.$totaltax; ?></td>
+						<?php if($usertype=='1'){ ?>
+							<td width="34%" style="padding:0px;">TOTAL: <?php echo $currencysymbol.$totaltransactionfee; ?></td>
+						<?php } ?>
+    	            </tr>
+    	        </table>
+    	        <h2 style="font-size:18px;padding-top:20px;padding-bottom:10px;"><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></h2>
 				<?php if($key!=count($events)-1){ ?>
 					<pagebreak></pagebreak>
 				<?php } ?>

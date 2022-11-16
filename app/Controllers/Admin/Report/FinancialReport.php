@@ -32,6 +32,7 @@ class FinancialReport extends BaseController
 			$data['currencysymbol']  	= $this->config->currencysymbol;
         	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['checkin' => $checkin, 'checkout' => $checkout, 'type' => $type]);
         	$data['type']		    	= $type;
+			$data['usertype']		    = '1';
 		    
 			if(empty($data['events'])){
 				$this->session->setFlashdata('danger', 'No Record Found.');
