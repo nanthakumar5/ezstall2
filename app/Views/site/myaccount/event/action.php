@@ -31,6 +31,8 @@ $rv_flag 				= isset($result['rv_flag']) ? $result['rv_flag'] : '';
 $cleaning_flag 			= isset($result['cleaning_flag']) ? $result['cleaning_flag'] : '';
 $charging_flag 			= isset($result['charging_flag']) ? $result['charging_flag'] : '';
 $notification_flag 		= isset($result['notification_flag']) ? $result['notification_flag'] : '';
+$price_flag 			= isset($result['price_flag']) ? explode(',', $result['price_flag']) : [];
+$price_fee 				= isset($result['price_fee']) ? explode(',', $result['price_fee']) : [];
 $cleaning_fee 			= isset($result['cleaning_fee']) ? $result['cleaning_fee'] : '';
 $barn        			= isset($result['barn']) ? $result['barn'] : [];
 $rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
@@ -224,6 +226,40 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 										<input type="hidden" value="" class="notification_flag" name="notification_flag">
 									</div>
 								</div>
+								<?php if($usertype=='2'){ ?>
+									<div align="center">
+										<div class="col-md-12 mt-3 bblg-2 pb-3">	
+											<div class="row">	
+												<div class="col-md-2">
+													<input type="checkbox" class="questionmodal_priceflagall">
+												</div>
+												<div class="col-md-4">
+													Rates
+												</div>
+												<div class="col-md-6">
+													$
+												</div>
+											</div>
+										</div>
+										<?php foreach($pricelist as $key => $data){ ?>
+											<div class="col-md-12 mt-3">	
+												<div class="row">	
+													<div class="col-md-2">
+														<input type="checkbox" class="questionmodal_priceflag questionmodal_priceflag<?php echo $key; ?>" data-key="<?php echo $key; ?>" value="1" name="price_flag[<?php echo $key; ?>]" <?php if(isset($price_flag[$key-1]) && $price_flag[$key-1]==1){ echo 'checked'; } ?>>
+													</div>
+													<div class="col-md-4">
+														<?php echo $data; ?>
+													</div>
+													<div class="col-md-6">
+														<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key; ?> form-control" name="price_fee[<?php echo $key; ?>]" value="<?php if(isset($price_fee[$key-1]) && $price_fee[$key-1]!=0){ echo $price_fee[$key-1]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
+													</div>
+												</div>
+											</div>
+										<?php } ?>
+										<input type="hidden" id="price_flag" value="<?php echo implode(',', $price_flag); ?>">
+										<input type="hidden" id="price_fee" value="<?php echo implode(',', $price_fee); ?>">
+									</div>
+								<?php } ?>
 							</div>
 						</div>
 					</div>

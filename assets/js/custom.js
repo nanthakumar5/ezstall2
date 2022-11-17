@@ -352,6 +352,35 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		});
 	}
 	
+	
+	/*Placeholder*/
+	if(barnstallname=='barn'){
+		var srheading  		= 'Stalls';
+		var srrate     		= 'Stalls Rate';
+		var srname     		= 'Stalls Name';
+		var srprice    		= 'Stalls Price';
+		var srnightprice    = 'Stalls Night Price';
+		var srweekprice    	= 'Stalls Week Price';
+		var srmonthprice    = 'Stalls Month Price';
+		var srflatprice    	= 'Stalls Flat Price';
+		var srimage    		= 'Stalls Image';
+		var srtotalnumber 	= 'Total Number of Stalls';
+		var srfirstnumber 	= 'First Stalls Number';
+	}else if(barnstallname=='rvhookups'){
+		var srheading  		= 'RV Lots';
+		var srrate     		= 'RV Lots Rate';
+		var srname     		= 'RV Lots Name';
+		var srprice    		= 'RV Lots Price';
+		var srnightprice    = 'RV Lots Night Price';
+		var srweekprice    	= 'RV Lots Week Price';
+		var srmonthprice    = 'RV Lots Month Price';
+		var srflatprice    	= 'RV Lots Flat Price';
+		var srimage    		= 'RV Lots Image';
+		var srtotalnumber 	= 'Total Number of RV Lots';
+		var srfirstnumber 	= 'First RV Lots Number';
+	}
+	/*Placeholder*/
+	
 	var bsresult = barnstallresult[0] ? barnstallresult[0] : [];
 	var occupied = barnstallresult[1] ? barnstallresult[1] : [];
 	var reserved = barnstallresult[2] ? barnstallresult[2] : [];
@@ -370,49 +399,21 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		barndata([], 1);
 	});
 
-	/*place holder name*/
-	var srheading  		= 'Stalls';
-	var srrate     		= 'Stalls Rate';
-	var srname     		= 'Stalls Name';
-	var srprice    		= 'Stalls Price';
-	var srnightprice    = 'Stalls Night Price';
-	var srweekprice    	= 'Stalls Week Price';
-	var srmonthprice    = 'Stalls Month Price';
-	var srflatprice    	= 'Stalls Flat Price';
-	var srimage    		= 'Stalls Image';
-	var srtotalnumber 	= 'Total Number of Stalls';
-	var srfirstnumber 	= 'First Stalls Number';
-	
-	if(barnstallname=='rvhookups'){
-		var srheading  		= 'RV Lots';
-		var srrate     		= 'RV Lots Rate';
-		var srname     		= 'RV Lots Name';
-		var srprice    		= 'RV Lots Price';
-		var srnightprice    = 'RV Lots Night Price';
-		var srweekprice    	= 'RV Lots Week Price';
-		var srmonthprice    = 'RV Lots Month Price';
-		var srflatprice    	= 'RV Lots Flat Price';
-		var srimage    		= 'RV Lots Image';
-		var srtotalnumber 	= 'Total Number of RV Lots';
-		var srfirstnumber 	= 'First RV Lots Number';
-	}
-	/*place holder name*/
-
 	function barndata(result=[], type=''){ 
 		var barnId   	= result['id'] ? result['id'] : '';
 		var stall		= result['stall'] ? result['stall'] : (result['rvstall'] ? result['rvstall'] : []);
 		
 		var activeclass = $.trim($(barn_append).html())=='' ? 'active' : '';
-		if(barnstallname=='rvhookups'){
-			var barnName 	= result['name'] ? result['name'] : '';
-			var uploadName  = 'Campsites';
-			var stallcamp 	= 'Rv Lots';
-			var BarnLots    = 'Campsites';
-		}else if(barnstallname=='barn'){
+		if(barnstallname=='barn'){
 			var barnName 	= result['name'] ? result['name'] : '';
 			var uploadName  = 'Barn';
 			var stallcamp 	= 'Stall';
 			var BarnLots    = 'Barn';
+		}else if(barnstallname=='rvhookups'){
+			var barnName 	= result['name'] ? result['name'] : '';
+			var uploadName  = 'Campsites';
+			var stallcamp 	= 'Rv Lots';
+			var BarnLots    = 'Campsites';
 		}
 
 		var barntab='\
@@ -463,7 +464,6 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		stalldata($(this).attr('data-barnIndex'));
 	});
 	
-	
 	function stalldata(barnIndex, result=[])
 	{ 
 		var stallId       		= result['id'] ? result['id'] : '';
@@ -500,7 +500,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var availability = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
 		if($.inArray(stallId, occupied) !== -1)	availability = '<span class="red-box"></span>';
 		if($.inArray(stallId, reserved) !== -1)	availability = '<span class="yellow-box"></span>';
-		
+	
 		var stallbox = '';
 		if(usertype==2){
 			var stallbox = 	'<div class="col-md-6 mb-3">\
@@ -676,11 +676,65 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	
 	/* START STALL BULK UPLOAD */
 	var charging_flagmodal ='';
-		$.each(charging_flagdata, function(i,v){ 
-            charging_flagmodal += '<option value='+i+'>'+v+'</option>';
-        })
+	$.each(charging_flagdata, function(i,v){ 
+		charging_flagmodal += '<option value='+i+'>'+v+'</option>';
+	})
+	
+	if(usertype==2){
+		var modaldata 	= 	'<div class="col-md-12 my-2">\
+								<div class="form-group">\
+									<label>'+srname+'</label>\
+									<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="Enter Your '+srname+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
+								<div class="form-group">\
+									<label>'+srnightprice+'</label>\
+									<input type="number" class="form-control stall_night_price_'+barnstallname+'" placeholder="Enter Your '+srnightprice+'" value="'+(price_feedata[0] ? price_feedata[0] : '')+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
+								<div class="form-group">\
+									<label>'+srnightprice+'</label>\
+									<input type="number" class="form-control stall_week_price_'+barnstallname+'" placeholder="Enter Your '+srweekprice+'" value="'+(price_feedata[1] ? price_feedata[1] : '')+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
+								<div class="form-group">\
+									<label>'+srmonthprice+'</label>\
+									<input type="number" class="form-control stall_month_price_'+barnstallname+'" placeholder="Enter Your '+srmonthprice+'" value="'+(price_feedata[2] ? price_feedata[2] : '')+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
+								<div class="form-group">\
+									<label>'+srflatprice+'</label>\
+									<input type="number" class="form-control stall_flat_price_'+barnstallname+'" placeholder="Enter Your '+srflatprice+'" value="'+(price_feedata[3] ? price_feedata[3] : '')+'">\
+								</div>\
+							</div>';
+	}else if(usertype==3){
+		var modaldata 	= 	'<div class="col-md-12 my-2">\
+								<div class="form-group">\
+									<label>'+srrate+'</label>\
+									<select class="form-control stall_charging_id_'+barnstallname+'">\
+									'+charging_flagmodal+'\
+									</select>\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2">\
+								<div class="form-group">\
+									<label>'+srname+'</label>\
+									<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="Enter Your '+srname+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2">\
+								<div class="form-group">\
+									<label>'+srprice+'</label>\
+									<input type="number" class="form-control stall_price_'+barnstallname+'" placeholder="Enter Your '+srprice+'">\
+								</div>\
+							</div>';
+	}
 
-
+	
 	var modal = '<div class="modal fade" id="bulkstallmodal_'+barnstallname+'" role="dialog">\
 					<div class="modal-dialog">\
 						<div class="modal-content">\
@@ -689,26 +743,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 								<button type="button" class="close" data-bs-dismiss="modal">&times;</button>\
 							</div>\
 							<div class="modal-body">\
-								<div class="col-md-12 my-2">\
-									<div class="form-group">\
-										<label>'+srrate+'</label>\
-										<select class="form-control stall_charging_id_'+barnstallname+'">\
-										'+charging_flagmodal+'\
-										</select>\
-									</div>\
-								</div>\
-								<div class="col-md-12 my-2">\
-									<div class="form-group">\
-										<label>'+srname+'</label>\
-										<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="Enter Your '+srname+'">\
-									</div>\
-								</div>\
-								<div class="col-md-12 my-2">\
-									<div class="form-group">\
-										<label>'+srprice+'</label>\
-										<input type="number" class="form-control stall_price_'+barnstallname+'" placeholder="Enter Your '+srprice+'">\
-									</div>\
-								</div>\
+								'+modaldata+'\
 								<div class="col-md-6 my-2">\
 									<div class="form-group">\
 										<label>'+srimage+'</label>\
@@ -765,6 +800,10 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		}
 
 		var name          	= $('.stall_name_'+barnstallname).val();
+		var nightprice      = $('.stall_night_price_'+barnstallname).val();
+		var weekprice       = $('.stall_week_price_'+barnstallname).val();
+		var monthprice      = $('.stall_month_price_'+barnstallname).val();
+		var flatprice       = $('.stall_flat_price_'+barnstallname).val();
 		var price        	= $('.stall_price_'+barnstallname).val();
 		var charging_id    	= $('.stall_charging_id_'+barnstallname).val(); 
 		var image        	= $('.stall_image_'+barnstallname).val();
@@ -774,7 +813,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 
 		for(var i=0; i<stalltotal; i++){ 
 			var names = stallnumber!='' ? name+' '+stallnumber : name; 
-			stalldata(barnIndexValue, {name:names,charging_id: charging_id,price:price,status:1,bulkimage:image});
+			stalldata(barnIndexValue, {name:names,charging_id: charging_id,night_price:nightprice,week_price:weekprice,month_price:monthprice,flat_price:flatprice,price:price,status:1,bulkimage:image});
 			if(stallnumber!='') stallnumber++ ;
 		}
 

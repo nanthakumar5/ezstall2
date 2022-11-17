@@ -18,8 +18,8 @@ $rv_flag 				= isset($result['rv_flag']) ? $result['rv_flag'] : '';
 $charging_flag 			= isset($result['charging_flag']) ? $result['charging_flag'] : '';
 $cleaning_flag 			= isset($result['cleaning_flag']) ? $result['cleaning_flag'] : '';
 $notification_flag 		= isset($result['notification_flag']) ? $result['notification_flag'] : '';
-$price_flag 			= isset($result['price_flag']) ? explode(',', $result['price_flag']) : '';
-$price_fee 				= isset($result['price_fee']) ? explode(',', $result['price_fee']) : '';
+$price_flag 			= isset($result['price_flag']) ? explode(',', $result['price_flag']) : [];
+$price_fee 				= isset($result['price_fee']) ? explode(',', $result['price_fee']) : [];
 $cleaning_fee 			= isset($result['cleaning_fee']) ? $result['cleaning_fee'] : '';
 $barn        			= isset($result['barn']) ? $result['barn'] : [];
 $rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
@@ -453,69 +453,6 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
             }
         }
     }
-	
-	$('.questionmodal_priceflagall').click(function(){
-		if($(this).is(':checked')){
-			$('.questionmodal_priceflag').prop('checked', true);
-		}else{
-			$('.questionmodal_priceflag').prop('checked', false);
-		}
-		
-		questionpopup2()
-	})
-	
-	$('.questionmodal_priceflag').click(function(){ 
-		questionpopup2()
-    });
-	
-  	function questionpopup2(){ 
-		$('.questionmodal_priceflag').each(function(){
-			var key = $(this).attr('data-key');
-			
-			if($(this).is(':checked')){
-				$('.questionmodal_pricefee'+key).removeAttr('disabled');
-			}else{
-				$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
-			}
-		})		
-		
-		pricedata();
-    }
-	
-	$('.questionmodal_pricefee').blur(function(){
-		pricedata();
-	})
-	
-	function pricedata(){
-		price_flag	= [];
-		price_fee	= [];
-		$('.questionmodal_priceflag').each(function(){
-			var key = $(this).attr('data-key');
-			
-			if($(this).is(':checked')){
-				price_flag.push(1);
-				price_fee.push($('.questionmodal_pricefee'+key).val())
-				
-				$(document).find('.pricelistwrapper'+key).removeClass('displaynone');
-				$(document).find('.pricelistwrapper'+key).each(function(){
-					if($(this).find('input').val()=='' || $(this).find('input').val()=='0'){
-						$(this).find('input').val($('.questionmodal_pricefee'+key).val());
-					}
-				});
-			}else{
-				price_flag.push(0);
-				price_fee.push(0)
-				
-				$(document).find('.pricelistwrapper'+key).addClass('displaynone');
-				$(document).find('.pricelistwrapper'+key).each(function(){
-					$(this).find('input').val('');
-				});
-			}
-		})
-		
-		$('#price_flag').val(price_flag.join(',')).trigger('change');
-		$('#price_fee').val(price_fee.join(',')).trigger('change');
-	}		
 	
     $('.facilitypayment').click(function(){
 		tabvalidation();
