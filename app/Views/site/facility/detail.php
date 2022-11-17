@@ -10,25 +10,6 @@ $description 	= $detail['description'];
 $image 		 	= base_url().'/assets/uploads/event/'.'1200x600_'.$detail['image'];
 $profileimage 	= isset($detail['profile_image']) ? $detail['profile_image'] : '';
 $profileimage 	= ($profileimage!="") ? base_url().'/assets/uploads/profile/'.$detail['profile_image'] : base_url().'/assets/images/profile.jpg';
-
-$pricelist = '';
-if($detail['eventusertype']=='2'){
-	$priceflag = explode(',', $detail['price_flag']);
-	$pricefee = explode(',', $detail['price_fee']);
-	
-	if(isset($priceflag[0]) && $priceflag[0]=='1'){
-		$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$pricefee[0].'" disabled>N ('.$currencysymbol.$pricefee[0].')</button>';
-	}
-	if(isset($priceflag[1]) && $priceflag[1]=='1'){
-		$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$pricefee[1].'" disabled>W ('.$currencysymbol.$pricefee[1].')</button>';
-	}
-	if(isset($priceflag[2]) && $priceflag[2]=='1'){
-		$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$pricefee[2].'" disabled>M ('.$currencysymbol.$pricefee[2].')</button>';
-	}
-	if(isset($priceflag[3]) && $priceflag[3]=='1'){
-		$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$pricefee[3].'" disabled>F ('.$currencysymbol.$pricefee[3].')</button>';
-	}
-}
 ?>
 <!--1200x600_-->
 
@@ -130,13 +111,30 @@ if($detail['eventusertype']=='2'){
 												$typeofprice = 'flat_price';
 											}
 
+											$pricelist = '';
+											if($detail['eventusertype']=='2'){
+												$priceflag = explode(',', $detail['price_flag']);
+												
+												if(isset($priceflag[0]) && $priceflag[0]=='1'){
+													$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$stalldata['night_price'].'" disabled>N ('.$currencysymbol.$stalldata['night_price'].')</button>';
+												}
+												if(isset($priceflag[1]) && $priceflag[1]=='1'){
+													$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$stalldata['week_price'].'" disabled>W ('.$currencysymbol.$stalldata['week_price'].')</button>';
+												}
+												if(isset($priceflag[2]) && $priceflag[2]=='1'){
+													$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$stalldata['month_price'].'" disabled>M ('.$currencysymbol.$stalldata['month_price'].')</button>';
+												}
+												if(isset($priceflag[3]) && $priceflag[3]=='1'){
+													$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$stalldata['flat_price'].'" disabled>F ('.$currencysymbol.$stalldata['flat_price'].')</button>';
+												}
+											}
+
 											$boxcolor  = 'green-box';
 											$checkboxstatus = '';
 
 											if($cartevent=='1'){
 												$checkboxstatus = 'disabled';
 											}
-
 
 											$tabcontent .= 	'<li class="list-group-item d-flex align-items-center justify-content-between '.$typeofprice.'">
 												<div>
@@ -196,6 +194,24 @@ if($detail['eventusertype']=='2'){
 													$typeofprice = 'month_price';
 												}else if($rvstalldata['charging_id']=='4'){
 													$typeofprice = 'flat_price';
+												}
+
+												$pricelist = '';
+												if($detail['eventusertype']=='2'){
+													$priceflag = explode(',', $detail['price_flag']);
+													
+													if(isset($priceflag[0]) && $priceflag[0]=='1'){
+														$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$rvstalldata['night_price'].'" disabled>N ('.$currencysymbol.$rvstalldata['night_price'].')</button>';
+													}
+													if(isset($priceflag[1]) && $priceflag[1]=='1'){
+														$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$rvstalldata['week_price'].'" disabled>W ('.$currencysymbol.$rvstalldata['week_price'].')</button>';
+													}
+													if(isset($priceflag[2]) && $priceflag[2]=='1'){
+														$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$rvstalldata['month_price'].'" disabled>M ('.$currencysymbol.$rvstalldata['month_price'].')</button>';
+													}
+													if(isset($priceflag[3]) && $priceflag[3]=='1'){
+														$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$rvstalldata['flat_price'].'" disabled>F ('.$currencysymbol.$rvstalldata['flat_price'].')</button>';
+													}
 												}
 
 												$boxcolor  = 'green-box';
@@ -415,6 +431,8 @@ if($detail['eventusertype']=='2'){
 	})
 	
 	function priceselection(type){
+		if(type==0) return true;
+		
 		$('.price_button').removeClass('priceactive');
 		
 		$(".eventbarnstall:not(:disabled):checked").each(function(){
