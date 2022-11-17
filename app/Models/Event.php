@@ -15,6 +15,11 @@ class Event extends BaseModel
 			$select[] 	= 	implode(',', $data);
 		} 
 
+		if(in_array('users', $querydata)){
+			$data		= 	['u.type as eventusertype'];							
+			$select[] 	= 	implode(',', $data);
+		} 
+
 		if(in_array('latlong', $querydata)){
 			$distance  = ['(((acos(sin(('.$requestdata['latitude'].'*pi()/180)) * sin((`e`.`latitude`*pi()/180))+cos(("'.$requestdata['latitude'].'"*pi()/180)) * cos((`e`.`latitude`*pi()/180)) * cos((("'.$requestdata['longitude'].'"-`e`.`longitude`)*pi()/180))))*180/pi())*60*1.1515*1.609344) as distance'];
 			$select[] 	= 	implode(',', $distance);
@@ -34,6 +39,7 @@ class Event extends BaseModel
 		}
 		
 		$query = $this->db->table('event e');
+		if(in_array('users', $querydata)) 				$query->join('users u', 'u.id=e.user_id', 'left');
 		
 		if(isset($extras['select'])) 					$query->select($extras['select']);
 		else											$query->select(implode(',', $select));

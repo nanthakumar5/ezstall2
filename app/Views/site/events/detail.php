@@ -7,6 +7,25 @@ $cartevent 			= ($getcart && $getcart['event_id'] != $detail['id']) ? 1 : 0;
 $bookedeventid 		= (isset($bookings['event_id'])) ? $bookings['event_id'] : 0;
 $bookeduserid 		= (isset($bookings['user_id'])) ? $bookings['user_id'] : 0;
 $comments        	= (isset($comments)) ? $comments : [];
+
+if($detail['eventusertype']=='2'){
+	$pricelist = '';
+	$priceflag = explode(',', $detail['price_flag']);
+	$pricefee = explode(',', $detail['price_fee']);
+	
+	if(isset($priceflag[0]) && $priceflag[0]=='1'){
+		$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$pricefee[0].'" disabled>N ('.$currencysymbol.$pricefee[0].')</button>';
+	}
+	if(isset($priceflag[1]) && $priceflag[1]=='1'){
+		$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$pricefee[1].'" disabled>W ('.$currencysymbol.$pricefee[1].')</button>';
+	}
+	if(isset($priceflag[2]) && $priceflag[2]=='1'){
+		$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$pricefee[2].'" disabled>M ('.$currencysymbol.$pricefee[2].')</button>';
+	}
+	if(isset($priceflag[3]) && $priceflag[3]=='1'){
+		$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$pricefee[3].'" disabled>F ('.$currencysymbol.$pricefee[3].')</button>';
+	}
+}
 ?>
 <body style="overflow: initial;">
 	<section class="maxWidth">
@@ -165,6 +184,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 											$tabcontent .= '<div class="tab-pane fade'.$barnactive.'" id="barn'.$barnid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 											<ul class="list-group">';
 											foreach($barndata['stall'] as $stalldata){
+												$typeofprice = '';
 												if($stalldata['charging_id']=='1'){ 
 													$typeofprice = 'night_price';
 												}else if($stalldata['charging_id']=='2'){
@@ -173,8 +193,6 @@ $comments        	= (isset($comments)) ? $comments : [];
 													$typeofprice = 'month_price';
 												}else if($stalldata['charging_id']=='4'){
 													$typeofprice = 'flat_price';
-												}else{
-													$typeofprice = '';
 												}
 
 												$boxcolor  = 'green-box';
@@ -188,6 +206,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 												<input class="form-check-input eventbarnstall stallid me-1" data-price="'.$stalldata['price'].'" data-barnid="'.$stalldata['barn_id'].'" data-flag="1" value="'.$stalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
 												'.$stalldata['name'].'
 												<span class="'.$boxcolor.' stallavailability" data-stallid="'.$stalldata['id'].'" ></span>
+												<div class="pricelist f-r">'.$pricelist.'</div>
 												</li>';
 											}
 											$tabcontent .= '</ul></div>';
@@ -228,6 +247,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 												$tabcontent .= '<div class="tab-pane fade'.$rvactive.'" id="barn'.$rvid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 												<ul class="list-group">';
 												foreach($rvdata['rvstall'] as $rvstalldata){ 
+													$typeofprice = '';
 													if($rvstalldata['charging_id']=='1'){
 														$typeofprice = 'night_price';
 													}else if($rvstalldata['charging_id']=='2'){
@@ -249,6 +269,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 													<input class="form-check-input rvbarnstall stallid me-1" data-price="'.$rvstalldata['price'].'" data-barnid="'.$rvstalldata['barn_id'].'" data-flag="2" value="'.$rvstalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
 													'.$rvstalldata['name'].'
 													<span class="'.$boxcolor.' stallavailability" data-stallid="'.$rvstalldata['id'].'" ></span>
+													<div class="pricelist f-r">'.$pricelist.'</div>
 													</li>';
 												}
 												$tabcontent .= '</ul></div>';
@@ -454,6 +475,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 			var transactionfee		= '<?php echo $settings['transactionfee'];?>';  
 			var currencysymbol 		= '<?php echo $currencysymbol; ?>';
 			var eventid 			= '<?php echo $detail["id"]; ?>';
+			var eventusertype 		= '<?php echo $detail["eventusertype"]; ?>';
 			var cartevent 			= '<?php echo $cartevent; ?>';
 			var checkevent 			= '<?php echo $checkevent["status"]; ?>';
 			var eventstartdate  	= '<?php echo $detail["start_date"] > date("Y-m-d") ? formatdate($detail["start_date"], 1) : 0; ?>';
@@ -499,23 +521,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 					var startdate 	= $("#startdate").val(); 
 					var enddate   	= $("#enddate").val(); 
 					if(enddate!=""){
-						var startdates 		= new Date(startdate);
-						var enddates 		= new Date(enddate);
-						var stallinterval  	= enddates.getTime() - startdates.getTime(); 
-						var intervaldays 	= stallinterval / (1000 * 3600 * 24); 
-						$('.week_price').show();
-						$('.month_price').show();
-						$('.night_price').show();
-						if(intervaldays%7==0){
-							$('.night_price').hide();
-							$('.month_price').hide();
-						}else if(intervaldays%30==0){ 
-							$('.week_price').hide();
-							$('.night_price').hide();
-						}else{
-							$('.week_price').hide();
-							$('.month_price').hide();
-						}
+						pricelist()
 					}
 
 					if(startdate!='' && enddate!=''){
@@ -527,7 +533,81 @@ $comments        	= (isset($comments)) ? $comments : [];
 					}
 				}, 100);
 			})
+			
+			function pricelist(){
+				var startdates 		= new Date($("#startdate").val());
+				var enddates 		= new Date($("#enddate").val());
+				var stallinterval  	= enddates.getTime() - startdates.getTime(); 
+				var intervaldays 	= stallinterval / (1000 * 3600 * 24); 
+				
+				if(eventusertype==2){
+					$('.night_button').removeAttr('disabled');
+					$('.week_button').removeAttr('disabled');
+					$('.month_button').removeAttr('disabled');
+					$('.flat_button').removeAttr('disabled');
+					
+					if(intervaldays%7!=0){
+						$('.week_button').attr('disabled', 'disabled');
+					}
+					
+					if(intervaldays%30!=0){ 
+						$('.month_button').attr('disabled', 'disabled');
+					}
+				}else{
+					$('.week_price').show();
+					$('.month_price').show();
+					$('.night_price').show();
+					
+					if(intervaldays%7==0){
+						$('.night_price').hide();
+						$('.month_price').hide();
+					}else if(intervaldays%30==0){ 
+						$('.week_price').hide();
+						$('.night_price').hide();
+					}else{
+						$('.week_price').hide();
+						$('.month_price').hide();
+					}
+				}
+			}
+			
+			$('.price_button').click(function(){
+				priceselection($(this).attr('data-pricetype'));
+			})
+			
+			function priceselection(type){
+				$('.price_button').removeClass('priceactive');
+				
+				$(".eventbarnstall:not(:disabled):checked").each(function(){
+					$(this).click();
+				});
+				
+				$(".rvbarnstall:not(:disabled):checked").each(function(){
+					$(this).click();
+				});
+				
+				$('.price_button[data-pricetype="'+type+'"]').each(function(){
+					$(this).addClass('priceactive');
+					$(this).parent().parent().find('.stallid').attr('data-price', $(this).attr('data-pricebutton'))
+				})
+			}
+			
+			function checkprice(flag){
+				var classarray = ['eventbarnstall', 'rvbarnstall'];
 
+				if(flag==1 || flag==2){
+					if(eventusertype==2){
+						if($("."+classarray[flag-1]).parent().find('.priceactive').length==0){
+							$("."+classarray[flag-1]+":not(:disabled)").prop('checked', false);
+							toastr.warning('Please select the price.', {timeOut: 5000});
+							return false;
+						}
+					}
+				}
+
+				return true;
+			}
+			
 			function occupiedreserved(startdate, enddate, stallid=''){
 				var result = 1;
 				ajax(
@@ -548,7 +628,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 							});
 						}
 					}
-					)
+				)
 
 				ajax(
 					'<?php echo base_url()."/ajax/ajaxreserved"; ?>',
@@ -568,7 +648,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 							});
 						}
 					}
-					)
+				)
 				
 				ajax(
 					'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
@@ -598,7 +678,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 							result = data.success;
 						}
 					}
-					)
+				)
 
 				return result;
 			}
@@ -634,10 +714,14 @@ $comments        	= (isset($comments)) ? $comments : [];
 					var barnid    	= _this.attr('data-barnid');
 					var stallid		= _this.val(); 
 					var price 		= _this.attr('data-price');
+					var pricetype   = _this.parent().find('.priceactive').attr('data-pricetype'); 
 
 					if($(_this).is(':checked')){  
+						var pricevalidation = checkprice(flag);
+						if(!pricevalidation) return false;
+					
 						var checkoccupiedreserved = occupiedreserved(startdate, enddate, stallid);
-						if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, quantity : 1, startdate : startdate, enddate : enddate, type : '1', checked : 1, flag : flag, actionid : ''});
+						if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : '1', checked : 1, flag : flag, actionid : ''});
 					}else{ 
 						$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
 						cart({stall_id : stallid, type : '1', checked : 0}); 
@@ -725,7 +809,9 @@ $comments        	= (isset($comments)) ? $comments : [];
 								$("#enddate").val(result.check_out); 
 
 								occupiedreserved($("#startdate").val(), $("#enddate").val());
-
+								pricelist();
+								priceselection(result.pricetype);
+							
 								var barnstalldata = cartsummary(1, 'STALL', result.barnstall);
 								var rvbarnstalldata = cartsummary(1, 'RV HOOKUP', result.rvbarnstall);
 								var feeddata = cartsummary(2, 'FEED', result.feed);
@@ -738,17 +824,6 @@ $comments        	= (isset($comments)) ? $comments : [];
 								if(result.cleaning_fee!=''){
 									var cleaning_fee = '<div class="col-8 event_c_text">Cleaning Fee</div>\
 									<div class="col-4 event_c_text text-end">'+currencysymbol+parseFloat(result.cleaning_fee).toFixed(2)+'\</div>';
-								}
-
-								if(result.interval%7==0){
-									$('.night_price').hide();
-									$('.month_price').hide();
-								}else if(result.interval%30==0){
-									$('.week_price').hide();
-									$('.night_price').hide();
-								}else{
-									$('.week_price').hide();
-									$('.month_price').hide();
 								}
 
 								var result ='\
@@ -817,10 +892,10 @@ $comments        	= (isset($comments)) ? $comments : [];
 								var total 		 = currencysymbol+v.total;
 							}
 
-					data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+'</span><span class="col-5 text-end event_c_text">('+intervaldays+') '+total+'</span></div>';
-					$('.stallid[value='+v.stall_id+']').removeAttr('disabled');
-					name = v.barn_name;
-				});
+							data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+'</span><span class="col-5 text-end event_c_text">('+intervaldays+') '+total+'</span></div>';
+							$('.stallid[value='+v.stall_id+']').removeAttr('disabled');
+							name = v.barn_name;
+						});
 					}else{
 						data += '<div class="event_cart_title"><span class="col-12 fw-bold">'+title+'</span></div>';
 						$(result).each(function(i,v){								

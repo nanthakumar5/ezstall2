@@ -102,6 +102,7 @@ class Cart extends BaseModel
 		if(isset($data['stall_id'])&& $data['stall_id']!='')           	$request['stall_id'] 	    = $data['stall_id'];
 		if(isset($data['product_id'])&& $data['product_id']!='')        $request['product_id'] 	    = $data['product_id'];
 		if(isset($data['price'])&& $data['price']!='')     				$request['price'] 	        = $data['price'];
+		if(isset($data['pricetype'])&& $data['pricetype']!='')     		$request['price_type'] 	    = $data['pricetype'];
 		if(isset($data['quantity'])&& $data['quantity']!='')           	$request['quantity'] 	    = $data['quantity'];
 		if(isset($data['total'])&& $data['total']!='')           		$request['total'] 	   		= $data['total'];
 		if(isset($data['startdate'])&& $data['startdate']!='')         	$request['check_in'] 	    = date('Y-m-d', strtotime($data['startdate']));

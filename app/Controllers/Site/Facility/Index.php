@@ -13,9 +13,9 @@ class Index extends BaseController
 {
 	public function __construct()
 	{
-		$this->event   	= new Event();
-		$this->users 	= new Users();
-		$this->stall    = new Stall();
+		$this->event   			= new Event();
+		$this->users 			= new Users();
+		$this->stall    		= new Stall();
 		$this->bookingdetails 	= new Bookingdetails();	
 		$this->booking 			= new Booking();
 	}
@@ -55,7 +55,7 @@ class Index extends BaseController
 	public function detail($id)
     {  
 		$currentdate = date("Y-m-d");
-		$event = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'],['id' => $id, 'type' =>'2']);
+		$event = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users'],['id' => $id, 'type' =>'2']);
 		$data['detail'] 			= $event;
 		$data['settings']  			= getSettings();
 		$data['currencysymbol']  	= $this->config->currencysymbol;

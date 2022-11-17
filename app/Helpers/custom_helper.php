@@ -268,15 +268,15 @@ function getCart($type=''){
 		$daydiff           		= ceil(abs($start - $end) / 86400);
 		$interval           	= $daydiff==0 ? 1 : $daydiff;
 		$type          			= array_unique(array_column($result, 'type'))[0];
+		$pricetype          	= array_unique(array_column($result, 'price_type'))[0];
 		$tax 					= isset($result[0]['tax']['tax_price']) ? $result[0]['tax']['tax_price'] :'0';
 
 
 		$barnstall = $rvbarnstall = $feed =  $shaving = [];
 
-		$intervalss = ($interval%7==0) ? ($interval/7) : $interval;
-		if($interval>29) {
-			$intervalss = ($interval%30==0) ? ($interval/30) : $interval;
-		}
+		$intervalss = $interval;
+		$intervalss = ($intervalss%7==0) ? ($intervalss/7) : $intervalss;
+		$intervalss = ($intervalss%30==0) ? ($intervalss/30) : $intervalss;
 		
 		$price = 0;
 		foreach ($result as $res) {
@@ -289,13 +289,10 @@ function getCart($type=''){
 					'price' 		=> $res['price'],
 					'chargingid' 	=> $res['chargingid'],
 					'interval' 		=> $interval,
-					//'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
-					'total' 		=> 0
+					'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
 				];
 				
-				//$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
-				$price += 0;
-
+				$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
 			}else if($res['flag']=='2'){
 				$rvbarnstall[] = [
 					'barn_id' 		=> $res['barn_id'], 
@@ -305,12 +302,10 @@ function getCart($type=''){
 					'price' 		=> $res['price'],
 					'chargingid' 	=> $res['chargingid'],
 					'interval' 		=> $interval,
-					//'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
-					'total' 		=> 0
+					'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
 				];
 				
-				//$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
-				$price += 0;
+				$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
 			}else if($res['flag']=='3'){
 				$feed[] = [
 					'product_id'	=> $res['product_id'], 
@@ -358,6 +353,7 @@ function getCart($type=''){
 			'check_in' 			=> $check_in,
 			'check_out'			=> $check_out,
 			'price' 			=> $price,
+			'pricetype' 		=> $pricetype,
 			'type' 				=> $type
 		];	
 	}else{

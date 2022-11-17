@@ -48,8 +48,8 @@ class Booking extends BaseModel
 		if(in_array('event', $querydata)) 				$query->join('event e', 'e.id=b.event_id', 'left');
 		
 		if(in_array('users', $querydata)) 				$query->join('users u', 'u.id=b.user_id', 'left');
-		if(in_array('cleanbookingdetails', $querydata)) 		$query->join('booking_details bd', 'b.id=bd.booking_id', 'left');
-		if(in_array('cleanstall', $querydata)) 				$query->join('stall s', 's.id=bd.stall_id', 'left');		
+		if(in_array('cleanbookingdetails', $querydata)) $query->join('booking_details bd', 'b.id=bd.booking_id', 'left');
+		if(in_array('cleanstall', $querydata)) 			$query->join('stall s', 's.id=bd.stall_id', 'left');		
 		if(in_array('payment',$querydata))				$query->join('payment p', 'p.id=b.payment_id', 'left');
 		if(in_array('paymentmethod',$querydata))		$query->join('payment_method pm', 'pm.id=b.paymentmethod_id', 'left');
 
