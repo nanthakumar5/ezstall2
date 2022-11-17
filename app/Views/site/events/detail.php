@@ -8,8 +8,8 @@ $bookedeventid 		= (isset($bookings['event_id'])) ? $bookings['event_id'] : 0;
 $bookeduserid 		= (isset($bookings['user_id'])) ? $bookings['user_id'] : 0;
 $comments        	= (isset($comments)) ? $comments : [];
 
+$pricelist = '';
 if($detail['eventusertype']=='2'){
-	$pricelist = '';
 	$priceflag = explode(',', $detail['price_flag']);
 	$pricefee = explode(',', $detail['price_fee']);
 	
@@ -202,11 +202,15 @@ if($detail['eventusertype']=='2'){
 													$checkboxstatus = 'disabled';
 												}
 
-												$tabcontent .= 	'<li class="list-group-item '.$typeofprice.'">
-												<input class="form-check-input eventbarnstall stallid me-1" data-price="'.$stalldata['price'].'" data-barnid="'.$stalldata['barn_id'].'" data-flag="1" value="'.$stalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
-												'.$stalldata['name'].'
-												<span class="'.$boxcolor.' stallavailability" data-stallid="'.$stalldata['id'].'" ></span>
-												<div class="pricelist f-r">'.$pricelist.'</div>
+												$tabcontent .= 	'<li class="list-group-item d-flex align-items-center justify-content-between '.$typeofprice.'">
+													<div>
+														<input class="form-check-input eventbarnstall stallid me-1" data-price="'.$stalldata['price'].'" data-barnid="'.$stalldata['barn_id'].'" data-flag="1" value="'.$stalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
+														'.$stalldata['name'].'
+													</div>
+													<div class="d-flex align-items-center">
+														<div class="pricelist f-r">'.$pricelist.'</div>
+														<span class="'.$boxcolor.' stallavailability" data-stallid="'.$stalldata['id'].'" ></span>
+													</div>
 												</li>';
 											}
 											$tabcontent .= '</ul></div>';
@@ -265,11 +269,15 @@ if($detail['eventusertype']=='2'){
 														$checkboxstatus = 'disabled';
 													}
 
-													$tabcontent .= 	'<li class="list-group-item rvhookups '.$typeofprice.'">
-													<input class="form-check-input rvbarnstall stallid me-1" data-price="'.$rvstalldata['price'].'" data-barnid="'.$rvstalldata['barn_id'].'" data-flag="2" value="'.$rvstalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
-													'.$rvstalldata['name'].'
-													<span class="'.$boxcolor.' stallavailability" data-stallid="'.$rvstalldata['id'].'" ></span>
-													<div class="pricelist f-r">'.$pricelist.'</div>
+													$tabcontent .= 	'<li class="list-group-item rvhookups d-flex align-items-center justify-content-between '.$typeofprice.'">
+														<div>
+															<input class="form-check-input rvbarnstall stallid me-1" data-price="'.$rvstalldata['price'].'" data-barnid="'.$rvstalldata['barn_id'].'" data-flag="2" value="'.$rvstalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
+															'.$rvstalldata['name'].'
+														</div>
+														<div class="d-flex align-items-center">
+															<div class="pricelist f-r">'.$pricelist.'</div>
+															<span class="'.$boxcolor.' stallavailability" data-stallid="'.$rvstalldata['id'].'" ></span>
+														</div>
 													</li>';
 												}
 												$tabcontent .= '</ul></div>';
@@ -588,7 +596,7 @@ if($detail['eventusertype']=='2'){
 				
 				$('.price_button[data-pricetype="'+type+'"]').each(function(){
 					$(this).addClass('priceactive');
-					$(this).parent().parent().find('.stallid').attr('data-price', $(this).attr('data-pricebutton'))
+					$(this).parent().parent().parent().find('.stallid').attr('data-price', $(this).attr('data-pricebutton'))
 				})
 			}
 			
@@ -597,7 +605,7 @@ if($detail['eventusertype']=='2'){
 
 				if(flag==1 || flag==2){
 					if(eventusertype==2){
-						if($("."+classarray[flag-1]).parent().find('.priceactive').length==0){
+						if($("."+classarray[flag-1]).parent().parent().find('.priceactive').length==0){
 							$("."+classarray[flag-1]+":not(:disabled)").prop('checked', false);
 							toastr.warning('Please select the price.', {timeOut: 5000});
 							return false;
@@ -714,7 +722,7 @@ if($detail['eventusertype']=='2'){
 					var barnid    	= _this.attr('data-barnid');
 					var stallid		= _this.val(); 
 					var price 		= _this.attr('data-price');
-					var pricetype   = _this.parent().find('.priceactive').attr('data-pricetype'); 
+					var pricetype   = _this.parent().parent().parent().find('.priceactive').attr('data-pricetype'); 
 
 					if($(_this).is(':checked')){  
 						var pricevalidation = checkprice(flag);
