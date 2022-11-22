@@ -83,13 +83,11 @@ class Index extends BaseController
 		$bookings 	= $this->booking->getBooking('row', ['booking', 'event'],['user_id' => $userid, 'eventid' => $id,'status'=> ['1']]);
 		$comments 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $id,'status'=> ['1']]);
 
-		$data['checkevent'] 		= checkEvent($event);
 		$data['detail']  			= $event;
+		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['checkevent' => checkEvent($event), 'settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol]+$data);		
+		$data['usertype']			= $usertype;
 		$data['bookings']  			= $bookings;
 		$data['comments']  			= $comments;
-		$data['settings']  			= getSettings();
-		$data['currencysymbol']  	= $this->config->currencysymbol;
-		$data['usertype']			= $usertype;
 		
 		return view('site/events/detail',$data);
     }

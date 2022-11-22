@@ -24,14 +24,22 @@ class FinancialReport extends BaseController
 		if ($this->request->getMethod()=='post')
         {
 			$requestdata 	= $this->request->getPost(); 			
-			$checkin  		= formatdate($requestdata['checkin']);
-			$checkout  		= formatdate($requestdata['checkout']);
 			$type  			= $requestdata['type'];
+			$checkin  		= $requestdata['checkin']!='' ? formatdate($requestdata['checkin']) : '';
+			$checkout  		= $requestdata['checkout']!='' ? formatdate($requestdata['checkout']) : '';
+			$eventid  		= $type=='1' ? ($requestdata['event_id']!='' ? $requestdata['event_id'] : '') : ($requestdata['facility_id']!='' ? $requestdata['facility_id'] : '');
 
+			$condition = [];
+			if($checkin!='') $condition['checkin'] = $checkin;
+			if($checkout!='') $condition['checkout'] = $checkout;
+			if($eventid!='') $condition['eventid'] = $eventid;
+        	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['type' => $type]+$condition);
+        	
 			$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
 			$data['currencysymbol']  	= $this->config->currencysymbol;
-        	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['checkin' => $checkin, 'checkout' => $checkout, 'type' => $type]);
-        	$data['type']		    	= $type;
+			$data['type']		    	= $type;
+			$data['checkin']		    = $checkin;
+			$data['checkout']		    = $checkout;
 			$data['usertype']		    = '1';
 		    
 			if(empty($data['events'])){

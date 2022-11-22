@@ -12,19 +12,6 @@ $profileimage      		= isset($result['profile_image']) ? $result['profile_image'
 $profileimage 			= filedata($profileimage, base_url().'/assets/uploads/profile/');
 $stallmap      			= isset($result['stallmap']) ? $result['stallmap'] : '';
 $stallmap 				= filedata($stallmap, base_url().'/assets/uploads/stallmap/');
-$feed_flag 				= isset($result['feed_flag']) ? $result['feed_flag'] : '';
-$shaving_flag 			= isset($result['shaving_flag']) ? $result['shaving_flag'] : '';
-$rv_flag 				= isset($result['rv_flag']) ? $result['rv_flag'] : '';
-$charging_flag 			= isset($result['charging_flag']) ? $result['charging_flag'] : '';
-$cleaning_flag 			= isset($result['cleaning_flag']) ? $result['cleaning_flag'] : '';
-$notification_flag 		= isset($result['notification_flag']) ? $result['notification_flag'] : '';
-$price_flag 			= isset($result['price_flag']) ? explode(',', $result['price_flag']) : [];
-$price_fee 				= isset($result['price_fee']) ? explode(',', $result['price_fee']) : [];
-$cleaning_fee 			= isset($result['cleaning_fee']) ? $result['cleaning_fee'] : '';
-$barn        			= isset($result['barn']) ? $result['barn'] : [];
-$rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
-$feed 					= isset($result['feed']) ? $result['feed'] : '';
-$shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 $pageaction 			= $id=='' ? 'Add' : 'Update';
 ?>
 <section class="content">
@@ -101,171 +88,7 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 							</div>
 						</div>		
 					</div>
-					<div class="card">
-						<div class="card-body">
-							<div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you be selling feed at this event? </p>
-
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_feed event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="feed_flag" name="feed_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you be selling shavings at this event?</p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_shaving event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="shaving_flag" name="shaving_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you have RV Hookups at this event? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_rv event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="rv_flag" name="rv_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you Collect the Cleaning fee from Horse owner? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_cleaning event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="cleaning_flag" name="cleaning_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Send a text message to users when their stall is unlocked and ready for use? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_notification event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="notification_flag" name="notification_flag">
-									</div>
-								</div>
-								<div align="center">
-									<div class="col-md-12 mt-3 bblg-2 pb-3">	
-										<div class="row">	
-											<div class="col-md-2">
-												<input type="checkbox" class="questionmodal_priceflagall">
-											</div>
-											<div class="col-md-4">
-												Rates
-											</div>
-											<div class="col-md-6">
-												$
-											</div>
-										</div>
-									</div>
-									<?php foreach($pricelist as $key => $data){ ?>
-										<div class="col-md-12 mt-3">	
-											<div class="row">	
-												<div class="col-md-2">
-													<input type="checkbox" class="questionmodal_priceflag questionmodal_priceflag<?php echo $key; ?>" data-key="<?php echo $key; ?>" value="1" name="price_flag[<?php echo $key; ?>]" <?php if(isset($price_flag[$key-1]) && $price_flag[$key-1]==1){ echo 'checked'; } ?>>
-												</div>
-												<div class="col-md-4">
-													<?php echo $data; ?>
-												</div>
-												<div class="col-md-6">
-													<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key; ?> form-control" name="price_fee[<?php echo $key; ?>]" value="<?php if(isset($price_fee[$key-1]) && $price_fee[$key-1]!=0){ echo $price_fee[$key-1]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
-												</div>
-											</div>
-										</div>
-									<?php } ?>
-									<input type="hidden" id="price_flag" value="<?php echo implode(',', $price_flag); ?>">
-									<input type="hidden" id="price_fee" value="<?php echo implode(',', $price_fee); ?>">
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0 addbarn">
-								<div class="col-md-3">
-									<p class="fs-2 fw-bold mb-0 barntfont">Barn</p>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<input type="hidden" value="" name="barnvalidation" id="barnvalidation">
-									<button class="btn-stall barnbtn" value="4" name="tst" id="tes">Add Barn</button>
-								</div>
-							</div>
-							<ul class="nav nav-pills flex-column col-md-3 barntab" role="tablist"></ul>
-							<div class="tab-content col-md-9 stalltab"></div>
-						</div>
-					</div>
-					<div class="card-body p-0 feed_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0 addfeed">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfontfeed">Feed</h4>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<input type="hidden" value="" name="feedvalidation" id="feedvalidation">
-								<button class="btn-stall feedbtn">Add feed</button>
-								</div>
-							</div>
-
-							<div class="row" >
-								<ul class="nav nav-pills flex-column feedlist" role="tablist"></ul>
-								<div class="tab-content col-md-9 feedstalltab"></div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0 shaving_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfontshavings">Shavings</h4>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<input type="hidden" value="" name="shavingsvalidation" id="shavingsvalidation">
-									<button class="btn-stall shavingsbtn">Add Shavings</button>
-								</div>
-							</div>
-							<div class="row" >
-								<ul class="nav nav-pills flex-column shavingslist" role="tablist"></ul>
-								<div class="tab-content col-md-9 shavingsstalltab"></div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0 rv_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfont">RV Hookups</h4>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<input type="hidden" value="" name="rvhookupsvalidation" id="rvhookupsvalidation">
-									<button class="btn-stall rvhookupsbtn">Add RV Hookups</button>
-								</div>
-							</div>
-							<div class="row">
-								<ul class="nav nav-pills flex-column col-md-3 rvhookupsbarntab" role="tablist"></ul>
-								<div class="tab-content col-md-9 rvhookupsstalltab"></div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0 cleaning_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0 cleaningfee">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfontfee">Cleaning Fee</h4>
-								</div>
-								<div class="col-md-12 my-2">
-									<div class="form-group">
-										<input type="text" name="cleaning_fee" class="form-control" id="cleaning_fee" placeholder="Enter Cleaning Fee" value="<?php echo $cleaning_fee ?>">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<?php echo $barnstall; ?>
 					<div class="col-md-12 mt-4">
 						<input type="hidden" name="actionid" value="<?php echo $id; ?>">
 						<input type="hidden" name="userid" value="<?php echo $userid; ?>">
@@ -275,94 +98,18 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 					</div>
 				</div>
 			</form>
-
-		</div>
-	</div>
-
-	<div class="modal fade" id="myModal" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content" style="text-align: left !important;">
-				<div class="modal-header">
-					<h4 class="modal-title">Stall</h4>
-					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>Stall Name</label>
-							<input type="text" id="stall_name" class="form-control" placeholder="Enter Your Stall Name">
-						</div>
-					</div>
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>Price</label>
-							<input type="text" id="stall_price" class="form-control" placeholder="Enter Price">
-						</div>
-					</div>
-					<div class="col-md-6 my-2">
-						<div class="form-group">
-							<label>Stall Image</label>			
-							<div>
-								<a href="" target="_blank">
-									<img src="" class="stall_source" width="100">
-								</a>
-							</div>
-							<input type="file" class="stall_file">
-							<span class="stall_msg"></span>
-							<input type="hidden" id="stall_image" class="stall_input" value="">
-						</div>
-					</div>	
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>Total Number of Stalls</label>
-							<input type="number" id="stall"  name="stall" class="form-control" placeholder="Enter Total Number of Stalls" min="1" required>
-						</div>
-					</div>
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>First Stall Number</label>
-							<input type="text" id="stallstarting"  name="stallstarting" class="form-control" placeholder="Enter First Stall Number" required>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="hidden" id="barnIndexValue" name="barnIndexValue" value="0">
-					<button type="button"class="btn btn-info bulkstallbtn">Submit</button>
-					<button type="button"class="btn btn-info " data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
 		</div>
 	</div>
 </section>
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <?php echo $stripe; ?>
-<?php echo $questionmodal; ?>
 <script>
-
-	var barn				 	= $.parseJSON('<?php echo addslashes(json_encode($barn)); ?>'); 
-	var chargingflag			= $.parseJSON('<?php echo addslashes(json_encode($chargingflag)); ?>'); 
-	var rvbarn					= $.parseJSON('<?php echo addslashes(json_encode($rvbarn)); ?>');
-	var feed				 	= $.parseJSON('<?php echo addslashes(json_encode($feed)); ?>');
-	var shaving					= $.parseJSON('<?php echo addslashes(json_encode($shaving)); ?>');
-	var occupied 	 			= $.parseJSON('<?php echo json_encode((isset($occupied)) ? array_filter($occupied) : []); ?>');
-	var reserved 	 			= $.parseJSON('<?php echo json_encode((isset($reserved)) ? array_filter(explode(",", implode(",", array_keys($reserved)))) : []); ?>');
-	var occupiedstallcount 	 	= '<?php echo (isset($occupied)) ? count($occupied) : 0; ?>';
-	var stallpercost 	 		= '<?php echo $settings["facilitystallfee"]; ?>';
-	var currencysymbol 			= '<?php echo $currencysymbol; ?>';
 	var id                      = '<?php echo $id ?>';
-	var feed_flag				= '<?php echo $feed_flag ?>';
-	var shaving_flag			= '<?php echo $shaving_flag ?>';
-	var rv_flag				 	= '<?php echo $rv_flag ?>';
-	var charging_flag			= '<?php echo $charging_flag ?>'; 
-	var cleaning_flag			= '<?php echo $cleaning_flag ?>'; 
-	var notification_flag		= '<?php echo $notification_flag ?>';
+	var currencysymbol 			= '<?php echo $currencysymbol; ?>';
+	var stallpercost 	 		= '<?php echo $settings["facilitystallfee"]; ?>';
 	
 	$(function(){
-		if(id==""){
-			$('#questionmodal').modal('show'); 
-		}
- 
 		editor('#description');
 		fileupload([".image_file"], ['.image_input', '.image_source','.image_msg'],['2']);
 		fileupload([".profileimage_file"], ['.profileimage_input', '.profileimage_source','.profileimage_msg']);
@@ -375,9 +122,6 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 				facility_name  	: {
 					required	: 	true
 				},
-				/*description     : {
-					required	: 	true
-				},*/
 				barnvalidation : {
 					required 	: true
 				},
@@ -390,69 +134,7 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 				ignore : []
 			}
 		);
-
-		questionpopup1(1, 'rv', rv_flag)
-		questionpopup1(1, 'feed', feed_flag)
-		questionpopup1(1, 'shaving', shaving_flag)
-		questionpopup1(1, 'cleaning', cleaning_flag)
-		questionpopup1(2, 'charging', charging_flag)
-		questionpopup1(2, 'notification', notification_flag)
-		
-		barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[2, chargingflag]], [barn, occupied, reserved])
-		barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [2, chargingflag]], [rvbarn, occupied, reserved])	
-		products('feed', [['.feedbtn'], ['.feedlist'], [0]], [feed])
-		products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0]], [shaving])
 	});
-	
-	$('.questionmodal_shaving').click(function(e){ 
-		e.preventDefault();
-        questionpopup1(1, 'shaving', $(this).val())
-    });
-	    
-    $('.questionmodal_feed').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(1, 'feed', $(this).val())
-    });
-
-    $('.questionmodal_rv').click(function(e){ 
-    	e.preventDefault();
-    	/*if($(this).val()=='2'){
-            $('#rvhookupsvalidation').val('1');
-        }else if($(this).val()=='1'){
-            $('#rvhookupsvalidation').val('');
-        }*/
-        questionpopup1(1, 'rv', $(this).val())
-    });
-
-    $('.questionmodal_cleaning').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(1, 'cleaning', $(this).val())
-    });
-
-
-    $('.questionmodal_charging').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(2, 'charging', $(this).val())
-    });
-
-    $('.questionmodal_notification').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(2, 'notification', $(this).val())
-    });
-
-  	function questionpopup1(type, name, value){ 
-        $('.questionmodal_'+name).removeClass("btn-stall").addClass("event_btn");
-        $('.questionmodal_'+name+'[value="'+value+'"]').removeClass("event_btn").addClass("btn-stall");
-        $('.'+name+'_flag').val(value);   
-        
-        if(type=='1'){
-            if(value=='1'){
-                $('.'+name+'_wrapper').show();  
-            }else{
-                $('.'+name+'_wrapper').hide();      
-            }
-        }
-    }
 	
     $('.facilitypayment').click(function(){
 		tabvalidation();

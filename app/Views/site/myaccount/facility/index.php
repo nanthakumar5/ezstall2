@@ -42,16 +42,13 @@ $currentdate 					= date("Y-m-d");
 						<?php } ?>
 				    <?php } ?>
 					<p class="mt-3"></p>
-				    <a href="<?php echo base_url().'/myaccount/facility/financialreport/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-2">
+				    <a data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
 						Financial Report <i class="far fa-eye i-white-icon"></i>
 					</a>
-				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-2">
+				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
 						Inventories <i class="far fa-eye i-white-icon"></i>
 					</a>
-					<a href="<?php echo base_url().'/myaccount/facility/export/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-2">
+					<a href="<?php echo base_url().'/myaccount/facility/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
 						Export <i class="fas fa-file-export i-white-icon"></i>
 					</a>
 				</div>
@@ -62,11 +59,57 @@ $currentdate 					= date("Y-m-d");
 	<?php } ?>
 	<?php echo $pager; ?>
 </section>
+
+<div id="financialmodal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Financial Report</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo base_url().'/myaccount/facility/financialreport'; ?>">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>From Date</label>
+									<input type="text" name="checkin" autocomplete="off" class="form-control" id="checkin">	
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>To Date</label>
+									<input type="text" name="checkout" autocomplete="off" class="form-control" id="checkout">		
+								</div>
+							</div>
+							<div class="col-md-12 mt-3">
+								<input type="hidden" value="" name="event_id" class="financialeventid">
+								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <script>
 	var userid = '<?php echo $userid; ?>';
-
+	
+	$(function(){
+		dateformat('#checkin, #checkout');
+	});
+	
+	$(document).on('click', '.financialreport', function (e) { 
+		e.preventDefault();
+		$('.financialeventid').val($(this).attr('data-id'));
+	});
+	
 	$(document).on('click','.delete',function(){
 		var action 	= 	'<?php echo base_url()."/myaccount/facility"; ?>';
 		var data   = '\

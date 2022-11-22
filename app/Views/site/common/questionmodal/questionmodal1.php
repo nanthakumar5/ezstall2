@@ -239,8 +239,7 @@
 		
 		$('#price_flag').val(price_flag.join(',')).trigger('change');
 		$('#price_fee').val(price_fee.join(',')).trigger('change');
-	}
-	
+	}	
 	// END PRICE LIST
 </script>
 

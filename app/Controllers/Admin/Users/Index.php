@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 
 use App\Models\Users;
 use App\Models\Stripe;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class Index extends BaseController
 {
@@ -106,4 +107,50 @@ class Index extends BaseController
 		
 		return view('admin/users/action', $data);
 	}	
+	
+	public function import()
+	{
+		$phpspreadsheet = new Spreadsheet();
+
+      	$reader 		= new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+      	$spreadsheet 	= $reader->load($_FILES['import']['tmp_name']);
+		$sheetdata 		= $spreadsheet->getActiveSheet()->toArray();
+		$array 			= [];
+		
+		$log = '';
+		foreach($sheetdata as $key => $data){
+			if($key=='0') continue;
+			
+			if($data[0]!='' && $data[1]!='' && $data[2]!='' && $data[3]!=''){
+				$checkUser = $this->users->getUsers('row', ['users'], ['email' => $data[1], 'status' => ['1', '2']]);
+				
+				if(!$checkUser){
+					$this->users->action([
+						'name' => $data[0],
+						'email' => $data[1],
+						'password' => $data[2],
+						'type' => $data[3],
+						'status' => '1',
+						'email_status' => '1'
+					]);
+				}else{
+					$log .= 'Row '.$key.', Email already exists'.PHP_EOL;
+				}
+			}else{
+				$log .= 'Row '.$key.', Some fields are empty'.PHP_EOL; 
+			}
+		}
+		
+		$this->session->setFlashdata('success', $log.'Users import successfully.');
+		return redirect()->to(getAdminUrl().'/users'); 
+	}
+	
+	public function sampleexport()
+	{
+		$filepath   = base_url().'/assets/excel/sampleuser.xlsx';		
+		header("Content-Type: application/octet-stream"); 
+        header("Content-Disposition: attachment; filename=\"". basename($filepath) ."\"");
+        readfile ($filepath);
+        exit();
+	}
 }

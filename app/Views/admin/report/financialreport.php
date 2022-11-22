@@ -29,7 +29,19 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									<label>Type</label>
-									<?php echo form_dropdown('type', $frtype, '1', ['class' => 'form-control']); ?>						
+									<?php echo form_dropdown('type', $frtype, '1', ['class' => 'form-control eventtype']); ?>						
+								</div>
+							</div>
+							<div class="col-md-12 eventbox">
+								<div class="form-group">
+									<label>Event</label>
+									<?php echo form_dropdown('event_id', ['' => 'All Event']+getEventsList(['type' => '1']), '', ['class' => 'form-control']); ?>						
+								</div>
+							</div>
+							<div class="col-md-12 facilitybox displaynone">
+								<div class="form-group">
+									<label>Facility</label>
+									<?php echo form_dropdown('facility_id', ['' => 'All Facility']+getEventsList(['type' => '2']), '', ['class' => 'form-control']); ?>						
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -58,22 +70,17 @@
 <script>
 $(function(){
 	dateformat('#checkin, #checkout');
-    validation(
-		'#form',
-		{
-			checkin 	     : {
-				required	: 	true
-			},
-			checkout  : {	
-				required	: 	true
-			}
-		},
-		{},
-		{
-			ignore : []
-		}
-	);
 });
+
+$('.eventtype').change(function(){
+	$('.eventbox, .facilitybox').addClass('displaynone');
+	
+	if($(this).val()=='1'){
+		$('.eventbox').removeClass('displaynone');
+	}else{
+		$('.facilitybox').removeClass('displaynone');
+	}
+})
 </script>
 
 <?php $this->endSection(); ?>

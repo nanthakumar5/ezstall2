@@ -88,7 +88,17 @@ class Index extends BaseController
 		return view('site/myaccount/event/index', $data);
     }
 
-    public function action($id='')
+    public function eventsaction($id='')
+	{   
+		return $this->action($id);
+	}
+	
+    public function facilityeventsaction($id='')
+	{   
+		return $this->action($id);
+	}
+	
+    public function action($id)
 	{   
 		$userdetails 					= getSiteUserDetails();
 		$userid         				= $userdetails['id'];
@@ -138,13 +148,9 @@ class Index extends BaseController
 			}
         } 
 		
+		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => $usertype]+$data);		
 		$data['userid'] 		= $userid;
-		$data['usertype'] 		= $usertype;
-		$data['yesno'] 			= $this->config->yesno;
-		$data['chargingflag'] 	= $this->config->chargingflag;
-		$data['pricelist'] 		= $this->config->pricelist;
 		$data['googleapikey'] 	= $this->config->googleapikey;
-		$data['questionmodal'] 	= view('site/common/questionmodal/questionmodal1', ['yesno' => $data['yesno'], 'pricelist' => $data['pricelist'], 'usertype' => $data['usertype']]);
 		return view('site/myaccount/event/action', $data);
 	}
 	
@@ -269,11 +275,22 @@ class Index extends BaseController
 		$mpdf->Output('Eventreport.pdf','D');
     }
 	
-   	public function financialreport($id)
+   	public function financialreport()
    	{
+		$requestData 	= $this->request->getPost();
+		
+		$checkin  		= $requestData['checkin']!='' ? formatdate($requestData['checkin']) : '';
+		$checkout  		= $requestData['checkout']!='' ? formatdate($requestData['checkout']) : '';
+		$eventid  		= $requestData['event_id']!='' ? $requestData['event_id'] : '';
+
+		$condition = [];
+		if($checkin!='') $condition['checkin'] = $checkin;
+		if($checkout!='') $condition['checkout'] = $checkout;
+		if($eventid!='') $condition['eventid'] = $eventid;
+		$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['type' => '1']+$condition);
+		
 		$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
 		$data['currencysymbol']  	= $this->config->currencysymbol;
-		$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['eventid' => $id, 'type' => '1']);
 		$data['type']		    	= '1';
 		$data['usertype']		    = '2';
 		

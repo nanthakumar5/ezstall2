@@ -225,8 +225,25 @@ function getUsersList($data=[])
     $users         =     new \App\Models\Users;;    
     $result        =     $users->getUsers('all', ['users'], ['status' => ['1']]+$data);
     
-    if(count($result) > 0) return ['' => 'Select User']+array_column($result, 'name', 'id');
-    else return [];    
+    if(count($result) > 0){
+		if(isset($data['all'])) return $result;
+		else return ['' => 'Select User']+array_column($result, 'name', 'id');
+    }else{
+		return [];    
+	}
+}
+
+function getEventsList($data=[])
+{    
+    $event         =     new \App\Models\Event;   
+    $result        =     $event->getEvent('all', ['event'], ['status' => ['1']]+$data);
+    
+    if(count($result) > 0){
+		if(isset($data['all'])) return $result;
+		else return array_column($result, 'name', 'id');
+    }else{
+		return [];    
+	}
 }
 
 

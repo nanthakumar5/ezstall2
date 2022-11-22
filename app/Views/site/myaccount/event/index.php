@@ -9,6 +9,9 @@ $currentdate 	= date("Y-m-d");
 <section class="maxWidth eventPagePanel mt-2">
 	<?php if($usertype !='4'){ ?>
 		<a class="btn-custom-black addevent" href="<?php echo base_url().'/myaccount/events/add'; ?>">Add Event</a>
+		<?php if($usertype =='2'){ ?>
+			<a class="btn-custom-black addevent" href="<?php echo base_url().'/myaccount/facilityevents/add'; ?>">Add Facility Event</a>
+		<?php } ?>
 	<?php } ?>
 	<?php  if($checksubscriptiontype=='3' && $checksubscriptionproducer <= $eventcount){ ?>
 		<button class="btn btn-primary paynow"  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#stripeFormModal" data-bs-whatever="@getbootstrap">Pay Now to Add Event</button>
@@ -60,28 +63,62 @@ $currentdate 	= date("Y-m-d");
 						Inventories <i class="far fa-eye i-white-icon"></i>
 					</a>
 					<p class="mt-3"></p>
-					<a href="<?php echo base_url().'/myaccount/events/financialreport/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-2">
+					<a data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
 						Financial Report <i class="fas fa-file-export i-white-icon"></i> 
 					</a>
-					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-2">
+					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
 						Report <i class="fas fa-file-export i-white-icon"></i> 
 					</a>
 					<?php if($usertype !='4'){ ?>
-						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" 
-							class="dash-export-event fs-7 mx-2">
+						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
 							Export <i class="fas fa-file-export i-white-icon"></i>
 						</a>
 					<?php } ?>
 				</div>
 			</div>
-			<?php } ?>
+		<?php } ?>
 	<?php } else{ ?>
 		<p class="mt-3">No Record Found</p>
 	<?php } ?>
 	<?php echo $pager; ?>
 </section>
+
+<div id="financialmodal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Financial Report</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo base_url().'/myaccount/events/financialreport'; ?>">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>From Date</label>
+									<input type="text" name="checkin" autocomplete="off" class="form-control" id="checkin">	
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label>To Date</label>
+									<input type="text" name="checkout" autocomplete="off" class="form-control" id="checkout">		
+								</div>
+							</div>
+							<div class="col-md-12 mt-3">
+								<input type="hidden" value="" name="event_id" class="financialeventid">
+								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <?php echo $stripe; ?>
@@ -89,7 +126,16 @@ $currentdate 	= date("Y-m-d");
 	var userid = '<?php echo $userid; ?>';
 	var eventcost = parseFloat('<?php echo $settings["producereventfee"]; ?>');
 	var currencysymbol = '<?php echo $currencysymbol; ?>';
-
+	
+	$(function(){
+		dateformat('#checkin, #checkout');
+	});
+	
+	$(document).on('click', '.financialreport', function (e) { 
+		e.preventDefault();
+		$('.financialeventid').val($(this).attr('data-id'));
+	});
+	
 	$(document).on('click','.delete',function(){
 		var action 	= 	'<?php echo base_url()."/myaccount/events"; ?>';
 		var data   = '\

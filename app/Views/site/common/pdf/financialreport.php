@@ -23,8 +23,9 @@ table tr td {
 		    <?php foreach($events as $key => $data){ ?>
                 <?php
                     $eventname  			= $data['eventname'];
-                    $startdate 				= formatdate($data['startdate'], 1);
-                 	$enddate 				= formatdate($data['enddate'], 1);
+                    $eventtype  			= $data['eventtype'];
+                    $startdate 				= isset($checkin) && $checkin!='' ? formatdate($checkin, 1) : formatdate($data['startdate'], 1);
+                 	$enddate 				= isset($checkout) && $checkout!='' ? formatdate($checkout, 1) : formatdate($data['enddate'], 1);
 					$totalamount 			= $data['totalamount'];
 					$totalprice 			= $data['totalprice'];
 					$totaltransactionfee 	= $data['totaltransactionfee'];
@@ -32,6 +33,12 @@ table tr td {
 					$totaltax 				= $data['totaltax'];
 					$totalamountadmin		= $totalprice+$totaltransactionfee+$totalcleaningfee+$totaltax;
 					$totalamountuser		= $totalprice+$totalcleaningfee+$totaltax;
+					
+					if($eventtype==1){
+						$eventtext = 'EVENT';
+					}else{
+						$eventtext = 'FACILITY';
+					}
 					
 					$totalstallavailable = 0;
 					$totalstallrented = 0;
@@ -157,9 +164,9 @@ table tr td {
 						<?php if($type=='1'){ ?>
 							<td style="padding-left:0px;"><?php echo 'Start Date: '.$startdate; ?></td>
 							<td><?php echo 'End Date: '.$enddate; ?></td>
-							<td><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
+							<td><?php echo 'TOTAL '.$eventtext.' REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
 						<?php }elseif($type=='2'){ ?>
-							<td style="padding-left:0px;"><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
+							<td style="padding-left:0px;"><?php echo 'TOTAL '.$eventtext.' REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
 						<?php } ?>
     	            </tr>
     	        </table>
@@ -238,7 +245,7 @@ table tr td {
 						<?php } ?>
     	            </tr>
     	        </table>
-    	        <h2 style="font-size:18px;padding-top:20px;padding-bottom:10px;"><?php echo 'TOTAL EVENT REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></h2>
+    	        <h2 style="font-size:18px;padding-top:20px;padding-bottom:10px;"><?php echo 'TOTAL '.$eventtext.' REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></h2>
 				<?php if($key!=count($events)-1){ ?>
 					<pagebreak></pagebreak>
 				<?php } ?>

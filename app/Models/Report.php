@@ -18,7 +18,7 @@ class Report extends BaseModel
 		}
 		
 		if(in_array('event', $querydata)){
-			$data		= 	['e.id AS eventid, e.name AS eventname, e.start_date AS startdate, e.end_date AS enddate'];							
+			$data		= 	['e.id AS eventid, e.name AS eventname, e.type AS eventtype, e.start_date AS startdate, e.end_date AS enddate'];							
 			$select[] 	= 	implode(',', $data);
 		}
 
@@ -30,9 +30,12 @@ class Report extends BaseModel
 		else											$query->select(implode(',', $select));
 		
 		if(isset($requestdata['eventid'])) 				$query->where('bk.event_id', $requestdata['eventid']);		
-		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);		
+		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);	
+		
 		if($checkin!='' && $checkout!='') 				$query->groupStart()->where("bk.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bk.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();
-			
+		elseif($checkin!='' && $checkout=='') 			$query->where("bk.check_in >=", $checkin);
+		elseif($checkin=='' && $checkout!='') 			$query->where("bk.check_out <=", $checkout);
+	
 		$query->groupBy('bk.event_id');
 
 		if($type=='count'){

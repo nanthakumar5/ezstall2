@@ -57,9 +57,8 @@ class Index extends BaseController
 		$currentdate = date("Y-m-d");
 		$event = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users'],['id' => $id, 'type' =>'2']);
 		$data['detail'] 			= $event;
-		$data['settings']  			= getSettings();
-		$data['currencysymbol']  	= $this->config->currencysymbol;
-
+		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol]+$data);		
+		
     	return view('site/facility/detail',$data);
     }
 	

@@ -99,12 +99,13 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
 
     $routes->match(['get', 'post'], 'events', 'Site\Myaccount\Event\Index::index');
     $routes->match(['get', 'post'], 'events/add', 'Site\Myaccount\Event\Index::action');
-    $routes->match(['get', 'post'], 'events/edit/(:num)', 'Site\Myaccount\Event\Index::action/$1');
+    $routes->match(['get', 'post'], 'events/edit/(:num)', 'Site\Myaccount\Event\Index::eventsaction/$1');
+    $routes->match(['get', 'post'], 'facilityevents/add', 'Site\Myaccount\Event\Index::facilityeventsaction');
     $routes->get('events/view/(:num)', 'Site\Myaccount\Event\Index::view/$1');
     $routes->get('events/inventories/(:num)', 'Site\Myaccount\Event\Index::inventories/$1');
     $routes->get('events/export/(:num)', 'Site\Myaccount\Event\Index::export/$1');
     $routes->get('events/eventreport/(:num)', 'Site\Myaccount\Event\Index::eventreport/$1');
-    $routes->get('events/financialreport/(:num)', 'Site\Myaccount\Event\Index::financialreport/$1');
+    $routes->post('events/financialreport', 'Site\Myaccount\Event\Index::financialreport');
 
     $routes->match(['get', 'post'], 'facility', 'Site\Myaccount\Facility\Index::index');
     $routes->match(['get', 'post'], 'facility/add', 'Site\Myaccount\Facility\Index::action');
@@ -112,7 +113,7 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
     $routes->get('facility/view/(:num)', 'Site\Myaccount\Facility\Index::view/$1');
     $routes->get('facility/inventories/(:num)', 'Site\Myaccount\Facility\Index::inventories/$1');
     $routes->get('facility/export/(:num)', 'Site\Myaccount\Facility\Index::export/$1');
-    $routes->get('facility/financialreport/(:num)', 'Site\Myaccount\Facility\Index::financialreport/$1');
+    $routes->post('facility/financialreport', 'Site\Myaccount\Facility\Index::financialreport');
 
     $routes->match(['get', 'post'], 'stallmanager', 'Site\Myaccount\Stallmanager\Index::index');
     $routes->match(['get', 'post'], 'stallmanager/add', 'Site\Myaccount\Stallmanager\Index::action');
@@ -149,6 +150,8 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function (
     $routes->match(['get', 'post'], 'users/action', 'Admin\Users\Index::action');
     $routes->get('users/action/(:num)', 'Admin\Users\Index::action/$1');
     $routes->post('users/DTusers', 'Admin\Users\Index::DTusers');
+    $routes->post('users/import', 'Admin\Users\Index::import');
+    $routes->get('users/sampleexport', 'Admin\Users\Index::sampleexport');
 
     // Event
     $routes->match(['get', 'post'], 'event', 'Admin\Event\Index::index');

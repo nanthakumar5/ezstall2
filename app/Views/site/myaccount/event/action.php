@@ -17,7 +17,7 @@ $end_date 				= isset($result['end_date']) ? dateformat($result['end_date']) : '
 $start_time 			= isset($result['start_time']) ? $result['start_time'] : '';
 $end_time 			    = isset($result['end_time']) ? $result['end_time'] : '';
 $stalls_price 			= isset($result['stalls_price']) ? $result['stalls_price'] : '';
-//$rvspots_price 			= isset($result['rvspots_price']) ? $result['rvspots_price'] : '';
+//$rvspots_price 		= isset($result['rvspots_price']) ? $result['rvspots_price'] : '';
 $image      			= isset($result['image']) ? $result['image'] : '';
 $image 				    = filedata($image, base_url().'/assets/uploads/event/');
 $status 				= isset($result['status']) ? $result['status'] : '';
@@ -25,19 +25,6 @@ $eventflyer      		= isset($result['eventflyer']) ? $result['eventflyer'] : '';
 $eventflyer 			= filedata($eventflyer, base_url().'/assets/uploads/eventflyer/');
 $stallmap      			= isset($result['stallmap']) ? $result['stallmap'] : '';
 $stallmap 				= filedata($stallmap, base_url().'/assets/uploads/stallmap/');
-$feed_flag 				= isset($result['feed_flag']) ? $result['feed_flag'] : '';
-$shaving_flag 			= isset($result['shaving_flag']) ? $result['shaving_flag'] : '';
-$rv_flag 				= isset($result['rv_flag']) ? $result['rv_flag'] : '';
-$cleaning_flag 			= isset($result['cleaning_flag']) ? $result['cleaning_flag'] : '';
-$charging_flag 			= isset($result['charging_flag']) ? $result['charging_flag'] : '';
-$notification_flag 		= isset($result['notification_flag']) ? $result['notification_flag'] : '';
-$price_flag 			= isset($result['price_flag']) ? explode(',', $result['price_flag']) : [];
-$price_fee 				= isset($result['price_fee']) ? explode(',', $result['price_fee']) : [];
-$cleaning_fee 			= isset($result['cleaning_fee']) ? $result['cleaning_fee'] : '';
-$barn        			= isset($result['barn']) ? $result['barn'] : [];
-$rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
-$feed 					= isset($result['feed']) ? $result['feed'] : '';
-$shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 $pageaction 			= $id=='' ? 'Add' : 'Update';
 ?>
 
@@ -177,171 +164,7 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 							</div>
 						</div>	
 					</div>
-
-					<div class="card">
-						<div class="card-body">
-							<div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you be selling feed at this event? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_feed event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="feed_flag" name="feed_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you be selling shavings at this event?</p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_shaving event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="shaving_flag" name="shaving_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you have RV Hookups at this event? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_rv event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="rv_flag" name="rv_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Will you collect the Cleaning fee from Horse owner? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_cleaning event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="cleaning_flag" name="cleaning_flag">
-									</div>
-								</div>
-								<div class="d-flex justify-content-between flex-wrap align-items-center my-3">
-									<p>Send a text message to users when their stall is unlocked and ready for use? </p>
-									<div>
-										<?php foreach($yesno as $key => $data){ ?>
-											<button type="button" class="btn questionmodal_notification event_btn" value="<?php echo $key; ?>"><?php echo $data; ?></button>
-										<?php } ?>
-										<input type="hidden" value="" class="notification_flag" name="notification_flag">
-									</div>
-								</div>
-								<?php if($usertype=='2'){ ?>
-									<div align="center">
-										<div class="col-md-12 mt-3 bblg-2 pb-3">	
-											<div class="row">	
-												<div class="col-md-2">
-													<input type="checkbox" class="questionmodal_priceflagall">
-												</div>
-												<div class="col-md-4">
-													Rates
-												</div>
-												<div class="col-md-6">
-													$
-												</div>
-											</div>
-										</div>
-										<?php foreach($pricelist as $key => $data){ ?>
-											<div class="col-md-12 mt-3">	
-												<div class="row">	
-													<div class="col-md-2">
-														<input type="checkbox" class="questionmodal_priceflag questionmodal_priceflag<?php echo $key; ?>" data-key="<?php echo $key; ?>" value="1" name="price_flag[<?php echo $key; ?>]" <?php if(isset($price_flag[$key-1]) && $price_flag[$key-1]==1){ echo 'checked'; } ?>>
-													</div>
-													<div class="col-md-4">
-														<?php echo $data; ?>
-													</div>
-													<div class="col-md-6">
-														<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key; ?> form-control" name="price_fee[<?php echo $key; ?>]" value="<?php if(isset($price_fee[$key-1]) && $price_fee[$key-1]!=0){ echo $price_fee[$key-1]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
-													</div>
-												</div>
-											</div>
-										<?php } ?>
-										<input type="hidden" id="price_flag" value="<?php echo implode(',', $price_flag); ?>">
-										<input type="hidden" id="price_fee" value="<?php echo implode(',', $price_fee); ?>">
-									</div>
-								<?php } ?>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0 addbarn">
-								<div class="col-md-3">
-									<p class="fs-2 fw-bold mb-0 barntfont">Barn</p>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<input type="hidden" value="" name="barnvalidation" id="barnvalidation">
-									<button class="btn-stall barnbtn" value="4" name="tst" id="tes">Add Barn</button>
-								</div>
-							</div>
-							<ul class="nav nav-pills flex-column col-md-3 barntab" role="tablist"></ul>
-							<div class="tab-content col-md-9 stalltab"></div>
-						</div>
-					</div>
-					<div class="card-body p-0 feed_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0 addfeed">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfontfeed">Feed</h4>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<button class="btn-stall feedbtn">Add feed</button>
-								</div>
-							</div>
-
-							<div class="row" >
-								<ul class="nav nav-pills flex-column feedlist" role="tablist"></ul>
-								<div class="tab-content col-md-9 feedstalltab"></div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0 shaving_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfontshavings">Shavings</h4>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<button class="btn-stall shavingsbtn">Add Shavings</button>
-								</div>
-							</div>
-							<div class="row" >
-								<ul class="nav nav-pills flex-column shavingslist" role="tablist"></ul>
-								<div class="tab-content col-md-9 shavingsstalltab"></div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0 rv_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfont">RV Hookups</h4>
-								</div>
-								<div class="col-md-9 t-right p-0 respsm">
-									<input type="hidden" value="" name="rvhookupsvalidation" id="rvhookupsvalidation">
-									<button class="btn-stall rvhookupsbtn">Add RV Hookups</button>
-								</div>
-							</div>
-							<div class="row">
-								<ul class="nav nav-pills flex-column col-md-3 rvhookupsbarntab" role="tablist"></ul>
-								<div class="tab-content col-md-9 rvhookupsstalltab"></div>
-							</div>
-						</div>
-					</div>
-					<div class="card-body p-0 cleaning_wrapper" style="display: none;">
-						<div class="container row mt-5 dash-barn-style mx-auto">
-							<div class="row align-items-center mb-4 p-0 cleaningfee">
-								<div class="col-md-3">
-									<h4 class="fw-bold mb-0 barntfontfee">Cleaning Fee</h4>
-								</div>
-								<div class="col-md-12 my-2">
-									<div class="form-group">						
-										<input type="text" name="cleaning_fee" class="form-control" id="cleaning_fee" placeholder="Enter Cleaning Fee" value="<?php echo $cleaning_fee; ?>">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<?php echo $barnstall; ?>
 					<div class="col-md-12 mt-4">
 						<input type="hidden" name="actionid" value="<?php echo $id; ?>">
 						<input type="hidden" name="userid" value="<?php echo $userid; ?>">
@@ -356,29 +179,8 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 </section>
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
-<?php echo $questionmodal; ?>
 <script> 
-	var barn				 	= $.parseJSON('<?php echo addslashes(json_encode($barn)); ?>');
-	var chargingflag			= $.parseJSON('<?php echo addslashes(json_encode($chargingflag)); ?>');
-	var rvbarn					= $.parseJSON('<?php echo addslashes(json_encode($rvbarn)); ?>');
-	var feed				 	= $.parseJSON('<?php echo addslashes(json_encode($feed)); ?>');
-	var shaving					= $.parseJSON('<?php echo addslashes(json_encode($shaving)); ?>');
-	var occupied 	 			= $.parseJSON('<?php echo json_encode((isset($occupied)) ? array_filter($occupied) : []); ?>');
-	var reserved 	 			= $.parseJSON('<?php echo json_encode((isset($reserved)) ? array_filter(explode(",", implode(",", array_keys($reserved)))) : []); ?>');
-	var id                      = '<?php echo $id ?>';
-	var feed_flag				= '<?php echo $feed_flag ?>';
-	var shaving_flag			= '<?php echo $shaving_flag ?>';
-	var rv_flag				 	= '<?php echo $rv_flag ?>';
-	var charging_flag			= '<?php echo $charging_flag ?>';
-	var cleaning_flag			= '<?php echo $cleaning_flag ?>';
-	var notification_flag		= '<?php echo $notification_flag ?>';
-	var usertype				= '<?php echo $usertype ?>';
-
 	$(function(){
-		if(id==""){
-			$('#questionmodal').modal('show'); 
-		}
-
 		$('#mobile').inputmask("(999) 999-9999");
 		uidatepicker("#start_date, #end_date");
 		fileupload([".image_file"], ['.image_input', '.image_source','.image_msg'],['1']);
@@ -427,82 +229,15 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 				},
 				barnvalidation : { 
 					required 	: true
-				},/*
-				rvhookupsvalidation : {
-					required 	: true
-				},
-				cleaning_fee : {
-				   required 	: true
-				}*/
+				}
 			},
 			{},
 			{
 				ignore : []
 			}
 		);
-		
-		questionpopup1(1, 'rv', rv_flag)
-		questionpopup1(1, 'feed', feed_flag)
-		questionpopup1(1, 'shaving', shaving_flag)
-		questionpopup1(1, 'cleaning', cleaning_flag)
-		questionpopup1(2, 'charging', charging_flag)
-		questionpopup1(2, 'notification', notification_flag)
-		
-		barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[usertype, chargingflag]], [barn, occupied, reserved])
-		barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag]], [rvbarn, occupied, reserved])
-		products('feed', [['.feedbtn'], ['.feedlist'], [0]], [feed])
-		products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0]], [shaving])
 	});
 	
-	$('.questionmodal_shaving').click(function(e){ 
-		e.preventDefault();
-        questionpopup1(1, 'shaving', $(this).val())
-    });
-	    
-    $('.questionmodal_feed').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(1, 'feed', $(this).val())
-    });
-
-    $('.questionmodal_rv').click(function(e){ 
-    	e.preventDefault();
-    	/*if($(this).val()=='2'){
-            $('#rvhookupsvalidation').val('1');
-        }else if($(this).val()=='1'){
-            $('#rvhookupsvalidation').val('');
-        }*/
-        questionpopup1(1, 'rv', $(this).val())
-    });
-
-    $('.questionmodal_cleaning').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(1, 'cleaning', $(this).val())
-    });
-
-    $('.questionmodal_charging').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(2, 'charging', $(this).val())
-    });
-
-    $('.questionmodal_notification').click(function(e){ 
-    	e.preventDefault();
-        questionpopup1(2, 'notification', $(this).val())
-    });
-	    
-    function questionpopup1(type, name, value){ 
-        $('.questionmodal_'+name).removeClass("btn-stall").addClass("event_btn");
-        $('.questionmodal_'+name+'[value="'+value+'"]').removeClass("event_btn").addClass("btn-stall");
-        $('.'+name+'_flag').val(value);   
-        
-        if(type=='1'){
-            if(value=='1'){
-                $('.'+name+'_wrapper').show();  
-            }else{
-                $('.'+name+'_wrapper').hide();      
-            }
-        }
-    }
-
 	$('#eventSubmit').click(function(e){
 		tabvalidation();
 	});
