@@ -161,11 +161,11 @@ table tr td {
     	        <h2 style="font-size:14px"><?php echo $eventname;?></h2>
     	        <table style="border-bottom:2px solid #000;margin-bottom:10px;">
     	            <tr>
-						<?php if($type=='1'){ ?>
+						<?php if($eventtype=='1'){ ?>
 							<td style="padding-left:0px;"><?php echo 'Start Date: '.$startdate; ?></td>
 							<td><?php echo 'End Date: '.$enddate; ?></td>
 							<td><?php echo 'TOTAL '.$eventtext.' REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
-						<?php }elseif($type=='2'){ ?>
+						<?php }elseif($eventtype=='2'){ ?>
 							<td style="padding-left:0px;"><?php echo 'TOTAL '.$eventtext.' REVENUE: '.$currencysymbol.($usertype==1 ? $totalamountadmin : $totalamountuser); ?></td>
 						<?php } ?>
     	            </tr>

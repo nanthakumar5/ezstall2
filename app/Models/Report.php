@@ -31,6 +31,7 @@ class Report extends BaseModel
 		
 		if(isset($requestdata['eventid'])) 				$query->where('bk.event_id', $requestdata['eventid']);		
 		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);	
+		if(isset($requestdata['userid'])) 				$query->where('e.user_id', $requestdata['userid']);	
 		
 		if($checkin!='' && $checkout!='') 				$query->groupStart()->where("bk.check_in BETWEEN '".$checkin."' AND '".$checkout."'")->orWhere("bk.check_out BETWEEN '".$checkin."' AND '".$checkout."'")->groupEnd();
 		elseif($checkin!='' && $checkout=='') 			$query->where("bk.check_in >=", $checkin);

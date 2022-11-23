@@ -191,14 +191,17 @@ function send_mail($to,$subject,$message,$attachment='')
 
 	$email = \Config\Services::email();
 
-       $config['protocol']  = 'smtp';
-       $config['SMTPHost']  = 'mail.ezstall.com';
-       $config['SMTPUser']  = 'support@ezstall.com';
-       $config['SMTPPass']  = 'qx~JrSJxRBZ0';
-       $config['SMTPPort']  = '587';
-       $config['SMTPCrypto']   = 'tls';
-       $config['charset']   = 'iso-8859-1';
-       $config['wordWrap']  = true;
+	$config['protocol']  	= 'smtp';
+	/*$config['SMTPHost']  	= 'mail.ezstall.com';
+	$config['SMTPUser']  	= 'support@ezstall.com';
+	$config['SMTPPass']  	= 'qx~JrSJxRBZ0';*/
+	$config['SMTPHost'] 	= 'mail.itfhrm.com';
+	$config['SMTPUser'] 	= 'info@itfhrm.com';
+	$config['SMTPPass'] 	= 'itFlex@123';
+	$config['SMTPPort']  	= '587';
+	$config['SMTPCrypto']   = 'tls';
+	$config['charset']   	= 'iso-8859-1';
+	$config['wordWrap']  	= true;
 
 	$email->initialize($config);
 

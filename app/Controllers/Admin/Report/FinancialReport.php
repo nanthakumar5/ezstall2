@@ -24,16 +24,19 @@ class FinancialReport extends BaseController
 		if ($this->request->getMethod()=='post')
         {
 			$requestdata 	= $this->request->getPost(); 			
+			$userid  		= $requestdata['user_id'];
 			$type  			= $requestdata['type'];
+			$eventid  		= $type=='1' ? ($requestdata['event_id']!='' ? $requestdata['event_id'] : '') : ($requestdata['facility_id']!='' ? $requestdata['facility_id'] : '');
 			$checkin  		= $requestdata['checkin']!='' ? formatdate($requestdata['checkin']) : '';
 			$checkout  		= $requestdata['checkout']!='' ? formatdate($requestdata['checkout']) : '';
-			$eventid  		= $type=='1' ? ($requestdata['event_id']!='' ? $requestdata['event_id'] : '') : ($requestdata['facility_id']!='' ? $requestdata['facility_id'] : '');
-
+			
 			$condition = [];
-			if($checkin!='') $condition['checkin'] = $checkin;
-			if($checkout!='') $condition['checkout'] = $checkout;
-			if($eventid!='') $condition['eventid'] = $eventid;
-        	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], ['type' => $type]+$condition);
+			if($userid!='') 	$condition['userid'] = $userid;
+			if($type!='') 		$condition['type'] = $type;
+			if($eventid!='') 	$condition['eventid'] = $eventid;
+			if($checkin!='') 	$condition['checkin'] = $checkin;
+			if($checkout!='') 	$condition['checkout'] = $checkout;
+        	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], $condition);
         	
 			$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
 			$data['currencysymbol']  	= $this->config->currencysymbol;
