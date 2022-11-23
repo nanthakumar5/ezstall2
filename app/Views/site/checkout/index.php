@@ -139,22 +139,9 @@
 										echo '<p>'.$barnname.'</p>';
 									}
 									
-									if($data['interval']%7==0){
-										$intervalss = $data['interval']/7;
-									}else if($data['interval']%30==0){
-										$intervalss = $data['interval']/30; 
-									}else{ 
-										$intervalss = $data['interval'];
-									}
-
-									if($data['chargingid']=='4'){
-										$intervaldays = $currencysymbol.$data['price'];
-										$total 		  = $currencysymbol.$data['price'];
-									}else{
-										$intervaldays = $currencysymbol.$data['price'].'x'.$intervalss;
-										$total 		  = $currencysymbol.$data['total'];
-									}
-
+									$intervaldays = $currencysymbol.$data['price'].'x'.$data['intervalday'];
+									$total 		  = $currencysymbol.$data['total'];
+									
 									$barnstalldata .= '<div class="row"><span class="col-7 event_c_text">'.$data['stall_name'].'</span><span class="col-5 text-end event_c_text">('.$intervaldays.') '.$total.'</span></div>';
 									echo '<p>'.$data['stall_name'].'</p>';
 								}
@@ -182,14 +169,9 @@
 										}else{ 
 											$intervalss = $rvdata['interval'];
 										}
-
-										if($rvdata['chargingid']=='4'){
-										$intervaldays = $currencysymbol.$rvdata['price'];
-										$total 		  = $currencysymbol.$rvdata['price'];
-									}else{
-										$intervaldays = $currencysymbol.$rvdata['price'].'x'.$intervalss;
+	
+										$intervaldays = $currencysymbol.$rvdata['price'].'x'.$data['intervalday'];
 										$total 		  = $currencysymbol.$rvdata['total'];
-									}
 
 										$rvbarnstalldata .= '<div class="row"><span class="col-7 event_c_text">'.$rvdata['stall_name'].'</span><span class="col-5 text-end event_c_text">('.$intervaldays.') '.$total.'</span></div>';
 										echo '<p>'.$rvdata['stall_name'].'</p>';

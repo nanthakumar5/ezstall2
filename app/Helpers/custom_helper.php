@@ -285,64 +285,70 @@ function getCart($type=''){
 		$daydiff           		= ceil(abs($start - $end) / 86400);
 		$interval           	= $daydiff==0 ? 1 : $daydiff;
 		$type          			= array_unique(array_column($result, 'type'))[0];
-		$pricetype          	= array_unique(array_column($result, 'price_type'))[0];
 		$tax 					= isset($result[0]['tax']['tax_price']) ? $result[0]['tax']['tax_price'] :'0';
 
-
 		$barnstall = $rvbarnstall = $feed =  $shaving = [];
-
-		$intervalss = $interval;
-		$intervalss = ($intervalss%7==0) ? ($intervalss/7) : $intervalss;
-		$intervalss = ($intervalss%30==0) ? ($intervalss/30) : $intervalss;
-		
 		$price = 0;
+		
 		foreach ($result as $res) {
-			if($res['flag']=='1'){
-				$barnstall[] = [
+			$singleprice = $res['price'];
+				
+			if($res['flag']=='1' || $res['flag']=='2'){				
+				$singlechargingid 	= $res['chargingid'];
+				$singlepricetype 	= $res['price_type'];
+				
+				if($singlepricetype==0){
+					$intervalday = $interval;
+					$intervalday = ($intervalday%7==0) ? ($intervalday/7) : $intervalday;
+					$intervalday = ($intervalday%30==0) ? ($intervalday/30) : $intervalday;
+					if($singlechargingid=='4') $intervalday = 1;
+						
+					$singletotal = $singlechargingid=='4' ?  $singleprice : $singleprice * $intervalday;
+				}else{
+					$intervalday = $interval;
+					if($singlepricetype=='2') 		$intervalday = ceil($intervalday/7);
+					elseif($singlepricetype=='3') 	$intervalday = ceil($intervalday/30);
+					elseif($singlepricetype=='4') 	$intervalday = 1;
+					
+					if($singlepricetype=='1') 		$singletotal = $singleprice * $intervalday;
+					elseif($singlepricetype=='2') 	$singletotal = $singleprice * $intervalday;
+					elseif($singlepricetype=='3') 	$singletotal = $singleprice * $intervalday;
+					elseif($singlepricetype=='4') 	$singletotal = $singleprice;
+				}
+				
+				$barnrvdata = [
 					'barn_id' 		=> $res['barn_id'], 
 					'barn_name' 	=> $res['barnname'], 
 					'stall_id' 		=> $res['stall_id'],
 					'stall_name' 	=> $res['stallname'],
-					'price' 		=> $res['price'],
-					'chargingid' 	=> $res['chargingid'],
+					'price' 		=> $singleprice,
+					'pricetype' 	=> $singlepricetype,
+					'chargingid' 	=> $singlechargingid,
 					'interval' 		=> $interval,
-					'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
+					'intervalday' 	=> $intervalday,
+					'total' 		=> $singletotal
 				];
 				
-				$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
-			}else if($res['flag']=='2'){
-				$rvbarnstall[] = [
-					'barn_id' 		=> $res['barn_id'], 
-					'barn_name' 	=> $res['barnname'], 
-					'stall_id' 		=> $res['stall_id'],
-					'stall_name' 	=> $res['stallname'],
-					'price' 		=> $res['price'],
-					'chargingid' 	=> $res['chargingid'],
-					'interval' 		=> $interval,
-					'total' 		=> ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss
-				];
+				if($res['flag']=='1') 		$barnstall[] = $barnrvdata;
+				elseif($res['flag']=='2')	$rvbarnstall[] = $barnrvdata;
 				
-				$price += ($res['chargingid']=='4') ? $res['price'] : $res['price'] * $intervalss;
-			}else if($res['flag']=='3'){
-				$feed[] = [
+				$price += $singletotal;
+			}else if($res['flag']=='3' || $res['flag']=='4'){
+				$singlequantity = $res['quantity'];
+				$singletotal = $singleprice * $singlequantity;
+				
+				$feedshavingdata = [
 					'product_id'	=> $res['product_id'], 
 					'product_name'	=> $res['productname'], 
-					'price' 		=> $res['price'],
-					'quantity' 		=> $res['quantity'],
-					'total' 		=> $res['price'] * $res['quantity']
+					'price' 		=> $singleprice,
+					'quantity' 		=> $singlequantity,
+					'total' 		=> $singletotal
 				];
 				
-				$price += $res['price'] * $res['quantity'];
-			}else if($res['flag']=='4'){
-				$shaving[] = [
-					'product_id'	=> $res['product_id'], 
-					'product_name'	=> $res['productname'], 
-					'price' 		=> $res['price'],
-					'quantity' 		=> $res['quantity'],
-					'total' 		=> $res['price'] * $res['quantity']
-				];
+				if($res['flag']=='3') 		$feed[] = $feedshavingdata;
+				elseif($res['flag']=='4')	$shaving[] = $feedshavingdata;
 				
-				$price += $res['price'] * $res['quantity'];
+				$price += $singletotal;
 			}
 		}
 
@@ -370,7 +376,6 @@ function getCart($type=''){
 			'check_in' 			=> $check_in,
 			'check_out'			=> $check_out,
 			'price' 			=> $price,
-			'pricetype' 		=> $pricetype,
 			'type' 				=> $type
 		];	
 	}else{

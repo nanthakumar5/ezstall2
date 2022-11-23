@@ -367,43 +367,51 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 			}, 100);
 		})
 		
-		function pricelist(){
-			var startdates 		= new Date($("#startdate").val());
-			var enddates 		= new Date($("#enddate").val());
-			var stallinterval  	= enddates.getTime() - startdates.getTime(); 
-			var intervaldays 	= stallinterval / (1000 * 3600 * 24); 
-			
+		function pricelist(){			
 			if(eventusertype==2){
 				$('.night_button').removeAttr('disabled');
 				$('.week_button').removeAttr('disabled');
 				$('.month_button').removeAttr('disabled');
 				$('.flat_button').removeAttr('disabled');
-			}else{
-				$('.week_price').show();
-				$('.month_price').show();
-				$('.night_price').show();
+			}else{					
+				var startdates 		= new Date($("#startdate").val());
+				var enddates 		= new Date($("#enddate").val());
+				var stallinterval  	= enddates.getTime() - startdates.getTime(); 
+				var intervaldays 	= stallinterval / (1000 * 3600 * 24); 
+				
+				$('.week_price').removeClass('displaynoneimp');
+				$('.month_price').removeClass('displaynoneimp');
+				$('.night_price').removeClass('displaynoneimp');
 				
 				if(intervaldays%7==0){
-					$('.night_price').hide();
-					$('.month_price').hide();
+					$('.night_price').addClass('displaynoneimp');
+					$('.month_price').addClass('displaynoneimp');
 				}else if(intervaldays%30==0){ 
-					$('.week_price').hide();
-					$('.night_price').hide();
+					$('.week_price').addClass('displaynoneimp');
+					$('.night_price').addClass('displaynoneimp');
 				}else{
-					$('.week_price').hide();
-					$('.month_price').hide();
+					$('.week_price').addClass('displaynoneimp');
+					$('.month_price').addClass('displaynoneimp');
 				}
 			}
 		}
 		
 		$('.price_button').click(function(){
-			$(this).parent().find('.price_button').removeClass('priceactive');
+			$(this).closest('.pricelist').find('.price_button').removeClass('priceactive');
 			$(this).addClass('priceactive');
-			$(this).parent().parent().parent().find('.stallid').attr('data-price', $(this).attr('data-pricebutton'));
+			
+			var stallbox = $(this).closest('li').find('.stallid');
+			
+			if(stallbox.is(':checked')){
+				stallbox.click();
+			}
+			
+			stallbox.attr('data-price', $(this).attr('data-pricebutton'));
+			stallbox.click();
 		})
 		
 		function checkprice(_this){
-			if(eventusertype==2 && _this.parent().parent().find('.priceactive').length==0){
+			if(eventusertype==2 && _this.closest('li').find('.priceactive').length==0){
 				_this.prop('checked', false);
 				toastr.warning('Please select the price.', {timeOut: 5000});
 				return false;
@@ -443,6 +451,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							}
 
 							$('.stallid[value='+v+']').prop('checked', true).attr('disabled', 'disabled');
+							$('.stallid[value='+i+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("red-box");
 						});
 					}
@@ -463,6 +472,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							}
 
 							$('.stallid[value='+i+']').prop('checked', true).attr('disabled', 'disabled');
+							$('.stallid[value='+i+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+i+']').removeClass("green-box").addClass("yellow-box");
 						});
 					}
@@ -477,6 +487,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					success : function(data){
 						$(data.success).each(function(i,v){
 							$('.stallid[value='+v+']').attr('disabled', 'disabled');
+							$('.stallid[value='+i+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("yellow-box");
 						});
 					}
@@ -533,7 +544,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 				var barnid    	= _this.attr('data-barnid');
 				var stallid		= _this.val(); 
 				var price 		= _this.attr('data-price');
-				var pricetype   = _this.parent().parent().find('.priceactive').attr('data-pricetype'); 
+				var pricetype   = _this.closest('li').find('.priceactive').attr('data-pricetype'); 
 
 				if($(_this).is(':checked')){  
 					var pricevalidation = checkprice(_this);
@@ -627,8 +638,8 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							$("#startdate").val(result.check_in); 
 							$("#enddate").val(result.check_out); 
 
-							occupiedreserved($("#startdate").val(), $("#enddate").val());
 							pricelist();
+							occupiedreserved($("#startdate").val(), $("#enddate").val());
 						
 							var barnstalldata = cartsummary(1, 'STALL', result.barnstall);
 							var rvbarnstalldata = cartsummary(1, 'RV HOOKUP', result.rvbarnstall);
@@ -694,24 +705,16 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							data += '<div><span class="col-12 fw-bold">'+v.barn_name+'</span></div>';
 						}
 
-						if(v.interval%7==0){
-							var interval = v.interval/7;
-						}else if(v.interval%30==0){
-							var interval = v.interval/30; 
-						}else{ 
-							var interval = v.interval
-						}
-
-						if(v.chargingid=='4'){
-							var intervaldays = currencysymbol+v.price;
-							var total 		 = currencysymbol+v.price;
-						}else{
-							var intervaldays = currencysymbol+v.price+'x'+interval;
-							var total 		 = currencysymbol+v.total;
-						}
-
-						data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+'</span><span class="col-5 text-end event_c_text">('+intervaldays+') '+total+'</span></div>';
+						data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+'</span><span class="col-5 text-end event_c_text">('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total+'</span></div>';
 						$('.stallid[value='+v.stall_id+']').removeAttr('disabled');
+						
+						if(v.pricetype!=0){
+							$('.stallid[value='+v.stall_id+']').closest('li').find('.price_button').removeAttr('disabled');
+							var pricebox = $('.stallid[value='+v.stall_id+']').closest('li').find('.price_button[data-pricetype="'+v.pricetype+'"]');
+							pricebox.addClass('priceactive');
+							$('.stallid[value='+v.stall_id+']').attr('data-price', pricebox.attr('data-pricebutton'));
+						}
+						
 						name = v.barn_name;
 					});
 				}else{

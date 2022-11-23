@@ -148,7 +148,7 @@ class Index extends BaseController
 			}
         } 
 		
-		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => $usertype]+$data);		
+		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'chargingflag' => $this->config->chargingflag, 'usertype' => $usertype]+$data);		
 		$data['userid'] 		= $userid;
 		$data['googleapikey'] 	= $this->config->googleapikey;
 		return view('site/myaccount/event/action', $data);

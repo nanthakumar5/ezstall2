@@ -21,6 +21,10 @@ body {
     display:none;
 }
 
+.displaynoneimp{
+    display:none!important;
+}
+
 .bblg-2{
 	border-bottom: 2px solid lightgrey;
 }
