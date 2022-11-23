@@ -369,6 +369,8 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 		
 		function pricelist(){			
 			if(eventusertype==2){
+				$('.price_button').removeClass('priceactive');
+				
 				$('.night_button').removeAttr('disabled');
 				$('.week_button').removeAttr('disabled');
 				$('.month_button').removeAttr('disabled');
@@ -554,6 +556,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : '1', checked : 1, flag : flag, actionid : ''});
 				}else{ 
 					$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
+					$('.stallavailability[data-stallid='+stallid+']').closest("li").find('.price_button').removeClass('priceactive');
 					cart({stall_id : stallid, type : '1', checked : 0}); 
 				}		
 			}else{

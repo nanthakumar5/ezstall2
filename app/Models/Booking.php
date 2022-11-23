@@ -275,7 +275,7 @@ class Booking extends BaseModel
                 'stall_id'      => isset($result['stall_id']) ? $result['stall_id'] : '',
                 'product_id'    => isset($result['product_id']) ? $result['product_id'] : '',
                 'price'      	=> isset($result['price']) ? $result['price'] : '',
-                'quantity'      => isset($result['quantity']) ? $result['quantity'] : (isset($result['interval']) ? $result['interval'] : ''),
+                'quantity'      => isset($result['quantity']) ? $result['quantity'] : (isset($result['intervalday']) ? $result['intervalday'] : ''),
                 'total'      	=> isset($result['total']) ? $result['total'] : '',
                 'flag'      	=> isset($extras['flag']) ? $extras['flag'] : '',
                 'status'      	=> 1
