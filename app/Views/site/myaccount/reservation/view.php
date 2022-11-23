@@ -117,28 +117,27 @@
 					<?php if(!empty($barnstalls)){ ?>
 						<div class="stall-summary-list">
 							<h5 class="fw-bold text-muted">Barn&Stall</h5>
-									<?php 	
-										$barnname = '';
-										foreach ($barnstalls as $barnstall) {
-											if($barnname!=$barnstall['barnname']){
-											$barnname = $barnstall['barnname'];?>
-						<table class="table-hover table-striped table-light table">
-								
-									<thead>
-											<tr>
-											<th><?php echo $barnname;?></th>
-											<th><p class="totalbg">Total</p></th>
-										</tr>
-									</thead>
-								<?php }?>
-									<tbody>
-										<tr>
-											<td><?php echo $barnstall['stallname']?></td>
-											<td><?php echo '('.$currencysymbol.$barnstall['price'].'x'.$barnstall['quantity'].')'.$currencysymbol.$barnstall['total']?></td>
-										</tr>
-									</tbody>
-								<?php } ?>
-							</table>
+							<?php 	
+								$barnname = '';
+								foreach ($barnstalls as $barnstall) {
+									if($barnname!=$barnstall['barnname']){
+										$barnname = $barnstall['barnname'];?>
+										<table class="table-hover table-striped table-light table">								
+											<thead>
+												<tr>
+													<th><?php echo $barnname;?></th>
+													<th><p class="totalbg">Total</p></th>
+												</tr>
+											</thead>
+									<?php }?>
+											<tbody>
+												<tr>
+													<td><?php echo $barnstall['stallname']; ?> <?php if($barnstall['price_type']!=0){ echo '<span class="pricelist_tagline">('.$pricelists[$barnstall['price_type']].')</span>'; } ?></td>
+													<td><?php echo '('.$currencysymbol.$barnstall['price'].'x'.$barnstall['quantity'].')'.$currencysymbol.$barnstall['total']?></td>
+												</tr>
+											</tbody>
+							<?php } ?>
+										</table>
 						<?php } ?>
 
 						<?php if(!empty($rvbarnstall)){ ?>
@@ -162,7 +161,7 @@
 								<?php }?>
 									<tbody>
 										<tr>
-											<td><?php echo $rvstallname;?></td>
+											<td><?php echo $rvstallname;?> <?php if($rvbarnstall['price_type']!=0){ echo '<span class="pricelist_tagline">('.$pricelists[$rvbarnstall['price_type']].')</span>'; } ?></td>
 											<td><?php echo '('.$currencysymbol.$rvprice.'x'.$rvquantity.')'.$currencysymbol.$rvtotal ?></td>
 										</tr>
 									</tbody>

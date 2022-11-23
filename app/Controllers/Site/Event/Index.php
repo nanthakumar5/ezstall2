@@ -84,7 +84,7 @@ class Index extends BaseController
 		$comments 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $id,'status'=> ['1']]);
 
 		$data['detail']  			= $event;
-		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['checkevent' => checkEvent($event), 'settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol]+$data);		
+		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['checkevent' => checkEvent($event), 'settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol, 'pricelists' => $this->config->pricelist]+$data);		
 		$data['usertype']			= $usertype;
 		$data['bookings']  			= $bookings;
 		$data['comments']  			= $comments;

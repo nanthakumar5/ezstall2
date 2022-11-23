@@ -292,6 +292,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 		var eventtype 			= '<?php echo $detail["type"]; ?>';
 		var eventusertype 		= '<?php echo $detail["eventusertype"]; ?>';
 		var cartevent 			= '<?php echo $cartevent; ?>';
+		var pricelists 			= $.parseJSON('<?php echo json_encode($pricelists); ?>');
 		
 		$(document).ready(function (){
 			if(cartevent == 0 ){
@@ -399,8 +400,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 		}
 		
 		$('.price_button').click(function(){
-			$(this).closest('.pricelist').find('.price_button').removeClass('priceactive');
-			$(this).addClass('priceactive');
+			$('.price_button').removeClass('priceactive');
 			
 			var stallbox = $(this).closest('li').find('.stallid');
 			
@@ -408,6 +408,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 				stallbox.click();
 			}
 			
+			$(this).addClass('priceactive');
 			stallbox.attr('data-price', $(this).attr('data-pricebutton'));
 			stallbox.click();
 		})
@@ -694,7 +695,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 						}
 					}
 				}
-				);
+			);
 		}
 
 		function cartsummary(type, title, result){
@@ -708,7 +709,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							data += '<div><span class="col-12 fw-bold">'+v.barn_name+'</span></div>';
 						}
 
-						data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+'</span><span class="col-5 text-end event_c_text">('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total+'</span></div>';
+						data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+(v.pricetype!=0 ? '<span class="pricelist_tagline">('+pricelists[v.pricetype]+')</span>' : "")+'</span><span class="col-5 text-end event_c_text">('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total+'</span></div>';
 						$('.stallid[value='+v.stall_id+']').removeAttr('disabled');
 						
 						if(v.pricetype!=0){

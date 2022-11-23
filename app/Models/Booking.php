@@ -274,6 +274,7 @@ class Booking extends BaseModel
                 'barn_id'      	=> isset($result['barn_id']) ? $result['barn_id'] : '',
                 'stall_id'      => isset($result['stall_id']) ? $result['stall_id'] : '',
                 'product_id'    => isset($result['product_id']) ? $result['product_id'] : '',
+                'price_type'    => isset($result['pricetype']) ? $result['pricetype'] : '',
                 'price'      	=> isset($result['price']) ? $result['price'] : '',
                 'quantity'      => isset($result['quantity']) ? $result['quantity'] : (isset($result['intervalday']) ? $result['intervalday'] : ''),
                 'total'      	=> isset($result['total']) ? $result['total'] : '',

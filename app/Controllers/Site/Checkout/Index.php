@@ -77,6 +77,7 @@ class Index extends BaseController
 		
 		return view('site/checkout/index', [
 			'currencysymbol' 	=> $this->config->currencysymbol, 
+			'pricelists' 		=> $this->config->pricelist, 
 			'settings' 			=> $settings, 
 			'userdetail' 		=> $userdetail, 
 			'cartdetail' 		=> $cartdetail,

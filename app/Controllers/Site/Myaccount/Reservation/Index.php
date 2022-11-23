@@ -74,6 +74,7 @@ class Index extends BaseController
 		$data['usertype'] 		= $this->config->usertype;
 		$data['bookingstatus'] 	= $this->config->bookingstatus;
 		$data['currencysymbol'] = $this->config->currencysymbol; 
+		$data['pricelists'] 	= $this->config->pricelist; 
 		return view('site/myaccount/reservation/view', $data);
 	}	
 

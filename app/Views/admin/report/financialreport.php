@@ -35,12 +35,13 @@
 											<option value="<?php echo $userlist['id']; ?>" data-usertype="<?php echo $userlist['type']; ?>" data-userid="<?php echo $userlist['id']; ?>"><?php echo $userlist['name']; ?></option>
 										<?php } ?>
 									</select>
+									<input type="hidden" name="user_text" class="user_text">
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
 									<label>Type</label>
-									<?php echo form_dropdown('type', ['' => 'All']+$frtype, '', ['class' => 'form-control eventtype']); ?>						
+									<?php echo form_dropdown('type', ['' => 'All']+$frtype, '', ['class' => 'form-control eventtype']); ?>	
 								</div>
 							</div>
 							<div class="col-md-12 eventbox">
@@ -51,7 +52,8 @@
 										<?php foreach(getEventsList(['type'=> '1', 'all' => '1']) as $eventlist){ ?>
 											<option value="<?php echo $eventlist['id']; ?>" data-userid="<?php echo $eventlist['user_id']; ?>"><?php echo $eventlist['name']; ?></option>
 										<?php } ?>
-									</select>				
+									</select>		
+									<input type="hidden" name="event_text" value="All Event" class="event_text">
 								</div>
 							</div>
 							<div class="col-md-12 facilitybox displaynone">
@@ -62,7 +64,8 @@
 										<?php foreach(getEventsList(['type'=> '2', 'all' => '1']) as $facilitylist){ ?>
 											<option value="<?php echo $facilitylist['id']; ?>" data-userid="<?php echo $facilitylist['user_id']; ?>"><?php echo $facilitylist['name']; ?></option>
 										<?php } ?>
-									</select>						
+									</select>	
+									<input type="hidden" name="facility_text" value="All Facility" class="facility_text">
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -110,6 +113,7 @@ $('#userid').change(function(){
 	$('#eventid option, #facilityid option').removeClass('displaynone');
 	
 	if(userid!=''){
+		$('.user_text').val($(this).find('option:selected').text());
 		$('#eventid option:not([data-userid="'+userid+'"])').addClass('displaynone');
 		$('#facilityid option:not([data-userid="'+userid+'"])').addClass('displaynone');
 	}
@@ -128,6 +132,18 @@ function eventtype(value=''){
 		$('.facilitybox').removeClass('displaynone');
 	}
 }
+
+$('#eventid').change(function(){
+	if($(this).val()!=''){
+		$('.event_text').val($(this).find('option:selected').text());
+	}
+})
+
+$('#facilityid').change(function(){
+	if($(this).val()!=''){
+		$('.facility_text').val($(this).find('option:selected').text());
+	}
+})
 </script>
 
 <?php $this->endSection(); ?>

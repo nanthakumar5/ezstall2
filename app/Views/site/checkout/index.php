@@ -141,8 +141,9 @@
 									
 									$intervaldays = $currencysymbol.$data['price'].'x'.$data['intervalday'];
 									$total 		  = $currencysymbol.$data['total'];
+									$pricelist 	  = $data['pricetype']!=0 ? '<span class="pricelist_tagline">('.$pricelists[$data['pricetype']].')</span>' : '';
 									
-									$barnstalldata .= '<div class="row"><span class="col-7 event_c_text">'.$data['stall_name'].'</span><span class="col-5 text-end event_c_text">('.$intervaldays.') '.$total.'</span></div>';
+									$barnstalldata .= '<div class="row"><span class="col-7 event_c_text">'.$data['stall_name'].$pricelist.'</span><span class="col-5 text-end event_c_text">('.$intervaldays.') '.$total.'</span></div>';
 									echo '<p>'.$data['stall_name'].'</p>';
 								}
 								?>
@@ -162,18 +163,11 @@
 											echo '<p>'.$rvbarnname.'</p>';
 										}
 
-										if($rvdata['interval']%7==0){
-											$intervalss = $rvdata['interval']/7;
-										}else if($rvdata['interval']%30==0){
-											$intervalss = $rvdata['interval']/30; 
-										}else{ 
-											$intervalss = $rvdata['interval'];
-										}
-	
 										$intervaldays = $currencysymbol.$rvdata['price'].'x'.$data['intervalday'];
 										$total 		  = $currencysymbol.$rvdata['total'];
-
-										$rvbarnstalldata .= '<div class="row"><span class="col-7 event_c_text">'.$rvdata['stall_name'].'</span><span class="col-5 text-end event_c_text">('.$intervaldays.') '.$total.'</span></div>';
+										$pricelist 	  = $data['pricetype']!=0 ? '<span class="pricelist_tagline">('.$pricelists[$rvdata['pricetype']].')</span>' : '';
+									
+										$rvbarnstalldata .= '<div class="row"><span class="col-7 event_c_text">'.$rvdata['stall_name'].$pricelist.'</span><span class="col-5 text-end event_c_text">('.$intervaldays.') '.$total.'</span></div>';
 										echo '<p>'.$rvdata['stall_name'].'</p>';
 									}
 									?>

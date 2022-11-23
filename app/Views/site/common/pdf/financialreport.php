@@ -20,6 +20,7 @@ table tr td {
 	<body>
 	    <div> 
 		    <div style="text-align:center;padding:0;"><img src="<?php echo $logo; ?>" width="500"></div>
+			<p><?php if(isset($reporttext)){ echo $reporttext; } ?>
 		    <?php foreach($events as $key => $data){ ?>
                 <?php
                     $eventname  			= $data['eventname'];

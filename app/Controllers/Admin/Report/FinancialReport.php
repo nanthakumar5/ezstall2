@@ -31,12 +31,48 @@ class FinancialReport extends BaseController
 			$checkout  		= $requestdata['checkout']!='' ? formatdate($requestdata['checkout']) : '';
 			
 			$condition = [];
-			if($userid!='') 	$condition['userid'] = $userid;
-			if($type!='') 		$condition['type'] = $type;
-			if($eventid!='') 	$condition['eventid'] = $eventid;
-			if($checkin!='') 	$condition['checkin'] = $checkin;
-			if($checkout!='') 	$condition['checkout'] = $checkout;
-        	$data['events']		    	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], $condition);
+			$reporttext = 'This report is for';
+			
+			if($userid!=''){
+				$condition['userid'] = $userid;
+				$reporttext .= ' User ('.$requestdata['user_text'].')';
+			}else{
+				$reporttext .= ' All Users';
+			}
+			
+			if($type!=''){ 		
+				$condition['type'] = $type;
+			}else{
+				$reporttext .= ' and All Events and Facility';
+			}
+			
+			if($type=='1'){
+				if($requestdata['event_id']!=''){
+					$eventid = $requestdata['event_id'];
+					$reporttext .= ' and Events ('.$requestdata['event_text'].')';
+				}else{
+					$reporttext .= ' All Events';
+				}
+			}elseif($type=='2'){
+				if($requestdata['facility_id']!=''){
+					$eventid = $requestdata['facility_id'];
+					$reporttext .= ' and Facility ('.$requestdata['facility_text'].')';
+				}else{
+					$reporttext .= ' All Facility';
+				}
+			}
+			
+			if($checkin!=''){
+				$condition['checkin'] = $checkin;
+				$reporttext .= ' from '.$requestdata['checkin'];
+			}
+			
+			if($checkout!=''){
+				$condition['checkout'] = $checkout;
+				$reporttext .= ' to '.$requestdata['checkout'];
+			}
+			
+        	$data['events']	= $this->report->getFinancialReport('all', ['booking', 'event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall', 'feed', 'feedbooked', 'shaving', 'shavingbooked'], $condition);
         	
 			$data['logo']               = imagetobase64('./assets/images/ezstall_black.png');
 			$data['currencysymbol']  	= $this->config->currencysymbol;
@@ -44,6 +80,7 @@ class FinancialReport extends BaseController
 			$data['checkin']		    = $checkin;
 			$data['checkout']		    = $checkout;
 			$data['usertype']		    = '1';
+			$data['reporttext']		    = $reporttext;
 		    
 			if(empty($data['events'])){
 				$this->session->setFlashdata('danger', 'No Record Found.');
