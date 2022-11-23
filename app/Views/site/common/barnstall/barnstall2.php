@@ -451,7 +451,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							}
 
 							$('.stallid[value='+v+']').prop('checked', true).attr('disabled', 'disabled');
-							$('.stallid[value='+i+']').closest('li').find('.price_button').attr('disabled', 'disabled');
+							$('.stallid[value='+v+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("red-box");
 						});
 					}
@@ -487,7 +487,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					success : function(data){
 						$(data.success).each(function(i,v){
 							$('.stallid[value='+v+']').attr('disabled', 'disabled');
-							$('.stallid[value='+i+']').closest('li').find('.price_button').attr('disabled', 'disabled');
+							$('.stallid[value='+v+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("yellow-box");
 						});
 					}
