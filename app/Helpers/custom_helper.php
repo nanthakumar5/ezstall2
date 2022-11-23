@@ -249,7 +249,7 @@ function getEventsList($data=[])
 
 function formatdate($date, $type=''){
     if($type==''){
-		$date = explode('-', $date);
+		$date = (strpos($date, '/')!== false) ? explode('/', $date) : explode('-', $date);
 		return $date[2].'-'.$date[0].'-'.$date[1]; //m-d-Y to Y-m-d
 	}elseif($type=='1'){
 		return date("m-d-Y", strtotime($date)); //Y-m-d to m-d-Y

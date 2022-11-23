@@ -42,7 +42,7 @@ $currentdate 					= date("Y-m-d");
 						<?php } ?>
 				    <?php } ?>
 					<p class="mt-3"></p>
-				    <a data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
+				    <a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
 						Financial Report <i class="far fa-eye i-white-icon"></i>
 					</a>
 				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
