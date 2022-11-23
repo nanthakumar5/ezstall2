@@ -512,71 +512,71 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 				$('.questionmodal_pricefee_modal').blur(function(){
 					pricedata();
 				})	
+			}	
 				
-				$('.questionmodal_priceflagall').click(function(){
-					if($(this).is(':checked')){
-						$('.questionmodal_priceflag').prop('checked', true);
-					}else{
-						$('.questionmodal_priceflag').prop('checked', false);
-					}
-					
-					questionpopup2()
-				})
-				
-				$('.questionmodal_priceflag').click(function(){ 
-					questionpopup2()
-				});
-				
-				function questionpopup2(){ 
-					$('.questionmodal_priceflag').each(function(){
-						var key = $(this).attr('data-key');
-						
-						if($(this).is(':checked')){
-							$('.questionmodal_pricefee'+key).removeAttr('disabled');
-						}else{
-							$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
-						}
-					})		
-					
-					pricedata();
+			$('.questionmodal_priceflagall').click(function(){
+				if($(this).is(':checked')){
+					$('.questionmodal_priceflag').prop('checked', true);
+				}else{
+					$('.questionmodal_priceflag').prop('checked', false);
 				}
 				
-				$('.questionmodal_pricefee').blur(function(){
-					pricedata();
+				questionpopup2()
+			})
+			
+			$('.questionmodal_priceflag').click(function(){ 
+				questionpopup2()
+			});
+			
+			function questionpopup2(){ 
+				$('.questionmodal_priceflag').each(function(){
+					var key = $(this).attr('data-key');
+					
+					if($(this).is(':checked')){
+						$('.questionmodal_pricefee'+key).removeAttr('disabled');
+					}else{
+						$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
+					}
+				})		
+				
+				pricedata();
+			}
+			
+			$('.questionmodal_pricefee').blur(function(){
+				pricedata();
+			})
+			
+			function pricedata(){
+				price_flag	= [];
+				price_fee	= [];
+				$('.questionmodal_priceflag').each(function(){
+					var key = $(this).attr('data-key');
+					
+					if($(this).is(':checked')){
+						price_flag.push(1);
+						price_fee.push($('.questionmodal_pricefee'+key).val())
+						
+						$(document).find('.pricelistwrapper'+key).removeClass('displaynone');
+						$(document).find('.pricelistwrapper'+key).each(function(){
+							if($(this).find('input').val()=='' || $(this).find('input').val()=='0'){
+								$(this).find('input').val($('.questionmodal_pricefee'+key).val());
+							}
+						});
+					}else{
+						price_flag.push(0);
+						price_fee.push(0)
+						
+						$(document).find('.pricelistwrapper'+key).addClass('displaynone');
+						$(document).find('.pricelistwrapper'+key).each(function(){
+							$(this).find('input').val('');
+						});
+					}
 				})
 				
-				function pricedata(){
-					price_flag	= [];
-					price_fee	= [];
-					$('.questionmodal_priceflag').each(function(){
-						var key = $(this).attr('data-key');
-						
-						if($(this).is(':checked')){
-							price_flag.push(1);
-							price_fee.push($('.questionmodal_pricefee'+key).val())
-							
-							$(document).find('.pricelistwrapper'+key).removeClass('displaynone');
-							$(document).find('.pricelistwrapper'+key).each(function(){
-								if($(this).find('input').val()=='' || $(this).find('input').val()=='0'){
-									$(this).find('input').val($('.questionmodal_pricefee'+key).val());
-								}
-							});
-						}else{
-							price_flag.push(0);
-							price_fee.push(0)
-							
-							$(document).find('.pricelistwrapper'+key).addClass('displaynone');
-							$(document).find('.pricelistwrapper'+key).each(function(){
-								$(this).find('input').val('');
-							});
-						}
-					})
-					
-					$('#price_flag').val(price_flag.join(',')).trigger('change');
-					$('#price_fee').val(price_fee.join(',')).trigger('change');
-				}	
-				// END PRICE LIST
-			}
+				$('#price_flag').val(price_flag.join(',')).trigger('change');
+				$('#price_fee').val(price_fee.join(',')).trigger('change');
+			}	
+			// END PRICE LIST
 		})
 	</script>
 <?php $this->endSection(); ?>
