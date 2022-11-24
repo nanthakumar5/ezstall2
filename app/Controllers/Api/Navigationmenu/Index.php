@@ -36,7 +36,7 @@ class Index extends BaseController
 
             if ($result) {
 	
-				if($result['type']=='2'){                         // Facility
+				if($result['type']=='2'){                         // Facility 
 					
 					$data = [
 						'1'=> 'Dashboard',

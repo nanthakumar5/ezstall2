@@ -47,7 +47,7 @@ class Index extends BaseController
 
         if ($validation->withRequest($this->request)->run()) {
 
-            $check_email = $this->users->getUsers('count', ['users'], ['email' => $post['email']]);
+            $check_email = $this->users->getUsers('count', ['users'], ['email' => $post['email']]); 
 
             if ($check_email) {
                 $json = ['0', 'Email id already Exists.', []];

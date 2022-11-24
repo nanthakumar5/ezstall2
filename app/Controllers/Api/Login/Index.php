@@ -46,7 +46,7 @@ class Index extends BaseController
 						'type' 		=> $result['type'],
 					];
                 if ($result['email_status'] == '0') $json = ['0', 'Mail is not verified.', []];
-                else $json = ['1', 'Login successfully.', [$data]];
+                else $json = ['1', 'Login successfully.', [$data]]; 
             } else {
                 $json = ['0', 'Invalid User.', []];
             }
