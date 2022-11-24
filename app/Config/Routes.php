@@ -38,6 +38,8 @@ $routes->setAutoRoute(true);
 //Api
 $routes->post('api/login', 'Api\Login\Index::index');
 $routes->post('api/register', 'Api\Register\Index::action');
+$routes->post('api/navigationmenu', 'Api\Navigationmenu\Index::index');
+$routes->match(['get', 'post'], 'api/verification/(:num)', 'Api\Register\Index::verification/$1'); 
 
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');

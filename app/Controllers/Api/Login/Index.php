@@ -39,8 +39,14 @@ class Index extends BaseController
             $result = $this->users->getUsers('row', ['users'], ['email' => $post['email'], 'password' => $post['password'], 'status' => ['1']]);
 
             if ($result) {
+				   $data = [
+						'user_id' 	=> $result['id'],
+						'name' 		=> $result['name'],
+						'email' 	=> $result['email'],
+						'type' 		=> $result['type'],
+					];
                 if ($result['email_status'] == '0') $json = ['0', 'Mail is not verified.', []];
-                else $json = ['1', 'Successfully Login.', ['id' => $result['id']]];
+                else $json = ['1', 'Login successfully.', [$data]]; 
             } else {
                 $json = ['0', 'Invalid User.', []];
             }

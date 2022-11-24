@@ -47,7 +47,7 @@ class Index extends BaseController
 
         if ($validation->withRequest($this->request)->run()) {
 
-            $check_email = $this->users->getUsers('count', ['users'], ['email' => $post['email']]);
+            $check_email = $this->users->getUsers('count', ['users'], ['email' => $post['email']]); 
 
             if ($check_email) {
                 $json = ['0', 'Email id already Exists.', []];
@@ -114,17 +114,20 @@ class Index extends BaseController
 
         //$email->initialize($config);
 
-        $email->setFrom('muthulakshmi@itflexsolutions.com', 'Ezstall');
+        //$email->setFrom('muthulakshmi@itflexsolutions.com', 'Ezstall');
+		$email->setFrom('no-reply@ezstall.com', 'Ezstall');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMessage($message);
 
         if ($email->send()) {
-            echo "sent";
+            //echo "sent";
+			return true;
         } else {
-            echo "not sent";
+            //echo "not sent";
+			return false;
         }
 
-        die;
+        //die;
     }
 }
