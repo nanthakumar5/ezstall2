@@ -339,6 +339,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	var barn_validation 	= barnstallitem[3][0];  
 	var usertype			= barnstallitem[4][0]; 
 	var charging_flagdata	= barnstallitem[4][1]; 
+	var nobtn				= barnstallitem[4][2]; 
 	
 	var price_flagdata		= []; 
 	var price_feedata		= [];  	
@@ -425,15 +426,21 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			</li>\
 		';
 		
+		if(nobtn==''){
+			var stalltabbtns	= '\
+				<button class="btn-stall stallbtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'" >Add '+stallcamp+'</button>\
+				<button class="btn-stall bulkstallmodal_'+barnstallname+'" data-barnIndex="'+barnIndex+'" data-bs-toggle="modal" data-bs-target="#bulkstallmodal_'+barnstallname+'">Add Bulk '+stallcamp+'</button>\
+				<a href="javascript:void(0);" class="btn btn-info bulkbtn_'+barnstallname+'">Upload '+uploadName+'</a>\
+				<input type="file" class="bulkfile_'+barnstallname+'" style="display:none;">\
+				<button class="btn-stall barnremovebtn_'+barnstallname+'">Remove '+BarnLots+' and '+stallcamp+'</button>\
+			';
+		}
+		
 		var stalltab = '\
 			<div id="tabtarget_'+barnstallname+'_'+barnIndex+'" class="container tab-pane p-0 mb-3 '+activeclass+'">\
 				<div class="col-md-11 p-0 my-3 stallbtns">\
 					<input type="hidden" name="stallvalidation_'+barnstallname+'_'+barnIndex+'" id="stallvalidation_'+barnstallname+'_'+barnIndex+'">\
-					<button class="btn-stall stallbtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'" >Add '+stallcamp+'</button>\
-					<button class="btn-stall bulkstallmodal_'+barnstallname+'" data-barnIndex="'+barnIndex+'" data-bs-toggle="modal" data-bs-target="#bulkstallmodal_'+barnstallname+'">Add Bulk '+stallcamp+'</button>\
-					<a href="javascript:void(0);" class="btn btn-info bulkbtn_'+barnstallname+'">Upload '+uploadName+'</a>\
-					<input type="file" class="bulkfile_'+barnstallname+'" style="display:none;">\
-					<button class="btn-stall barnremovebtn_'+barnstallname+'">Remove '+BarnLots+' and '+stallcamp+'</button>\
+					'+(stalltabbtns ? stalltabbtns : '')+'\
 				</div>\
 			</div>\
 		';
@@ -492,44 +499,50 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			var selected = i==charging_flags ? 'selected' : '';
 			charging_flag += '<option value='+i+' '+selected+'>'+v+'</option>';
 		})
-
-		var blockunblock = 	'<div class="col-md-6 mb-3">\
+	
+		var availability = '';
+		var blockunblock = '';
+		
+		if(nobtn==''){
+			availability = 	'<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
+		}else{
+			blockunblock = 	'<div class="col-md-6 mb-3">\
 								<input type="checkbox" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+checked+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
 							</div>';
+		}
 		
-		var availability = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
 		if($.inArray(stallId, occupied) !== -1)	availability = '<span class="red-box"></span>';
 		if($.inArray(stallId, reserved) !== -1)	availability = '<span class="yellow-box"></span>';
 	
 		var stallbox = '';
 		if(usertype==2){
-			var stallbox = 	'<div class="col-md-6 mb-3">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
-							</div>\
-							<div class="col-md-6 mb-3 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_night_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][night_price]" class="form-control fs-7" placeholder="Enter Your '+srnightprice+'" value="'+stallNightPrice+'">\
-							</div>\
-							<div class="col-md-6 mb-3 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_week_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][week_price]" class="form-control fs-7" placeholder="Enter Your '+srweekprice+'" value="'+stallWeekPrice+'">\
-							</div>\
-							<div class="col-md-6 mb-3 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][month_price]" class="form-control fs-7" placeholder="Enter Your '+srmonthprice+'" value="'+stallMonthPrice+'">\
-							</div>\
-							<div class="col-md-6 mb-3 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="Enter Your '+srflatprice+'" value="'+stallFlatPrice+'">\
-							</div>';
+			stallbox = 	'<div class="col-md-6 mb-3">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+						</div>\
+						<div class="col-md-6 mb-3 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_night_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][night_price]" class="form-control fs-7" placeholder="Enter Your '+srnightprice+'" value="'+stallNightPrice+'">\
+						</div>\
+						<div class="col-md-6 mb-3 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_week_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][week_price]" class="form-control fs-7" placeholder="Enter Your '+srweekprice+'" value="'+stallWeekPrice+'">\
+						</div>\
+						<div class="col-md-6 mb-3 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][month_price]" class="form-control fs-7" placeholder="Enter Your '+srmonthprice+'" value="'+stallMonthPrice+'">\
+						</div>\
+						<div class="col-md-6 mb-3 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="Enter Your '+srflatprice+'" value="'+stallFlatPrice+'">\
+						</div>';
 		}else if(usertype==3){
-			var stallbox = 	'<div class="col-md-6 mb-3">\
-								<select class="form-control" id="stall_'+barnstallname+'_'+stallIndex+'_chargingflag" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][chargingflag]">\
-								'+charging_flag+'\
-								</select>\
-							</div>\
-							<div class="col-md-6 mb-3">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
-							</div>\
-							<div class="col-md-6 mb-3">\
-								<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="Enter Your '+srprice+'" value="'+stallPrice+'">\
-							</div>';
+			stallbox = 	'<div class="col-md-6 mb-3">\
+							<select class="form-control" id="stall_'+barnstallname+'_'+stallIndex+'_chargingflag" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][chargingflag]">\
+							'+charging_flag+'\
+							</select>\
+						</div>\
+						<div class="col-md-6 mb-3">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+						</div>\
+						<div class="col-md-6 mb-3">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="Enter Your '+srprice+'" value="'+stallPrice+'">\
+						</div>';
 		}
 		
 		var data='\
@@ -827,9 +840,10 @@ function products(productsname, productsitem=[], productsresult=[]){
 	var selector_btn1 	= productsitem[0][0];
 	var product_append 	= productsitem[1][0];
 	var productIndex 	= productsitem[2][0];
+	var notbtn			= productsitem[2][1];
 
 	var productsresult 	= productsresult[0] ? productsresult[0] : [];
-
+	
 	if(productsresult.length > 0){
 		$(productsresult).each(function(i, v){
 			productsdata(v);
@@ -848,7 +862,11 @@ function products(productsname, productsitem=[], productsresult=[]){
 		var productName     		= result['name'] ? result['name'] : ''; 
 		var productQuantity    		= result['quantity'] ? result['quantity'] : '';
 		var productPrice    		= result['price'] ? result['price'] : ''; 
-	
+		
+		var deletebtn = '';
+		if(notbtn==''){
+			deletebtn = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 productremovebtn_'+productsname+'"><i class="fas fa-times text-white"></i></a>';
+		}
 		
 		var data='\
 		<div class="row mb-2 dash-stall-base">\
@@ -862,7 +880,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 				<input type="text" id="product_'+productsname+'_'+productIndex+'_price" name="'+productsname+'['+productIndex+'][price]" required class="form-control fs-7" placeholder="Price" value="'+productPrice+'">\
 			</div>\
 			<div class="col-md-1 mb-4 delete">\
-				<a href="javascript:void(0);" class="dash-stall-remove fs-7 productremovebtn_'+productsname+'"><i class="fas fa-times text-white"></i></a>\
+				'+deletebtn+'\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][id]" value="'+productId+'">\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][status]" value="1">\
 			</div>\

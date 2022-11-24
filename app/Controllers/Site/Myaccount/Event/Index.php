@@ -90,16 +90,6 @@ class Index extends BaseController
 
     public function eventsaction($id='')
 	{   
-		return $this->action($id);
-	}
-	
-    public function facilityeventsaction($id='')
-	{   
-		return $this->action($id);
-	}
-	
-    public function action($id)
-	{   
 		$userdetails 					= getSiteUserDetails();
 		$userid         				= $userdetails['id'];
 		$usertype       				= $userdetails['type'];
@@ -148,8 +138,36 @@ class Index extends BaseController
 			}
         } 
 		
-		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'chargingflag' => $this->config->chargingflag, 'usertype' => $usertype]+$data);		
+		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'chargingflag' => $this->config->chargingflag, 'usertype' => $usertype]+(isset($data) ? $data : []));		
 		$data['userid'] 		= $userid;
+		$data['googleapikey'] 	= $this->config->googleapikey;
+		return view('site/myaccount/event/action', $data);
+	}
+	
+    public function facilityaction($id='')
+	{   
+		$userdetails 					= getSiteUserDetails();
+		$userid         				= $userdetails['id'];
+		
+		if ($this->request->getMethod()=='post'){
+			$requestData 			= $this->request->getPost();
+			$requestData['type'] 	= '1';
+
+			if(isset($requestData['start_date'])) $requestData['start_date'] 	= formatdate($requestData['start_date']);
+    		if(isset($requestData['end_date'])) $requestData['end_date'] 		= formatdate($requestData['end_date']);
+            $result = $this->event->action($requestData);
+			
+			if($result){
+				$this->session->setFlashdata('success', 'Event submitted successfully.');
+				return redirect()->to(base_url().'/myaccount/events'); 
+			}else{
+				$this->session->setFlashdata('danger', 'Try Later.');
+				return redirect()->to(base_url().'/myaccount/events'); 
+			}
+        }
+		
+		$data['userid'] 		= $userid;
+		$data['facilitylist'] 	= getEventsList(['type' => '2', 'userid' => $userid]);
 		$data['googleapikey'] 	= $this->config->googleapikey;
 		return view('site/myaccount/event/action', $data);
 	}

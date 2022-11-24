@@ -147,4 +147,25 @@ class Ajax extends BaseController
 		$array = array_values($array);
 		echo json_encode($array);
     }
+	
+	public function barnstall1()
+	{
+		$requestData 	= $this->request->getPost(); 
+		$id				= $requestData['id'];
+		$userid			= $requestData['userid'];
+		
+		$event = new \App\Models\Event();
+		$result = $event->getEvent('row',  ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $id, 'status' => ['1'], 'userid' => $userid, 'type' => '2']);
+		
+		if($result){				
+			$data['occupied'] 	= getOccupied($id);
+			$data['reserved'] 	= getReserved($id);
+			$data['result'] 	= $result;
+			$data['nobtn'] 		= '1';
+			
+			echo view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => '2']+$data);		
+		}else{
+			echo '';
+		}
+	}
 }

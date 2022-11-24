@@ -116,7 +116,7 @@ class Index extends BaseController
 			}
         } 
 		
-		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => $usertype]+$data);		
+		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => $usertype]+(isset($data) ? $data : []));		
 		$data['userid'] 		= $userid;
 		$data['settings'] 		= $settings;
 		$data['statuslist'] 	= $this->config->status1;

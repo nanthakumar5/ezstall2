@@ -26,6 +26,9 @@ $eventflyer 			= filedata($eventflyer, base_url().'/assets/uploads/eventflyer/')
 $stallmap      			= isset($result['stallmap']) ? $result['stallmap'] : '';
 $stallmap 				= filedata($stallmap, base_url().'/assets/uploads/stallmap/');
 $pageaction 			= $id=='' ? 'Add' : 'Update';
+
+$facilitylist			= isset($facilitylist) ? $facilitylist : '';
+$facilitylistid			= '';
 ?>
 
 <section class="content">
@@ -44,132 +47,146 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 				<input type="hidden" id="id" name="id" value="<?php echo $id;?>" >
 				<div class="col-md-12">
 					<div class="row">
-						<div class="col-md-12 my-2">
-							<div class="form-group">
-								<label>Name</label>								
-								<input type="text" name="name" class="form-control" id="name" placeholder="Enter Name" value="<?php echo $name; ?>">
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>Street</label>								
-								<input type="text" name="location" class="form-control" id="location" placeholder="Enter Location" value="<?php echo $location; ?>">
-							</div>
-						</div>
-						<div class="col-md-6">
-	                    	<div class="form-group">
-		                        <label>City</label>                        
-		                        <input type="text" name="city" class="form-control" id="city" placeholder="Enter City" value="<?php echo $city; ?>">
-								<input type="hidden" name="latitude" id="latitude" value="<?php echo $latitude; ?>">
-								<input type="hidden" name="longitude" id="longitude" value="<?php echo $longitude; ?>">
-		                    </div>
-	                    </div>
-		                <div class="col-md-6">
-		                    <div class="form-group">
-		                        <label>State</label>                      
-		                        <input type="text" name="state" class="form-control" id="state" placeholder="Enter State" value="<?php echo $state; ?>">
-		                    </div>
-		                </div>
-						<div class="col-md-6">
-							<div class="form-group">
-							    <label>Zip Code</label>                      
-							    <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter Zip Code" value="<?php echo $zipcode; ?>">
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>Mobile</label>								
-								<input type="text" name="mobile" class="form-control mobile" id="mobile" placeholder="Enter Mobile" value="<?php echo $mobile; ?>">								
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>Start Date</label>	
-								<input type="text" class="form-control" name="start_date" value="<?php echo $start_date;?>" id="start_date">
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>End Date</label>	
-								<input type="text" class="form-control" name="end_date" value="<?php echo $end_date;?>" id="end_date">
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>Start Time</label>	
-								<input type="time" class="form-control" name="start_time" value="<?php echo $start_time;?>" id="start_time">
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>End Time</label>	
-								<input type="time" class="form-control" name="end_time" value="<?php echo $end_time;?>" id="end_time">
-							</div>
-						</div>
-						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>Stalls Price</label>								
-								<input type="text" name="stalls_price" class="form-control" id="stalls_price" placeholder="Enter Stalls Price" value="<?php echo $stalls_price;?>">								
-							</div>
-						</div>
-<!-- 						<div class="col-md-6 my-2">
-							<div class="form-group">
-								<label>RV Spots Price</label>								
-								<input type="text" name="rvspots_price" class="form-control" id="rvspots_price" placeholder="Enter RV Spots Price" value="<?php //echo $rvspots_price;?>">								
-							</div>
-						</div> -->
-						<div class="col-md-12 my-2">
-							<div class="form-group">
-								<label>Event Description</label>
-								<textarea class="form-control" id="description" name="description" placeholder="Enter Description" rows="3"><?php echo $description;?></textarea>
-							</div>
-						</div>
-						<div class="col-md-4 my-2">
-							<div class="form-group">
-								<label>Event Image</label>			
-								<div>
-									<a href="<?php echo $image[1];?>" target="_blank">
-										<img src="<?php echo $image[1];?>" class="image_source" width="100">
-									</a>
+						<?php if($facilitylist!=''){ ?>
+							<div class="col-md-12 my-2">
+								<div class="form-group">
+									<label>Facility</label>		
+									<?php echo form_dropdown('facility_id', ['' => 'Select Facility']+$facilitylist, '', ['class' => 'form-control facilityid']); ?>									
 								</div>
-								<input type="file" id="file" name="file" class="image_file">
-								<span class="image_msg messagenotify"></span>
-								<input type="hidden" id="image" name="image" class="image_input" value="<?php echo $image[0];?>">
 							</div>
-						</div>							
-						<div class="col-md-4 my-2">
-							<div class="form-group">
-								<label>Event Flyer</label>			
-								<div>
-									<a href="<?php echo $eventflyer[1];?>" target="_blank">
-										<img src="<?php echo $eventflyer[1];?>" class="eventflyer_source" width="100">
-									</a>
+						<?php } ?>
+						<div class="col-md-12 eventwrapper">
+							<div class="row">
+								<div class="col-md-12 my-2">
+									<div class="form-group">
+										<label>Name</label>								
+										<input type="text" name="name" class="form-control" id="name" placeholder="Enter Name" value="<?php echo $name; ?>">
+									</div>
 								</div>
-								<input type="file" id="" name="" class="eventflyer_file">
-								<span class="eventflyer_msg messagenotify"></span>
-								<input type="hidden" id="eventflyer" name="eventflyer" class="eventflyer_input" value="<?php echo $eventflyer[0];?>">
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>Street</label>								
+										<input type="text" name="location" class="form-control" id="location" placeholder="Enter Location" value="<?php echo $location; ?>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>City</label>                        
+										<input type="text" name="city" class="form-control" id="city" placeholder="Enter City" value="<?php echo $city; ?>">
+										<input type="hidden" name="latitude" id="latitude" value="<?php echo $latitude; ?>">
+										<input type="hidden" name="longitude" id="longitude" value="<?php echo $longitude; ?>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>State</label>                      
+										<input type="text" name="state" class="form-control" id="state" placeholder="Enter State" value="<?php echo $state; ?>">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Zip Code</label>                      
+										<input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter Zip Code" value="<?php echo $zipcode; ?>">
+									</div>
+								</div>
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>Mobile</label>								
+										<input type="text" name="mobile" class="form-control mobile" id="mobile" placeholder="Enter Mobile" value="<?php echo $mobile; ?>">								
+									</div>
+								</div>
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>Start Date</label>	
+										<input type="text" class="form-control" name="start_date" value="<?php echo $start_date;?>" id="start_date">
+									</div>
+								</div>
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>End Date</label>	
+										<input type="text" class="form-control" name="end_date" value="<?php echo $end_date;?>" id="end_date">
+									</div>
+								</div>
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>Start Time</label>	
+										<input type="time" class="form-control" name="start_time" value="<?php echo $start_time;?>" id="start_time">
+									</div>
+								</div>
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>End Time</label>	
+										<input type="time" class="form-control" name="end_time" value="<?php echo $end_time;?>" id="end_time">
+									</div>
+								</div>
+								<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>Stalls Price</label>								
+										<input type="text" name="stalls_price" class="form-control" id="stalls_price" placeholder="Enter Stalls Price" value="<?php echo $stalls_price;?>">								
+									</div>
+								</div>
+		<!-- 						<div class="col-md-6 my-2">
+									<div class="form-group">
+										<label>RV Spots Price</label>								
+										<input type="text" name="rvspots_price" class="form-control" id="rvspots_price" placeholder="Enter RV Spots Price" value="<?php //echo $rvspots_price;?>">								
+									</div>
+								</div> -->
+								<div class="col-md-12 my-2">
+									<div class="form-group">
+										<label>Event Description</label>
+										<textarea class="form-control" id="description" name="description" placeholder="Enter Description" rows="3"><?php echo $description;?></textarea>
+									</div>
+								</div>
+								<div class="col-md-4 my-2">
+									<div class="form-group">
+										<label>Event Image</label>			
+										<div>
+											<a href="<?php echo $image[1];?>" target="_blank">
+												<img src="<?php echo $image[1];?>" class="image_source" width="100">
+											</a>
+										</div>
+										<input type="file" id="file" name="file" class="image_file">
+										<span class="image_msg messagenotify"></span>
+										<input type="hidden" id="image" name="image" class="image_input" value="<?php echo $image[0];?>">
+									</div>
+								</div>							
+								<div class="col-md-4 my-2">
+									<div class="form-group">
+										<label>Event Flyer</label>			
+										<div>
+											<a href="<?php echo $eventflyer[1];?>" target="_blank">
+												<img src="<?php echo $eventflyer[1];?>" class="eventflyer_source" width="100">
+											</a>
+										</div>
+										<input type="file" id="" name="" class="eventflyer_file">
+										<span class="eventflyer_msg messagenotify"></span>
+										<input type="hidden" id="eventflyer" name="eventflyer" class="eventflyer_input" value="<?php echo $eventflyer[0];?>">
+									</div>
+								</div>
+								<div class="col-md-4 my-2">
+									<div class="form-group">
+										<label>Stall Map (optional)</label>			
+										<div>
+											<a href="<?php echo $stallmap[1];?>" target="_blank">
+												<img src="<?php echo $stallmap[1];?>" class="stallmap_source" width="100">
+											</a>
+										</div>
+										<input type="file" class="stallmap_file">
+										<span class="stallmap_msg messagenotify"></span>
+										<input type="hidden" id="stallmap" name="stallmap" class="stallmap_input" value="<?php echo $stallmap[0];?>">
+									</div>
+								</div>	
 							</div>
 						</div>
-						<div class="col-md-4 my-2">
-							<div class="form-group">
-								<label>Stall Map (optional)</label>			
-								<div>
-									<a href="<?php echo $stallmap[1];?>" target="_blank">
-										<img src="<?php echo $stallmap[1];?>" class="stallmap_source" width="100">
-									</a>
-								</div>
-								<input type="file" class="stallmap_file">
-								<span class="stallmap_msg messagenotify"></span>
-								<input type="hidden" id="stallmap" name="stallmap" class="stallmap_input" value="<?php echo $stallmap[0];?>">
-							</div>
-						</div>	
 					</div>
-					<?php echo $barnstall; ?>
-					<div class="col-md-12 mt-4">
-						<input type="hidden" name="actionid" value="<?php echo $id; ?>">
-						<input type="hidden" name="userid" value="<?php echo $userid; ?>">
-						<input type="submit" id ="eventSubmit" class="btn btn-danger" value="Submit">
-						<a href="<?php echo base_url(); ?>/myaccount/events" class="btn btn-dark">Back</a>
+					<div class="eventwrapper">
+						<?php echo isset($barnstall) ? $barnstall : '<div class="facilitybarnstall"></div>'; ?>
+						<div class="col-md-12 mt-4">
+							<input type="hidden" name="actionid" value="<?php echo $id; ?>">
+							<input type="hidden" name="userid" value="<?php echo $userid; ?>">
+							<input type="submit" id ="eventSubmit" class="btn btn-danger" value="Submit">
+							<a href="<?php echo base_url(); ?>/myaccount/events" class="btn btn-dark">Back</a>
+						</div>
 					</div>
 				</div>
 			</form>
@@ -278,6 +295,42 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 				$('#longitude').val(longitude);
 			}
 		})
+	}
+</script>
+
+<script> 
+	if($('.facilityid').length){
+		var userid = '<?php echo $userid; ?>';
+		
+		$(function(){
+			facility()
+		})
+
+		$('.facilityid').change(function(){
+			facility($(this).val());
+		})
+
+		function facility(value=''){
+			$('.facilitybarnstall').html('');
+			
+			if(value!=''){
+				$('.eventwrapper').removeClass('displaynone');
+				
+				ajax(
+					'<?php echo base_url()."/ajax/barnstall1"; ?>',
+					{ id : value, userid : userid },
+					{
+						datatype: 'html',
+						asynchronous : 1,
+						success : function(data){
+							$('.facilitybarnstall').html(data);
+						}
+					}
+				)
+			}else{
+				$('.eventwrapper').addClass('displaynone');
+			}
+		}
 	}
 </script>
 <?php $this->endSection(); ?>

@@ -47,6 +47,7 @@ $routes->post('ajax/ajaxstripepayment', 'Common\Ajax::ajaxstripepayment');
 $routes->post('ajax/ajaxproductquantity', 'Common\Ajax::ajaxproductquantity');
 $routes->post('ajax/ajaxblockunblock', 'Common\Ajax::ajaxblockunblock');
 $routes->post('ajax/importbarnstall', 'Common\Ajax::importbarnstall');
+$routes->post('ajax/barnstall1', 'Common\Ajax::barnstall1');
 $routes->get('stripe3d', 'Site\Stripe\Index::index');
 
 $routes->post('ajaxsearchevents', 'Common\Ajax::ajaxsearchevents');
@@ -98,9 +99,9 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
     $routes->match(['get', 'post'], 'updatedata', 'Site\Myaccount\Dashboard\Index::updatedata');
 
     $routes->match(['get', 'post'], 'events', 'Site\Myaccount\Event\Index::index');
-    $routes->match(['get', 'post'], 'events/add', 'Site\Myaccount\Event\Index::action');
+    $routes->match(['get', 'post'], 'events/add', 'Site\Myaccount\Event\Index::eventsaction');
     $routes->match(['get', 'post'], 'events/edit/(:num)', 'Site\Myaccount\Event\Index::eventsaction/$1');
-    $routes->match(['get', 'post'], 'facilityevents/add', 'Site\Myaccount\Event\Index::facilityeventsaction');
+    $routes->match(['get', 'post'], 'facilityevents/add', 'Site\Myaccount\Event\Index::facilityaction');
     $routes->get('events/view/(:num)', 'Site\Myaccount\Event\Index::view/$1');
     $routes->get('events/inventories/(:num)', 'Site\Myaccount\Event\Index::inventories/$1');
     $routes->get('events/export/(:num)', 'Site\Myaccount\Event\Index::export/$1');

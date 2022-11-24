@@ -43,7 +43,7 @@
 			<li>
 				<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/calendar">
 					<i class="side-nav-i bi bi-calendar2-event"></i>
-					<p>Facility Calendar</p>
+					<p>Calendar</p>
 				</a>
 			</li>
 		<?php } ?>
