@@ -19,7 +19,8 @@
 
 	<section class="content">
 		<div class="page-action">
-			<a href="<?php echo getAdminUrl(); ?>/event/action" class="btn btn-primary">Add Event</a>
+			<a href="<?php echo getAdminUrl(); ?>/facilityevent/action" class="btn btn-primary">Add Facility Event</a>
+			<a href="<?php echo getAdminUrl(); ?>/producerevent/action" class="btn btn-primary">Add Producer Event</a>
 		</div>
 		<div class="card">
 			<div class="card-header">

@@ -101,9 +101,7 @@ class Index extends BaseController
 			}
         }
 		
-		$data['statuslist'] 	= $this->config->status1;
-		$data['chargingflag'] 	= $this->config->chargingflag;
-		$data['yesno'] 			= $this->config->yesno;
+		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => '2', 'pagetype' => '1']+(isset($data) ? $data : []));		
 		return view('admin/facility/action', $data);
 	}	
 	

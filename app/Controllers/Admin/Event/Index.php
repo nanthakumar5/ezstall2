@@ -38,13 +38,13 @@ class Index extends BaseController
 	{
 		$post 			= $this->request->getPost();
 		$totalcount 	= $this->event->getEvent('count', ['event'], ['status' => ['1', '2'], 'type' => '1']+$post);
-		$results 		= $this->event->getEvent('all', ['event'], ['status' => ['1', '2'], 'type' => '1']+$post);
+		$results 		= $this->event->getEvent('all', ['event', 'users'], ['status' => ['1', '2'], 'type' => '1']+$post);
 		$totalrecord 	= [];
 				
 		if(count($results) > 0){
 			$action = '';
 			foreach($results as $key => $result){
-				$action = 	'<a href="'.getAdminUrl().'/event/action/'.$result['id'].'">Edit</a> / 
+				$action = 	'<a href="'.getAdminUrl().'/'.($result['eventusertype']==2 ? 'facilityevent' : 'producerevent').'/action/'.$result['id'].'">Edit</a> / 
 							<a href="javascript:void(0);" data-id="'.$result['id'].'" class="delete">Delete</a> /
 							<a href="'.getAdminUrl().'/event/view/'.$result['id'].'" data-id="'.$result['id'].'" class="view">View</a>/
 							<a href="'.getAdminUrl().'/comments/'.$result['id'].'" data-id="'.$result['id'].'" class="commentview">View Comments</a>
@@ -74,7 +74,17 @@ class Index extends BaseController
 		echo json_encode($json);
 	}
 	
-	public function action($id='')
+	public function producereventaction($id='')
+	{
+		return $this->action($id, 3);
+	}	
+	
+	public function facilityeventaction($id='')
+	{
+		return $this->action($id, 2);
+	}	
+	
+	public function action($id, $usertype)
 	{
 		if($id!=''){
 			$result = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $id, 'status' => ['1', '2'], 'type' => '1']);
@@ -104,9 +114,11 @@ class Index extends BaseController
 			}
         }
 		
-		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => '']+(isset($data) ? $data : []));		
+		$data['barnstall'] 		= view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => $usertype, 'pagetype' => '1', 'chargingflag' => $this->config->chargingflag]+(isset($data) ? $data : []));		
 		$data['statuslist'] 	= $this->config->status1;
 		$data['googleapikey'] 	= $this->config->googleapikey;
+		$data['userlist'] 		= getUsersList(['type'=>[$usertype]]);
+		$data['usertype'] 		= $usertype;
 		
 		return view('admin/event/action', $data);
 	}	

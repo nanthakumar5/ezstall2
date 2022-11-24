@@ -155,8 +155,10 @@ $routes->group('administrator', ['filter' => 'adminauthentication2'], function (
 
     // Event
     $routes->match(['get', 'post'], 'event', 'Admin\Event\Index::index');
-    $routes->match(['get', 'post'], 'event/action', 'Admin\Event\Index::action');
-    $routes->get('event/action/(:num)', 'Admin\Event\Index::action/$1');
+    $routes->match(['get', 'post'], 'facilityevent/action', 'Admin\Event\Index::facilityeventaction');
+    $routes->get('facilityevent/action/(:num)', 'Admin\Event\Index::facilityeventaction/$1');
+    $routes->match(['get', 'post'], 'producerevent/action', 'Admin\Event\Index::producereventaction');
+    $routes->get('producerevent/action/(:num)', 'Admin\Event\Index::producereventaction/$1');
     $routes->post('event/DTevent', 'Admin\Event\Index::DTevent');
     $routes->get('event/view/(:num)', 'Admin\Event\Index::view/$1');
 

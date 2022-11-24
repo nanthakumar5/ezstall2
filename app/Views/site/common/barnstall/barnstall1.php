@@ -189,61 +189,6 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 </div>
 
 <?php $this->section('js') ?>
-	<div class="modal fade" id="myModal" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content" style="text-align: left !important;">
-				<div class="modal-header">
-					<h4 class="modal-title">Stall</h4>
-					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
-				</div>
-				<div class="modal-body">
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>Stall Name</label>
-							<input type="text" id="stall_name" class="form-control" placeholder="Enter Your Stall Name">
-						</div>
-					</div>
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>Price</label>
-							<input type="text" id="stall_price" class="form-control" placeholder="Enter Price">
-						</div>
-					</div>
-					<div class="col-md-6 my-2">
-						<div class="form-group">
-							<label>Stall Image</label>			
-							<div>
-								<a href="" target="_blank">
-									<img src="" class="stall_source" width="100">
-								</a>
-							</div>
-							<input type="file" class="stall_file">
-							<span class="stall_msg"></span>
-							<input type="hidden" id="stall_image" class="stall_input" value="">
-						</div>
-					</div>	
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>Total Number of Stalls</label>
-							<input type="number" id="stall"  name="stall" class="form-control" placeholder="Enter Total Number of Stalls" min="1" required>
-						</div>
-					</div>
-					<div class="col-md-12 my-2">
-						<div class="form-group">
-							<label>First Stall Number</label>
-							<input type="text" id="stallstarting"  name="stallstarting" class="form-control" placeholder="Enter First Stall Number" required>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="hidden" id="barnIndexValue" name="barnIndexValue" value="0">
-					<button type="button"class="btn btn-info bulkstallbtn">Submit</button>
-					<button type="button"class="btn btn-info " data-bs-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 	<?php if($id==''){ ?>
 		<div class="modal" id="questionmodal" data-bs-backdrop="static">
 			<div class="modal-dialog">
@@ -341,9 +286,6 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 	<?php } ?>
 
 	<script>		
-		var adminuserlist 			= $('.adminuserlist').length;
-		var adminuserlistcount		= 0;
-		
 		var barn				 	= $.parseJSON('<?php echo addslashes(json_encode($barn)); ?>'); 
 		var rvbarn					= $.parseJSON('<?php echo addslashes(json_encode($rvbarn)); ?>');
 		var feed				 	= $.parseJSON('<?php echo addslashes(json_encode($feed)); ?>');
@@ -357,6 +299,7 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 		var cleaning_flag			= '<?php echo $cleaning_flag ?>'; 
 		var notification_flag		= '<?php echo $notification_flag ?>';
 		var usertype				= '<?php echo $usertype ?>';
+		var pagetype				= '<?php echo isset($pagetype) ? $pagetype : '' ?>';
 		
 		$(function(){
 			questionpopup1(1, 'rv', rv_flag)
@@ -369,23 +312,6 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag]], [rvbarn, occupied, reserved])			
 			products('feed', [['.feedbtn'], ['.feedlist'], [0]], [feed])
 			products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0]], [shaving])
-			
-			if(adminuserlist > 0){
-				$('.adminuserlist').change(function(){					
-					usertype = $(this).find('option:selected').attr('data-usertype');
-					
-					adminuserlistcount++;
-					var prevadminuserlistcount = adminuserlistcount-1 > 0 ? adminuserlistcount-1 : '';
-					$('.barntab'+prevadminuserlistcount+', .stalltab'+prevadminuserlistcount).empty();
-					$(document).find('.barnbtn'+prevadminuserlistcount).removeClass('barnbtn'+prevadminuserlistcount).addClass('barnbtn'+adminuserlistcount);
-					$(document).find('.barntab'+prevadminuserlistcount).removeClass('barntab'+prevadminuserlistcount).addClass('barntab'+adminuserlistcount);
-					$(document).find('.stalltab'+prevadminuserlistcount).removeClass('stalltab'+prevadminuserlistcount).addClass('stalltab'+adminuserlistcount);
-					
-					barnstall('barn', [['.barnbtn'+adminuserlistcount], ['.barntab'+adminuserlistcount, '.stalltab'+adminuserlistcount], [0, 0], ['#barnvalidation'],[usertype, chargingflag]], [barn, occupied, reserved])
-					barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag]], [rvbarn, occupied, reserved])	
-				})
-			}
-			
 		});
 		
 		$('.questionmodal_shaving').click(function(e){ 
@@ -431,7 +357,7 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 	<script>
 		var id = '<?php echo $id ?>';
 		$(function(){
-			if(id=="" && adminuserlist==0){
+			if(id=="" && pagetype!=1){
 				$('#questionmodal').modal('show');
 				
 				$('.modalcarousel_next').click(function(){

@@ -54,18 +54,13 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 			<h3 class="card-title"><?php echo $pageaction; ?> Event</h3>
 		</div>
 		<div class="card-body">
-			<form method="post" id="form" action="<?php echo getAdminUrl(); ?>/event/action" autocomplete="off">
+			<form method="post" id="form" action="<?php echo getAdminUrl(); ?>/<?php echo $usertype==2 ? 'facilityevent' : 'producerevent'; ?>/action" autocomplete="off">
 				<div class="col-md-12">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
 								<label>User</label>					
-								<select id="userid" class="form-control adminuserlist" name="userid">
-									<option value="" data-usertype="">Select User</option>
-									<?php foreach(getUsersList(['type'=>['2', '3'], 'all' => '1']) as $userlist){ ?>
-										<option value="<?php echo $userlist['id']; ?>" data-usertype="<?php echo $userlist['type']; ?>" <?php if($userid==$userlist['id']){ echo 'selected'; } ?>><?php echo $userlist['name']; ?></option>
-									<?php } ?>
-								</select>
+								<?php echo form_dropdown('userid', $userlist, $userid, ['id' => 'userid', 'class' => 'form-control']); ?>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -200,7 +195,7 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 						<input type="hidden" name="status" value="1">
 						<input type="hidden" name="type" value="">
 						<input type="submit" id ="eventSubmit" class="btn btn-danger" value="Submit">
-						<a href="<?php echo base_url(); ?>/events" class="btn btn-dark">Back</a>
+						<a href="<?php echo getAdminUrl(); ?>/event" class="btn btn-dark">Back</a>
 					</div>
 				</div>
 			</form>
