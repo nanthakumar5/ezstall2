@@ -15,6 +15,7 @@
 		<link rel="stylesheet" href="<?php echo base_url(); ?>/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
 		<link rel="stylesheet" href="<?php echo base_url();?>/assets/plugins/jquery-ui/jquery-ui.css">
 		<link href="<?php echo base_url() ?>/assets/site/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo base_url() ?>/assets/plugins/fullcalendar/main.min.css" rel="stylesheet">
 		<link href="<?php echo base_url() ?>/assets/plugins/toastr/toastr.min.css" rel="stylesheet">
 		<link href="<?php echo base_url() ?>/assets/site/css/style.css" rel="stylesheet">
 		<link href="<?php echo base_url() ?>/assets/plugins/fontawesome-free/css/all.css" rel="stylesheet">
@@ -210,6 +211,7 @@
 		<script src="<?php echo base_url();?>/assets/site/js/bootstrap.bundle.min.js"></script>
 		<script src="<?php echo base_url();?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+	    <script src="<?php echo base_url();?>/assets/plugins/fullcalendar/main.min.js"></script>
 	    <script src="<?php echo base_url();?>/assets/plugins/toastr/toastr.min.js"></script>
 	    <script src="<?php echo base_url();?>/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
     	<script src="<?php echo base_url();?>/assets/plugins/tinymce/tinymce.min.js"></script>

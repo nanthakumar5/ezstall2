@@ -40,6 +40,12 @@
 					<p>Facility</p>
 				</a>
 			</li>
+			<li>
+				<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/calendar">
+					<i class="side-nav-i bi bi-calendar2-event"></i>
+					<p>Facility Calendar</p>
+				</a>
+			</li>
 		<?php } ?>
 		<?php if($role=='2' || $role=='3'){ ?>
 			<li>

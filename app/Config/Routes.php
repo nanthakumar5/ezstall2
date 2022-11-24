@@ -115,6 +115,8 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
     $routes->get('facility/export/(:num)', 'Site\Myaccount\Facility\Index::export/$1');
     $routes->post('facility/financialreport', 'Site\Myaccount\Facility\Index::financialreport');
 
+    $routes->get('calendar', 'Site\Myaccount\Calendar\Index::index');
+	
     $routes->match(['get', 'post'], 'stallmanager', 'Site\Myaccount\Stallmanager\Index::index');
     $routes->match(['get', 'post'], 'stallmanager/add', 'Site\Myaccount\Stallmanager\Index::action');
     $routes->match(['get', 'post'], 'stallmanager/edit/(:num)', 'Site\Myaccount\Stallmanager\Index::action/$1');
