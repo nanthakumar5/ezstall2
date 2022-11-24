@@ -20,6 +20,8 @@ $barn        			= isset($result['barn']) ? $result['barn'] : [];
 $rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
 $feed 					= isset($result['feed']) ? $result['feed'] : '';
 $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
+
+$nobtn					= isset($nobtn) ? $nobtn : '';
 ?>
 <div class="card">
 	<div class="card-body">
@@ -115,7 +117,9 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			</div>
 			<div class="col-md-9 t-right p-0 respsm">
 				<input type="hidden" value="" name="barnvalidation" id="barnvalidation">
-				<button class="btn-stall barnbtn" value="4" name="tst" id="tes">Add Barn</button>
+				<?php if($nobtn==''){ ?>
+					<button class="btn-stall barnbtn" value="4" name="tst" id="tes">Add Barn</button>
+				<?php } ?>
 			</div>
 		</div>
 		<ul class="nav nav-pills flex-column col-md-3 barntab" role="tablist"></ul>
@@ -130,7 +134,9 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			</div>
 			<div class="col-md-9 t-right p-0 respsm">
 				<input type="hidden" value="" name="feedvalidation" id="feedvalidation">
-			<button class="btn-stall feedbtn">Add feed</button>
+				<?php if($nobtn==''){ ?>
+					<button class="btn-stall feedbtn">Add feed</button>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="row" >
@@ -147,7 +153,9 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			</div>
 			<div class="col-md-9 t-right p-0 respsm">
 				<input type="hidden" value="" name="shavingsvalidation" id="shavingsvalidation">
-				<button class="btn-stall shavingsbtn">Add Shavings</button>
+				<?php if($nobtn==''){ ?>
+					<button class="btn-stall shavingsbtn">Add Shavings</button>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="row" >
@@ -164,7 +172,9 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			</div>
 			<div class="col-md-9 t-right p-0 respsm">
 				<input type="hidden" value="" name="rvhookupsvalidation" id="rvhookupsvalidation">
-				<button class="btn-stall rvhookupsbtn">Add RV Hookups</button>
+				<?php if($nobtn==''){ ?>
+					<button class="btn-stall rvhookupsbtn">Add RV Hookups</button>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="row">
@@ -188,7 +198,7 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 	</div>
 </div>
 
-<?php $this->section('js') ?>
+<?php //$this->section('js') ?>
 	<?php if($id==''){ ?>
 		<div class="modal" id="questionmodal" data-bs-backdrop="static">
 			<div class="modal-dialog">
@@ -301,6 +311,8 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 		var usertype				= '<?php echo $usertype ?>';
 		var pagetype				= '<?php echo isset($pagetype) ? $pagetype : '' ?>';
 		
+		var nobtn					= '<?php echo $nobtn; ?>';
+			
 		$(function(){
 			questionpopup1(1, 'rv', rv_flag)
 			questionpopup1(1, 'feed', feed_flag)
@@ -308,10 +320,10 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			questionpopup1(1, 'cleaning', cleaning_flag)
 			questionpopup1(2, 'notification', notification_flag)
 			
-			barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[usertype, chargingflag]], [barn, occupied, reserved])
-			barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag]], [rvbarn, occupied, reserved])			
-			products('feed', [['.feedbtn'], ['.feedlist'], [0]], [feed])
-			products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0]], [shaving])
+			barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[usertype, chargingflag, nobtn]], [barn, occupied, reserved])
+			barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag, nobtn]], [rvbarn, occupied, reserved])			
+			products('feed', [['.feedbtn'], ['.feedlist'], [0, nobtn]], [feed])
+			products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0, nobtn]], [shaving])
 		});
 		
 		$('.questionmodal_shaving').click(function(e){ 
@@ -505,5 +517,5 @@ $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 			// END PRICE LIST
 		})
 	</script>
-<?php $this->endSection(); ?>
+<?php //$this->endSection(); ?>
 
