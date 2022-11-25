@@ -32,9 +32,9 @@ class Index extends BaseController
 
         if ($validation->withRequest($this->request)->run()) {
 
-            $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
+            $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'type'=>['3'],'status' => ['1']]); 
             if ($result) {
-				  $datas =  $this->users->getUsers('all', ['users'], ['type'=>['4'],'status' => ['1']]);	
+				  $datas =  $this->users->getUsers('all', ['users'], ['parentid' => $post['user_id'],'type'=>['4'],'status' => ['1']]);	
                   if(count($datas) > 0) {
 					$result1=[];
                     foreach($datas as $data){
@@ -104,6 +104,7 @@ class Index extends BaseController
     			$json = ['0', 'Email id already Exists.', []];
 			} else {
 				$post['userid']       = $post['user_id'];
+				$post['parentid']     = $post['user_id'];
 				$post['name']         = $post['name'];
 				$post['email']        = $post['email'];
 				$post['password']     = md5($post['password']);
@@ -151,7 +152,7 @@ class Index extends BaseController
                     'required' => 'User id is required.',
                 ],
 				'stallmanagerid' => [
-                    'required' => 'User id is required.',
+                    'required' => 'Stallmanager id is required.',
                 ],
 				'name' => [
                     'required' => 'Name is required.',
