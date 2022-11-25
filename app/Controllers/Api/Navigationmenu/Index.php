@@ -35,78 +35,78 @@ class Index extends BaseController
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
 
             if ($result) {
-	
+               $data=[];	
 				if($result['type']=='2'){                         // Facility 
 					
-					$data = [
-						'1'=> 'Dashboard',
-						'2'=> 'Account Information',
-						'3'=> 'Event',
-						'4'=> 'Facility',
-						'5'=> 'Facility Calendar',
-						'6'=> 'Stall Manager',
-						'7'=> 'Operators',
-						'8'=> 'Current Reservation',
-						'9'=> 'Past Reservation',
-						'10'=> 'Payments',
-						'11'=> 'Transactions',
-						'12'=> 'Subscriptions',
-						'13'=> 'Logout'
-					];
+					$data = array(
+					        array('id' => '1','screen' => 'Account Information'),
+							array('id' => '2','screen' => 'Event'),
+							array('id' => '3','screen' => 'Facility'),
+							array('id' => '4','screen' => 'Stall Manager'),
+							array('id' => '5','screen' => 'Operators'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '8','screen' => 'Payments'),
+							array('id' => '9','screen' => 'Transactions'),
+							array('id' => '10','screen' => 'Subscriptions'),
+							
+					      );
 						
 				} elseif($result['type']=='3'){                       // Producer
 					
-					$data = [
-						    '1'=> 'Dashboard',
-							'2'=> 'Account Information',
-							'3'=> 'Event',
-							'6'=> 'Stall Manager',
-							'7'=> 'Operators',
-							'8'=> 'Current Reservation',
-							'9'=> 'Past Reservation',
-							'10'=> 'Payments',
-							'11'=> 'Transactions',
-							'13'=> 'Logout'
-					];
+					$data = array(
+					        array('id' => '1','screen' => 'Account Information'),
+							array('id' => '2','screen' => 'Event'),
+							array('id' => '4','screen' => 'Stall Manager'),
+							array('id' => '5','screen' => 'Operators'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '9','screen' => 'Payments'),
+							array('id' => '10','screen' => 'Transactions'),
+					      );
 					
 				} elseif($result['type']=='4'){                       // Stall Manager
 					
-					$data = [
-						'1'=> 'Dashboard',
-						'2'=> 'Account Information',
-						'3'=> 'Event',
-						'4'=> 'Facility',
-						'5'=> 'Facility Calendar',
-						'8'=> 'Current Reservation',
-						'9'=> 'Past Reservation',
-						'10'=> 'Payments',
-						'13'=> 'Logout'
-					];
+					$data = array(
+					        array('id' => '1','screen' => 'Account Information'),
+							array('id' => '2','screen' => 'Event'),
+							array('id' => '3','screen' => 'Facility'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '9','screen' => 'Payments'),
+					      );
 					
 				} elseif($result['type']=='5'){                       //Horse Owner
 					
-					$data = [
-    					'1'=> 'Dashboard',
-						'2'=> 'Account Information',
-						'8'=> 'Current Reservation',
-						'9'=> 'Past Reservation',
-						'10'=> 'Payments',
-						'13'=> 'Logout'
-					];
-				}
-				
-                 $json = ['1', '1 Record(s) Found', [$data]];
+					$data = array(
+					        array('id' => '1','screen' => 'Account Information'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '9','screen' => 'Payments'),
+					      );
+
+				} elseif($result['type']=='6'){                       //Operator
+					
+					$data = array(
+					        array('id' => '1','screen' => 'Account Information'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+					      );
+				} 
+				 $type = isset($result['type']) ? $result['type'] : []; 
+				 if(!empty($data)) $json = ['1', count($data).' Record(s) Found', $type, $data];
+                 else             $json = ['0', 'No Records Found.',[] ,[]];
             } else {
-                $json = ['0', 'No Records Found.', []];
+                $json = ['0', 'No Records Found.', [],[]];
             }
         } else {
-            $json = ['0', $validation->getErrors(), []];
+            $json = ['0', $validation->getErrors(), [],[]];
         }
 
         echo json_encode([
             'status'         => $json[0],
             'message'       => $json[1],
-            'result'         => $json[2],
+			'type'          => $json[2],
+            'result'         => $json[3],
         ]);
 
         die;
