@@ -35,8 +35,9 @@ class Index extends BaseController
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
 
             if ($result) {
-	            $data = [];
-				if($result['type']=='2'){                         // Facility 
+	            if ($result) {
+	            
+				if($result['type']=='2'){                         // Facility
 					
 					$data = [
 						'1'=> 'Dashboard',
@@ -102,7 +103,7 @@ class Index extends BaseController
 						'13'=> 'Logout'
 					];
 				}
-				
+				$data = isset($data) ? $data : [];
                  $json = ['1', '1 Record(s) Found', [$data]];
             } else {
                 $json = ['0', 'No Records Found.', []];
