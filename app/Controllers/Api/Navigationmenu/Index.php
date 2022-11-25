@@ -33,7 +33,7 @@ class Index extends BaseController
         if ($validation->withRequest($this->request)->run()) {
 
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
-
+            $data=[];
             if ($result) {
 	
 				if($result['type']=='2'){                         // Facility 
