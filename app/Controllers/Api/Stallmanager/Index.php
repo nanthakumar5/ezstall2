@@ -166,6 +166,7 @@ class Index extends BaseController
         if ($validation->withRequest($this->request)->run()) {
 			
 				$post['userid']       = $post['user_id'];
+				$post['parentid']     = $post['user_id'];
 				$post['actionid']     = $post['stallmanagerid'];
 				$post['name']         = $post['name'];
 				$post['email']        = $post['email'];
