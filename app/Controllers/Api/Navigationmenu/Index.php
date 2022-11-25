@@ -94,7 +94,7 @@ class Index extends BaseController
 						'13'=> 'Logout'
 					];
 				} 
-				 if(isset($data)) $json = ['1', '1 Record(s) Found', [$data]];
+				 if(!empty($data)) $json = ['1', '1 Record(s) Found', [$data]];
                  else             $json = ['0', 'No Records Found.', []];
             } else {
                 $json = ['0', 'No Records Found.', []];
