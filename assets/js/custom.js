@@ -339,7 +339,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	var barn_validation 	= barnstallitem[3][0];  
 	var usertype			= barnstallitem[4][0]; 
 	var charging_flagdata	= barnstallitem[4][1]; 
-	var nobtn				= barnstallitem[4][2]; 
+	var nobtn				= barnstallitem[4][2] ? barnstallitem[4][2]  : ''; 
 	
 	var price_flagdata		= []; 
 	var price_feedata		= [];  	
@@ -353,8 +353,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		});
 	}
 	
-	
-	/*Placeholder*/
+	/*PLACEHOLDER*/
 	if(barnstallname=='barn'){
 		var srheading  		= 'Stalls';
 		var srrate     		= 'Stalls Rate';
@@ -367,6 +366,9 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var srimage    		= 'Stalls Image';
 		var srtotalnumber 	= 'Total Number of Stalls';
 		var srfirstnumber 	= 'First Stalls Number';
+		var uploadName  	= 'Barn';
+		var stallcamp 		= 'Stall';
+		var BarnLots    	= 'Barn';
 	}else if(barnstallname=='rvhookups'){
 		var srheading  		= 'RV Lots';
 		var srrate     		= 'RV Lots Rate';
@@ -379,43 +381,23 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var srimage    		= 'RV Lots Image';
 		var srtotalnumber 	= 'Total Number of RV Lots';
 		var srfirstnumber 	= 'First RV Lots Number';
+		var uploadName  	= 'Campsites';
+		var stallcamp 		= 'Rv Lots';
+		var BarnLots    	= 'Campsites';
 	}
-	/*Placeholder*/
+	/*PLACEHOLDER*/
 	
 	var bsresult = barnstallresult[0] ? barnstallresult[0] : [];
 	var occupied = barnstallresult[1] ? barnstallresult[1] : [];
 	var reserved = barnstallresult[2] ? barnstallresult[2] : [];
 	
-	/* START BARN AND STALL RESULT */
-	if(bsresult.length > 0){
-		$(bsresult).each(function(i, v){
-			barndata(v);
-		});
-	}
-	/* END BARN AND STALL RESULT */
-	
 	/* START ADD EDIT BARN */
-	$(selector_btn1).click(function(e){
-		e.preventDefault();
-		barndata([], 1);
-	});
-
-	function barndata(result=[], type=''){ 
-		var barnId   	= result['id'] ? result['id'] : '';
-		var stall		= result['stall'] ? result['stall'] : (result['rvstall'] ? result['rvstall'] : []);
-		
+	var barndata = function(result=[], type=''){ 
 		var activeclass = $.trim($(barn_append).html())=='' ? 'active' : '';
-		if(barnstallname=='barn'){
-			var barnName 	= result['name'] ? result['name'] : '';
-			var uploadName  = 'Barn';
-			var stallcamp 	= 'Stall';
-			var BarnLots    = 'Barn';
-		}else if(barnstallname=='rvhookups'){
-			var barnName 	= result['name'] ? result['name'] : '';
-			var uploadName  = 'Campsites';
-			var stallcamp 	= 'Rv Lots';
-			var BarnLots    = 'Campsites';
-		}
+		
+		var barnId   	= result['id'] ? result['id'] : '';
+		var barnName 	= result['name'] ? result['name'] : '';
+		var stall		= result['stall'] ? result['stall'] : (result['rvstall'] ? result['rvstall'] : []);		
 
 		var barntab='\
 			<li class="nav-item text-center mb-3">\
@@ -437,7 +419,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		}
 		
 		var stalltab = '\
-			<div id="tabtarget_'+barnstallname+'_'+barnIndex+'" class="container tab-pane p-0 mb-3 '+activeclass+'">\
+			<div id="tabtarget_'+barnstallname+'_'+barnIndex+'" class="stallcontainer container tab-pane p-0 mb-3 '+activeclass+'">\
 				<div class="col-md-11 p-0 my-3 stallbtns">\
 					<input type="hidden" name="stallvalidation_'+barnstallname+'_'+barnIndex+'" id="stallvalidation_'+barnstallname+'_'+barnIndex+'">\
 					'+(stalltabbtns ? stalltabbtns : '')+'\
@@ -465,13 +447,8 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	/* END ADD EDIT BARN */
 	
 	
-	/* START ADD EDIT STALL */
-	$(document).on('click', '.stallbtn_'+barnstallname, function(e){ 
-		e.preventDefault();
-		stalldata($(this).attr('data-barnIndex'));
-	});
-	
-	function stalldata(barnIndex, result=[])
+	/* START ADD EDIT STALL */	
+	var stalldata = function(barnIndex, result=[])
 	{ 
 		var stallId       		= result['id'] ? result['id'] : '';
 		var charging_flags      = result['charging_id'] ? result['charging_id'] : ''; 
@@ -579,11 +556,31 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	}
 	/* END ADD EDIT STALL */
 	
+	/* START BARN AND STALL CLICK AND RESULT */	
+	$(selector_btn1).off('click');
+	$(selector_btn1).click(function(e){
+		e.preventDefault();
+		barndata([], 1);
+	});
+
+	if(bsresult.length > 0){
+		$(bsresult).each(function(i, v){
+			barndata(v);
+		});
+	}
+	
+	$(document).off('click', '.stallbtn_'+barnstallname);
+	$(document).on('click', '.stallbtn_'+barnstallname, function(e){ 
+		e.preventDefault();
+		stalldata($(this).attr('data-barnIndex'));
+	});
+	/* END BARN AND STALL CLICK AND RESULT */
 	
 	/* START BARN REMOVE */
+	$(document).off('click', '.barnremovebtn_'+barnstallname);
 	$(document).on('click', '.barnremovebtn_'+barnstallname, function(e){
 		e.preventDefault();
-		var stalltabparent = $(this).parent().parent();
+		var stalltabparent = $(this).closest('.stallcontainer');
 		$(document).find('[data-bs-target="#'+stalltabparent.attr('id')+'"]').parent().remove();
 		stalltabparent.remove();
 		
@@ -599,11 +596,12 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 
 	
 	/* START STALL REMOVE */
+	$(document).off('click', '.stallremovebtn_'+barnstallname);
 	$(document).on('click', '.stallremovebtn_'+barnstallname, function(e){
 		e.preventDefault();
-		var stallparent = $(this).parent().parent().parent();
 		var bi = $(this).attr('data-barnIndex')
-		$(this).parent().parent().remove();
+		var stallparent = $(this).closest('.stallcontainer');
+		$(this).closest('.dash-stall-base').remove();
 		
 		if(stallparent.find('.dash-stall-base').length==0){
 			$(document).find('#stallvalidation_'+barnstallname+'_'+bi).val('');
@@ -613,45 +611,8 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	/* END STALL REMOVE */
 	
 	
-	/* START BARN NAME TEXTBOX */
-	$(document).on('click', barn_append+' li a.active', function(e){ 
-		e.preventDefault();
-		barntext();
-	});
-	
-	$(document).on('keyup', '.barnnametextbox', function(){
-		$(this).parent().find('.barnametext').text($(this).val());
-	})
-	
-	$(document).on('click', function(){
-		if (!$(event.target).is(".barnnametextbox, .barnametext")){
-			$(document).find('.requiredtab').show();
-			$(document).find('.barnametext').show();
-			$(document).find('.barnnametextbox').hide();
-		}
-	})
-	
-	function barntext(type=''){
-		setTimeout(function () {
-			$(document).find(barn_append+' li').each(function(){
-				if($(this).find('.tab-link').hasClass('active')){
-					$(this).find('.tab-link .requiredtab').hide();
-					$(this).find('.tab-link .barnametext').hide();
-					$(this).find('.tab-link .barnnametextbox').show();
-				}else{
-					$(this).find('.tab-link .requiredtab').show();
-					$(this).find('.tab-link .barnametext').show();
-					$(this).find('.tab-link .barnnametextbox').hide();
-				}
-				
-				$(this).find('.tab-link .barnametext').text($(this).find('.tab-link .barnnametextbox').val());
-			})
-		}, 10);
-	}
-	/* END BARN NAME TEXTBOX */
-	
-	
 	/* START STALL IMAGE CLICK */
+	$(document).off('click','.stalluploadimage_'+barnstallname)
 	$(document).on('click','.stalluploadimage_'+barnstallname, function (e) {
 		e.preventDefault();
 		$(this).parent().find('.stallimage').click();
@@ -660,6 +621,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	
 	
 	/* START BULK UPLOAD */
+	$(document).off('click','.bulkbtn_'+barnstallname)
 	$(document).on('click','.bulkbtn_'+barnstallname, function () {
 		$(this).parent().find('.bulkfile_'+barnstallname).click();
 	});
@@ -687,7 +649,10 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	});
 	/* END BULK UPLOAD */
 	
+	
 	/* START STALL BULK UPLOAD */
+	$('#bulkstallmodal_'+barnstallname).remove();
+	
 	var charging_flagmodal ='';
 	$.each(charging_flagdata, function(i,v){ 
 		charging_flagmodal += '<option value='+i+'>'+v+'</option>';
@@ -800,11 +765,13 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		$('.stall_source_'+barnstallname).parent().attr('href', baseurl()+'assets/images/upload.png');
 	})
 
+	$(document).off('click', '.bulkstallmodal_'+barnstallname)
 	$(document).on('click', '.bulkstallmodal_'+barnstallname, function (e) { 
 		e.preventDefault();
 		$('.barnIndexValue_'+barnstallname).val($(this).attr('data-barnIndex'));
 	});
 
+	$(document).off('click', '.bulkstallbtn_'+barnstallname)
 	$(document).on('click', '.bulkstallbtn_'+barnstallname, function(e){ 
 		e.preventDefault();
 		if($('.stall_total_'+barnstallname+'').val()==''){
@@ -819,7 +786,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var flatprice       = $('.stall_flat_price_'+barnstallname).val();
 		var price        	= $('.stall_price_'+barnstallname).val();
 		var charging_id    	= $('.stall_charging_id_'+barnstallname).val(); 
-		var image        	= $('.stall_image_'+barnstallname).val();
+		var image        	= $('.stall_input_'+barnstallname).val();
 		var stalltotal    	= $('.stall_total_'+barnstallname).val();
 		var stallnumber 	= $('.stall_number_'+barnstallname).val(); 
 		var barnIndexValue	= $('.barnIndexValue_'+barnstallname).val();
@@ -840,7 +807,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 	var selector_btn1 	= productsitem[0][0];
 	var product_append 	= productsitem[1][0];
 	var productIndex 	= productsitem[2][0];
-	var notbtn			= productsitem[2][1];
+	var notbtn			= productsitem[2][1] ? productsitem[2][1] : '';
 
 	var productsresult 	= productsresult[0] ? productsresult[0] : [];
 	
@@ -851,6 +818,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 	}
 	
 	/* START ADD EDIT PRODUCTS */
+	$(selector_btn1).off('click');
 	$(selector_btn1).click(function(e){
 		e.preventDefault();
 		productsdata();
@@ -864,8 +832,14 @@ function products(productsname, productsitem=[], productsresult=[]){
 		var productPrice    		= result['price'] ? result['price'] : ''; 
 		
 		var deletebtn = '';
+		var blockunblock = '';
+		
 		if(notbtn==''){
 			deletebtn = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 productremovebtn_'+productsname+'"><i class="fas fa-times text-white"></i></a>';
+		}else{
+			blockunblock = 	'<div class="col-md-2 mb-4">\
+								<input type="checkbox" id="product_'+productsname+'_'+productIndex+'_block_unblock" name="'+productsname+'['+productIndex+'][block_unblock]" value="1">  Reserved\
+							</div>';
 		}
 		
 		var data='\
@@ -879,6 +853,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 			<div class="col-md-2 mb-4">\
 				<input type="text" id="product_'+productsname+'_'+productIndex+'_price" name="'+productsname+'['+productIndex+'][price]" required class="form-control fs-7" placeholder="Price" value="'+productPrice+'">\
 			</div>\
+			'+blockunblock+'\
 			<div class="col-md-1 mb-4 delete">\
 				'+deletebtn+'\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][id]" value="'+productId+'">\
@@ -898,6 +873,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 	
 	
 	/* START PRODUCTS REMOVE */
+	$(document).off('click', '.productremovebtn_'+productsname)
 	$(document).on('click', '.productremovebtn_'+productsname, function(e){
 		e.preventDefault();
 		$(this).parent().parent().remove();

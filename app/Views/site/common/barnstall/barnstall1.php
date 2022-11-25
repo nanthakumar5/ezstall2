@@ -21,6 +21,7 @@ $rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
 $feed 					= isset($result['feed']) ? $result['feed'] : '';
 $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 
+$ajax					= isset($ajax) ? $ajax : '';
 $nobtn					= isset($nobtn) ? $nobtn : '';
 ?>
 <div class="card">
@@ -198,7 +199,7 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 	</div>
 </div>
 
-<?php //$this->section('js') ?>
+<?php if($ajax==''){ $this->section('js'); } ?>
 	<?php if($id==''){ ?>
 		<div class="modal" id="questionmodal" data-bs-backdrop="static">
 			<div class="modal-dialog">
@@ -517,5 +518,5 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 			// END PRICE LIST
 		})
 	</script>
-<?php //$this->endSection(); ?>
+<?php if($ajax==''){ $this->endSection(); } ?>
 

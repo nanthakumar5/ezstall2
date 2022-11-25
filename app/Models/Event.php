@@ -215,6 +215,8 @@ class Event extends BaseModel
 		$actionid 			= (isset($data['actionid'])) ? $data['actionid'] : '';
 		$userid				= $data['userid'];
 		
+		$facilityid			= (isset($data['facility_id']) && $data['facility_id']!='') ? $data['facility_id'] : '';
+		
 		$request['user_id'] = $userid;
 		$request['status'] 	= '1';
 		if(isset($data['name']) && $data['name']!='')      		        		$request['name'] 				= $data['name'];
@@ -240,6 +242,7 @@ class Event extends BaseModel
 		if(isset($data['cleaning_flag']) && $data['cleaning_flag']!='') 		$request['cleaning_flag'] 		= $data['cleaning_flag'];
 		if(isset($data['cleaning_fee']) && $data['cleaning_fee']!='') 			$request['cleaning_fee'] 		= $data['cleaning_fee'];
 		if(isset($data['type']) && $data['type']!='')    		 				$request['type'] 				= $data['type'];
+		if($facilityid!='')    		 											$request['facility_id'] 		= $facilityid;
 		
 		$priceflag 	= [];
 		$pricefee 	= [];
@@ -251,10 +254,8 @@ class Event extends BaseModel
 		$request['price_fee'] 				= implode(',', $pricefee);
 		
 		if(isset($data['image']) && $data['image']!=''){
-		   // if(filemove($data['image'], './assets/uploads/temp')!= $data['image']){
-     			$request['image'] = $data['image'];	
-     			filemove($data['image'], './assets/uploads/event');	
-		  //  }
+			$request['image'] = $data['image'];	
+			filemove($data['image'], './assets/uploads/event');	
 		}
 		
 		if(isset($data['eventflyer']) && $data['eventflyer']!=''){
@@ -287,17 +288,25 @@ class Event extends BaseModel
 				$eventinsertid = $actionid;
 			}
 		}
-		 
-		if(isset($data['barn']) && count($data['barn']) > '0') 				$this->barnstallaction($data['barn'], [$eventinsertid, $data['type'], '1']);
-		if(isset($data['rvhookups']) && count($data['rvhookups']) > '0')	$this->barnstallaction($data['rvhookups'], [$eventinsertid, $data['type'], '2']);
-		if(isset($data['feed']) && count($data['feed']) > '0') 				$this->productsaction($data['feed'], [$eventinsertid, '1']);
-		if(isset($data['shavings']) && count($data['shavings']) > '0') 		$this->productsaction($data['shavings'], [$eventinsertid, '2']);
+		
+		if($facilityid==''){
+			if(isset($data['barn']) && count($data['barn']) > '0') 				$this->barnstallaction($data['barn'], [$eventinsertid, $data['type'], '1']);
+			if(isset($data['rvhookups']) && count($data['rvhookups']) > '0')	$this->barnstallaction($data['rvhookups'], [$eventinsertid, $data['type'], '2']);
+			if(isset($data['feed']) && count($data['feed']) > '0') 				$this->productsaction($data['feed'], [$eventinsertid, '1']);
+			if(isset($data['shavings']) && count($data['shavings']) > '0') 		$this->productsaction($data['shavings'], [$eventinsertid, '2']);
+		}else{
+			if(isset($data['barn']) && count($data['barn']) > '0') 				$this->facilitybarnstallaction($data['barn'], [$eventinsertid, $data['type'], '1']);
+			if(isset($data['rvhookups']) && count($data['rvhookups']) > '0')	$this->facilitybarnstallaction($data['rvhookups'], [$eventinsertid, $data['type'], '2']);
+			if(isset($data['feed']) && count($data['feed']) > '0') 				$this->facilityproductsaction($data['feed'], [$eventinsertid, '1']);
+			if(isset($data['shavings']) && count($data['shavings']) > '0') 		$this->facilityproductsaction($data['shavings'], [$eventinsertid, '2']);
+		}
 		
 		if(isset($eventinsertid) && $this->db->transStatus() === FALSE){
 			$this->db->transRollback();
 			return false;
 		}else{
 			$this->db->transCommit();
+			echo '<pre>';print_r($data);die;
 			return $eventinsertid;
 		}
 	}
@@ -394,19 +403,95 @@ class Event extends BaseModel
 		}
 
 		foreach($data as $productsdata){
-			$productsid        	 			= $productsdata['id']!='' ? $productsdata['id'] : '';
-			$productsdata['event_id'] 		= $extras[0];
-			$productsdata['name']       	= $productsdata['name'];
-			$productsdata['price']      	= $productsdata['price'];
-			$productsdata['status']     	= $productsdata['status'];
-			$productsdata['type']     		= $extras[1];
+			$productsid        	 		= $productsdata['id']!='' ? $productsdata['id'] : '';
+			$products['event_id'] 		= $extras[0];
+			$products['name']       	= $productsdata['name'];
+			$products['quantity']       = $productsdata['quantity'];
+			$products['price']      	= $productsdata['price'];
+			$products['status']     	= $productsdata['status'];
+			$products['type']     		= $extras[1];
 			
 			
 			if($productsid==''){
-				$this->db->table('products')->insert($productsdata);
+				$this->db->table('products')->insert($products);
 			}else {
-			   $this->db->table('products')->update($productsdata, ['id' => $productsid]);
+			   $this->db->table('products')->update($products, ['id' => $productsid]);
 			}	
+		}
+	}
+	
+	public function facilitybarnstallaction($data, $extras)
+	{		
+		foreach($data as $barndata){
+			if(isset($barndata['stall']) && count($barndata['stall']) > 0 && strpos(json_encode($barndata['stall']), 'block_unblock')){ 
+				$barnid       		= '';
+				$barn['event_id'] 	= $extras[0];
+				$barn['barn_id'] 	= $barndata['id'];
+				$barn['name']     	= $barndata['name'];
+				$barn['status']     = '1';
+				$barn['type']		= $extras[2];
+				
+				if($barnid==''){
+					$this->db->table('barn')->insert($barn);
+					$barninsertid = $this->db->insertID();
+				}else {
+				   $this->db->table('barn')->update($barn, ['id' => $barnid]);
+				   $barninsertid = $barnid;
+				}
+				
+				if(isset($barndata['stall']) && count($barndata['stall']) > 0){ 
+					foreach($barndata['stall'] as $stalldata){  
+						if(isset($stalldata['block_unblock'])){
+							$stallid        	 	= '';
+							$stall['event_id'] 	 	= $extras[0];
+							$stall['barn_id']    	= $barninsertid;
+							$stall['stall_id']    	= $stalldata['id'];
+							$stall['charging_id']  	= isset($stalldata['chargingflag']) ? $stalldata['chargingflag'] : '' ;
+							$stall['name']       	= $stalldata['name'];
+							$stall['price']      	= isset($stalldata['price']) ? $stalldata['price'] : 0;
+							$stall['night_price']   = isset($stalldata['night_price']) ? $stalldata['night_price'] : 0;
+							$stall['week_price']    = isset($stalldata['week_price']) ? $stalldata['week_price'] : 0;
+							$stall['month_price']   = isset($stalldata['month_price']) ? $stalldata['month_price'] : 0;
+							$stall['flat_price']    = isset($stalldata['flat_price']) ? $stalldata['flat_price'] : 0;
+							$stall['status']     	= $stalldata['status'];
+							$stall['type']		 	= $extras[2];
+							
+							if(isset($stalldata['image']) && $stalldata['image']!=''){
+								$stall['image'] = $stalldata['image'];		
+								filemove($stalldata['image'], './assets/uploads/stall');		
+							}
+							
+							if($stallid==''){
+								$this->db->table('stall')->insert($stall);
+							}else {
+							   $this->db->table('stall')->update($stall, ['id' => $stallid]);
+							}	
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public function facilityproductsaction($data, $extras)
+	{
+		foreach($data as $productsdata){
+			if(isset($productsdata['block_unblock'])){
+				$productsid        	 		= '';
+				$products['event_id'] 		= $extras[0];
+				$products['product_id'] 	= $productsdata['id'];
+				$products['name']       	= $productsdata['name'];
+				$products['quantity']       = $productsdata['quantity'];
+				$products['price']      	= $productsdata['price'];
+				$products['status']     	= $productsdata['status'];
+				$products['type']     		= $extras[1];
+				
+				if($productsid==''){
+					$this->db->table('products')->insert($products);
+				}else {
+				   $this->db->table('products')->update($products, ['id' => $productsid]);
+				}	
+			}
 		}
 	}
 }

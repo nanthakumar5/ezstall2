@@ -161,6 +161,7 @@ class Ajax extends BaseController
 			$data['occupied'] 	= getOccupied($id);
 			$data['reserved'] 	= getReserved($id);
 			$data['result'] 	= $result;
+			$data['ajax'] 		= '1';
 			$data['nobtn'] 		= '1';
 			
 			echo view('site/common/barnstall/barnstall1', ['yesno' => $this->config->yesno, 'pricelist' => $this->config->pricelist, 'usertype' => '2']+$data);		

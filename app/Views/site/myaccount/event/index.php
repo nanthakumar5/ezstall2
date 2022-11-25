@@ -45,7 +45,7 @@ $currentdate 	= date("Y-m-d");
 					</a>
 					<?php if($currentdate <= $data['end_date']){ ?>
 					    <?php if($usertype !='4'){ ?>
-							<a href="<?php echo base_url().'/myaccount/events/edit/'.$data['id']; ?>" 
+							<a href="<?php echo base_url().'/myaccount/'.($data['facility_id']!=0 ? 'facilityevents' : 'events').'/edit/'.$data['id']; ?>" 
 								class="dash-edit-event fs-7 mx-2">
 								Edit <i class="far fa-edit i-white-icon"></i>
 							</a>

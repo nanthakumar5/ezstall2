@@ -27,8 +27,8 @@ $stallmap      			= isset($result['stallmap']) ? $result['stallmap'] : '';
 $stallmap 				= filedata($stallmap, base_url().'/assets/uploads/stallmap/');
 $pageaction 			= $id=='' ? 'Add' : 'Update';
 
+$facilityid				= isset($result['facility_id']) ? $result['facility_id'] : '';
 $facilitylist			= isset($facilitylist) ? $facilitylist : '';
-$facilitylistid			= '';
 ?>
 
 <section class="content">
@@ -51,7 +51,7 @@ $facilitylistid			= '';
 							<div class="col-md-12 my-2">
 								<div class="form-group">
 									<label>Facility</label>		
-									<?php echo form_dropdown('facility_id', ['' => 'Select Facility']+$facilitylist, '', ['class' => 'form-control facilityid']); ?>									
+									<?php echo form_dropdown('facility_id', ['' => 'Select Facility']+$facilitylist, $facilityid, ['class' => 'form-control facilityid']); ?>									
 								</div>
 							</div>
 						<?php } ?>
@@ -303,7 +303,7 @@ $facilitylistid			= '';
 		var userid = '<?php echo $userid; ?>';
 		
 		$(function(){
-			facility()
+			facility($('.facilityid').val())
 		})
 
 		$('.facilityid').change(function(){

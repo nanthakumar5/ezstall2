@@ -104,6 +104,7 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
     $routes->match(['get', 'post'], 'events/add', 'Site\Myaccount\Event\Index::eventsaction');
     $routes->match(['get', 'post'], 'events/edit/(:num)', 'Site\Myaccount\Event\Index::eventsaction/$1');
     $routes->match(['get', 'post'], 'facilityevents/add', 'Site\Myaccount\Event\Index::facilityaction');
+    $routes->match(['get', 'post'], 'facilityevents/edit/(:num)', 'Site\Myaccount\Event\Index::facilityaction/$1');
     $routes->get('events/view/(:num)', 'Site\Myaccount\Event\Index::view/$1');
     $routes->get('events/inventories/(:num)', 'Site\Myaccount\Event\Index::inventories/$1');
     $routes->get('events/export/(:num)', 'Site\Myaccount\Event\Index::export/$1');
