@@ -93,17 +93,9 @@ class Index extends BaseController
 						'10'=> 'Payments',
 						'13'=> 'Logout'
 					];
-				} elseif($result['type']=='6'){                       //operator
-					
-					$data = [
-    					'1'=> 'Dashboard',
-						'2'=> 'Account Information',
-						'8'=> 'Current Reservation',
-						'13'=> 'Logout'
-					];
-				}
-				
-                 $json = ['1', '1 Record(s) Found', [$data]];
+				} 
+				 if(isset($data)) $json = ['1', '1 Record(s) Found', [$data]];
+                 else             $json = ['0', 'No Records Found.', []];
             } else {
                 $json = ['0', 'No Records Found.', []];
             }
