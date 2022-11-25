@@ -66,7 +66,8 @@ class Index extends BaseController
                     $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
                         \n To activate your account please click below link." . ' ' . $verificationurl . "";
 
-                    $this->send_mail($post['email'], $email_subject, $email_message);
+                    send_mail($post['email'], $email_subject, $email_message,'');
+					
                     $json = ['1', 'User Submitted Successfully.', []];
                 } else {
                     $json = ['0', 'Try Later.', []];
