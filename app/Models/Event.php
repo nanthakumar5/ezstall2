@@ -306,7 +306,6 @@ class Event extends BaseModel
 			return false;
 		}else{
 			$this->db->transCommit();
-			echo '<pre>';print_r($data);die;
 			return $eventinsertid;
 		}
 	}
