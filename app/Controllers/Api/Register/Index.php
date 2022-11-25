@@ -66,8 +66,7 @@ class Index extends BaseController
                     $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
                         \n To activate your account please click below link." . ' ' . $verificationurl . "";
 
-                    send_mail($post['email'], $email_subject, $email_message,'');
-					
+                    $this->send_mail($post['email'], $email_subject, $email_message);
                     $json = ['1', 'User Submitted Successfully.', []];
                 } else {
                     $json = ['0', 'Try Later.', []];
@@ -121,13 +120,20 @@ class Index extends BaseController
         $email->setSubject($subject);
         $email->setMessage($message);
 
-        if ($email->send()) {
+        /*if ($email->send()) {
             //echo "sent";
 			return true;
         } else {
             //echo "not sent";
 			return false;
-        }
+        }*/
+		
+		if($email->send()){
+        return "sent";
+    }else{
+       	print_r($email->printDebugger());exit;
+        return "not sent";
+    }
 
         //die;
     }
