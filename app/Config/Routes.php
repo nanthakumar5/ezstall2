@@ -40,6 +40,10 @@ $routes->post('api/login', 'Api\Login\Index::index');
 $routes->post('api/register', 'Api\Register\Index::action');
 $routes->post('api/navigationmenu', 'Api\Navigationmenu\Index::index');
 $routes->match(['get', 'post'], 'api/verification/(:num)', 'Api\Register\Index::verification/$1'); 
+$routes->post('api/stallmanager', 'Api\Stallmanager\Index::index');
+$routes->post('api/addstallmanager', 'Api\Stallmanager\Index::add');
+$routes->post('api/editstallmanager', 'Api\Stallmanager\Index::edit');
+$routes->post('api/deletestallmanager', 'Api\Stallmanager\Index::delete');
 
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
