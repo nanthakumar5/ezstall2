@@ -33,9 +33,9 @@ class Index extends BaseController
         if ($validation->withRequest($this->request)->run()) {
 
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
-            
+
             if ($result) {
-	        $data=[];
+	            $data = [];
 				if($result['type']=='2'){                         // Facility 
 					
 					$data = [
@@ -93,8 +93,7 @@ class Index extends BaseController
 						'10'=> 'Payments',
 						'13'=> 'Logout'
 					];
-				} 
-				
+				}
 				
                  $json = ['1', '1 Record(s) Found', [$data]];
             } else {
