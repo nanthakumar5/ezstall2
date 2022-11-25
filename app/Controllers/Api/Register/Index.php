@@ -120,20 +120,13 @@ class Index extends BaseController
         $email->setSubject($subject);
         $email->setMessage($message);
 
-        /*if ($email->send()) {
+        if ($email->send()) {
             //echo "sent";
 			return true;
         } else {
             //echo "not sent";
 			return false;
-        }*/
-		
-		if($email->send()){
-        return "sent";
-    }else{
-       	print_r($email->printDebugger());exit;
-        return "not sent";
-    }
+        }
 
         //die;
     }
