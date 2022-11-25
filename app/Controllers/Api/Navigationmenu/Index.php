@@ -15,7 +15,6 @@ class Index extends BaseController
 
     public function index()
     {
-        
         $post       = $this->request->getPost();  //print_r($post);die;
         $validation = \Config\Services::validation();
 
@@ -40,85 +39,74 @@ class Index extends BaseController
 				if($result['type']=='2'){                         // Facility 
 					
 					$data = array(
-					        array('id' => '1','screen' => 'Dashboard'),
-					        array('id' => '2','screen' => 'Account Information'),
-							array('id' => '3','screen' => 'Event'),
-							array('id' => '4','screen' => 'Facility'),
-							array('id' => '5','screen' => 'Facility Calendar'),
-							array('id' => '6','screen' => 'Stall Manager'),
-							array('id' => '7','screen' => 'Operators'),
-					        array('id' => '8','screen' => 'Current Reservation'),
-							array('id' => '9','screen' => 'Past Reservation'),
-							array('id' => '10','screen' => 'Payments'),
-							array('id' => '11','screen' => 'Transactions'),
-							array('id' => '12','screen' => 'Subscriptions'),
-							array('id' => '13','screen'=> 'Logout'),
+					        array('id' => '1','screen' => 'Account Information'),
+							array('id' => '2','screen' => 'Event'),
+							array('id' => '3','screen' => 'Facility'),
+							array('id' => '4','screen' => 'Stall Manager'),
+							array('id' => '5','screen' => 'Operators'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '8','screen' => 'Payments'),
+							array('id' => '9','screen' => 'Transactions'),
+							array('id' => '10','screen' => 'Subscriptions'),
+							
 					      );
 						
 				} elseif($result['type']=='3'){                       // Producer
 					
 					$data = array(
-					        array('id' => '1','screen' => 'Dashboard'),
-					        array('id' => '2','screen' => 'Account Information'),
-							array('id' => '3','screen' => 'Event'),
-							array('id' => '6','screen' => 'Stall Manager'),
-							array('id' => '7','screen' => 'Operators'),
-					        array('id' => '8','screen' => 'Current Reservation'),
-							array('id' => '9','screen' => 'Past Reservation'),
-							array('id' => '10','screen' => 'Payments'),
-							array('id' => '11','screen' => 'Transactions'),
-							array('id' => '13','screen'=> 'Logout'),
+					        array('id' => '1','screen' => 'Account Information'),
+							array('id' => '2','screen' => 'Event'),
+							array('id' => '4','screen' => 'Stall Manager'),
+							array('id' => '5','screen' => 'Operators'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '9','screen' => 'Payments'),
+							array('id' => '10','screen' => 'Transactions'),
 					      );
 					
 				} elseif($result['type']=='4'){                       // Stall Manager
 					
 					$data = array(
-					        array('id' => '1','screen' => 'Dashboard'),
-					        array('id' => '2','screen' => 'Account Information'),
-							array('id' => '3','screen' => 'Event'),
-							array('id' => '4','screen' => 'Facility'),
-							array('id' => '5','screen' => 'Facility Calendar'),
-					        array('id' => '8','screen' => 'Current Reservation'),
-							array('id' => '9','screen' => 'Past Reservation'),
-							array('id' => '10','screen' => 'Payments'),
-							array('id' => '13','screen'=> 'Logout'),
+					        array('id' => '1','screen' => 'Account Information'),
+							array('id' => '2','screen' => 'Event'),
+							array('id' => '3','screen' => 'Facility'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '9','screen' => 'Payments'),
 					      );
 					
 				} elseif($result['type']=='5'){                       //Horse Owner
 					
 					$data = array(
-					        array('id' => '1','screen' => 'Dashboard'),
-					        array('id' => '2','screen' => 'Account Information'),
-					        array('id' => '8','screen' => 'Current Reservation'),
-							array('id' => '9','screen' => 'Past Reservation'),
-							array('id' => '10','screen' => 'Payments'),
-							array('id' => '13','screen'=> 'Logout'),
+					        array('id' => '1','screen' => 'Account Information'),
+					        array('id' => '6','screen' => 'Current Reservation'),
+							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '9','screen' => 'Payments'),
 					      );
 
 				} elseif($result['type']=='6'){                       //Operator
 					
 					$data = array(
-					        array('id' => '1','screen' => 'Dashboard'),
-					        array('id' => '2','screen' => 'Account Information'),
-					        array('id' => '8','screen' => 'Current Reservation'),
-							array('id' => '13','screen'=> 'Logout'),
+					        array('id' => '1','screen' => 'Account Information'),
+					        array('id' => '6','screen' => 'Current Reservation'),
 					      );
-				}
-				
-				 if(!empty($data)) $json = ['1', '1 Record(s) Found', $data];
-                 else             $json = ['0', 'No Records Found.', []];
-
+				} 
+				 $type = isset($result['type']) ? $result['type'] : []; 
+				 if(!empty($data)) $json = ['1', count($data).' Record(s) Found', $type, $data];
+                 else             $json = ['0', 'No Records Found.',[] ,[]];
             } else {
-                $json = ['0', 'No Records Found.', []];
+                $json = ['0', 'No Records Found.', [],[]];
             }
         } else {
-            $json = ['0', $validation->getErrors(), []];
+            $json = ['0', $validation->getErrors(), [],[]];
         }
 
         echo json_encode([
             'status'         => $json[0],
             'message'       => $json[1],
-            'result'         => $json[2],
+			'type'          => $json[2],
+            'result'         => $json[3],
         ]);
 
         die;
