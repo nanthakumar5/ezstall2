@@ -114,8 +114,8 @@ class Index extends BaseController
 
         //$email->initialize($config);
 
-        //$email->setFrom('muthulakshmi@itflexsolutions.com', 'Ezstall');
-		$email->setFrom('no-reply@ezstall.com', 'Ezstall');
+        $email->setFrom('no-reply@itflexsolutions.com', 'Ezstall');
+		//$email->setFrom('no-reply@ezstall.com', 'Ezstall');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMessage($message);
