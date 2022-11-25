@@ -66,7 +66,18 @@ class Index extends BaseController
                     $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
                         \n To activate your account please click below link." . ' ' . $verificationurl . "";
 
-                    $this->send_mail($post['email'], $email_subject, $email_message);
+                    //$this->send_mail($post['email'], $email_subject, $email_message);
+					
+					//$email_content="You have received a new message from Contact Us page on App ".ucfirst($slug).".\n\n".$post['name']." - ".$post['email']."\n\n".$post['message'];
+				
+					$email = \Config\Services::email();
+					$email->setFrom('no-reply@ezstall.com');
+					$email->setTo('arunkumar.s@itflexsolutions.com');
+					$email->setSubject($email_subject);
+					$email->setMessage($email_message);
+
+					$email->send();
+					
                     $json = ['1', 'User Submitted Successfully.', []];
                 } else {
                     $json = ['0', 'Try Later.', []];
