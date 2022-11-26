@@ -304,7 +304,8 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 		var userid = '<?php echo $userid; ?>';
 		
 		$(function(){
-			facility($('.facilityid').val())
+			facility($('.facilityid').val());
+			checkblockunblock();
 		})
 
 		$('.facilityid').change(function(){
@@ -331,6 +332,34 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 			}else{
 				$('.eventwrapper').addClass('displaynone');
 			}
+		}
+		
+		$("#start_date, #end_date").change(function(){
+			facility($('.facilityid').val());
+			checkblockunblock();
+		})
+		
+		function checkblockunblock(){
+			setTimeout(function(){
+				var id 			= '<?php echo $id; ?>';
+				var startdate 	= $("#start_date").val(); 
+				var enddate   	= $("#end_date").val(); 
+
+				if(startdate!='' && enddate!=''){
+					ajax(
+						'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
+						{ eventid : $('.facilityid').val(), checkin : startdate, checkout : enddate, nqeventid : id },
+						{
+							asynchronous : 1,
+							success : function(data){
+								$(data.success).each(function(i,v){
+									$(document).find('.block_unblock[data-stallid='+v+']').prop('checked', true).attr('disabled', 'disabled');
+								});
+							}
+						}
+					)
+				}
+			}, 100);
 		}
 	}
 </script>

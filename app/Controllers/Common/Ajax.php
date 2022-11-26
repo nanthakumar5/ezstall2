@@ -65,11 +65,24 @@ class Ajax extends BaseController
 		$result = getReserved($eventid, ['checkin' => $checkin, 'checkout' => $checkout]);
 		echo json_encode(['success' => $result]);
 	}
-
+	
+	/*
 	public function ajaxblockunblock()
 	{  
 		$eventid 	= $this->request->getPost('eventid'); 
 		$result 	= getBlockunblock($eventid);
+		echo json_encode(['success' => $result]); 
+	}
+	*/
+	
+	public function ajaxblockunblock()
+	{  
+		$eventid = $this->request->getPost('eventid');
+		$checkin = formatdate($this->request->getPost('checkin'));
+		$checkout = formatdate($this->request->getPost('checkout'));
+		$nqeventid = $this->request->getPost('nqeventid') ? $this->request->getPost('nqeventid') : '';
+		
+		$result = getBlockunblock($eventid, ['checkin' => $checkin, 'checkout' => $checkout, 'nqeventid' => $nqeventid]);
 		echo json_encode(['success' => $result]); 
 	}
 	

@@ -418,12 +418,26 @@ function getReserved($eventid, $extras=[]){
 	return (count($cart) > 0) ? array_column($cart, 'user_id', 'stall_id') : [];
 }
 
+/*
 function getBlockunblock($eventid){ 
 	$condition 	= ['event_id' => $eventid, 'block_unblock' => '1', 'status' => ['1']];
 	
 	$stall	= new \App\Models\Stall;
 	$blockunblock	= $stall->getStall('all', ['stall'], $condition);
 	return (count($blockunblock) > 0) ? array_column($blockunblock, 'id') : [];
+}
+*/
+
+function getBlockunblock($eventid, $extras=[]){ 
+	$condition 	= ['facilityid' => $eventid, 'status' => ['1'], 'type' => '1'];
+	if(count($extras) > 0) $condition = $condition+['btw_start_date' => $extras['checkin'], 'btw_end_date' => $extras['checkout'], 'nqeventid' => $extras['nqeventid']];
+	else $condition = $condition+['gtenddate' => date('Y-m-d')];
+		
+	$stall			= new \App\Models\Stall;
+	$blockunblock	= $stall->getStall('all', ['stall', 'event'], $condition);
+	
+	if(count($extras) > 0) return (count($blockunblock) > 0) ? array_column($blockunblock, 'stall_id') : [];
+	else return (count($blockunblock) > 0) ? $blockunblock : [];
 }
 
 function getProductQuantity($eventid, $extras=[]){

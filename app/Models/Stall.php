@@ -15,7 +15,7 @@ class Stall extends BaseModel
 			$select[] 	= 	implode(',', $data);
 		}
 		if(in_array('event', $querydata)){
-			$data		= 	['e.description','e.user_id','e.name'];							
+			$data		= 	['e.description','e.user_id','e.name','e.start_date estartdate','e.end_date eenddate'];							
 			$select[] 	= 	implode(',', $data);
 		}
 
@@ -31,8 +31,13 @@ class Stall extends BaseModel
 		if(isset($requestdata['barn_id'])) 			    $query->where('s.barn_id', $requestdata['barn_id']);
 		if(isset($requestdata['block_unblock'])) 		$query->where('s.block_unblock', $requestdata['block_unblock']);
 		if(isset($requestdata['e.id'])) 				$query->where('e.id', $requestdata['e.id']);
+		if(isset($requestdata['ids'])) 					$query->whereIn('e.id', $requestdata['ids']);
+		if(isset($requestdata['facilityid'])) 			$query->where('e.facility_id', $requestdata['facilityid']);
+		if(isset($requestdata['nqeventid']) && $requestdata['nqeventid']!='') 	$query->where('e.id !=', $requestdata['nqeventid']);
 		if(isset($requestdata['start_date'])) 			$query->where('e.start_date', $requestdata['start_date']);
 		if(isset($requestdata['end_date'])) 			$query->where('e.end_date', $requestdata['end_date']);
+		if(isset($requestdata['gtenddate'])) 			$query->where('e.end_date >=', $requestdata['gtenddate']);
+		if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) $query->groupStart()->where("'".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date")->orWhere("'".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date")->groupEnd();
 		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);
 		if(isset($requestdata['status'])) 				$query->whereIn('s.status', $requestdata['status']);
 		

@@ -84,9 +84,10 @@ class Index extends BaseController
 		if($id!=''){
 			$result = $this->event->getEvent('row',  ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'],['id' => $id, 'status' => ['1'], 'userid' => $userid, 'type' => '2']);
 			if($result){				
-				$data['occupied'] 	= getOccupied($id);
-				$data['reserved'] 	= getReserved($id);
-				$data['result'] 	= $result;
+				$data['occupied'] 		= getOccupied($id);
+				$data['reserved'] 		= getReserved($id);
+				$data['blockunblock'] 	= getBlockunblock($id);
+				$data['result'] 		= $result;
 			}else{
 				$this->session->setFlashdata('danger', 'No Record Found.');
 				return redirect()->to(base_url().'/myaccount/facility'); 

@@ -387,9 +387,10 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	}
 	/*PLACEHOLDER*/
 	
-	var bsresult = barnstallresult[0] ? barnstallresult[0] : [];
-	var occupied = barnstallresult[1] ? barnstallresult[1] : [];
-	var reserved = barnstallresult[2] ? barnstallresult[2] : [];
+	var bsresult 			= barnstallresult[0] ? barnstallresult[0] : [];
+	var occupied 			= barnstallresult[1] ? barnstallresult[1] : [];
+	var reserved 			= barnstallresult[2] ? barnstallresult[2] : [];
+	var blockedunblocked 	= barnstallresult[3] ? barnstallresult[3] : [];
 	
 	/* START ADD EDIT BARN */
 	var barndata = function(result=[], type=''){ 
@@ -486,13 +487,23 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			availability = 	'<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
 		}else{
 			blockunblock = 	'<div class="col-md-6 mb-3">\
-								<input type="checkbox" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
+								<input type="checkbox" data-stallid="'+fstallId+'" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
 							</div>';
 		}
 		
 		if($.inArray(stallId, occupied) !== -1)	availability = '<span class="red-box"></span>';
 		if($.inArray(stallId, reserved) !== -1)	availability = '<span class="yellow-box"></span>';
-	
+		
+		var blockedunblockedtext = '';
+		if(blockedunblocked.length){
+			var blockedunblockedindex = blockedunblocked.map(x => x.stall_id).indexOf(stallId);
+			if(blockedunblockedindex > -1){
+				var blockedunblockedmap = blockedunblocked[blockedunblockedindex];
+				blockedunblockedtext = '<div class="col-md-12 mb-3">'+blockedunblockedmap.name+' From '+blockedunblockedmap.estartdate+' To '+blockedunblockedmap.eenddate+'</div>';
+				availability = '<span class="yellow-box"></span>';
+			}
+		}
+		
 		var stallbox = '';
 		if(usertype==2){
 			stallbox = 	'<div class="col-md-6 mb-3">\
@@ -543,6 +554,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][status]" value="1">\
 				'+availability+'\
 			</div>\
+			'+blockedunblockedtext+'\
 		</div>\
 		';
 		

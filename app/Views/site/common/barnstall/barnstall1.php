@@ -302,7 +302,8 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 		var feed				 	= $.parseJSON('<?php echo addslashes(json_encode($feed)); ?>');
 		var shaving					= $.parseJSON('<?php echo addslashes(json_encode($shaving)); ?>');
 		var occupied 	 			= $.parseJSON('<?php echo json_encode((isset($occupied)) ? array_filter($occupied) : []); ?>');
-		var reserved 	 			= $.parseJSON('<?php echo json_encode((isset($reserved)) ? array_filter(explode(",", implode(",", array_keys($reserved)))) : []); ?>');		
+		var reserved 	 			= $.parseJSON('<?php echo json_encode((isset($reserved)) ? array_filter(explode(",", implode(",", array_keys($reserved)))) : []); ?>');	
+		var blockunblock 	 		= $.parseJSON('<?php echo json_encode((isset($blockunblock)) ? array_filter($blockunblock) : []); ?>');	
 		var chargingflag			= $.parseJSON('<?php echo addslashes(json_encode(isset($chargingflag) ? $chargingflag : [])); ?>'); 
 		var rv_flag				 	= '<?php echo $rv_flag ?>';
 		var feed_flag				= '<?php echo $feed_flag ?>';
@@ -321,8 +322,8 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 			questionpopup1(1, 'cleaning', cleaning_flag)
 			questionpopup1(2, 'notification', notification_flag)
 			
-			barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[usertype, chargingflag, nobtn]], [barn, occupied, reserved])
-			barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag, nobtn]], [rvbarn, occupied, reserved])			
+			barnstall('barn', [['.barnbtn'], ['.barntab', '.stalltab'], [0, 0], ['#barnvalidation'],[usertype, chargingflag, nobtn]], [barn, occupied, reserved, blockunblock])
+			barnstall('rvhookups', [['.rvhookupsbtn'], ['.rvhookupsbarntab', '.rvhookupsstalltab'], [0, 0], ['#rvhookupsvalidation'], [usertype, chargingflag, nobtn]], [rvbarn, occupied, reserved, blockunblock])			
 			products('feed', [['.feedbtn'], ['.feedlist'], [0, nobtn]], [feed])
 			products('shavings', [['.shavingsbtn'], ['.shavingslist'], [0, nobtn]], [shaving])
 		});

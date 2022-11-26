@@ -482,9 +482,10 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 				}
 			)
 			
+			/*
 			ajax(
 				'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
-				{ eventid : eventid},
+				{ eventid : eventid },
 				{
 					asynchronous : 1,
 					success : function(data){
@@ -496,7 +497,25 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					}
 				}
 			)
-
+			*/
+			
+			if(eventtype==2){
+				ajax(
+					'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
+					{ eventid : eventid, checkin : startdate, checkout : enddate },
+					{
+						asynchronous : 1,
+						success : function(data){
+							$(data.success).each(function(i,v){
+								$('.stallid[value='+v+']').attr('disabled', 'disabled');
+								$('.stallid[value='+v+']').closest('li').find('.price_button').attr('disabled', 'disabled');
+								$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("yellow-box");
+							});
+						}
+					}
+				)
+			}
+			
 			return result;
 		}
 
