@@ -300,6 +300,7 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 
 <script> 
 	if($('.facilityid').length){
+		var id = '<?php echo $id; ?>';
 		var userid = '<?php echo $userid; ?>';
 		
 		$(function(){
@@ -310,15 +311,15 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 			facility($(this).val());
 		})
 
-		function facility(value=''){
+		function facility(facilityid=''){
 			$('.facilitybarnstall').html('');
 			
-			if(value!=''){
+			if(facilityid!=''){
 				$('.eventwrapper').removeClass('displaynone');
 				
 				ajax(
 					'<?php echo base_url()."/ajax/barnstall1"; ?>',
-					{ id : value, userid : userid },
+					{ eventid : id, facilityid: facilityid, userid : userid },
 					{
 						datatype: 'html',
 						asynchronous : 1,

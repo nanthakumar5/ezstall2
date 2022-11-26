@@ -151,15 +151,24 @@ class Ajax extends BaseController
 	public function barnstall1()
 	{
 		$requestData 	= $this->request->getPost(); 
-		$id				= $requestData['id'];
+		$eventid		= $requestData['eventid'];
+		$facilityid		= $requestData['facilityid'];
 		$userid			= $requestData['userid'];
 		
 		$event = new \App\Models\Event();
-		$result = $event->getEvent('row',  ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $id, 'status' => ['1'], 'userid' => $userid, 'type' => '2']);
+		$result = $event->getEvent('row',  ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $facilityid, 'status' => ['1'], 'userid' => $userid, 'type' => '2']);
 		
-		if($result){				
-			$data['occupied'] 	= getOccupied($id);
-			$data['reserved'] 	= getReserved($id);
+		if($result){		
+			$event = $event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $eventid, 'status' => ['1'], 'userid' => $userid, 'type' => '1']);
+			$event = $event ? $event : '';
+			
+			$result = $this->getEventBarnStall(['result' => $result, 'event' => $event, 'barnname' => 'barn', 'stallname' => 'stall']);
+			$result = $this->getEventBarnStall(['result' => $result, 'event' => $event, 'barnname' => 'rvbarn', 'stallname' => 'rvstall']);
+			$result = $this->getEventProducts(['result' => $result, 'event' => $event, 'productname' => 'feed']);
+			$result = $this->getEventProducts(['result' => $result, 'event' => $event, 'productname' => 'shaving']);
+						
+			$data['occupied'] 	= getOccupied($facilityid);
+			$data['reserved'] 	= getReserved($facilityid);
 			$data['result'] 	= $result;
 			$data['ajax'] 		= '1';
 			$data['nobtn'] 		= '1';
@@ -168,5 +177,96 @@ class Ajax extends BaseController
 		}else{
 			echo '';
 		}
+	}
+	
+	public function getEventBarnStall($data=[])
+    {
+		$result 	= $data['result'];
+		$event 		= $data['event'];
+		$barnname 	= $data['barnname'];
+		$stallname 	= $data['stallname'];
+		
+		if(!empty($result[$barnname])){
+			foreach($result[$barnname] as $key1 => $barndata){
+				$barnid 								= $barndata['id'];
+				$result[$barnname][$key1]['barn_id'] 	= $barnid;
+				
+				if($event!=''){
+					$eventbarn 		= array_column($event[$barnname], 'barn_id');
+					$eventbarnkey 	= array_search($barnid, $eventbarn);
+					if($eventbarnkey !== false){
+						$eventbarndata 							= $event[$barnname][$eventbarnkey];
+						$result[$barnname][$key1]['id'] 		= $eventbarndata['id'];
+						$result[$barnname][$key1]['name'] 		= $eventbarndata['name'];
+					}else{
+						$result[$barnname][$key1]['id'] 		= '';
+					}
+				}else{
+					$result[$barnname][$key1]['id'] = '';
+				}
+				
+				if(!empty($barndata[$stallname])){
+					foreach($barndata[$stallname] as $key2 => $stalldata){
+						$stallid = $stalldata['id'];
+						$result[$barnname][$key1][$stallname][$key2]['stall_id'] = $stallid;
+						
+						if(isset($eventbarndata)){
+							$eventstall 	= array_column($eventbarndata[$stallname], 'stall_id');
+							$eventstallkey 	= array_search($stallid, $eventstall);
+							if($eventstallkey !== false){
+								$eventstalldata 												= $eventbarndata[$stallname][$eventstallkey];
+								$result[$barnname][$key1][$stallname][$key2]['id'] 				= $eventstalldata['id'];
+								$result[$barnname][$key1][$stallname][$key2]['name'] 			= $eventstalldata['name'];
+								$result[$barnname][$key1][$stallname][$key2]['night_price'] 	= $eventstalldata['night_price'];
+								$result[$barnname][$key1][$stallname][$key2]['week_price'] 		= $eventstalldata['week_price'];
+								$result[$barnname][$key1][$stallname][$key2]['month_price'] 	= $eventstalldata['month_price'];
+								$result[$barnname][$key1][$stallname][$key2]['flat_price'] 		= $eventstalldata['flat_price'];
+								$result[$barnname][$key1][$stallname][$key2]['block_unblock'] 	= "1";
+							}else{
+								$result[$barnname][$key1][$stallname][$key2]['id'] 				= '';
+							}
+						}else{
+							$result[$barnname][$key1][$stallname][$key2]['id'] = '';
+						}
+					}
+				}
+			}
+		}
+		
+		return $result;
+	}
+	
+	
+	public function getEventProducts($data=[])
+	{
+		$result 		= $data['result'];
+		$event 			= $data['event'];
+		$productname 	= $data['productname'];
+		
+		if(!empty($result[$productname])){
+			foreach($result[$productname] as $key => $productdata){
+				$productid = $productdata['id'];
+				$result[$productname][$key]['product_id'] = $productid;
+				
+				if($event!=''){
+					$eventproduct 		= array_column($event[$productname], 'product_id');
+					$eventproductkey 	= array_search($productid, $eventproduct);
+					if($eventproductkey !== false){
+						$eventproductdata 								= $event[$productname][$eventproductkey];
+						$result[$productname][$key]['id'] 				= $eventproductdata['id'];
+						$result[$productname][$key]['name'] 			= $eventproductdata['name'];
+						$result[$productname][$key]['quantity'] 		= $eventproductdata['quantity'];
+						$result[$productname][$key]['price'] 			= $eventproductdata['price'];
+						$result[$productname][$key]['block_unblock'] 	= "1";
+					}else{
+						$result[$productname][$key]['id'] = '';
+					}
+				}else{
+					$result[$productname][$key]['id'] = '';
+				}
+			}
+		}
+		
+		return $result;
 	}
 }

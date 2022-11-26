@@ -420,12 +420,12 @@ class Event extends BaseModel
 	}
 	
 	public function facilitybarnstallaction($data, $extras)
-	{		
+	{	
 		foreach($data as $barndata){
 			if(isset($barndata['stall']) && count($barndata['stall']) > 0 && strpos(json_encode($barndata['stall']), 'block_unblock')){ 
-				$barnid       		= '';
+				$barnid       		= $barndata['id']!='' ? $barndata['id'] : '';
 				$barn['event_id'] 	= $extras[0];
-				$barn['barn_id'] 	= $barndata['id'];
+				$barn['barn_id'] 	= $barndata['barn_id'];
 				$barn['name']     	= $barndata['name'];
 				$barn['status']     = '1';
 				$barn['type']		= $extras[2];
@@ -441,10 +441,10 @@ class Event extends BaseModel
 				if(isset($barndata['stall']) && count($barndata['stall']) > 0){ 
 					foreach($barndata['stall'] as $stalldata){  
 						if(isset($stalldata['block_unblock'])){
-							$stallid        	 	= '';
+							$stallid        	 	= $stalldata['id']!='' ? $stalldata['id'] : '';
 							$stall['event_id'] 	 	= $extras[0];
 							$stall['barn_id']    	= $barninsertid;
-							$stall['stall_id']    	= $stalldata['id'];
+							$stall['stall_id']    	= $stalldata['stall_id'];
 							$stall['charging_id']  	= isset($stalldata['chargingflag']) ? $stalldata['chargingflag'] : '' ;
 							$stall['name']       	= $stalldata['name'];
 							$stall['price']      	= isset($stalldata['price']) ? $stalldata['price'] : 0;
@@ -465,9 +465,14 @@ class Event extends BaseModel
 							}else {
 							   $this->db->table('stall')->update($stall, ['id' => $stallid]);
 							}	
+						}elseif($stalldata['id']!=''){
+							$this->db->table('stall')->update(['status' => '0'], ['id' => $stalldata['id'], 'barn_id' => $barninsertid, 'type' => $extras[2]]);
 						}
 					}
 				}
+			}elseif($barndata['id']!=''){
+				$this->db->table('barn')->update(['status' => '0'], ['id' => $barndata['id'], 'event_id' => $extras[0], 'type' => $extras[2]]);
+				$this->db->table('stall')->update(['status' => '0'], ['barn_id' => $barndata['id'], 'event_id' => $extras[0], 'type' => $extras[2]]);
 			}
 		}
 	}
@@ -476,9 +481,9 @@ class Event extends BaseModel
 	{
 		foreach($data as $productsdata){
 			if(isset($productsdata['block_unblock'])){
-				$productsid        	 		= '';
+				$productsid        	 		= $productsdata['id']!='' ? $productsdata['id'] : '';
 				$products['event_id'] 		= $extras[0];
-				$products['product_id'] 	= $productsdata['id'];
+				$products['product_id'] 	= $productsdata['product_id'];
 				$products['name']       	= $productsdata['name'];
 				$products['quantity']       = $productsdata['quantity'];
 				$products['price']      	= $productsdata['price'];
@@ -490,6 +495,8 @@ class Event extends BaseModel
 				}else {
 				   $this->db->table('products')->update($products, ['id' => $productsid]);
 				}	
+			}elseif($productsdata['id']!=''){
+				$this->db->table('products')->update(['status' => '0'], ['id' => $productsdata['id'], 'event_id' => $extras[0], 'type' => $extras[1]]);
 			}
 		}
 	}

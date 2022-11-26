@@ -398,6 +398,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var barnId   	= result['id'] ? result['id'] : '';
 		var barnName 	= result['name'] ? result['name'] : '';
 		var stall		= result['stall'] ? result['stall'] : (result['rvstall'] ? result['rvstall'] : []);		
+		var fbarnId		= result['barn_id'] ? result['barn_id'] : '';		
 
 		var barntab='\
 			<li class="nav-item text-center mb-3">\
@@ -405,6 +406,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 					<input type="text" id="barn_'+barnstallname+'_'+barnIndex+'_name" name="'+barnstallname+'['+barnIndex+'][name]" class="form-control " placeholder="Enter '+uploadName+' Name" value="'+barnName+'"">\
 				</a>\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][id]" value="'+barnId+'">\
+				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][barn_id]" value="'+fbarnId+'">\
 			</li>\
 		';
 		
@@ -460,8 +462,8 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var stallFlatPrice    	= result['flat_price'] ? result['flat_price'] : (price_feedata[3] ? price_feedata[3] : '');
 		var stallImage    		= result['image'] ? result['image'] : '';
 		var stallBulkImage    	= result['bulkimage'] ? result['bulkimage'] : '';
-		var block_unblock      	= result['block_unblock'] ? result['block_unblock'] : ''; 
-		var checked				= (block_unblock=='1') ? 'checked' : '';
+		var block_unblock      	= result['block_unblock'] ? result['block_unblock'] : '';
+		var fstallId      		= result['stall_id'] ? result['stall_id'] : '';
 		
 		if(stallImage!='' && stallBulkImage==''){
 			var stallImages   	= baseurl()+'assets/uploads/stall/'+stallImage;
@@ -484,7 +486,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			availability = 	'<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
 		}else{
 			blockunblock = 	'<div class="col-md-6 mb-3">\
-								<input type="checkbox" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+checked+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
+								<input type="checkbox" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
 							</div>';
 		}
 		
@@ -537,6 +539,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			'+blockunblock+'\
 			<div class="col-md-1 mb-3 delete">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][id]" value="'+stallId+'" class="stall_id">\
+				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][stall_id]" value="'+fstallId+'">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][status]" value="1">\
 				'+availability+'\
 			</div>\
@@ -830,6 +833,8 @@ function products(productsname, productsitem=[], productsresult=[]){
 		var productName     		= result['name'] ? result['name'] : ''; 
 		var productQuantity    		= result['quantity'] ? result['quantity'] : '';
 		var productPrice    		= result['price'] ? result['price'] : ''; 
+		var productBlockUnblock		= result['block_unblock'] ? result['block_unblock'] : ''; 
+		var fproductId				= result['product_id'] ? result['product_id'] : ''; 
 		
 		var deletebtn = '';
 		var blockunblock = '';
@@ -838,7 +843,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 			deletebtn = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 productremovebtn_'+productsname+'"><i class="fas fa-times text-white"></i></a>';
 		}else{
 			blockunblock = 	'<div class="col-md-2 mb-4">\
-								<input type="checkbox" id="product_'+productsname+'_'+productIndex+'_block_unblock" name="'+productsname+'['+productIndex+'][block_unblock]" value="1">  Reserved\
+								<input type="checkbox" id="product_'+productsname+'_'+productIndex+'_block_unblock" '+(productBlockUnblock=="1" ? "checked" : "")+' name="'+productsname+'['+productIndex+'][block_unblock]" value="1">  Reserved\
 							</div>';
 		}
 		
@@ -857,6 +862,7 @@ function products(productsname, productsitem=[], productsresult=[]){
 			<div class="col-md-1 mb-4 delete">\
 				'+deletebtn+'\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][id]" value="'+productId+'">\
+				<input type="hidden" name="'+productsname+'['+productIndex+'][product_id]" value="'+fproductId+'">\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][status]" value="1">\
 			</div>\
 		</div>\
