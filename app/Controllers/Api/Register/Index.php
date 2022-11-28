@@ -58,6 +58,17 @@ class Index extends BaseController
                 $action = $this->users->action($post);
 
                 if ($action) {
+					
+					$result=[];
+					$data= $this->users->getUsers('row', ['users'], ['id' => $action]); 
+					if($data){
+							$result = [
+							'user_id' 	=> $data['id'],
+							'name' 		=> $data['name'],
+							'email' 	=> $data['email'],
+							'type' 		=> $data['type'],
+						];
+					}
 
                     $encryptid = $encrypter->encrypt($action);
 
@@ -66,10 +77,10 @@ class Index extends BaseController
                     $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
                         \n To activate your account please click below link." . ' ' . $verificationurl . "";
 
-                    //$this->send_mail($post['email'], $email_subject, $email_message);
+                    $this->send_mail($post['email'], $email_subject, $email_message);
 					
 					//Email send function
-                        $email = \Config\Services::email();
+                        /*$email = \Config\Services::email();
                         $config['protocol'] = 'sendmail';
                         $config['mailPath'] = '/usr/sbin/sendmail';
                         $config['charset']  = 'iso-8859-1';
@@ -78,13 +89,14 @@ class Index extends BaseController
                         $email->initialize($config);
                         $email->setFrom('no-reply@itfhrm.com', 'Ezstall');
                         $email->setTo($post['email']);
+						//$email->setSubject('Thanks for your Registration');
                         $email->setSubject($email_subject);
                         $email->setMessage($email_message);
 
-                        $email->send(); 
+                        $email->send(); */
 
-
-                    $json = ['1', 'User Submitted Successfully.', []];
+					
+                    $json = ['1', 'User Submitted Successfully.', $result];
                 } else {
                     $json = ['0', 'Try Later.', []];
                 }

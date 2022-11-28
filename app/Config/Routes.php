@@ -44,6 +44,10 @@ $routes->post('api/stallmanager', 'Api\Stallmanager\Index::index');
 $routes->post('api/addstallmanager', 'Api\Stallmanager\Index::add');
 $routes->post('api/editstallmanager', 'Api\Stallmanager\Index::edit');
 $routes->post('api/deletestallmanager', 'Api\Stallmanager\Index::delete');
+$routes->post('api/operator', 'Api\Operator\Index::index');
+$routes->post('api/addoperator', 'Api\Operator\Index::add');
+$routes->post('api/editoperator', 'Api\Operator\Index::edit');
+$routes->post('api/deleteoperator', 'Api\Operator\Index::delete');
 
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
