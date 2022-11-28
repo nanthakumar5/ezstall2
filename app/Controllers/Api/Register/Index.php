@@ -66,7 +66,24 @@ class Index extends BaseController
                     $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
                         \n To activate your account please click below link." . ' ' . $verificationurl . "";
 
-                    $this->send_mail($post['email'], $email_subject, $email_message);
+                    //$this->send_mail($post['email'], $email_subject, $email_message);
+					
+					//Email send function
+                        $email = \Config\Services::email();
+                        $config['protocol'] = 'sendmail';
+                        $config['mailPath'] = '/usr/sbin/sendmail';
+                        $config['charset']  = 'iso-8859-1';
+                        $config['wordWrap'] = true;
+
+                        $email->initialize($config);
+                        $email->setFrom('no-reply@itfhrm.com', 'Ezstall');
+                        $email->setTo($post['email']);
+                        $email->setSubject($email_subject);
+                        $email->setMessage($email_message);
+
+                        $email->send(); 
+
+
                     $json = ['1', 'User Submitted Successfully.', []];
                 } else {
                     $json = ['0', 'Try Later.', []];
