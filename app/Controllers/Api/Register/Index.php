@@ -133,7 +133,7 @@ class Index extends BaseController
 
         if ($id != '') {
             $post['actionid'] = $decryptid;
-            $post['email_status'] = 1;
+            $post['email_status'] = '1';
 
             $updateaction = $this->users->action($post);
             if ($updateaction) {
