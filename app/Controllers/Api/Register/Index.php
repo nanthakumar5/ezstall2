@@ -70,14 +70,23 @@ class Index extends BaseController
 						];
 					}
 
-                    $encryptid = $encrypter->encrypt($action);
+                    /*$encryptid = $encrypter->encrypt($action);
 
                     $verificationurl = base_url() . "/api/verification/" . $encryptid;
                     $email_subject = "Ezstall Registration";
                     $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
                         \n To activate your account please click below link." . ' ' . $verificationurl . "";
 
-                    $this->send_mail($post['email'], $email_subject, $email_message);
+                    $this->send_mail($post['email'], $email_subject, $email_message);*/
+					
+					$encryptid = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$action.substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
+					$verificationurl= base_url()."/api/verification/".$encryptid;
+					$email_subject = "Ezstall Registration";
+					$email_message = "Hi ".$post['name'].","." \n\n Thank you for Registering in Ezstall.
+					\n To activate your account please click below link.".' '.$verificationurl."";
+
+					send_mail($post['email'],$email_subject,$email_message);
+						
 					
 					//Email send function
                         /*$email = \Config\Services::email();
@@ -118,8 +127,9 @@ class Index extends BaseController
 
     public function verification($id)
     {
-        $encrypter = \Config\Services::encrypter();
-        $decryptid = $encrypter->decrypt($id);
+        /*$encrypter = \Config\Services::encrypter();
+        $decryptid = $encrypter->decrypt($id);*/
+		$decryptid = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
         if ($id != '') {
             $post['actionid'] = $decryptid;
