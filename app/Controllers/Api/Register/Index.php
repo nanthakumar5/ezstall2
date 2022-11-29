@@ -70,14 +70,7 @@ class Index extends BaseController
 						];
 					}
 
-                    /*$encryptid = $encrypter->encrypt($action);
-
-                    $verificationurl = base_url() . "/api/verification/" . $encryptid;
-                    $email_subject = "Ezstall Registration";
-                    $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
-                        \n To activate your account please click below link." . ' ' . $verificationurl . "";
-
-                    $this->send_mail($post['email'], $email_subject, $email_message);*/
+                    // email function discussed and updated on 29-November-22
 					
 					$encryptid = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$action.substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
 					$verificationurl= base_url()."/api/verification/".$encryptid;
@@ -87,24 +80,6 @@ class Index extends BaseController
 
 					send_mail($post['email'],$email_subject,$email_message);
 						
-					
-					//Email send function
-                        /*$email = \Config\Services::email();
-                        $config['protocol'] = 'sendmail';
-                        $config['mailPath'] = '/usr/sbin/sendmail';
-                        $config['charset']  = 'iso-8859-1';
-                        $config['wordWrap'] = true;
-
-                        $email->initialize($config);
-                        $email->setFrom('no-reply@itfhrm.com', 'Ezstall');
-                        $email->setTo($post['email']);
-						//$email->setSubject('Thanks for your Registration');
-                        $email->setSubject($email_subject);
-                        $email->setMessage($email_message);
-
-                        $email->send(); */
-
-					
                     $json = ['1', 'User Submitted Successfully.', $result];
                 } else {
                     $json = ['0', 'Try Later.', []];
@@ -127,8 +102,6 @@ class Index extends BaseController
 
     public function verification($id)
     {
-        /*$encrypter = \Config\Services::encrypter();
-        $decryptid = $encrypter->decrypt($id);*/
 		$decryptid = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
         if ($id != '') {
