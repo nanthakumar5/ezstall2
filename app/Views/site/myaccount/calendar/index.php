@@ -12,6 +12,7 @@
 	$(function(){
 		var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
 			initialView: 'dayGridMonth',
 			events: eventresource
 		});

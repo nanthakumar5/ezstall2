@@ -348,7 +348,7 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 				if(startdate!='' && enddate!=''){
 					ajax(
 						'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
-						{ eventid : $('.facilityid').val(), checkin : startdate, checkout : enddate, nqeventid : id },
+						{ eventid : $('.facilityid').val(), checkin : startdate, checkout : enddate, nqeventid : id, type : 2 },
 						{
 							asynchronous : 1,
 							success : function(data){

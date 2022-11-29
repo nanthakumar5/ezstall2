@@ -34,7 +34,7 @@ class Index extends BaseController
 		{    
 			$requestData 				= $this->request->getPost();
 			$userid             		= $userdetail['id'];
-			$paymentmethodid			= $requestData['paymentmethodid'];;
+			$paymentmethodid			= $requestData['paymentmethodid'];
 			$mpdf 						= new \Mpdf\Mpdf();
 
 			if($paymentmethodid!='1') $payment = $this->stripe->action(['id' => $requestData['stripepayid']]);

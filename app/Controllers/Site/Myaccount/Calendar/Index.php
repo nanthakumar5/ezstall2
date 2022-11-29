@@ -15,7 +15,7 @@ class Index extends BaseController
     { 			
 		$userdetail 		= getSiteUserDetails();
 		$userid 			= $userdetail['id'];
-		$events				= $this->event->getEvent('all', ['event', 'barn', 'stall'], ['status' => ['1'], 'userid' => $userid, 'type' => '2'], ['orderby' => 'e.id desc']);
+		$events				= $this->event->getEvent('all', ['event', 'barn', 'stall', 'bookedstall'], ['status' => ['1'], 'userid' => $userid, 'type' => '2'], ['orderby' => 'e.id desc']);
 		
 		$eventresource = [];
 		foreach($events as $key => $event){

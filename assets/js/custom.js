@@ -423,6 +423,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		
 		var stalltab = '\
 			<div id="tabtarget_'+barnstallname+'_'+barnIndex+'" class="stallcontainer container tab-pane p-0 mb-3 '+activeclass+'">\
+				'+(nobtn!='' ? "<input type='checkbox' class='selectallstall'> Select All Stall" : "")+'\
 				<div class="col-md-11 p-0 my-3 stallbtns">\
 					<input type="hidden" name="stallvalidation_'+barnstallname+'_'+barnIndex+'" id="stallvalidation_'+barnstallname+'_'+barnIndex+'">\
 					'+(stalltabbtns ? stalltabbtns : '')+'\
@@ -480,28 +481,33 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			charging_flag += '<option value='+i+' '+selected+'>'+v+'</option>';
 		})
 	
-		var availability = '';
-		var blockunblock = '';
-		
-		if(nobtn==''){
-			availability = 	'<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
-		}else{
-			blockunblock = 	'<div class="col-md-6 mb-3">\
-								<input type="checkbox" data-stallid="'+fstallId+'" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1">  Reserved\
-							</div>';
-		}
-		
+		var availability = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
 		if($.inArray(stallId, occupied) !== -1)	availability = '<span class="red-box"></span>';
 		if($.inArray(stallId, reserved) !== -1)	availability = '<span class="yellow-box"></span>';
 		
 		var blockedunblockedtext = '';
+		var blockedunblockedstyle = '';
 		if(blockedunblocked.length){
 			var blockedunblockedindex = blockedunblocked.map(x => x.stall_id).indexOf(stallId);
 			if(blockedunblockedindex > -1){
+				var blockedavailability = '<span class="yellow-box"></span>';
 				var blockedunblockedmap = blockedunblocked[blockedunblockedindex];
 				blockedunblockedtext = '<div class="col-md-12 mb-3">'+blockedunblockedmap.name+' From '+blockedunblockedmap.estartdate+' To '+blockedunblockedmap.eenddate+'</div>';
-				availability = '<span class="yellow-box"></span>';
+				blockedunblockedstyle = 'displaynone';
 			}
+		}
+		
+		var blockunblock = '';		
+		if(nobtn==''){
+			availability = 	blockedavailability ? blockedavailability : availability;
+			blockunblock = 	'<div class="col-md-6 mb-3 '+blockedunblockedstyle+'">\
+								<input type="checkbox" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> Reserved\
+							</div>';
+		}else{
+			availability =	'';
+			blockunblock = 	'<div class="col-md-6 mb-3">\
+								<input type="checkbox" data-stallid="'+fstallId+'" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : (block_unblock=="2" ? "checked disabled" : ""))+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> '+(block_unblock=="2" ? "Reserved" : "Add this stall for facility event")+'\
+							</div>';
 		}
 		
 		var stallbox = '';
@@ -535,18 +541,21 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 						</div>';
 		}
 		
+		/*
+		var stallimagebox = '<div class="col-md-3 mb-3">\
+								<a href="'+stallImages+'" target="_blank">\
+									<img src="'+stallImages+'" class="stall_image_source_'+barnstallname+'_'+stallIndex+'" width="40" height="35">\
+								</a>\
+								<button class="dash-upload stalluploadimage_'+barnstallname+' fs-7" title="Upload image here">Upload</button>\
+								<input type="file" class="stallimage stall_image_file_'+barnstallname+'_'+stallIndex+'" style="display:none;">\
+								<span class="stall_image_msg'+stallIndex+'"></span>\
+								<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][image]" class="stall_image_input_'+barnstallname+'_'+stallIndex+'" value="'+stallImage+'">\
+							</div>';
+		*/
+		
 		var data='\
 		<div class="row mb-2 dash-stall-base">\
 			'+stallbox+'\
-			<div class="col-md-3 mb-3">\
-				<a href="'+stallImages+'" target="_blank">\
-					<img src="'+stallImages+'" class="stall_image_source_'+barnstallname+'_'+stallIndex+'" width="40" height="35">\
-				</a>\
-				<button class="dash-upload stalluploadimage_'+barnstallname+' fs-7" title="Upload image here">Upload</button>\
-				<input type="file" class="stallimage stall_image_file_'+barnstallname+'_'+stallIndex+'" style="display:none;">\
-				<span class="stall_image_msg'+stallIndex+'"></span>\
-				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][image]" class="stall_image_input_'+barnstallname+'_'+stallIndex+'" value="'+stallImage+'">\
-			</div>\
 			'+blockunblock+'\
 			<div class="col-md-1 mb-3 delete">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][id]" value="'+stallId+'" class="stall_id">\
@@ -563,7 +572,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		
 		$(document).find('#tabtarget_'+barnstallname+'_'+barnIndex).find('.stallbtns').before(data); 
 
-		fileupload(['.stall_image_file_'+barnstallname+'_'+stallIndex], ['.stall_image_input_'+barnstallname+'_'+stallIndex, '.stall_image_source_'+barnstallname+'_'+stallIndex, '.stall_image_msg_'+barnstallname+'_'+stallIndex]);
+		//fileupload(['.stall_image_file_'+barnstallname+'_'+stallIndex], ['.stall_image_input_'+barnstallname+'_'+stallIndex, '.stall_image_source_'+barnstallname+'_'+stallIndex, '.stall_image_msg_'+barnstallname+'_'+stallIndex]);
 		
 		$(document).find('#stall_'+barnstallname+'_'+stallIndex+'_name').rules("add", {required: true});
 		$(document).find('#stall_'+barnstallname+'_'+stallIndex+'_price').rules("add", {required: true});
@@ -625,6 +634,14 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	})
 	/* END STALL REMOVE */
 	
+	$(document).off('click', '.selectallstall');
+	$(document).on('click', '.selectallstall', function(e){ 
+		if($(this).is(':checked')){
+			$(this).closest('.stallcontainer').find('.block_unblock').not(':disabled').prop('checked', true);
+		}else{
+			$(this).closest('.stallcontainer').find('.block_unblock').not(':disabled').prop('checked', false);
+		}
+	});
 	
 	/* START STALL IMAGE CLICK */
 	$(document).off('click','.stalluploadimage_'+barnstallname)
@@ -726,18 +743,9 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 								</div>\
 							</div>';
 	}
-
 	
-	var modal = '<div class="modal fade" id="bulkstallmodal_'+barnstallname+'" role="dialog">\
-					<div class="modal-dialog">\
-						<div class="modal-content">\
-							<div class="modal-header">\
-								<h4 class="modal-title">'+srheading+'</h4>\
-								<button type="button" class="close" data-bs-dismiss="modal">&times;</button>\
-							</div>\
-							<div class="modal-body">\
-								'+modaldata+'\
-								<div class="col-md-6 my-2">\
+	/*
+	var stallimageboxmodal = 	'<div class="col-md-6 my-2">\
 									<div class="form-group">\
 										<label>'+srimage+'</label>\
 										<div>\
@@ -748,7 +756,18 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 										<input type="file" class="stall_file_'+barnstallname+'">\
 										<input type="hidden" class="stall_input_'+barnstallname+'" value="">\
 									</div>\
-								</div>	\
+								</div>';
+	*/
+	
+	var modal = '<div class="modal fade" id="bulkstallmodal_'+barnstallname+'" role="dialog">\
+					<div class="modal-dialog">\
+						<div class="modal-content">\
+							<div class="modal-header">\
+								<h4 class="modal-title">'+srheading+'</h4>\
+								<button type="button" class="close" data-bs-dismiss="modal">&times;</button>\
+							</div>\
+							<div class="modal-body">\
+								'+modaldata+'\
 								<div class="col-md-12 my-2">\
 									<div class="form-group">\
 										<label>'+srtotalnumber+'</label>\
@@ -772,7 +791,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 				</div>';
 	
 	$('body').append(modal);	
-	fileupload(['.stall_file_'+barnstallname], ['.stall_input_'+barnstallname, '.stall_source_'+barnstallname]);
+	//fileupload(['.stall_file_'+barnstallname], ['.stall_input_'+barnstallname, '.stall_source_'+barnstallname]);
 	
 	$('#bulkstallmodal_'+barnstallname).on('shown.bs.modal', function (e) { 
 		$('.stall_name_'+barnstallname+', .stall_price_'+barnstallname+', .stall_input_'+barnstallname+', .stall_file_'+barnstallname+', .stall_total_'+barnstallname+', .stall_number_'+barnstallname).val('');

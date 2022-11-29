@@ -406,11 +406,11 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 			
 			if(stallbox.is(':checked')){
 				stallbox.click();
+			}else{
+				$(this).addClass('priceactive');
+				stallbox.attr('data-price', $(this).attr('data-pricebutton'));
+				stallbox.click();
 			}
-			
-			$(this).addClass('priceactive');
-			stallbox.attr('data-price', $(this).attr('data-pricebutton'));
-			stallbox.click();
 		})
 		
 		function checkprice(_this){
@@ -482,7 +482,6 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 				}
 			)
 			
-			/*
 			ajax(
 				'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
 				{ eventid : eventid },
@@ -497,12 +496,11 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					}
 				}
 			)
-			*/
 			
 			if(eventtype==2){
 				ajax(
 					'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
-					{ eventid : eventid, checkin : startdate, checkout : enddate },
+					{ eventid : eventid, checkin : startdate, checkout : enddate, type : 2 },
 					{
 						asynchronous : 1,
 						success : function(data){
@@ -573,11 +571,11 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					if(!pricevalidation) return false;
 				
 					var checkoccupiedreserved = occupiedreserved(startdate, enddate, stallid);
-					if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : '1', checked : 1, flag : flag, actionid : ''});
+					if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
 				}else{ 
 					$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
 					$('.stallavailability[data-stallid='+stallid+']').closest("li").find('.price_button').removeClass('priceactive');
-					cart({stall_id : stallid, type : '1', checked : 0}); 
+					cart({stall_id : stallid, type : eventtype, checked : 0}); 
 				}		
 			}else{
 				var productid      		= _this.attr('data-productid');
@@ -596,12 +594,12 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 						quantitywrapper.focus();
 						toastr.warning('Please Select Quantity Less Than or equal to.'+(parseInt(originalquantity) - parseInt(cartquantity)), {timeOut: 5000});
 					}else{ 
-						cart({event_id : eventid, product_id : productid, price : price, quantity : quantity, startdate : startdate, enddate : enddate, type : '1', checked : 1, flag : flag, actionid : ''});
+						cart({event_id : eventid, product_id : productid, price : price, quantity : quantity, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
 					}
 				}else{
 					quantitywrapper.val('');
 					$('.cartremove[data-productid='+productid+']').addClass('displaynone'); 
-					cart({product_id : productid, type : '1', checked : 0});
+					cart({product_id : productid, type : eventtype, checked : 0});
 				}
 			}
 		}

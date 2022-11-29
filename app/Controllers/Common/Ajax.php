@@ -66,23 +66,18 @@ class Ajax extends BaseController
 		echo json_encode(['success' => $result]);
 	}
 	
-	/*
 	public function ajaxblockunblock()
 	{  
-		$eventid 	= $this->request->getPost('eventid'); 
-		$result 	= getBlockunblock($eventid);
-		echo json_encode(['success' => $result]); 
-	}
-	*/
-	
-	public function ajaxblockunblock()
-	{  
-		$eventid = $this->request->getPost('eventid');
-		$checkin = formatdate($this->request->getPost('checkin'));
-		$checkout = formatdate($this->request->getPost('checkout'));
-		$nqeventid = $this->request->getPost('nqeventid') ? $this->request->getPost('nqeventid') : '';
+		$requestData 	= $this->request->getPost();
+		$eventid 		= $requestData['eventid'];
 		
-		$result = getBlockunblock($eventid, ['checkin' => $checkin, 'checkout' => $checkout, 'nqeventid' => $nqeventid]);
+		$condition = [];
+		if(isset($requestData['checkin']) && $requestData['checkin']!='') 		$condition['checkin'] 	= formatdate($requestData['checkin']);
+		if(isset($requestData['checkout']) && $requestData['checkout']!='') 	$condition['checkout'] 	= formatdate($requestData['checkout']);
+		if(isset($requestData['nqeventid']) && $requestData['nqeventid']!='') 	$condition['nqeventid'] = $requestData['nqeventid'];
+		if(isset($requestData['type']) && $requestData['type']!='') 			$condition['type'] 		= $requestData['type'];
+		
+		$result = getBlockunblock($eventid, $condition);
 		echo json_encode(['success' => $result]); 
 	}
 	
@@ -221,7 +216,8 @@ class Ajax extends BaseController
 				if(!empty($barndata[$stallname])){
 					foreach($barndata[$stallname] as $key2 => $stalldata){
 						$stallid = $stalldata['id'];
-						$result[$barnname][$key1][$stallname][$key2]['stall_id'] = $stallid;
+						$result[$barnname][$key1][$stallname][$key2]['stall_id'] 		= $stallid;
+						$result[$barnname][$key1][$stallname][$key2]['block_unblock'] 	= $stalldata['block_unblock']=='1' ? '2' : $stalldata['block_unblock'];
 						
 						if(isset($eventbarndata)){
 							$eventstall 	= array_column($eventbarndata[$stallname], 'stall_id');

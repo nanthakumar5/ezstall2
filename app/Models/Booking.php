@@ -231,15 +231,15 @@ class Booking extends BaseModel
 		if(isset($data['eventid']) && $data['eventid']!='')      	      		$request['event_id'] 	  		= $data['eventid'];
 		if(isset($data['paymentid']) && $data['paymentid']!='')      	   		$request['payment_id'] 			= $data['paymentid'];
 		if(isset($data['paymentmethodid']) && $data['paymentmethodid']!='')     $request['paymentmethod_id'] 	= $data['paymentmethodid'];
-		if(isset($data['paidunpaid']) && $data['paidunpaid']!='')     			$request['paid_unpaid'] 	= $data['paidunpaid'];
+		if(isset($data['paidunpaid']) && $data['paidunpaid']!='')     			$request['paid_unpaid'] 		= $data['paidunpaid'];
 		if(isset($data['userid']) && $data['userid']!='')      	           		$request['user_id'] 	  		= $data['userid'];
 		if(isset($data['type']) && $data['type']!='')      	           	 		$request['type'] 	      		= $data['type'];
 		if(isset($data['price']) && $data['price']!='')      	           	 	$request['price'] 	      		= $data['price'];
 		if(isset($data['transactionfee']) && $data['transactionfee']!='')      	$request['transaction_fee'] 	= $data['transactionfee'];
-		if(isset($data['cleaningfee']) && $data['cleaningfee']!='')      		$request['cleaning_fee'] 	= $data['cleaningfee'];
-		if(isset($data['eventtax']) && $data['eventtax']!='')      	       	 	$request['event_tax'] 	      		= $data['eventtax'];
+		if(isset($data['cleaningfee']) && $data['cleaningfee']!='')      		$request['cleaning_fee'] 		= $data['cleaningfee'];
+		if(isset($data['eventtax']) && $data['eventtax']!='')      	       	 	$request['event_tax'] 	      	= $data['eventtax'];
 		if(isset($data['amount']) && $data['amount']!='')      	           	 	$request['amount'] 	      		= $data['amount'];
-		if(isset($data['special_notice']) && $data['special_notice']!='')      	$request['special_notice'] 	      		= $data['special_notice'];
+		if(isset($data['special_notice']) && $data['special_notice']!='')      	$request['special_notice'] 	    = $data['special_notice'];
  		$request['status'] = '1';
 
 		if(isset($request)){				

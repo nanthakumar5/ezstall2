@@ -86,7 +86,7 @@ class Index extends BaseController
 			if($result){				
 				$data['occupied'] 		= getOccupied($id);
 				$data['reserved'] 		= getReserved($id);
-				$data['blockunblock'] 	= getBlockunblock($id);
+				$data['blockunblock'] 	= getBlockunblock($id, ['type' => '1']);
 				$data['result'] 		= $result;
 			}else{
 				$this->session->setFlashdata('danger', 'No Record Found.');

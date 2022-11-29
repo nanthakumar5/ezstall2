@@ -418,26 +418,20 @@ function getReserved($eventid, $extras=[]){
 	return (count($cart) > 0) ? array_column($cart, 'user_id', 'stall_id') : [];
 }
 
-/*
-function getBlockunblock($eventid){ 
-	$condition 	= ['event_id' => $eventid, 'block_unblock' => '1', 'status' => ['1']];
-	
-	$stall	= new \App\Models\Stall;
-	$blockunblock	= $stall->getStall('all', ['stall'], $condition);
-	return (count($blockunblock) > 0) ? array_column($blockunblock, 'id') : [];
-}
-*/
-
 function getBlockunblock($eventid, $extras=[]){ 
-	$condition 	= ['facilityid' => $eventid, 'status' => ['1'], 'type' => '1'];
-	if(count($extras) > 0) $condition = $condition+['btw_start_date' => $extras['checkin'], 'btw_end_date' => $extras['checkout'], 'nqeventid' => $extras['nqeventid']];
-	else $condition = $condition+['gtenddate' => date('Y-m-d')];
+	$condition1 	= ['event_id' => $eventid, 'block_unblock' => '1', 'status' => ['1']];
+	$condition2 	= ['facilityid' => $eventid, 'status' => ['1'], 'type' => '1'];
+	
+	if(isset($extras['type']) &&  $extras['type']=='1') 	$condition = $condition2+['gtenddate' => date('Y-m-d')];
+	elseif(isset($extras['type']) &&  $extras['type']=='2') $condition = $condition2+['btw_start_date' => $extras['checkin'], 'btw_end_date' => $extras['checkout'], 'nqeventid' => (isset($extras['nqeventid']) ? $extras['nqeventid'] : '')];
+	else $condition = $condition1;
 		
 	$stall			= new \App\Models\Stall;
 	$blockunblock	= $stall->getStall('all', ['stall', 'event'], $condition);
 	
-	if(count($extras) > 0) return (count($blockunblock) > 0) ? array_column($blockunblock, 'stall_id') : [];
-	else return (count($blockunblock) > 0) ? $blockunblock : [];
+	if(isset($extras['type']) &&  $extras['type']=='1') 	return (count($blockunblock) > 0) ? $blockunblock : [];
+	elseif(isset($extras['type']) &&  $extras['type']=='2') return (count($blockunblock) > 0) ? array_column($blockunblock, 'stall_id') : [];
+	else return (count($blockunblock) > 0) ? array_column($blockunblock, 'id') : [];
 }
 
 function getProductQuantity($eventid, $extras=[]){
