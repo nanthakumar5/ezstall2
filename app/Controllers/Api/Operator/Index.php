@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Stallmanager;
+namespace App\Controllers\Api\Operator;
 
 use App\Controllers\BaseController;
 
@@ -34,7 +34,7 @@ class Index extends BaseController
 
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'type'=>['2','3'],'status' => ['1']]); 
             if ($result) {
-				  $datas =  $this->users->getUsers('all', ['users'], ['parentid' => $post['user_id'],'type'=>['4'],'status' => ['1']]);	
+				  $datas =  $this->users->getUsers('all', ['users'], ['parentid' => $post['user_id'],'type'=>['6'],'status' => ['1']]);	
                   if(count($datas) > 0) {
 					$result1=[];
                     foreach($datas as $data){
@@ -115,15 +115,15 @@ class Index extends BaseController
 					$post['password']     = md5($post['password']);
 					$post['status']       = '1';
 					$post['email_status'] = '1';
-					$post['type']         = '4';                        
+					$post['type']         = '6';                        
 
-					$stallmanagerid = $this->users->action($post); 
+					$operatorid = $this->users->action($post); 
 					
-					if($stallmanagerid){
+					if($operatorid){
 						
 						$result=[];
 						
-						$data = $this->users->getUsers('row', ['users'], ['id' => $stallmanagerid]); 
+						$data = $this->users->getUsers('row', ['users'], ['id' => $operatorid]); 
 						if($data){
 							$result = [
 							'user_id' 	=> $data['id'],
@@ -133,13 +133,13 @@ class Index extends BaseController
 						];
 					   }
 						
-						$json = ['1', 'Stall Manager Created Successfully.', $result];
+						$json = ['1', 'Operator Created Successfully.', $result];
 					} else {
 						$json = ['0', 'Try Later.', []];
 					}
 					
 				} else {
-					$json = ['0', 'Not Authorized to Create Stallmanager.', []];
+					$json = ['0', 'Not Authorized to Create Operator.', []];
 				}
             }
 		} else {
@@ -164,7 +164,7 @@ class Index extends BaseController
         $validation->setRules(
             [
                 'user_id'        => 'required',
-				'stallmanagerid' => 'required',
+				'operatorid' => 'required',
 				'name'           => 'required',
 				'email'          => 'required|valid_email',
             ],
@@ -173,8 +173,8 @@ class Index extends BaseController
                 'user_id' => [
                     'required' => 'User id is required.',
                 ],
-				'stallmanagerid' => [
-                    'required' => 'Stallmanager id is required.',
+				'operatorid' => [
+                    'required' => 'Operator id is required.',
                 ],
 				'name' => [
                     'required' => 'Name is required.',
@@ -189,18 +189,18 @@ class Index extends BaseController
 			
 				$post['userid']       = $post['user_id'];
 				$post['parentid']     = $post['user_id'];
-				$post['actionid']     = $post['stallmanagerid'];
+				$post['actionid']     = $post['operatorid'];
 				$post['name']         = $post['name'];
 				$post['email']        = $post['email'];
 				if(isset($post['password'])) $post['password']     = md5($post['password']);
 
-				$stallmanagerid = $this->users->action($post); 
+				$operatorid = $this->users->action($post); 
                 
-				if($stallmanagerid){
+				if($operatorid){
 
 					$result=[];
 						
-					$data = $this->users->getUsers('row', ['users'], ['id' => $stallmanagerid]); 
+					$data = $this->users->getUsers('row', ['users'], ['id' => $operatorid]); 
 					if($data){
 						$result = [
 						'user_id' 	=> $data['id'],
@@ -210,7 +210,7 @@ class Index extends BaseController
 					];
 				   }
 				   
-                    $json = ['1', 'Stall Manager Updated Successfully.', $result];
+                    $json = ['1', 'Operator Updated Successfully.', $result];
                 } else {
                     $json = ['0', 'Try Later.', []];
                 }
@@ -237,14 +237,14 @@ class Index extends BaseController
         $validation->setRules(
             [
                 'user_id'        => 'required',
-				'stallmanagerid' => 'required'
+				'operatorid' => 'required'
             ],
 
             [
                 'user_id' => [
                     'required' => 'User id is required.',
                 ],
-				'stallmanagerid' => [
+				'operatorid' => [
                     'required' => 'User id is required.',
                 ]
             ]
@@ -253,12 +253,12 @@ class Index extends BaseController
         if ($validation->withRequest($this->request)->run()) {
 			
 				$post['userid']       = $post['user_id'];
-				$post['id']           = $post['stallmanagerid'];
+				$post['id']           = $post['operatorid'];
 			
-				$stallmanagerid = $this->users->delete($post); 
+				$operatorid = $this->users->delete($post); 
                 
-				if($stallmanagerid){
-                    $json = ['1', 'Stall Manager Deleted Successfully.', []];
+				if($operatorid){
+                    $json = ['1', 'Operator Deleted Successfully.', []];
                 } else {
                     $json = ['0', 'Try Later.', []];
                 }

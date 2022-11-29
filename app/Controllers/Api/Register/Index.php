@@ -58,16 +58,29 @@ class Index extends BaseController
                 $action = $this->users->action($post);
 
                 if ($action) {
+					
+					$result=[];
+					$data= $this->users->getUsers('row', ['users'], ['id' => $action]); 
+					if($data){
+							$result = [
+							'user_id' 	=> $data['id'],
+							'name' 		=> $data['name'],
+							'email' 	=> $data['email'],
+							'type' 		=> $data['type'],
+						];
+					}
 
-                    $encryptid = $encrypter->encrypt($action);
+                    // email function discussed and updated on 29-November-22
+					
+					$encryptid = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$action.substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
+					$verificationurl= base_url()."/api/verification/".$encryptid;
+					$email_subject = "Ezstall Registration";
+					$email_message = "Hi ".$post['name'].","." \n\n Thank you for Registering in Ezstall.
+					\n To activate your account please click below link.".' '.$verificationurl."";
 
-                    $verificationurl = base_url() . "/api/verification/" . $encryptid;
-                    $email_subject = "Ezstall Registration";
-                    $email_message = "Hi " . $post['name'] . "," . " \n\n Thank you for Registering in Ezstall.
-                        \n To activate your account please click below link." . ' ' . $verificationurl . "";
-
-                    $this->send_mail($post['email'], $email_subject, $email_message);
-                    $json = ['1', 'User Submitted Successfully.', []];
+					send_mail($post['email'],$email_subject,$email_message);
+						
+                    $json = ['1', 'User Submitted Successfully.', $result];
                 } else {
                     $json = ['0', 'Try Later.', []];
                 }
@@ -89,12 +102,11 @@ class Index extends BaseController
 
     public function verification($id)
     {
-        $encrypter = \Config\Services::encrypter();
-        $decryptid = $encrypter->decrypt($id);
+		$decryptid = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
         if ($id != '') {
             $post['actionid'] = $decryptid;
-            $post['email_status'] = 1;
+            $post['email_status'] = '1';
 
             $updateaction = $this->users->action($post);
             if ($updateaction) {
