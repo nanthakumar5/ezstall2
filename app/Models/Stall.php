@@ -11,7 +11,7 @@ class Stall extends BaseModel
     	$select 			= [];
 		
 		if(in_array('stall', $querydata)){
-			$data		= 	['s.*'];							
+			$data		= 	['s.*', 's.name stallname'];							
 			$select[] 	= 	implode(',', $data);
 		}
 		if(in_array('event', $querydata)){
@@ -29,6 +29,7 @@ class Stall extends BaseModel
 		if(isset($requestdata['name'])) 				$query->where('s.name', $requestdata['name']);
 		if(isset($requestdata['event_id'])) 			$query->where('s.event_id', $requestdata['event_id']); 
 		if(isset($requestdata['barn_id'])) 			    $query->where('s.barn_id', $requestdata['barn_id']);
+		if(isset($requestdata['stall_id'])) 			$query->where('s.stall_id', $requestdata['stall_id']);
 		if(isset($requestdata['block_unblock'])) 		$query->where('s.block_unblock', $requestdata['block_unblock']);
 		if(isset($requestdata['e.id'])) 				$query->where('e.id', $requestdata['e.id']);
 		if(isset($requestdata['ids'])) 					$query->whereIn('e.id', $requestdata['ids']);

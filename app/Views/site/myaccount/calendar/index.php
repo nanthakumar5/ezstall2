@@ -7,14 +7,22 @@
 
 <?php $this->section('js') ?>
 <script>
-	var eventresource = $.parseJSON('<?php echo json_encode($eventresource); ?>');
-	
+	var eventdata 		= $.parseJSON('<?php echo json_encode($eventdata); ?>');
+	var resourcedata 	= $.parseJSON('<?php echo json_encode($resourcedata); ?>');
+
 	$(function(){
 		var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
 			schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-			initialView: 'dayGridMonth',
-			events: eventresource
+			initialView: 'resourceTimelineMonth',
+			headerToolbar: {
+				left: 'prev,next',
+				center: 'title',
+				right: 'dayGridMonth,resourceTimelineMonth'
+			},
+			dayMaxEventRows: true, 
+			resources: resourcedata,
+			events: eventdata
 		});
         calendar.render();
 	});
