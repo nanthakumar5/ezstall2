@@ -48,6 +48,9 @@ $routes->post('api/operator', 'Api\Operator\Index::index');
 $routes->post('api/addoperator', 'Api\Operator\Index::add');
 $routes->post('api/editoperator', 'Api\Operator\Index::edit');
 $routes->post('api/deleteoperator', 'Api\Operator\Index::delete');
+$routes->post('api/upcomingevents', 'Api\Eventlisting\Index::upcomingevents');
+$routes->post('api/pastevents', 'Api\Eventlisting\Index::pastevents');
+$routes->post('api/viewallevents', 'Api\Eventlisting\Index::viewallevents');
 
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
