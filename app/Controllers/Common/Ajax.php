@@ -156,6 +156,80 @@ class Ajax extends BaseController
 		echo json_encode($array);
     }
 	
+	public function calendar()
+	{
+		$requestData = $this->request->getPost(); 
+		
+		$event 		= new \App\Models\Event();
+		$event		= $event->getEvent('row', ['event', 'barn', 'stall', 'bookedstall', 'rvbarn', 'rvstall', 'rvbookedstall'], ['id' => $requestData['id'], 'status' => ['1'], 'userid' => $requestData['userid'], 'type' => '2'], ['orderby' => 'e.id desc']);
+		
+		$barn 		= $this->getCalendarEventBarnStall($event, ['heading' => 'Barn', 'barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall', 'key' => 0]);
+		$rvhookup 	= $this->getCalendarEventBarnStall($event, ['heading' => 'RV Hookup', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall', 'key' => 1]);
+		
+		$resourcedata 	= array_merge($barn[0], $rvhookup[0]);
+		$eventdata 		= array_merge($barn[1], $rvhookup[1]);
+		
+		echo json_encode(['resourcedata' => $resourcedata, 'eventdata' => $eventdata]);
+	}
+	
+	public function getCalendarEventBarnStall($event, $extras)
+    {
+		$heading 		= $extras['heading'];
+		$barnname 		= $extras['barnname'];
+		$stallname 		= $extras['stallname'];
+		$bookedstall 	= $extras['bookedstall'];
+		$key 			= $extras['key'];
+		
+		$resourcedata 	= [];
+		$eventdata 		= [];
+		
+		$resourcedata[$key] = [
+			'id' 	=> $heading.$barnname.$event['id'],
+			'title' => $heading
+		];
+		
+		foreach($event[$barnname] as $barnkey => $barn){
+			$resourcedata[$key]['children'][$barnkey] = [
+				'id' 	=> 'barn'.$barn['id'],
+				'title' => $barn['name']
+			];
+				
+			foreach($barn[$stallname] as $stallkey => $stall){
+				$resourcedata[$key]['children'][$barnkey]['children'][$stallkey] = [
+					'id' 	=> 'stall'.$stall['id'],
+					'title' => $stall['name']
+				];
+				
+				$reservedstall 	= new \App\Models\Stall();
+				$reservedstall 	= $reservedstall->getStall('row', ['stall', 'event'], ['stall_id' => $stall['id'], 'facilityid' => $event['id'], 'status' => ['1']]);
+				
+				if($reservedstall){
+					$eventdata[] = [
+						'id' 			=> 'reservedstall'.$reservedstall['id'],
+						'resourceId' 	=> 'stall'.$stall['id'],
+						'title' 		=> $reservedstall['stallname'],
+						'start' 		=> $reservedstall['estartdate'],
+						'end' 			=> $reservedstall['eenddate'],
+						'color' 		=> 'yellow'
+					];
+				}
+				
+				foreach($stall[$bookedstall] as $bookedstallkey => $bs){
+					$eventdata[] = [
+						'id' 			=> 'booking'.$bs['bdid'],
+						'resourceId' 	=> 'stall'.$bs['bdstallid'],
+						'title' 		=> $bs['name'],
+						'start' 		=> $bs['check_in'],
+						'end' 			=> $bs['check_out'],
+						'color' 		=> 'red'
+					];
+				}
+			}
+		}
+		
+		return [$resourcedata, $eventdata];
+    }
+	
 	public function barnstall1()
 	{
 		$requestData 	= $this->request->getPost(); 
