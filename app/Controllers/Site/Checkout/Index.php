@@ -54,7 +54,7 @@ class Index extends BaseController
 					$this->cart->delete(['user_id' => $userid, 'type' => $requestData['type']]);
 					$reservationpdf = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['userid' => [$userid], 'id' => $booking]);
 					
-					smsTemplate(['mobile' => $reservationpdf['mobile'],'eventname' => $reservationpdf['eventname'],'username' => $reservationpdf['username']]);
+					//smsTemplate(['mobile' => $reservationpdf['mobile'],'eventname' => $reservationpdf['eventname'],'username' => $reservationpdf['username']]);
 					$data['reservationpdf'] = $reservationpdf;
 					$data['usertype'] 		= $this->config->usertype;
 					$data['settings'] 		= getSettings();

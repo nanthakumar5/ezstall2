@@ -270,20 +270,21 @@ class Booking extends BaseModel
 
         foreach ($results as $result){
             $bookingdetails = array(
-                'booking_id' 	=> isset($extras['booking_id']) ? $extras['booking_id'] : '',
-                'barn_id'      	=> isset($result['barn_id']) ? $result['barn_id'] : '',
-                'stall_id'      => isset($result['stall_id']) ? $result['stall_id'] : '',
-                'product_id'    => isset($result['product_id']) ? $result['product_id'] : '',
-                'price_type'    => isset($result['pricetype']) ? $result['pricetype'] : '',
-                'price'      	=> isset($result['price']) ? $result['price'] : '',
-                'quantity'      => isset($result['quantity']) ? $result['quantity'] : (isset($result['intervalday']) ? $result['intervalday'] : ''),
-                'total'      	=> isset($result['total']) ? $result['total'] : '',
-                'flag'      	=> isset($extras['flag']) ? $extras['flag'] : '',
-                'status'      	=> 1
+                'booking_id' 			=> isset($extras['booking_id']) ? $extras['booking_id'] : '',
+                'barn_id'      			=> isset($result['barn_id']) ? $result['barn_id'] : '',
+                'stall_id'      		=> isset($result['stall_id']) ? $result['stall_id'] : '',
+                'product_id'    		=> isset($result['product_id']) ? $result['product_id'] : '',
+                'price_type'    		=> isset($result['pricetype']) ? $result['pricetype'] : '',
+                'price'      			=> isset($result['price']) ? $result['price'] : '',
+                'subscription_price'    => isset($result['subscriptionprice']) ? $result['subscriptionprice'] : '',
+                'quantity'      		=> isset($result['quantity']) ? $result['quantity'] : (isset($result['intervalday']) ? $result['intervalday'] : ''),
+                'total'      			=> isset($result['total']) ? $result['total'] : '',
+                'flag'      			=> isset($extras['flag']) ? $extras['flag'] : '',
+                'status'      			=> 1
             );
 			
             $this->db->table('booking_details')->insert($bookingdetails);
-
+			
 			if(isset($result['product_id']) && isset($result['quantity']) && isset($extras['flag']) && ($extras['flag']==3 || $extras['flag']==4)){
 				$datass = $this->db->table('products')->where('id', $result['product_id'])->set('quantity', 'quantity-'.$result['quantity'], FALSE)->update();
 				

@@ -266,7 +266,7 @@
 			
 			$('.stripeextra').remove();
 			var data = 	'<div class="stripeextra">'+result.join("")+'</div>';
-			$('.stripetotal').text('(Total - '+$('.totaldue').text()+')');
+			$('.stripetotal').text('(Total - '+$('#checkout_amount').val()+')');
 
 			$('.stripepaybutton').append(data);
 		})

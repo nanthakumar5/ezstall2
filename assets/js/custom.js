@@ -961,7 +961,7 @@ function cartbox(pagetype, result){
 		total 		= 	(parseFloat(c_price)+parseFloat(c_transactionfee)+parseFloat(c_cleaningfee)).toFixed(2);
 		
 		buttons 	=	'<div class="row mb-2 w-100">\
-							<a href="'+baseurl()+'/checkout" class="w-100 text-center mx-2 ucEventdetBtn ps-3 mb-3 ">Continue to Checkout</a>\
+							<a href="'+baseurl()+'checkout" class="w-100 text-center mx-2 ucEventdetBtn ps-3 mb-3 ">Continue to Checkout</a>\
 						</div>';		
 	}else if(pagetype==2){
 		c_tax 		= (result.event_tax!='' && result.event_tax!=0) ? parseFloat(result.event_tax *100).toFixed(2) : 0;
