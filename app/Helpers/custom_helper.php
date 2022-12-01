@@ -312,24 +312,27 @@ function getCart($type=''){
 					if($singlepricetype=='2') 		$intervalday = ceil($intervalday/7);
 					elseif($singlepricetype=='3') 	$intervalday = ceil($intervalday/30);
 					elseif($singlepricetype=='4') 	$intervalday = 1;
+					elseif($singlepricetype=='5') 	$intervalday = 1;
 					
 					if($singlepricetype=='1') 		$singletotal = $singleprice * $intervalday;
 					elseif($singlepricetype=='2') 	$singletotal = $singleprice * $intervalday;
 					elseif($singlepricetype=='3') 	$singletotal = $singleprice * $intervalday;
 					elseif($singlepricetype=='4') 	$singletotal = $singleprice;
+					elseif($singlepricetype=='5') 	$singletotal = $singleprice;
 				}
 				
 				$barnrvdata = [
-					'barn_id' 		=> $res['barn_id'], 
-					'barn_name' 	=> $res['barnname'], 
-					'stall_id' 		=> $res['stall_id'],
-					'stall_name' 	=> $res['stallname'],
-					'price' 		=> $singleprice,
-					'pricetype' 	=> $singlepricetype,
-					'chargingid' 	=> $singlechargingid,
-					'interval' 		=> $interval,
-					'intervalday' 	=> $intervalday,
-					'total' 		=> $singletotal
+					'barn_id' 				=> $res['barn_id'], 
+					'barn_name' 			=> $res['barnname'], 
+					'stall_id' 				=> $res['stall_id'],
+					'stall_name' 			=> $res['stallname'],
+					'subscriptionprice' 	=> $res['subscription_price'],
+					'price' 				=> $singleprice,
+					'pricetype' 			=> $singlepricetype,
+					'chargingid' 			=> $singlechargingid,
+					'interval' 				=> $interval,
+					'intervalday' 			=> $intervalday,
+					'total' 				=> $singletotal
 				];
 				
 				if($res['flag']=='1') 		$barnstall[] = $barnrvdata;

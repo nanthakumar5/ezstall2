@@ -355,35 +355,39 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	
 	/*PLACEHOLDER*/
 	if(barnstallname=='barn'){
-		var srheading  		= 'Stalls';
-		var srrate     		= 'Stalls Rate';
-		var srname     		= 'Stalls Name';
-		var srprice    		= 'Stalls Price';
-		var srnightprice    = 'Stalls Night Price';
-		var srweekprice    	= 'Stalls Week Price';
-		var srmonthprice    = 'Stalls Month Price';
-		var srflatprice    	= 'Stalls Flat Price';
-		var srimage    		= 'Stalls Image';
-		var srtotalnumber 	= 'Total Number of Stalls';
-		var srfirstnumber 	= 'First Stalls Number';
-		var uploadName  	= 'Barn';
-		var stallcamp 		= 'Stall';
-		var BarnLots    	= 'Barn';
+		var srheading  						= 'Stalls';
+		var srrate     						= 'Stalls Rate';
+		var srname     						= 'Stalls Name';
+		var srprice    						= 'Stalls Price';
+		var srnightprice   					= 'Stalls Night Price';
+		var srweekprice    					= 'Stalls Week Price';
+		var srmonthprice    				= 'Stalls Month Price';
+		var srflatprice    					= 'Stalls Flat Price';
+		var srsubscriptioninitialprice    	= 'Stalls Subscription Initial Price';
+		var srsubscriptionmonthprice    	= 'Stalls Subscription Month Price';
+		var srimage    						= 'Stalls Image';
+		var srtotalnumber 					= 'Total Number of Stalls';
+		var srfirstnumber 					= 'First Stalls Number';
+		var uploadName  					= 'Barn';
+		var stallcamp 						= 'Stall';
+		var BarnLots    					= 'Barn';
 	}else if(barnstallname=='rvhookups'){
-		var srheading  		= 'RV Lots';
-		var srrate     		= 'RV Lots Rate';
-		var srname     		= 'RV Lots Name';
-		var srprice    		= 'RV Lots Price';
-		var srnightprice    = 'RV Lots Night Price';
-		var srweekprice    	= 'RV Lots Week Price';
-		var srmonthprice    = 'RV Lots Month Price';
-		var srflatprice    	= 'RV Lots Flat Price';
-		var srimage    		= 'RV Lots Image';
-		var srtotalnumber 	= 'Total Number of RV Lots';
-		var srfirstnumber 	= 'First RV Lots Number';
-		var uploadName  	= 'Campsites';
-		var stallcamp 		= 'Rv Lots';
-		var BarnLots    	= 'Campsites';
+		var srheading  						= 'RV Lots';
+		var srrate     						= 'RV Lots Rate';
+		var srname     						= 'RV Lots Name';
+		var srprice    						= 'RV Lots Price';
+		var srnightprice    				= 'RV Lots Night Price';
+		var srweekprice    					= 'RV Lots Week Price';
+		var srmonthprice    				= 'RV Lots Month Price';
+		var srflatprice    					= 'RV Lots Flat Price';
+		var srsubscriptioninitialprice    	= 'RV Lots Subscription Initial Price';
+		var srsubscriptionmonthprice    	= 'RV Lots Subscription Month Price';
+		var srimage    						= 'RV Lots Image';
+		var srtotalnumber 					= 'Total Number of RV Lots';
+		var srfirstnumber 					= 'First RV Lots Number';
+		var uploadName  					= 'Campsites';
+		var stallcamp 						= 'Rv Lots';
+		var BarnLots    					= 'Campsites';
 	}
 	/*PLACEHOLDER*/
 	
@@ -454,18 +458,20 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 	/* START ADD EDIT STALL */	
 	var stalldata = function(barnIndex, result=[])
 	{ 
-		var stallId       		= result['id'] ? result['id'] : '';
-		var charging_flags      = result['charging_id'] ? result['charging_id'] : ''; 
-		var stallName     		= result['name'] ? result['name'] : '';
-		var stallPrice    		= result['price'] ? result['price'] : '';
-		var stallNightPrice    	= result['night_price'] ? result['night_price'] : (price_feedata[0] ? price_feedata[0] : '');
-		var stallWeekPrice    	= result['week_price'] ? result['week_price'] : (price_feedata[1] ? price_feedata[1] : '');
-		var stallMonthPrice    	= result['month_price'] ? result['month_price'] : (price_feedata[2] ? price_feedata[2] : '');
-		var stallFlatPrice    	= result['flat_price'] ? result['flat_price'] : (price_feedata[3] ? price_feedata[3] : '');
-		var stallImage    		= result['image'] ? result['image'] : '';
-		var stallBulkImage    	= result['bulkimage'] ? result['bulkimage'] : '';
-		var block_unblock      	= result['block_unblock'] ? result['block_unblock'] : '';
-		var fstallId      		= result['stall_id'] ? result['stall_id'] : '';
+		var stallId       					= result['id'] ? result['id'] : '';
+		var charging_flags      			= result['charging_id'] ? result['charging_id'] : ''; 
+		var stallName     					= result['name'] ? result['name'] : '';
+		var stallPrice    					= result['price'] ? result['price'] : '';
+		var stallNightPrice    				= result['night_price'] ? result['night_price'] : (price_feedata[0] ? price_feedata[0] : '');
+		var stallWeekPrice    				= result['week_price'] ? result['week_price'] : (price_feedata[1] ? price_feedata[1] : '');
+		var stallMonthPrice    				= result['month_price'] ? result['month_price'] : (price_feedata[2] ? price_feedata[2] : '');
+		var stallFlatPrice    				= result['flat_price'] ? result['flat_price'] : (price_feedata[3] ? price_feedata[3] : '');
+		var stallSubscriptionInitialPrice   = result['subscription_initial_price'] ? result['subscription_initial_price'] : (price_feedata[4] ? price_feedata[4] : '');
+		var stallSubscriptionMonthPrice    	= result['subscription_month_price'] ? result['subscription_month_price'] : (price_feedata[5] ? price_feedata[5] : '');
+		var stallImage    					= result['image'] ? result['image'] : '';
+		var stallBulkImage    				= result['bulkimage'] ? result['bulkimage'] : '';
+		var block_unblock      				= result['block_unblock'] ? result['block_unblock'] : '';
+		var fstallId      					= result['stall_id'] ? result['stall_id'] : '';
 		
 		if(stallImage!='' && stallBulkImage==''){
 			var stallImages   	= baseurl()+'assets/uploads/stall/'+stallImage;
@@ -526,6 +532,12 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 						</div>\
 						<div class="col-md-6 mb-3 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="Enter Your '+srflatprice+'" value="'+stallFlatPrice+'">\
+						</div>\
+						<div class="col-md-6 mb-3 pricelistwrapper51 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_initial_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_initial_price]" class="form-control fs-7" placeholder="Enter Your '+srsubscriptioninitialprice+'" value="'+stallSubscriptionInitialPrice+'">\
+						</div>\
+						<div class="col-md-6 mb-3 pricelistwrapper52 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_month_price]" class="form-control fs-7" placeholder="Enter Your '+srsubscriptionmonthprice+'" value="'+stallSubscriptionMonthPrice+'">\
 						</div>';
 		}else if(usertype==3){
 			stallbox = 	'<div class="col-md-6 mb-3">\
@@ -720,6 +732,18 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 									<label>'+srflatprice+'</label>\
 									<input type="number" class="form-control stall_flat_price_'+barnstallname+'" placeholder="Enter Your '+srflatprice+'" value="'+(price_feedata[3] ? price_feedata[3] : '')+'">\
 								</div>\
+							</div>\
+							<div class="col-md-12 my-2 pricelistwrapper51 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
+								<div class="form-group">\
+									<label>'+srsubscriptioninitialprice+'</label>\
+									<input type="number" class="form-control stall_subscription_initial_price_'+barnstallname+'" placeholder="Enter Your '+srsubscriptioninitialprice+'" value="'+(price_feedata[4] ? price_feedata[4] : '')+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2 pricelistwrapper52 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
+								<div class="form-group">\
+									<label>'+srsubscriptionmonthprice+'</label>\
+									<input type="number" class="form-control stall_subscription_month_price_'+barnstallname+'" placeholder="Enter Your '+srsubscriptionmonthprice+'" value="'+(price_feedata[5] ? price_feedata[5] : '')+'">\
+								</div>\
 							</div>';
 	}else if(usertype==3){
 		var modaldata 	= 	'<div class="col-md-12 my-2">\
@@ -813,21 +837,23 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			return false;
 		}
 
-		var name          	= $('.stall_name_'+barnstallname).val();
-		var nightprice      = $('.stall_night_price_'+barnstallname).val();
-		var weekprice       = $('.stall_week_price_'+barnstallname).val();
-		var monthprice      = $('.stall_month_price_'+barnstallname).val();
-		var flatprice       = $('.stall_flat_price_'+barnstallname).val();
-		var price        	= $('.stall_price_'+barnstallname).val();
-		var charging_id    	= $('.stall_charging_id_'+barnstallname).val(); 
-		var image        	= $('.stall_input_'+barnstallname).val();
-		var stalltotal    	= $('.stall_total_'+barnstallname).val();
-		var stallnumber 	= $('.stall_number_'+barnstallname).val(); 
-		var barnIndexValue	= $('.barnIndexValue_'+barnstallname).val();
+		var name          				= $('.stall_name_'+barnstallname).val();
+		var nightprice      			= $('.stall_night_price_'+barnstallname).val();
+		var weekprice       			= $('.stall_week_price_'+barnstallname).val();
+		var monthprice      			= $('.stall_month_price_'+barnstallname).val();
+		var flatprice       			= $('.stall_flat_price_'+barnstallname).val();
+		var subscriptioninitialprice	= $('.stall_subscription_initial_price_'+barnstallname).val();
+		var subscriptionmonthprice      = $('.stall_subscription_month_price_'+barnstallname).val();
+		var price        				= $('.stall_price_'+barnstallname).val();
+		var charging_id    				= $('.stall_charging_id_'+barnstallname).val(); 
+		var image        				= $('.stall_input_'+barnstallname).val();
+		var stalltotal    				= $('.stall_total_'+barnstallname).val();
+		var stallnumber 				= $('.stall_number_'+barnstallname).val(); 
+		var barnIndexValue				= $('.barnIndexValue_'+barnstallname).val();
 
 		for(var i=0; i<stalltotal; i++){ 
 			var names = stallnumber!='' ? name+' '+stallnumber : name; 
-			stalldata(barnIndexValue, {name:names,charging_id: charging_id,night_price:nightprice,week_price:weekprice,month_price:monthprice,flat_price:flatprice,price:price,status:1,bulkimage:image});
+			stalldata(barnIndexValue, {name:names,charging_id: charging_id,night_price:nightprice,week_price:weekprice,month_price:monthprice,flat_price:flatprice,subscription_initial_price:subscriptioninitialprice,subscription_month_price:subscriptionmonthprice,price:price,status:1,bulkimage:image});
 			if(stallnumber!='') stallnumber++ ;
 		}
 
@@ -916,4 +942,130 @@ function products(productsname, productsitem=[], productsresult=[]){
 		$(this).parent().parent().remove();
 	})
 	/* END PRODUCTS REMOVE */
+}
+
+function cartbox(pagetype, result){
+	var barnstalldata 	= cartsummary(pagetype, 1, 'STALL', result.barnstall);
+	var rvbarnstalldata = cartsummary(pagetype, 1, 'RV HOOKUP', result.rvbarnstall);
+	var feeddata 		= cartsummary(pagetype, 2, 'FEED', result.feed);
+	var shavingdata 	= cartsummary(pagetype, 2, 'SHAVING', result.shaving);
+	
+	var c_price 			= parseFloat(result.price).toFixed(2);
+	var c_transactionfee 	= (transactionfee!='' && transactionfee!=0) ? parseFloat((transactionfee/100) * c_price).toFixed(2) : 0;
+	var c_cleaningfee 		= (result.cleaning_fee!='' && result.cleaning_fee!=0) ? parseFloat(result.cleaning_fee).toFixed(2) : 0;
+	
+	var c_tax 	= 0;
+	var total 	= '';
+	var buttons = '';
+	if(pagetype==1){
+		total 		= 	(parseFloat(c_price)+parseFloat(c_transactionfee)+parseFloat(c_cleaningfee)).toFixed(2);
+		
+		buttons 	=	'<div class="row mb-2 w-100">\
+							<a href="'+baseurl()+'/checkout" class="w-100 text-center mx-2 ucEventdetBtn ps-3 mb-3 ">Continue to Checkout</a>\
+						</div>';		
+	}else if(pagetype==2){
+		c_tax 		= (result.event_tax!='' && result.event_tax!=0) ? parseFloat(result.event_tax *100).toFixed(2) : 0;
+		total 		= (parseFloat(c_price)+parseFloat(c_transactionfee)+parseFloat(c_cleaningfee)+parseFloat(c_tax)).toFixed(2);
+	}
+	
+
+	var cleaningfee = '';
+	if(c_cleaningfee!=0){
+		cleaning_fee = '<div class="col-8 event_c_text">Cleaning Fee</div>\
+						<div class="col-4 event_c_text text-end">'+currencysymbol+c_cleaningfee+'\</div>';
+	}
+	
+	var tax = '';
+	if(c_tax!=0){
+		tax = 	'<div class="col-8 event_c_text">Tax</div>\
+				<div class="col-4 event_c_text text-end">'+currencysymbol+c_tax+'</div>';
+	}
+	
+	var data ='\
+	<div class="w-100">\
+		<div class="border rounded pt-4 ps-3 pe-3 mb-5">\
+			<div class="row mb-2">\
+				<div class="col-md-12">\
+					<div class="row"> <span class="col-6 fw-bold">Total Day :</span><span class="col-6 fw-bold text-end">'+result.interval+'</span></div>\
+					'+barnstalldata+'\
+					'+rvbarnstalldata+'\
+					'+feeddata+'\
+					'+shavingdata+'\
+				</div>\
+			</div>\
+			<div class="row mb-2 event_border_top pt-4">\
+				<div class="col-8 event_c_text">Total</div>\
+				<div class="col-4 event_c_text text-end">'+currencysymbol+c_price+'\</div>\
+				<div class="col-8 event_c_text">Transaction Fees</div>\
+				<div class="col-4 event_c_text text-end">'+currencysymbol+c_transactionfee+'\</div>\
+				'+cleaning_fee+'\
+				'+tax+'\
+			</div>\
+			<div class="row mb-2 border-top mt-3 mb-3 pt-3">\
+				<div class="col-8 fw-bold ">Total Due</div>\
+				<div class="col-4 fw-bold">'+currencysymbol+total+'</div>\
+			</div>\
+			'+buttons+'\
+		</div>\
+	</div>\
+	';
+	
+	if(pagetype==2){
+		$(document).find('#checkout_price').val(c_price);
+		$(document).find('#checkout_transactionfee').val(c_transactionfee);
+		$(document).find('#checkout_cleaningfee').val(c_cleaningfee);
+		$(document).find('#checkout_amount').val(total);
+	}
+	
+	return data;
+}
+
+function cartsummary(pagetype, type, title, result){
+	var data = '';
+	if(result.length){
+		if(type==1){
+			var name = '';
+			data += '<div class="event_cart_title"><span class="col-12 fw-bold">'+title+'</span></div>';
+			$(result).each(function(i,v){
+				if(name!=v.barn_name){
+					data += '<div><span class="col-12 fw-bold">'+v.barn_name+'</span></div>';
+				}
+
+				data += '<div class="row">\
+							<span class="col-7 event_c_text">\
+								'+v.stall_name+'\
+								'+(v.pricetype!=0 ? '<span class="pricelist_tagline">('+pricelists[v.pricetype]+')</span>' : "")+'\
+							</span>\
+							<span class="col-5 text-end event_c_text">\
+								('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total+'\
+								'+(v.pricetype==5 ? currencysymbol+v.subscriptionprice : "")+'\
+							</span>\
+						</div>';
+				
+				if(pagetype==1){
+					$('.stallid[value='+v.stall_id+']').removeAttr('disabled');				
+					if(v.pricetype!=0){
+						$('.stallid[value='+v.stall_id+']').closest('li').find('.price_button').removeAttr('disabled');
+						var pricebox = $('.stallid[value='+v.stall_id+']').closest('li').find('.price_button[data-pricetype="'+v.pricetype+'"]');
+						pricebox.addClass('priceactive');
+						$('.stallid[value='+v.stall_id+']').attr('data-price', pricebox.attr('data-pricebutton'));
+					}
+				}
+				
+				name = v.barn_name;
+			});
+		}else{
+			data += '<div class="event_cart_title"><span class="col-12 fw-bold">'+title+'</span></div>';
+			$(result).each(function(i,v){								
+				data += '<div class="row"><span class="col-7 event_c_text">'+v.product_name+'</span><span class="col-5 text-end event_c_text">('+currencysymbol+v.price+'x'+v.quantity+') '+currencysymbol+v.total+'</span></div>';
+				
+				if(pagetype==1){
+					$('.quantity[data-productid='+v.product_id+']').val(v.quantity);
+					$('.cartremove[data-productid='+v.product_id+']').removeClass('displaynone');
+				}
+			});
+		}
+	}
+
+	return data;
 }

@@ -246,10 +246,11 @@ class Event extends BaseModel
 		
 		$priceflag 	= [];
 		$pricefee 	= [];
-		for($i=1; $i<5; $i++){
+		for($i=1; $i<6; $i++){
 			$priceflag[] 	= isset($data['price_flag'][$i]) ? $data['price_flag'][$i] : 0;
-			$pricefee[] 	= isset($data['price_fee'][$i]) ? $data['price_fee'][$i] : 0;
-		}		
+			$pricefee[] 	= isset($data['price_fee'][$i]) ? ($i==5 ? implode(',', $data['price_fee'][$i]) : $data['price_fee'][$i]) : 0;
+		}	
+			
 		$request['price_flag'] 				= implode(',', $priceflag);
 		$request['price_fee'] 				= implode(',', $pricefee);
 		
@@ -360,19 +361,21 @@ class Event extends BaseModel
 				}
 				
 				foreach($barndata['stall'] as $stalldata){  
-					$stallid        	 	= $stalldata['id']!='' ? $stalldata['id'] : '';
-					$stall['event_id'] 	 	= $extras[0];
-					$stall['barn_id']    	= $barninsertid;
-					$stall['charging_id']  	= isset($stalldata['chargingflag']) ? $stalldata['chargingflag'] : '' ;
-					$stall['name']       	= $stalldata['name'];
-					$stall['price']      	= isset($stalldata['price']) ? $stalldata['price'] : 0;
-					$stall['night_price']   = isset($stalldata['night_price']) ? $stalldata['night_price'] : 0;
-					$stall['week_price']    = isset($stalldata['week_price']) ? $stalldata['week_price'] : 0;
-					$stall['month_price']   = isset($stalldata['month_price']) ? $stalldata['month_price'] : 0;
-					$stall['flat_price']    = isset($stalldata['flat_price']) ? $stalldata['flat_price'] : 0;
-					$stall['block_unblock'] = isset($stalldata['block_unblock']) ? $stalldata['block_unblock'] : 0;
-					$stall['status']     	= $stalldata['status'];
-					$stall['type']		 	= $extras[2];
+					$stallid        	 					= $stalldata['id']!='' ? $stalldata['id'] : '';
+					$stall['event_id'] 	 					= $extras[0];
+					$stall['barn_id']    					= $barninsertid;
+					$stall['charging_id']  					= isset($stalldata['chargingflag']) ? $stalldata['chargingflag'] : '' ;
+					$stall['name']       					= $stalldata['name'];
+					$stall['price']      					= isset($stalldata['price']) ? $stalldata['price'] : 0;
+					$stall['night_price']  			 		= isset($stalldata['night_price']) ? $stalldata['night_price'] : 0;
+					$stall['week_price']    				= isset($stalldata['week_price']) ? $stalldata['week_price'] : 0;
+					$stall['month_price']   				= isset($stalldata['month_price']) ? $stalldata['month_price'] : 0;
+					$stall['flat_price']    				= isset($stalldata['flat_price']) ? $stalldata['flat_price'] : 0;
+					$stall['subscription_initial_price']    = isset($stalldata['subscription_initial_price']) ? $stalldata['subscription_initial_price'] : 0;
+					$stall['subscription_month_price']    	= isset($stalldata['subscription_month_price']) ? $stalldata['subscription_month_price'] : 0;
+					$stall['block_unblock'] 				= isset($stalldata['block_unblock']) ? $stalldata['block_unblock'] : 0;
+					$stall['status']     					= $stalldata['status'];
+					$stall['type']		 					= $extras[2];
 					
 					if(isset($stalldata['image']) && $stalldata['image']!=''){
 						$stall['image'] = $stalldata['image'];		

@@ -98,7 +98,18 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 									<?php echo $data; ?>
 								</div>
 								<div class="col-md-6">
-									<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key; ?> form-control" name="price_fee[<?php echo $key; ?>]" value="<?php if(isset($price_fee[$key-1]) && $price_fee[$key-1]!=0){ echo $price_fee[$key-1]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
+									<?php if($key=='5'){ ?>
+										<div class="col-md-12 row">	
+											<div class="col-md-6 pl-0 p-r-2">
+												<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key.'1'; ?> form-control" placeholder="Initial Price" name="price_fee[<?php echo $key; ?>][1]" value="<?php if(isset($price_fee[$key-1]) && $price_fee[$key-1]!=0){ echo $price_fee[$key-1]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
+											</div>
+											<div class="col-md-6 pr-0 p-l-2">
+												<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key.'2'; ?> form-control" placeholder="Monthly Price" name="price_fee[<?php echo $key; ?>][2]" value="<?php if(isset($price_fee[$key]) && $price_fee[$key]!=0){ echo $price_fee[$key]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
+											</div>
+										</div>
+									<?php }else{ ?>
+										<input type="number" min="0" class="questionmodal_pricefee questionmodal_pricefee<?php echo $key; ?> form-control" placeholder="Price" name="price_fee[<?php echo $key; ?>]" value="<?php if(isset($price_fee[$key-1]) && $price_fee[$key-1]!=0){ echo $price_fee[$key-1]; } ?>" <?php if(!isset($price_flag[$key-1]) || (isset($price_flag[$key-1]) && $price_flag[$key-1]==0)){ echo 'disabled'; } ?>>
+									<?php } ?>
 								</div>
 							</div>
 						</div>
@@ -271,7 +282,18 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 												<?php echo $data; ?>
 											</div>
 											<div class="col-md-6">
-												<input type="number" min="0" class="questionmodal_pricefee_modal form-control" data-key="<?php echo $key; ?>" disabled>
+												<?php if($key=='5'){ ?>
+													<div class="col-md-12 row">	
+														<div class="col-md-6 pl-0 p-r-2">
+															<input type="number" min="0" class="questionmodal_pricefee_modal form-control" placeholder="Initial Price" data-key="<?php echo $key.'1'; ?>" disabled>
+														</div>
+														<div class="col-md-6 pr-0 p-l-2">
+															<input type="number" min="0" class="questionmodal_pricefee_modal form-control" placeholder="Monthly Price" data-key="<?php echo $key.'2'; ?>" disabled>
+														</div>
+													</div>
+												<?php }else{ ?>
+													<input type="number" min="0" class="questionmodal_pricefee_modal form-control" placeholder="Price" data-key="<?php echo $key; ?>" disabled>
+												<?php } ?>
 											</div>
 										</div>
 									</div>
@@ -410,13 +432,12 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 					if(nextsibling.hasClass('last')) $('.modalcarousel_next').addClass('displaynone');
 				})
 				
-				// START PRICE LIST
-				
+				// START MODAL PRICE LIST				
 				$('.questionmodal_priceflagall_modal').click(function(){
 					if($(this).is(':checked')){
-						$('.questionmodal_priceflagall').prop('checked', true);
+						$('.questionmodal_priceflag_modal').prop('checked', false);
 					}else{
-						$('.questionmodal_priceflagall').prop('checked', false);
+						$('.questionmodal_priceflag_modal').prop('checked', true);
 					}
 					
 					$('.questionmodal_priceflag_modal').each(function(){
@@ -429,16 +450,18 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 						
 					if($(this).is(':checked')){
 						var pricefeemodal = $(this).parent().parent().find('.questionmodal_pricefee_modal');
-						pricefeemodal.removeAttr('disabled');
+						pricefeemodal.val('').removeAttr('disabled');
 						
-						$('.questionmodal_priceflag'+key).prop('checked', true);
-						$('.questionmodal_pricefee'+key).val(pricefeemodal.val()).removeAttr('disabled');
+						$('.questionmodal_priceflag'+key).prop('checked', true);						
+						if(key==5)	$('.questionmodal_pricefee'+key+'1, .questionmodal_pricefee'+key+'2').removeAttr('disabled');
+						else		$('.questionmodal_pricefee'+key).removeAttr('disabled');
 					}else{
 						var pricefeemodal = $(this).parent().parent().find('.questionmodal_pricefee_modal');
-						pricefeemodal.attr('disabled', 'disabled');
+						pricefeemodal.val('').attr('disabled', 'disabled');
 						
 						$('.questionmodal_priceflag'+key).prop('checked', false);
-						$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
+						if(key==5)	$('.questionmodal_pricefee'+key+'1, .questionmodal_pricefee'+key+'2').val('').attr('disabled', 'disabled');
+						else		$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
 					}
 					
 					pricedata();
@@ -452,8 +475,10 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 				$('.questionmodal_pricefee_modal').blur(function(){
 					pricedata();
 				})	
+				// END MODAL PRICE LIST
 			}	
 				
+			// START PRICE LIST
 			$('.questionmodal_priceflagall').click(function(){
 				if($(this).is(':checked')){
 					$('.questionmodal_priceflag').prop('checked', true);
@@ -473,9 +498,11 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 					var key = $(this).attr('data-key');
 					
 					if($(this).is(':checked')){
-						$('.questionmodal_pricefee'+key).removeAttr('disabled');
+						if(key==5)	$('.questionmodal_pricefee'+key+'1, .questionmodal_pricefee'+key+'2').val('').removeAttr('disabled');
+						else		$('.questionmodal_pricefee'+key).removeAttr('disabled');
 					}else{
-						$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
+						if(key==5)	$('.questionmodal_pricefee'+key+'1, .questionmodal_pricefee'+key+'2').val('').attr('disabled', 'disabled');
+						else		$('.questionmodal_pricefee'+key).val('').attr('disabled', 'disabled');
 					}
 				})		
 				
@@ -494,22 +521,47 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 					
 					if($(this).is(':checked')){
 						price_flag.push(1);
-						price_fee.push($('.questionmodal_pricefee'+key).val())
-						
-						$(document).find('.pricelistwrapper'+key).removeClass('displaynone');
-						$(document).find('.pricelistwrapper'+key).each(function(){
-							if($(this).find('input').val()=='' || $(this).find('input').val()=='0'){
-								$(this).find('input').val($('.questionmodal_pricefee'+key).val());
+						if(key==5){
+							for(var i=1; i<=2; i++){
+								price_fee.push($('.questionmodal_pricefee'+key+i).val())
+								
+								
+								$(document).find('.pricelistwrapper'+key+i).removeClass('displaynone');
+								$(document).find('.pricelistwrapper'+key+i).each(function(){
+									if($(this).find('input').val()=='' || $(this).find('input').val()=='0'){
+										$(this).find('input').val($('.questionmodal_pricefee'+key+i).val());
+									}
+								});
 							}
-						});
+						}else{
+							price_fee.push($('.questionmodal_pricefee'+key).val())
+							
+							$(document).find('.pricelistwrapper'+key).removeClass('displaynone');
+							$(document).find('.pricelistwrapper'+key).each(function(){
+								if($(this).find('input').val()=='' || $(this).find('input').val()=='0'){
+									$(this).find('input').val($('.questionmodal_pricefee'+key).val());
+								}
+							});
+						}
 					}else{
 						price_flag.push(0);
-						price_fee.push(0)
-						
-						$(document).find('.pricelistwrapper'+key).addClass('displaynone');
-						$(document).find('.pricelistwrapper'+key).each(function(){
-							$(this).find('input').val('');
-						});
+						if(key==5){
+							for(var i=1; i<=2; i++){
+								price_fee.push(0);
+								
+								$(document).find('.pricelistwrapper'+key+i).addClass('displaynone');
+								$(document).find('.pricelistwrapper'+key+i).each(function(){
+									$(this).find('input').val('');
+								});
+							}
+						}else{
+							price_fee.push(0);
+							
+							$(document).find('.pricelistwrapper'+key).addClass('displaynone');
+							$(document).find('.pricelistwrapper'+key).each(function(){
+								$(this).find('input').val('');
+							});
+						}
 					}
 				})
 				

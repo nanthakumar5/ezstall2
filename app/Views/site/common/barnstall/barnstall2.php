@@ -1,7 +1,52 @@
 <?php 
-$getcart 			= getCart('1');
-$cartevent 			= ($getcart && $getcart['event_id'] != $detail['id']) ? 1 : 0;
-$checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
+$getcart 					= getCart('1');
+$cartevent 					= ($getcart && $getcart['event_id'] != $detail['id']) ? 1 : 0;
+$checkeventstatus			= isset($checkevent) ? $checkevent["status"] : '';
+$GLOBALS['gdetail']			= $detail;
+$GLOBALS['gcurrencysymbol']	= $currencysymbol;
+
+function charging($chargingid){
+	$typeofprice = '';
+	if($chargingid=='1'){ 
+		$typeofprice = 'night_price';
+	}else if($chargingid=='2'){
+		$typeofprice = 'week_price';
+	}else if($chargingid=='3'){
+		$typeofprice = 'month_price';
+	}else if($chargingid=='4'){
+		$typeofprice = 'flat_price';
+	}
+	
+	return $typeofprice;
+}
+
+function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
+	global $gdetail;
+	global $gcurrencysymbol;
+	
+	$pricelist = '';
+	if($gdetail['eventusertype']=='2'){
+		$priceflag = explode(',', $gdetail['price_flag']);
+		
+		if(isset($priceflag[0]) && $priceflag[0]=='1'){
+			$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$night.'" disabled>N ('.$gcurrencysymbol.$night.')</button>';
+		}
+		if(isset($priceflag[1]) && $priceflag[1]=='1'){
+			$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$week.'" disabled>W ('.$gcurrencysymbol.$week.')</button>';
+		}
+		if(isset($priceflag[2]) && $priceflag[2]=='1'){
+			$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$month.'" disabled>M ('.$gcurrencysymbol.$month.')</button>';
+		}
+		if(isset($priceflag[3]) && $priceflag[3]=='1'){
+			$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$flat.'" disabled>F ('.$gcurrencysymbol.$flat.')</button>';
+		}
+		if(isset($priceflag[4]) && $priceflag[4]=='1'){
+			$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="5" data-pricebutton="'.$sinitial.'" disabled data-sprice="'.$smonth.'" >S ('.$gcurrencysymbol.$sinitial.') M ('.$gcurrencysymbol.$smonth.')</button>';
+		}
+	}
+	
+	return $pricelist;
+}
 ?>
 <div class="border rounded py-2 ps-3 pe-3 mt-4 mb-3">
 	<div class="infoPanel form_check bookyourstalls">
@@ -56,36 +101,9 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 						$tabcontent .= '<div class="tab-pane fade'.$barnactive.'" id="barn'.$barnid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 						<ul class="list-group">';
 						foreach($barndata['stall'] as $stalldata){
-							$typeofprice = '';
-							if($stalldata['charging_id']=='1'){ 
-								$typeofprice = 'night_price';
-							}else if($stalldata['charging_id']=='2'){
-								$typeofprice = 'week_price';
-							}else if($stalldata['charging_id']=='3'){
-								$typeofprice = 'month_price';
-							}else if($stalldata['charging_id']=='4'){
-								$typeofprice = 'flat_price';
-							}
-							
-							$pricelist = '';
-							if($detail['eventusertype']=='2'){
-								$priceflag = explode(',', $detail['price_flag']);
-								
-								if(isset($priceflag[0]) && $priceflag[0]=='1'){
-									$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$stalldata['night_price'].'" disabled>N ('.$currencysymbol.$stalldata['night_price'].')</button>';
-								}
-								if(isset($priceflag[1]) && $priceflag[1]=='1'){
-									$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$stalldata['week_price'].'" disabled>W ('.$currencysymbol.$stalldata['week_price'].')</button>';
-								}
-								if(isset($priceflag[2]) && $priceflag[2]=='1'){
-									$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$stalldata['month_price'].'" disabled>M ('.$currencysymbol.$stalldata['month_price'].')</button>';
-								}
-								if(isset($priceflag[3]) && $priceflag[3]=='1'){
-									$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$stalldata['flat_price'].'" disabled>F ('.$currencysymbol.$stalldata['flat_price'].')</button>';
-								}
-							}
-							
-							$boxcolor  = 'green-box';
+							$typeofprice 	= charging($stalldata['charging_id']);
+							$pricelist 		= pricinglist($stalldata['night_price'], $stalldata['week_price'], $stalldata['month_price'], $stalldata['flat_price'], $stalldata['subscription_initial_price'], $stalldata['subscription_month_price']);
+							$boxcolor  		= 'green-box';
 							$checkboxstatus = '';
 
 							if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){
@@ -141,36 +159,9 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 							$tabcontent .= '<div class="tab-pane fade'.$rvactive.'" id="barn'.$rvid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 							<ul class="list-group">';
 							foreach($rvdata['rvstall'] as $rvstalldata){ 
-								$typeofprice = '';
-								if($rvstalldata['charging_id']=='1'){
-									$typeofprice = 'night_price';
-								}else if($rvstalldata['charging_id']=='2'){
-									$typeofprice = 'week_price';
-								}else if($rvstalldata['charging_id']=='3'){
-									$typeofprice = 'month_price';
-								}else if($rvstalldata['charging_id']=='4'){
-									$typeofprice = 'flat_price';
-								}
-								
-								$pricelist = '';
-								if($detail['eventusertype']=='2'){
-									$priceflag = explode(',', $detail['price_flag']);
-									
-									if(isset($priceflag[0]) && $priceflag[0]=='1'){
-										$pricelist .= '<button class="btn btn-success mr-2 night_button price_button" data-pricetype="1" data-pricebutton="'.$rvstalldata['night_price'].'" disabled>N ('.$currencysymbol.$rvstalldata['night_price'].')</button>';
-									}
-									if(isset($priceflag[1]) && $priceflag[1]=='1'){
-										$pricelist .= '<button class="btn btn-success mr-2 week_button price_button" data-pricetype="2" data-pricebutton="'.$rvstalldata['week_price'].'" disabled>W ('.$currencysymbol.$rvstalldata['week_price'].')</button>';
-									}
-									if(isset($priceflag[2]) && $priceflag[2]=='1'){
-										$pricelist .= '<button class="btn btn-success mr-2 month_button price_button" data-pricetype="3" data-pricebutton="'.$rvstalldata['month_price'].'" disabled>M ('.$currencysymbol.$rvstalldata['month_price'].')</button>';
-									}
-									if(isset($priceflag[3]) && $priceflag[3]=='1'){
-										$pricelist .= '<button class="btn btn-success mr-2 flat_button price_button" data-pricetype="4" data-pricebutton="'.$rvstalldata['flat_price'].'" disabled>F ('.$currencysymbol.$rvstalldata['flat_price'].')</button>';
-									}
-								}
-								
-								$boxcolor  = 'green-box';
+								$typeofprice 	= charging($rvstalldata['charging_id']);
+								$pricelist 		= pricinglist($rvstalldata['night_price'], $rvstalldata['week_price'], $rvstalldata['month_price'], $rvstalldata['flat_price'], $rvstalldata['subscription_initial_price'], $rvstalldata['subscription_month_price']);
+								$boxcolor  		= 'green-box';
 								$checkboxstatus = '';
 
 								if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){
@@ -231,8 +222,7 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 									<td style="border: 1px solid #e4e4e4;">
 										<?php if($feed['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
 										<input type="number" <?php echo $readonly ?> min="0" class="form-control quantity" data-productid="<?php echo $feed['id']?>" data-flag="3" <?php if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){ echo 'disabled'; } ?>>
-										<p style="color:red">
-											<?php echo $msg; ?></p>
+										<p style="color:red"><?php echo $msg; ?></p>
 									</td>
 									<td style="border: 1px solid #e4e4e4;">
 										<?php if($cartevent!='1' && $checkeventstatus!='' && $checkeventstatus!='0'){ ?>
@@ -561,17 +551,18 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 			var enddate   	= $("#enddate").val(); 
 
 			if(flag==1 || flag==2){			
-				var barnid    	= _this.attr('data-barnid');
-				var stallid		= _this.val(); 
-				var price 		= _this.attr('data-price');
-				var pricetype   = _this.closest('li').find('.priceactive').attr('data-pricetype'); 
+				var barnid    			= _this.attr('data-barnid');
+				var stallid				= _this.val(); 
+				var price 				= _this.attr('data-price');
+				var pricetype   		= _this.closest('li').find('.priceactive').attr('data-pricetype'); 
+				var subscriptionprice  	= _this.closest('li').find('.priceactive').attr('data-sprice'); 
 
 				if($(_this).is(':checked')){  
 					var pricevalidation = checkprice(_this);
 					if(!pricevalidation) return false;
 				
 					var checkoccupiedreserved = occupiedreserved(startdate, enddate, stallid);
-					if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
+					if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, subscriptionprice : subscriptionprice, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
 				}else{ 
 					$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
 					$('.stallavailability[data-stallid='+stallid+']').closest("li").find('.price_button').removeClass('priceactive');
@@ -661,51 +652,9 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 
 							pricelist();
 							occupiedreserved($("#startdate").val(), $("#enddate").val());
-						
-							var barnstalldata = cartsummary(1, 'STALL', result.barnstall);
-							var rvbarnstalldata = cartsummary(1, 'RV HOOKUP', result.rvbarnstall);
-							var feeddata = cartsummary(2, 'FEED', result.feed);
-							var shavingdata = cartsummary(2, 'SHAVING', result.shaving);
-							var stallcleaning_fee = (result.cleaning_fee!='') ? result.cleaning_fee : '0';
-
-							var total = (parseFloat(stallcleaning_fee)+parseFloat(result.price)+parseFloat((transactionfee/100) * result.price)).toFixed(2);
-
-							var cleaning_fee = '';
-							if(result.cleaning_fee!=''){
-								var cleaning_fee = '<div class="col-8 event_c_text">Cleaning Fee</div>\
-								<div class="col-4 event_c_text text-end">'+currencysymbol+parseFloat(result.cleaning_fee).toFixed(2)+'\</div>';
-							}
-
-							var result ='\
-							<div class="w-100">\
-							<div class="border rounded pt-4 ps-3 pe-3 mb-5">\
-							<div class="row mb-2">\
-							<div class="col-md-12">\
-							<div class="row"> <span class="col-6 fw-bold">Total Day :</span><span class="col-6 fw-bold text-end">'+result.interval+'</span></div>\
-							'+barnstalldata+'\
-							'+rvbarnstalldata+'\
-							'+feeddata+'\
-							'+shavingdata+'\
-							</div>\
-							</div>\
-							<div class="row mb-2 event_border_top pt-4">\
-							<div class="col-8 event_c_text">Total</div>\
-							<div class="col-4 event_c_text text-end">'+currencysymbol+result.price.toFixed(2)+'\</div>\
-							<div class="col-8 event_c_text">Transaction Fees</div>\
-							<div class="col-4 event_c_text text-end">'+currencysymbol+((transactionfee/100) * result.price).toFixed(2)+'\</div>\
-							'+cleaning_fee+'\
-							</div>\
-							<div class="row mb-2 border-top mt-3 mb-3 pt-3">\
-							<div class="col-8 fw-bold ">Total Due</div>\
-							<div class="col-4 fw-bold">'+currencysymbol+total+'</div>\
-							</div>\
-							<div class="row mb-2 w-100">\
-							<a href="<?php echo base_url()?>/checkout" class="w-100 text-center mx-2 ucEventdetBtn ps-3 mb-3 ">Continue to Checkout</a>\
-							</div>\
-							</div>\
-							</div>\
-							';
-
+							
+							var result = cartbox(1, result);
+							
 							$('.checkout').empty().append(result);
 						}else{
 							$('.checkout').empty();
@@ -713,42 +662,6 @@ $checkeventstatus	= isset($checkevent) ? $checkevent["status"] : '';
 					}
 				}
 			);
-		}
-
-		function cartsummary(type, title, result){
-			var data = '';
-			if(result.length){
-				if(type==1){
-					var name = '';
-					data += '<div class="event_cart_title"><span class="col-12 fw-bold">'+title+'</span></div>';
-					$(result).each(function(i,v){
-						if(name!=v.barn_name){
-							data += '<div><span class="col-12 fw-bold">'+v.barn_name+'</span></div>';
-						}
-
-						data += '<div class="row"><span class="col-7 event_c_text">'+v.stall_name+(v.pricetype!=0 ? '<span class="pricelist_tagline">('+pricelists[v.pricetype]+')</span>' : "")+'</span><span class="col-5 text-end event_c_text">('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total+'</span></div>';
-						$('.stallid[value='+v.stall_id+']').removeAttr('disabled');
-						
-						if(v.pricetype!=0){
-							$('.stallid[value='+v.stall_id+']').closest('li').find('.price_button').removeAttr('disabled');
-							var pricebox = $('.stallid[value='+v.stall_id+']').closest('li').find('.price_button[data-pricetype="'+v.pricetype+'"]');
-							pricebox.addClass('priceactive');
-							$('.stallid[value='+v.stall_id+']').attr('data-price', pricebox.attr('data-pricebutton'));
-						}
-						
-						name = v.barn_name;
-					});
-				}else{
-					data += '<div class="event_cart_title"><span class="col-12 fw-bold">'+title+'</span></div>';
-					$(result).each(function(i,v){								
-						data += '<div class="row"><span class="col-7 event_c_text">'+v.product_name+'</span><span class="col-5 text-end event_c_text">('+currencysymbol+v.price+'x'+v.quantity+') '+currencysymbol+v.total+'</span></div>';
-						$('.quantity[data-productid='+v.product_id+']').val(v.quantity);
-						$('.cartremove[data-productid='+v.product_id+']').removeClass('displaynone');
-					});
-				}
-			}
-
-			return data;
 		}
 	</script>
 <?php $this->endSection(); ?>
