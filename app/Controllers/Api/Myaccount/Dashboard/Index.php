@@ -20,6 +20,14 @@ class Index extends BaseController
     {
         $post       = $this->request->getPost();  
 
-		
+        $json = ['0', 'No Records Found.', []];	
+        
+		echo json_encode([
+            'status'         => $json[0],
+            'message'       => $json[1],
+            'result'         => $json[2],
+        ]);
+
+        die;		
     }
 }
