@@ -116,7 +116,7 @@ class Index extends BaseController
 						'image'        => ($data['image']!='') ? base_url().'/assets/uploads/event/'.$data['image'] : '',
 						'description'  =>  $data['description'],
 						'barndata'     => $data['barn'],
-						'rvbarndata'   => $data['rvbarn']
+						'rvbarndata'   => $data['rvbarn'],
 					];
 
 				$json = ['1', '1 Record(s) Found', $result1];	
