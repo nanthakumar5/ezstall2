@@ -60,14 +60,11 @@ class Index extends BaseController
 			if(count($datas) > 0){
 				$result1=[];
 				foreach($datas as $data){
-				   $result1[] = [
+				  $result1[] = [
 						'id'	       =>  $data['id'],
 						'name'	       =>  $data['name'],
 						'image'        => ($data['image']!='') ? base_url().'/assets/uploads/event/'.$data['image'] : '',
-						'location'     =>  $data['location'],
-						'start_date'   => ($data['start_date']!='' && $data['start_date']!='0000-00-00') ? date('m-d-Y', strtotime($data['start_date'])) : '',
-						'end_date'     => ($data['end_date']!='' && $data['end_date']!='0000-00-00') ? date('m-d-Y', strtotime($data['end_date'])) : '',
-						'stalls_price' => $data['stalls_price']
+						'description'  =>  $data['description'],
 					];
 				}
 
