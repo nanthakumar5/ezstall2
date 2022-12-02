@@ -26,13 +26,10 @@
 					<input type="radio" class="subscribe" name="subscribe">
 					<label class="subscription_select_label"><?php echo $plan['name']; ?></label>
 					<label class="subscription_select_label"><?php echo $currencysymbol.$plan['price']; ?></label>
-						<div class="paymentfields">
-							<input type="hidden" value="<?php echo $plan['id']; ?>" name="plan_id">
-							<input type="hidden" value="<?php echo $plan['name']; ?>" name="plan_name">
-							<input type="hidden" value="<?php echo $plan['price']; ?>" name="plan_price">
-							<input type="hidden" value="<?php echo $plan['interval']; ?>" name="plan_interval">
-							<input type="hidden" value="2" name="type">
-						</div>
+					<div class="paymentfields">
+						<input type="hidden" value="<?php echo $plan['id']; ?>" name="plan_id">
+						<input type="hidden" value="2" name="type">
+					</div>
 				</div>
 				<div class="choose_subscription_btn text-center">
 					<button class="pay-btn paynowbtn">Pay Now</button>

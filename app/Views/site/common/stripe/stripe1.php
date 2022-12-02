@@ -75,7 +75,7 @@
 				displayError.textContent = result.error.message;
 			} else {
 				var basedata = {};
-				$('.stripeextra input').each(function(){
+				$('.stripeextra input, .stripeextra textarea').each(function(){
 					basedata[$(this).attr('name')] = $(this).val();
 				})
 				
