@@ -207,6 +207,7 @@ class Booking extends BaseModel
 						->select('bd.*, p.name productname, p.quantity productquantity');
 					}
 					
+					if(isset($extras['subscriptionstatus']) && $extras['subscriptionstatus']!='') $bookingdetails = $bookingdetails->where('bd.subscription_status', '1');
 					$bookingdetails = $bookingdetails
 					->where(['bd.booking_id'=> $result['id'], 'bd.flag' => $flag, 'bd.status'=> '1'])
 					->get()
