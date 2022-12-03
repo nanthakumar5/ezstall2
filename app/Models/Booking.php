@@ -66,7 +66,6 @@ class Booking extends BaseModel
 
 		if(isset($requestdata['gtcheck_in'])) 			$query->where('b.check_in >=', $requestdata['gtcheck_in']);
 		if(isset($requestdata['ltcheck_out'])) 		    $query->where('b.check_out <=', $requestdata['ltcheck_out']);	
-		if(isset($requestdata['subscriptionstatus'])) 	$query->where('b.subscription_status', $requestdata['subscriptionstatus']);	
 		if(isset($requestdata['status'])) 				$query->where('b.status', $requestdata['status']);	
 
 		if(isset($requestdata['lockunlock'])) 			$query->where('s.lock_unlock', $requestdata['lockunlock']);
@@ -151,8 +150,8 @@ class Booking extends BaseModel
 				$result = $query->getRowArray();
 			}
 
-			$result = $this->getBookingDetails($type, $querydata, ['result' => $result, 'flag' => 1, 'bookingname' =>'barnstall']);
-			$result = $this->getBookingDetails($type, $querydata, ['result' => $result, 'flag' => 2, 'bookingname' =>'rvbarnstall']);
+			$result = $this->getBookingDetails($type, $querydata, ['result' => $result, 'flag' => 1, 'bookingname' =>'barnstall', 'subscriptionstatus' => (isset($requestdata['subscriptionstatus']) ? '1' : '')]);
+			$result = $this->getBookingDetails($type, $querydata, ['result' => $result, 'flag' => 2, 'bookingname' =>'rvbarnstall', 'subscriptionstatus' => (isset($requestdata['subscriptionstatus']) ? '1' : '')]);
 			$result = $this->getBookingDetails($type, $querydata, ['result' => $result, 'flag' => 3, 'bookingname' =>'feed']);
 			$result = $this->getBookingDetails($type, $querydata, ['result' => $result, 'flag' => 4, 'bookingname' =>'shaving']);
 		}
@@ -182,6 +181,7 @@ class Booking extends BaseModel
 							->select('bd.*, p.name productname, p.quantity productquantity');
 						}
 						
+						if(isset($extras['subscriptionstatus']) && $extras['subscriptionstatus']!='') $bookingdetails = $bookingdetails->where('bd.subscription_status', '1');
 						$bookingdetails = $bookingdetails
 						->where(['bd.booking_id'=> $booking['id'], 'bd.flag' => $flag, 'bd.status'=> '1'])
 						->get()
