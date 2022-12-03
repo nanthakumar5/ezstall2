@@ -243,7 +243,6 @@ class Booking extends BaseModel
 		if(isset($data['amount']) && $data['amount']!='')      	           	 	$request['amount'] 	      		= $data['amount'];
 		if(isset($data['special_notice']) && $data['special_notice']!='')      	$request['special_notice'] 	    = $data['special_notice'];
  		$request['status'] 				= '1';
- 		$request['subscription_status'] = '1';
 
 		if(isset($request)){				
 			$request['updated_at'] 	= $datetime;
@@ -285,7 +284,8 @@ class Booking extends BaseModel
                 'quantity'      		=> isset($result['quantity']) ? $result['quantity'] : (isset($result['intervalday']) ? $result['intervalday'] : ''),
                 'total'      			=> isset($result['total']) ? $result['total'] : '',
                 'flag'      			=> isset($extras['flag']) ? $extras['flag'] : '',
-                'status'      			=> 1
+                'status'      			=> 1,
+				'subscription_status' 	=> 1
             );
 			
             $this->db->table('booking_details')->insert($bookingdetails);
