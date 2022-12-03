@@ -156,6 +156,7 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
     $routes->get('bookings/view/(:num)', 'Site\Myaccount\Reservation\Index::view/$1');
     $routes->post('bookings/searchbookeduser', 'Site\Myaccount\Reservation\Index::bookeduser');
     $routes->match(['get', 'post'], 'paidunpaid', 'Site\Myaccount\Reservation\Index::paidunpaid');
+    $routes->post('bookings/cancelsubscription', 'Site\Myaccount\Reservation\Index::cancelsubscription');
 
     $routes->match(['get', 'post'], 'pastactivity', 'Site\Myaccount\PastActivity\Index::index');
     $routes->get('pastactivity/view/(:num)', 'Site\Myaccount\PastActivity\Index::view/$1');

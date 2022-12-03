@@ -45,8 +45,7 @@ class Booking extends BaseModel
 
 		$query = $this->db->table('booking b');
 
-		if(in_array('event', $querydata)) 				$query->join('event e', 'e.id=b.event_id', 'left');
-		
+		if(in_array('event', $querydata)) 				$query->join('event e', 'e.id=b.event_id', 'left');		
 		if(in_array('users', $querydata)) 				$query->join('users u', 'u.id=b.user_id', 'left');
 		if(in_array('cleanbookingdetails', $querydata)) $query->join('booking_details bd', 'b.id=bd.booking_id', 'left');
 		if(in_array('cleanstall', $querydata)) 			$query->join('stall s', 's.id=bd.stall_id', 'left');		
@@ -67,6 +66,7 @@ class Booking extends BaseModel
 
 		if(isset($requestdata['gtcheck_in'])) 			$query->where('b.check_in >=', $requestdata['gtcheck_in']);
 		if(isset($requestdata['ltcheck_out'])) 		    $query->where('b.check_out <=', $requestdata['ltcheck_out']);	
+		if(isset($requestdata['subscriptionstatus'])) 	$query->where('b.subscription_status', $requestdata['subscriptionstatus']);	
 		if(isset($requestdata['status'])) 				$query->where('b.status', $requestdata['status']);	
 
 		if(isset($requestdata['lockunlock'])) 			$query->where('s.lock_unlock', $requestdata['lockunlock']);
@@ -174,7 +174,8 @@ class Booking extends BaseModel
 							$bookingdetails = $bookingdetails
 							->join('barn b', 'b.id = bd.barn_id', 'left')
 							->join('stall s','s.id  = bd.stall_id', 'left')
-							->select('bd.*, b.name barnname, s.name stallname, s.lock_unlock lockunlock, s.dirty_clean dirtyclean');
+							->join('payment p','p.id  = bd.payment_id', 'left')
+							->select('bd.*, b.name barnname, s.name stallname, s.lock_unlock lockunlock, s.dirty_clean dirtyclean, p.plan_period_start subscriptionstartdate');
 						}elseif($flag==3 || $flag==4){
 							$bookingdetails = $bookingdetails
 							->join('products p', 'p.id = bd.product_id', 'left')
@@ -198,7 +199,8 @@ class Booking extends BaseModel
 						$bookingdetails = $bookingdetails
 						->join('barn b', 'b.id = bd.barn_id', 'left')
 						->join('stall s','s.id  = bd.stall_id', 'left')
-						->select('bd.*, b.name barnname, s.name stallname, s.lock_unlock lockunlock, s.dirty_clean dirtyclean');
+						->join('payment p','p.id  = bd.payment_id', 'left')
+						->select('bd.*, b.name barnname, s.name stallname, s.lock_unlock lockunlock, s.dirty_clean dirtyclean, p.plan_period_start subscriptionstartdate');
 					}elseif($flag==3 || $flag==4){
 						$bookingdetails = $bookingdetails
 						->join('products p', 'p.id = bd.product_id', 'left')
@@ -240,7 +242,8 @@ class Booking extends BaseModel
 		if(isset($data['eventtax']) && $data['eventtax']!='')      	       	 	$request['event_tax'] 	      	= $data['eventtax'];
 		if(isset($data['amount']) && $data['amount']!='')      	           	 	$request['amount'] 	      		= $data['amount'];
 		if(isset($data['special_notice']) && $data['special_notice']!='')      	$request['special_notice'] 	    = $data['special_notice'];
- 		$request['status'] = '1';
+ 		$request['status'] 				= '1';
+ 		$request['subscription_status'] = '1';
 
 		if(isset($request)){				
 			$request['updated_at'] 	= $datetime;
@@ -250,6 +253,7 @@ class Booking extends BaseModel
 
 			$this->db->table('booking')->insert($request);
 			$insertid = $this->db->insertID();
+			if(isset($data['paymentid']) && $data['paymentid']!='') $this->db->table('payment')->where('id', $data['paymentid'])->update(['booking_id' => $insertid]);
 		}
 
 		$this->bookingdetailaction(json_decode($data['barnstall'], true), ['event_id' => $data['eventid'], 'booking_id' => $insertid, 'flag' => '1']);
@@ -274,6 +278,7 @@ class Booking extends BaseModel
                 'barn_id'      			=> isset($result['barn_id']) ? $result['barn_id'] : '',
                 'stall_id'      		=> isset($result['stall_id']) ? $result['stall_id'] : '',
                 'product_id'    		=> isset($result['product_id']) ? $result['product_id'] : '',
+                'payment_id'    		=> isset($result['payment_id']) ? $result['payment_id'] : '',
                 'price_type'    		=> isset($result['pricetype']) ? $result['pricetype'] : '',
                 'price'      			=> isset($result['price']) ? $result['price'] : '',
                 'subscription_price'    => isset($result['subscriptionprice']) ? $result['subscriptionprice'] : '',
@@ -284,6 +289,8 @@ class Booking extends BaseModel
             );
 			
             $this->db->table('booking_details')->insert($bookingdetails);
+			$insertid = $this->db->insertID();
+			if(isset($result['payment_id']) && $result['payment_id']!='') $this->db->table('payment')->where('id', $result['payment_id'])->update(['booking_id' => $extras['booking_id'], 'booking_details_id' => $insertid]);
 			
 			if(isset($result['product_id']) && isset($result['quantity']) && isset($extras['flag']) && ($extras['flag']==3 || $extras['flag']==4)){
 				$datass = $this->db->table('products')->where('id', $result['product_id'])->set('quantity', 'quantity-'.$result['quantity'], FALSE)->update();
@@ -334,5 +341,5 @@ class Booking extends BaseModel
 			$this->db->transCommit();
 			return $bookingupdateid;
 		}
-	}
+	}	
 }

@@ -177,10 +177,10 @@
 						<input type="hidden" name="eventid" value="<?php echo $cartdetail['event_id']; ?>">
 						<input type="hidden" name="eventtax" value="<?php echo $cartdetail['event_tax']; ?>">
 						<input type="hidden" name="type" value="<?php echo $cartdetail['type']; ?>">
-						<input type="hidden" name="barnstall" value='<?php echo json_encode($barnstall); ?>'>
-						<input type="hidden" name="rvbarnstall" value='<?php echo json_encode($rvbarnstall); ?>'>
-						<input type="hidden" name="feed" value='<?php echo json_encode($feed); ?>'>
-						<input type="hidden" name="shaving" value='<?php echo json_encode($shaving); ?>'>
+						<textarea style="display:none" name="barnstall"><?php echo json_encode($barnstall); ?></textarea>
+						<textarea style="display:none" name="rvbarnstall"><?php echo json_encode($rvbarnstall); ?></textarea>
+						<textarea style="display:none" name="feed"><?php echo json_encode($feed); ?></textarea>
+						<textarea style="display:none" name="shaving"><?php echo json_encode($shaving); ?></textarea>
 						<input type="hidden" name="page" value="checkout" >
 						<button class="payment-btn checkoutpayment" type="button">Complete Payment</button>
 					</div>

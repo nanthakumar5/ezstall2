@@ -390,7 +390,7 @@ function getCart($type=''){
 }
 
 function getOccupied($eventid, $extras=[]){
-	$condition 	= ['eventid' => $eventid,  'status' => '1'];
+	$condition 	= ['eventid' => $eventid,  'subscriptionstatus' => '1',  'status' => '1'];
 	if(count($extras) > 0) $condition 	= $condition+$extras;
 		
 	$booking	= new \App\Models\Booking;

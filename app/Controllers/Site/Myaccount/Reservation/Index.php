@@ -3,14 +3,18 @@ namespace App\Controllers\Site\Myaccount\Reservation;
 
 use App\Controllers\BaseController;
 use App\Models\Booking;
+use App\Models\Bookingdetails;
 use App\Models\Stripe;
+use App\Models\Payments;
 
 class Index extends BaseController
 {
 	public function __construct()
 	{
 		$this->booking = new Booking();	
+		$this->bookingdetails = new Bookingdetails();	
 		$this->stripe  = new Stripe();
+		$this->payments  = new Payments();
 	}
 
 	public function index()
@@ -62,7 +66,7 @@ class Index extends BaseController
 	{
     	$userid = getSiteUserID();
 
-		$result = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['userid' => [$userid], 'id' => $id]);
+		$result = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment', 'paymentmethod'], ['userid' => [$userid], 'id' => $id]);
 		
 		if($result){
 			$data['result'] = $result;
@@ -99,5 +103,18 @@ class Index extends BaseController
 			$id = $this->booking->paiddata($this->request->getPost());
 			return redirect()->to(base_url().'/myaccount/bookings/view/'.$id); 
 		}
+	}
+	
+	public function cancelsubscription()
+	{
+		$requestdata = $this->request->getPost();
+		
+		$payment = $this->payments->getPayments('row', ['payment'], ['id' => $requestdata['paymentid']]);
+		if($payment){
+			$this->stripe->cancelSchedule($payment['stripe_subscription_id']);
+			$this->bookingdetails->cancelsubscription(['booking_details_id' => $payment['booking_details_id']]);
+		}
+		
+		return redirect()->to(base_url().'/myaccount/bookings/view/'.$requestdata['bookingid']); 
 	}
 }

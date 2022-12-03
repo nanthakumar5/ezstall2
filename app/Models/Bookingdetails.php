@@ -74,5 +74,19 @@ class Bookingdetails extends BaseModel
 		}
 	
 	}
+	
+	public function cancelsubscription($data)
+	{	
+		$this->db->transStart();
+		$this->db->table('booking_details')->update(['subscription_status' => 0] , ['id' => $data['booking_details_id']]);
+
+		if($this->db->transStatus() === FALSE){ 
+			$this->db->transRollback();
+			return false;
+		}else{
+			$this->db->transCommit();
+			return true;
+		}
+	}
 
 }
