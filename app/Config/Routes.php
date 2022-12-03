@@ -60,6 +60,13 @@ $routes->post('api/addoperator', 'Api\Myaccount\Operators\Index::add');
 $routes->post('api/editoperator', 'Api\Myaccount\Operators\Index::edit');
 $routes->post('api/deleteoperator', 'Api\Myaccount\Operators\Index::delete');
 
+//Homepage API
+$routes->get('api/faq', 'Api\Faq\Index::index');
+$routes->get('api/aboutus', 'Api\Aboutus\Index::index');
+$routes->post('api/aboutus/view', 'Api\Aboutus\Index::view');
+$routes->get('api/contactus', 'Api\Contactus\Index::index');
+$routes->post('api/contactus/add', 'Api\Contactus\Index::add');
+
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
 $routes->post('ajax/ajaxoccupied', 'Common\Ajax::ajaxoccupied');
