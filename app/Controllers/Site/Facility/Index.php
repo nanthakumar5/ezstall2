@@ -37,6 +37,9 @@ class Index extends BaseController
 		}
 
 		if($this->request->getGet('name')!="")   			$searchdata['lname']    			= $this->request->getGet('name');
+		if($this->request->getGet('location')!="")   		$searchdata['llocation']    		= $this->request->getGet('location');
+		if($this->request->getGet('start_date')!="")   	 	$searchdata['btw_start_date']    	= formatdate($this->request->getGet('start_date'));
+		if($this->request->getGet('end_date')!="")   	 	$searchdata['btw_end_date']    		= formatdate($this->request->getGet('end_date'));
 		if($this->request->getGet('no_of_stalls')!="")   	$searchdata['no_of_stalls']    		= $this->request->getGet('no_of_stalls');
 		
 		$facilitycount = count($this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'type' => '2']));

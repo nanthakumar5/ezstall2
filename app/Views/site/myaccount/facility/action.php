@@ -4,7 +4,12 @@
 <?php
 $id 					= isset($result['id']) ? $result['id'] : '';
 $name 					= isset($result['name']) ? $result['name'] : '';
+$location 				= isset($result['location']) ? $result['location'] : '';
+$city 					= isset($result['city']) ? $result['city'] : '';
+$state 					= isset($result['state']) ? $result['state'] : '';
 $zipcode 				= isset($result['zipcode']) ? $result['zipcode'] : '';
+$latitude 				= isset($result['latitude']) ? $result['latitude'] : '';
+$longitude 				= isset($result['longitude']) ? $result['longitude'] : '';
 $description 		    = isset($result['description']) ? $result['description'] : '';
 $image      			= isset($result['image']) ? $result['image'] : '';
 $image 				    = filedata($image, base_url().'/assets/uploads/event/');
@@ -36,10 +41,30 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 								<input type="text" name="facility_name" class="form-control" id="name" placeholder="Enter Name" value="<?php echo $name; ?>">
 							</div>
 						</div>
-						<div class="col-md-12">
+						<div class="col-md-6 my-2">
 							<div class="form-group">
-							    <label>Zip Code</label>                      
-							    <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter Zip Code" value="<?php echo $zipcode; ?>">
+								<label>Street</label>								
+								<input type="text" name="location" class="form-control" id="location" placeholder="Enter Location" value="<?php echo $location; ?>">
+							</div>
+						</div>
+						<div class="col-md-6 my-2">
+							<div class="form-group">
+								<label>City</label>                        
+								<input type="text" name="city" class="form-control" id="city" placeholder="Enter City" value="<?php echo $city; ?>">
+								<input type="hidden" name="latitude" id="latitude" value="<?php echo $latitude; ?>">
+								<input type="hidden" name="longitude" id="longitude" value="<?php echo $longitude; ?>">
+							</div>
+						</div>
+						<div class="col-md-6 my-2">
+							<div class="form-group">
+								<label>State</label>                      
+								<input type="text" name="state" class="form-control" id="state" placeholder="Enter State" value="<?php echo $state; ?>">
+							</div>
+						</div>
+						<div class="col-md-6 my-2">
+							<div class="form-group">
+								<label>Zip Code</label>                      
+								<input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter Zip Code" value="<?php echo $zipcode; ?>">
 							</div>
 						</div>
 						<div class="col-md-12 my-2">
@@ -122,10 +147,19 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 				facility_name  	: {
 					required	: 	true
 				},
-				barnvalidation : {
-					required 	: true
+				location 	 : {
+					required	: 	true
 				},
-				zipcode : {
+				city 	 : {
+					required	: 	true
+				},
+				state 	 : {
+					required	: 	true
+				},
+				zipcode 	 : {
+					required	: 	true
+				},				
+				barnvalidation : {
 					required 	: true
 				}
 			},
@@ -176,6 +210,31 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 			})
 		}, 100);
 	}	
+	
+	function debounce(callback, wait) {
+		let timeout;
+		return (args) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(function () { callback.apply(this, args); }, wait);
+		};
+	}
+
+	document.getElementById("city").addEventListener('keyup', debounce( () => {
+		getCoordinates(document.getElementById("city").value);
+	}, 1000))
+	
+	function getCoordinates(address){
+		fetch("https://maps.googleapis.com/maps/api/geocode/json?address="+address+"&key=<?php echo $googleapikey; ?>")
+		.then(response => response.json())
+		.then(data => {
+			if(data.status=="OK"){
+				const latitude = data.results[0].geometry.location.lat;
+				const longitude = data.results[0].geometry.location.lng;
+				$('#latitude').val(latitude);
+				$('#longitude').val(longitude);
+			}
+		})
+	}
 </script>
 <?php $this->endSection(); ?>
 

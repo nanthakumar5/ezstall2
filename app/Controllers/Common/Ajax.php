@@ -319,7 +319,6 @@ class Ajax extends BaseController
 		return $result;
 	}
 	
-	
 	public function getEventProducts($data=[])
 	{
 		$result 		= $data['result'];

@@ -21,6 +21,13 @@ $rvbarn        			= isset($result['rvbarn']) ? $result['rvbarn'] : [];
 $feed 					= isset($result['feed']) ? $result['feed'] : '';
 $shaving 				= isset($result['shaving']) ? $result['shaving'] : '';
 
+$location 				= isset($result['location']) ? $result['location'] : '';
+$city 					= isset($result['city']) ? $result['city'] : '';
+$state 					= isset($result['state']) ? $result['state'] : '';
+$zipcode 				= isset($result['zipcode']) ? $result['zipcode'] : '';
+$latitude 				= isset($result['latitude']) ? $result['latitude'] : '';
+$longitude 				= isset($result['longitude']) ? $result['longitude'] : '';
+
 $ajax					= isset($ajax) ? $ajax : '';
 $nobtn					= isset($nobtn) ? $nobtn : '';
 ?>
@@ -211,7 +218,7 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 </div>
 
 <?php if($ajax==''){ $this->section('js'); } ?>
-	<?php if($id==''){ ?>
+	<?php if($id=='' && !isset($import)){ ?>
 		<div class="modal" id="questionmodal" data-bs-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -338,6 +345,15 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 		var nobtn					= '<?php echo $nobtn; ?>';
 			
 		$(function(){
+			if(nobtn=='1' && $(document).find('[name="actionid"]').length && $(document).find('[name="actionid"]').val()==''){
+				if($(document).find('#location').length) $(document).find('#location').val('<?php echo $location ?>');
+				if($(document).find('#city').length) $(document).find('#city').val('<?php echo $city ?>');
+				if($(document).find('#state').length) $(document).find('#state').val('<?php echo $state ?>');
+				if($(document).find('#zipcode').length) $(document).find('#zipcode').val('<?php echo $zipcode ?>');
+				if($(document).find('#latitude').length) $(document).find('#latitude').val('<?php echo $latitude ?>');
+				if($(document).find('#longitude').length) $(document).find('#longitude').val('<?php echo $longitude ?>');
+			}
+			
 			questionpopup1(1, 'rv', rv_flag)
 			questionpopup1(1, 'feed', feed_flag)
 			questionpopup1(1, 'shaving', shaving_flag)

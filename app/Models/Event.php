@@ -50,7 +50,6 @@ class Event extends BaseModel
 		if(isset($requestdata['status'])) 				$query->whereIn('e.status', $requestdata['status']);
 		if(isset($requestdata['userid'])) 				$query->where('e.user_id', $requestdata['userid']);
 		if(isset($requestdata['userids'])) 				$query->whereIn('e.user_id', $requestdata['userids']);
-		if(isset($requestdata['llocation'])) 			$query->like('e.location', $requestdata['llocation']);
 		if(isset($requestdata['lname'])) 				$query->like('e.name', $requestdata['lname']);
 		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);
 		if(isset($requestdata['latitude'])) 			$query->where('e.latitude <=', $requestdata['latitude']);
@@ -63,6 +62,16 @@ class Event extends BaseModel
 		if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) $query->groupStart()->where("'".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date")->orWhere('e.end_date <=', $requestdata['btw_end_date'])->groupEnd();
 		if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) $query->groupStart()->where("'".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date")->orWhere("'".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date")->groupEnd();
 		if(isset($requestdata['no_of_stalls'])) 		$query->having('stallavailable >=', $requestdata['no_of_stalls']);
+		
+		if(isset($requestdata['llocation'])){
+			$llocation = $requestdata['llocation'];
+			$query->groupStart();
+				$query->like('e.location', $llocation);
+				$query->orLike('e.city', $llocation);
+				$query->orLike('e.state', $llocation);
+				$query->orLike('e.zipcode', $llocation);
+			$query->groupEnd();
+		}
 		
 		if($type!=='count' && isset($requestdata['start']) && isset($requestdata['length'])){
 			$query->limit($requestdata['length'], $requestdata['start']);

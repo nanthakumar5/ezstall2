@@ -74,7 +74,7 @@
 						<div class="infoPanel">
 							<span class="mx-auto infoSection">
 								<span class="iconProperty">
-									<input type="text" name="location" placeholder="Location">
+									<input type="text" name="location" placeholder="Location, State, City, Zip">
 									<img src="<?php echo base_url()?>/assets/site/img/location.svg" class="iconPlace" alt="Map Icon">
 								</span>
 								<span class="iconProperty">
@@ -85,7 +85,11 @@
 									<input type="text" name="end_date" class="event_search_end_date" placeholder="Check-Out">
 									<img src="<?php echo base_url()?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
 								</span>
-								<input type="text" name="no_of_stalls" placeholder="No.of stalls">
+								<select id="event_search_list" class="border-0">
+									<option value="1">Event</option>
+									<option value="2">Facility</option>
+								</select>
+								<!--<input type="text" name="no_of_stalls" placeholder="No.of stalls">-->
 								<span class="searchResult">
 									<button type="submit">
 										<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" class="searchIcon" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -229,6 +233,11 @@
 			}else if(newselettertoast=='0'){
 				toastr.success('Email ID already Subscribed..', {timeOut: 5000});
 			}
+			
+			$('#event_search_list').change(function (e) {
+				if($(this).val()=='1') $('.homeeventsearch').attr('action', '<?php echo base_url();?>/events')
+				else $('.homeeventsearch').attr('action',  '<?php echo base_url();?>/facility')
+			});
 			
 			$('.homeeventsearch').submit(function (e) {
 				e.preventDefault();

@@ -69,7 +69,7 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 										<input type="text" name="location" class="form-control" id="location" placeholder="Enter Location" value="<?php echo $location; ?>">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 my-2">
 									<div class="form-group">
 										<label>City</label>                        
 										<input type="text" name="city" class="form-control" id="city" placeholder="Enter City" value="<?php echo $city; ?>">
@@ -77,13 +77,13 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 										<input type="hidden" name="longitude" id="longitude" value="<?php echo $longitude; ?>">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 my-2">
 									<div class="form-group">
 										<label>State</label>                      
 										<input type="text" name="state" class="form-control" id="state" placeholder="Enter State" value="<?php echo $state; ?>">
 									</div>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-6 my-2">
 									<div class="form-group">
 										<label>Zip Code</label>                      
 										<input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter Zip Code" value="<?php echo $zipcode; ?>">
@@ -125,7 +125,7 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 										<input type="text" name="stalls_price" class="form-control" id="stalls_price" placeholder="Enter Stalls Price" value="<?php echo $stalls_price;?>">								
 									</div>
 								</div>
-		<!-- 						<div class="col-md-6 my-2">
+								<!--<div class="col-md-6 my-2">
 									<div class="form-group">
 										<label>RV Spots Price</label>								
 										<input type="text" name="rvspots_price" class="form-control" id="rvspots_price" placeholder="Enter RV Spots Price" value="<?php //echo $rvspots_price;?>">								
@@ -302,8 +302,14 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 	if($('.facilityid').length){
 		var id = '<?php echo $id; ?>';
 		var userid = '<?php echo $userid; ?>';
+		var facility_id = '<?php echo $facilityid; ?>';
 		
 		$(function(){
+			if(id!=''){
+				$('.facilityid').attr('disabled', 'disabled'); 
+				$('.facilityid').parent().append('<input type="hidden" name="facility_id" value="'+facility_id+'">'); 
+			}
+			
 			facility($('.facilityid').val());
 			checkblockunblock();
 		})

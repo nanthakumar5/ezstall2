@@ -16,6 +16,7 @@ class Custom extends BaseConfig
 	public $bookingstatus 		= ['1' => 'Booked', '2' => 'Cancelled'];
 	public $yesno 				= ['1' => 'Yes', '2' => 'No'];
 	public $chargingflag 		= ['1' => 'Per Night', '2' => 'Per Week', '3' => 'Per Month', '4' => 'Flat Rate'];
+	public $chargingflag2 		= ['Per Night' => '1', 'Per Week' => '2', 'Per Month' => '3', 'Flat Rate' => '4'];
 	public $pricelist 			= ['1' => 'Nightly', '2' => 'Weekly', '3' => 'Monthly', '4' => 'Flat Rate', '5' => 'Subscription'];
 	public $currencysymbol 		= "$";
 	public $googleapikey 		= "AIzaSyDRvTJ00O76SJefErQP2FFz4IDmCigbS6w";

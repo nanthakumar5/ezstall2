@@ -9,6 +9,7 @@ $currentdate 					= date("Y-m-d");
 <section class="maxWidth eventPagePanel mt-2">
 	<?php if($usertype !='4'){ ?>
 		<a class="btn-custom-black" href="<?php echo base_url().'/myaccount/facility/add'; ?>">Add Facility</a>
+		<a class="btn-custom-black" href="javascript:void(0);" data-toggle="modal" data-target="#importmodal">Import</a>
 	<?php } ?>
 
 	<?php if(count($list) > 0){ ?>
@@ -96,6 +97,35 @@ $currentdate 					= date("Y-m-d");
 	</div>
 </div>
 
+<div id="importmodal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Import</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="<?php echo base_url().'/myaccount/facility/add'; ?>" enctype="multipart/form-data" id="importform">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Upload Excel</label>
+									<input type="file" name="import" autocomplete="off" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+								</div>
+							</div>
+							<div class="col-md-12 mt-3">
+								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <script>
@@ -103,6 +133,23 @@ $currentdate 					= date("Y-m-d");
 	
 	$(function(){
 		dateformat('#checkin, #checkout');
+		
+		validation(
+			'#importform',
+			{
+				import  	: {
+					required	: 	true
+				}
+			}
+		);
+	});
+	
+	$(document).on('click', '#importbtn', function (e) { 
+		$('#importfile').click();
+	});
+	
+	$(document).on('click', '#importfile', function (e) { 
+		
 	});
 	
 	$(document).on('click', '.financialreport', function (e) { 

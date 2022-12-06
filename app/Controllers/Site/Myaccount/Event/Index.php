@@ -122,19 +122,24 @@ class Index extends BaseController
 		}
 		
 		if ($this->request->getMethod()=='post'){
-			$requestData 			= $this->request->getPost();
-			$requestData['type'] 	= '1';
-
-			if(isset($requestData['start_date'])) $requestData['start_date'] 	= formatdate($requestData['start_date']);
-    		if(isset($requestData['end_date'])) $requestData['end_date'] 		= formatdate($requestData['end_date']);
-            $result = $this->event->action($requestData);
-			
-			if($result){
-				$this->session->setFlashdata('success', 'Event submitted successfully.');
-				return redirect()->to(base_url().'/myaccount/events'); 
+			if(isset($_FILES['import'])){
+				$data['import'] 		= 1;
+				$data['result'] 		= $this->importevents();
 			}else{
-				$this->session->setFlashdata('danger', 'Try Later.');
-				return redirect()->to(base_url().'/myaccount/events'); 
+				$requestData 			= $this->request->getPost();
+				$requestData['type'] 	= '1';
+
+				if(isset($requestData['start_date'])) $requestData['start_date'] 	= formatdate($requestData['start_date']);
+				if(isset($requestData['end_date'])) $requestData['end_date'] 		= formatdate($requestData['end_date']);
+				$result = $this->event->action($requestData);
+				
+				if($result){
+					$this->session->setFlashdata('success', 'Event submitted successfully.');
+					return redirect()->to(base_url().'/myaccount/events'); 
+				}else{
+					$this->session->setFlashdata('danger', 'Try Later.');
+					return redirect()->to(base_url().'/myaccount/events'); 
+				}
 			}
         } 
 		
@@ -157,63 +162,218 @@ class Index extends BaseController
     }
 	
     public function export($id)
-    {	
-    	$data 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'bookedstall'],['id' => $id, 'type' => '1']);
-
-    	$bookingtotalamount	= $this->booking->getBooking('all', ['booking'],['eventid' => $id]);
-		$totalamount = 0;
-    	foreach($bookingtotalamount as $bkam){
-			$totalamount +=  $bkam['amount'];
-    	}
+    {
+		$userdetail 	= getSiteUserDetails();
+		$usertype 		= $userdetail['type'];
+		$charging		= $this->config->chargingflag;
+		$chargingvalue	= implode(',', array_values($charging));
+		
+    	$data = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $id, 'type' => '1']);
 
 		$spreadsheet = new Spreadsheet();
 		$sheet 		 = $spreadsheet->getActiveSheet();
 
-		$sheet->setCellValue('A1', 'Event Name');
-		$sheet->setCellValue('B1', 'Description');
-		$sheet->setCellValue('C1', 'Location');
-		$sheet->setCellValue('D1', 'Mobile');
-		$sheet->setCellValue('E1', 'start_date');
-		$sheet->setCellValue('F1', 'end_date');
-		$sheet->setCellValue('G1', 'start_time');
-		$sheet->setCellValue('H1', 'end_time');
-		$sheet->setCellValue('I1', 'stalls_price');
-		$sheet->setCellValue('J1', 'rvspots_price');
-		$sheet->setCellValue('K1', 'Total Amount');
-
-     	$row = 2;
-		$sheet->setCellValue('A' . $row, $data['name']);
-		$sheet->setCellValue('B' . $row, $data['description']);
-		$sheet->setCellValue('C' . $row, $data['location']);
-		$sheet->setCellValue('D' . $row, $data['mobile']);
-		$sheet->setCellValue('E' . $row, formatdate($data['start_date']));
-		$sheet->setCellValue('F' . $row, formatdate($data['end_date']));
-		$sheet->setCellValue('G' . $row, formattime($data['start_time']));
-		$sheet->setCellValue('H' . $row, formattime($data['end_time']));
-		$sheet->setCellValue('I' . $row, $data['stalls_price']);
+		$row = 1;
+		$sheet->setCellValue('A'.$row, 'Name');
+		$sheet->setCellValue('B'.$row, 'Street');
+		$sheet->setCellValue('C'.$row, 'City');
+		$sheet->setCellValue('D'.$row, 'State');
+		$sheet->setCellValue('E'.$row, 'Zipcode');
+		$sheet->setCellValue('F'.$row, 'Mobile');
+		$sheet->setCellValue('G'.$row, 'Start Date');
+		$sheet->setCellValue('H'.$row, 'End Date');
+		$sheet->setCellValue('I'.$row, 'Start Time');
+		$sheet->setCellValue('J'.$row, 'End Time');
+		$sheet->setCellValue('K'.$row, 'Stalls Price');
+		$sheet->setCellValue('L'.$row, 'Description');
+		$sheet->setCellValue('M'.$row, 'Will you be selling feed at this event?');
+		$sheet->setCellValue('N'.$row, 'Will you be selling shavings at this event?');
+		$sheet->setCellValue('O'.$row, 'Will you have RV Hookups at this event?');
+		$sheet->setCellValue('P'.$row, 'Will you Collect the Cleaning fee from Horse owner?');
+		$sheet->setCellValue('Q'.$row, 'Send a text message to users when their stall is unlocked and ready for use?');
+		if($usertype=='2'){
+			$sheet->setCellValue('R'.$row, 'Night Price');
+			$sheet->setCellValue('S'.$row, 'Week Price');
+			$sheet->setCellValue('T'.$row, 'Month Price');
+			$sheet->setCellValue('U'.$row, 'Flat Price');
+			$sheet->setCellValue('V'.$row, 'Subscription Initial Price');
+			$sheet->setCellValue('W'.$row, 'Subscription Month Price');
+			$sheet->setCellValue('X'.$row, 'Cleaning Price');
+		}else{
+			$sheet->setCellValue('R'.$row, 'Cleaning Price');
+		}
 		
-		foreach ($data['barn'] as $key => $barn) { 
-			$sheet->setCellValue('A'.$row, $barn['name']);
-			$row++;
-			
-			foreach($barn['stall'] as $key=> $stall){  
-				$stallname  = $stall['name'];
-				$bookedstall = '';
-				foreach($stall['bookedstall'] as $keys=> $booking){
-
-					$bookedstall	.=   "\nName : ".$booking['name']."\nDate  : ".formatdate($booking['check_in'])." to ".formatdate($booking['check_out'])."\nPayment Method : ".$booking['paymentmethod'];
-				}
-				
-				$sheet->setCellValue('A'.$row, $stallname.$bookedstall);
-				$sheet->getCell('A'.$row)->getStyle()->getAlignment()->setWrapText(true);
-				$sheet->getCell('A'.$row)->getStyle()->getFont()->setBold(true);
-				$row++;
-			} 
+		
+		$row++;
+		$sheet->setCellValue('M'.$row, '1-Yes, 2-No');
+		$sheet->setCellValue('N'.$row, '1-Yes, 2-No');
+		$sheet->setCellValue('O'.$row, '1-Yes, 2-No');
+		$sheet->setCellValue('P'.$row, '1-Yes, 2-No');
+		$sheet->setCellValue('Q'.$row, '1-Yes, 2-No');
+		
+        $row++;
+		$pricefee = explode(',', $data['price_fee']);
+		$sheet->setCellValue('A'.$row, $data['name']);
+		$sheet->setCellValue('B'.$row, $data['location']);
+		$sheet->setCellValue('C'.$row, $data['city']);
+		$sheet->setCellValue('D'.$row, $data['state']);
+		$sheet->setCellValue('E'.$row, $data['zipcode']);
+		$sheet->setCellValue('F'.$row, $data['mobile']);
+		$sheet->setCellValue('G'.$row, formatdate($data['start_date'], 1));
+		$sheet->setCellValue('H'.$row, formatdate($data['end_date'], 1));
+		$sheet->setCellValue('I'.$row, $data['start_time']);
+		$sheet->setCellValue('J'.$row, $data['end_time']);
+		$sheet->setCellValue('K'.$row, $data['stalls_price']);
+		$sheet->setCellValue('L'.$row, $data['description']);
+		$sheet->setCellValue('M'.$row, $data['feed_flag']);
+		$sheet->setCellValue('N'.$row, $data['shaving_flag']);
+		$sheet->setCellValue('O'.$row, $data['rv_flag']);
+		$sheet->setCellValue('P'.$row, $data['cleaning_flag']);
+		$sheet->setCellValue('Q'.$row, $data['notification_flag']);
+		if($usertype=='2'){
+			$sheet->setCellValue('R'.$row, (isset($pricefee[0]) ? $pricefee[0] : 0));
+			$sheet->setCellValue('S'.$row, (isset($pricefee[1]) ? $pricefee[1] : 0));
+			$sheet->setCellValue('T'.$row, (isset($pricefee[2]) ? $pricefee[2] : 0));
+			$sheet->setCellValue('U'.$row, (isset($pricefee[3]) ? $pricefee[3] : 0));
+			$sheet->setCellValue('V'.$row, (isset($pricefee[4]) ? $pricefee[4] : 0));
+			$sheet->setCellValue('W'.$row, (isset($pricefee[5]) ? $pricefee[5] : 0));
+			$sheet->setCellValue('X'.$row, $data['cleaning_fee']);
+		}else{
+			$sheet->setCellValue('R'.$row, $data['cleaning_fee']);
+		}
+		
+		$row = $row+2;
+		$sheet->setCellValue('A'.$row, 'Barn & Stall');
+		if($usertype=='2'){
+			$sheet->setCellValue('B'.$row, 'Night Price');
+			$sheet->setCellValue('C'.$row, 'Week Price');
+			$sheet->setCellValue('D'.$row, 'Month Price');
+			$sheet->setCellValue('E'.$row, 'Flat Price');
+			$sheet->setCellValue('F'.$row, 'Subscription Initial Price');
+			$sheet->setCellValue('G'.$row, 'Subscription Month Price');
+			$sheet->setCellValue('J'.$row, 'RV Hookups');
+			$sheet->setCellValue('K'.$row, 'Night Price');
+			$sheet->setCellValue('L'.$row, 'Week Price');
+			$sheet->setCellValue('M'.$row, 'Month Price');
+			$sheet->setCellValue('N'.$row, 'Flat Price');
+			$sheet->setCellValue('O'.$row, 'Subscription Initial Price');
+			$sheet->setCellValue('P'.$row, 'Subscription Month Price');
+			$sheet->setCellValue('R'.$row, 'Name');
+			$sheet->setCellValue('S'.$row, 'Quantity');
+			$sheet->setCellValue('T'.$row, 'Price');
+			$sheet->setCellValue('V'.$row, 'Name');
+			$sheet->setCellValue('W'.$row, 'Quantity');
+			$sheet->setCellValue('X'.$row, 'Price');
+		}else{
+			$sheet->setCellValue('B'.$row, 'Charging');
+			$sheet->setCellValue('C'.$row, 'Price');
+			$sheet->setCellValue('E'.$row, 'RV Hookups');
+			$sheet->setCellValue('F'.$row, 'Charging');
+			$sheet->setCellValue('G'.$row, 'Price');
+			$sheet->setCellValue('I'.$row, 'Name');
+			$sheet->setCellValue('J'.$row, 'Quantity');
+			$sheet->setCellValue('K'.$row, 'Price');
+			$sheet->setCellValue('M'.$row, 'Name');
+			$sheet->setCellValue('N'.$row, 'Quantity');
+			$sheet->setCellValue('O'.$row, 'Price');
 		}
 		
 		$row++;
-		$sheet->setCellValue('K' . $row, $totalamount);
+		$row1 = $row;
+		foreach ($data['barn'] as $barn) { 
+			$sheet->setCellValue('A'.$row, $barn['name']);
+			$row++;
+			
+			foreach($barn['stall'] as $stall){  
+				$sheet->setCellValue('A'.$row, $stall['name']);
+				if($usertype=='2'){
+					$sheet->setCellValue('B'.$row, $stall['night_price']);
+					$sheet->setCellValue('C'.$row, $stall['week_price']);
+					$sheet->setCellValue('D'.$row, $stall['month_price']);
+					$sheet->setCellValue('E'.$row, $stall['flat_price']);
+					$sheet->setCellValue('F'.$row, $stall['subscription_initial_price']);
+					$sheet->setCellValue('G'.$row, $stall['subscription_month_price']);
+					
+					$dropdownlist = $sheet->getCell('F'.$row)->getDataValidation();
+					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)    
+					->setAllowBlank(false)
+					->setShowDropDown(true)
+					->setPrompt('Select Charging ID')
+					->setFormula1('"'.$chargingvalue.'"');
+				}else{
+					$sheet->setCellValue('B'.$row, (isset($charging[$stall['charging_id']]) ? $charging[$stall['charging_id']] : ''));
+					$sheet->setCellValue('C'.$row, $stall['price']);
+				}
+				$row++;
+			} 
+			
+			$row++;
+		}
 		
+		$row = $row1;
+		foreach ($data['rvbarn'] as $barn) { 
+			if($usertype=='2'){
+				$sheet->setCellValue('J'.$row, $barn['name']);
+			}else{
+				$sheet->setCellValue('E'.$row, $barn['name']);
+			}
+			$row++;
+			
+			foreach($barn['rvstall'] as $stall){  
+				if($usertype=='2'){
+					$sheet->setCellValue('J'.$row, $stall['name']);
+					$sheet->setCellValue('K'.$row, $stall['night_price']);
+					$sheet->setCellValue('L'.$row, $stall['week_price']);
+					$sheet->setCellValue('M'.$row, $stall['month_price']);
+					$sheet->setCellValue('N'.$row, $stall['flat_price']);
+					$sheet->setCellValue('O'.$row, $stall['subscription_initial_price']);
+					$sheet->setCellValue('P'.$row, $stall['subscription_month_price']);
+				}else{
+					$sheet->setCellValue('E'.$row, $stall['name']);
+					$sheet->setCellValue('F'.$row, (isset($charging[$stall['charging_id']]) ? $charging[$stall['charging_id']] : ''));
+					$sheet->setCellValue('G'.$row, $stall['price']);
+					
+					$dropdownlist = $sheet->getCell('F'.$row)->getDataValidation();
+					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)    
+					->setAllowBlank(false)
+					->setShowDropDown(true)
+					->setPrompt('Select Charging ID')
+					->setFormula1('"'.$chargingvalue.'"');
+				}
+				$row++;
+			} 
+			
+			$row++;
+		}
+			
+		$row = $row1;
+		foreach ($data['feed'] as $product) { 
+			if($usertype=='2'){
+				$sheet->setCellValue('R'.$row, $product['name']);
+				$sheet->setCellValue('S'.$row, $product['quantity']);
+				$sheet->setCellValue('T'.$row, $product['price']);
+			}else{
+				$sheet->setCellValue('I'.$row, $product['name']);
+				$sheet->setCellValue('J'.$row, $product['quantity']);
+				$sheet->setCellValue('K'.$row, $product['price']);
+			}
+			$row++;
+		}
+			
+		$row = $row1;
+		foreach ($data['shaving'] as $product) { 
+			if($usertype=='2'){
+				$sheet->setCellValue('V'.$row, $product['name']);
+				$sheet->setCellValue('W'.$row, $product['quantity']);
+				$sheet->setCellValue('X'.$row, $product['price']);
+			}else{
+				$sheet->setCellValue('M'.$row, $product['name']);
+				$sheet->setCellValue('N'.$row, $product['quantity']);
+				$sheet->setCellValue('O'.$row, $product['price']);
+			}
+			$row++;
+		}
+			
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$data['name'].'.xlsx"');
 		header('Cache-Control: max-age=0');
@@ -222,6 +382,187 @@ class Index extends BaseController
 		$writer->save('php://output');
 		die;
     }
+	
+	public function importevents()
+	{
+		$userdetail 	= getSiteUserDetails();
+		$usertype 		= $userdetail['type'];
+		$charging		= $this->config->chargingflag2;
+		
+		$phpspreadsheet = new Spreadsheet();
+
+      	$reader 		= new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+      	$spreadsheet 	= $reader->load($_FILES['import']['tmp_name']);
+		$sheetdata 		= $spreadsheet->getActiveSheet()->toArray();
+		
+		$result = [];
+		$barnstallindex = $rvhookupindex = $feedindex = $shavingindex = 0;
+		$typebarn = $typervhookup = 0;
+		
+		foreach($sheetdata as $key => $data){
+			if(in_array($key, [0, 1, 3, 4])) continue;
+			
+			if($key==2){
+				$priceflag = [
+					isset($data[17]) && $data[17]!='' && $data[17]!=0 ? 1 : 0,
+					isset($data[18]) && $data[18]!='' && $data[18]!=0 ? 1 : 0,
+					isset($data[19]) && $data[19]!='' && $data[19]!=0 ? 1 : 0,
+					isset($data[20]) && $data[20]!='' && $data[20]!=0 ? 1 : 0,
+					isset($data[21]) && $data[21]!='' && $data[21]!=0 ? 1 : 0
+				];
+				
+				$pricefee = [
+					isset($data[17]) ? $data[17] : 0,
+					isset($data[18]) ? $data[18] : 0,
+					isset($data[19]) ? $data[19] : 0,
+					isset($data[20]) ? $data[20] : 0,
+					isset($data[21]) ? $data[21] : 0,
+					isset($data[22]) ? $data[22] : 0
+				];
+				
+				$result = [
+					'name'					=> isset($data[0]) ? $data[0] : '',
+					'location'				=> isset($data[1]) ? $data[1] : '',
+					'city'					=> isset($data[2]) ? $data[2] : '',
+					'state'					=> isset($data[3]) ? $data[3] : '',
+					'zipcode'				=> isset($data[4]) ? $data[4] : '',
+					'mobile'				=> isset($data[5]) ? $data[5] : '',
+					'start_date'			=> isset($data[6]) ? $data[6] : '',
+					'end_date'				=> isset($data[7]) ? $data[7] : '',
+					'start_time'			=> isset($data[8]) ? $data[8] : '',
+					'end_time'				=> isset($data[9]) ? $data[9] : '',
+					'stalls_price'			=> isset($data[10]) ? $data[10] : '',
+					'description'			=> isset($data[11]) ? $data[11] : '',
+					'feed_flag'				=> isset($data[12]) ? $data[12] : '',
+					'shaving_flag'			=> isset($data[13]) ? $data[13] : '',
+					'rv_flag'				=> isset($data[14]) ? $data[14] : '',
+					'cleaning_flag'			=> isset($data[15]) ? $data[15] : '',
+					'notification_flag'		=> isset($data[16]) ? $data[16] : '',
+					'price_flag'			=> $usertype=='2' ? implode(',', $priceflag) : '',
+					'price_fee'				=> $usertype=='2' ? implode(',', $pricefee) : '',
+					'cleaning_fee'			=> $usertype=='2' ? (isset($data[23]) ? $data[23] : '') : (isset($data[17]) ? $data[17] : ''),
+				];
+			}
+			
+			if($key >= 5){				
+				if($usertype=='2' && isset($data[0]) && $data[0]!=''){
+					if($typebarn==0){
+						$result['barn'][$barnstallindex] = [
+							'name' => $data[0],
+							'type' => '1'
+						];
+						
+						$typebarn++;
+					}else{
+						$result['barn'][$barnstallindex]['stall'][] = [
+							'name' 							=> $data[0],
+							'night_price' 					=> isset($data[1]) ? $data[1] : 0,
+							'week_price' 					=> isset($data[2]) ? $data[2] : 0,
+							'month_price' 					=> isset($data[3]) ? $data[3] : 0,
+							'flat_price' 					=> isset($data[4]) ? $data[4] : 0,
+							'subscription_initial_price' 	=> isset($data[5]) ? $data[5] : 0,
+							'subscription_month_price' 		=> isset($data[6]) ? $data[6] : 0,
+						];
+					}
+				}elseif($usertype=='3' && isset($data[0]) && $data[0]!=''){
+					if($typebarn==0){
+						$result['barn'][$barnstallindex] = [
+							'name' => $data[0],
+							'type' => '1'
+						];
+						
+						$typebarn++;
+					}else{
+						$result['barn'][$barnstallindex]['stall'][] = [
+							'name' 			=> $data[0],
+							'charging_id' 	=> isset($data[1]) ? (isset($charging[$data[1]]) ? $charging[$data[1]] : '') : '',
+							'price' 		=> isset($data[2]) ? $data[2] : 0,
+						];
+					}
+				}else{
+					$typebarn = 0;
+					$barnstallindex++;
+				}
+				
+				if($usertype=='2' && isset($data[9]) && $data[9]!=''){
+					if($typervhookup==0){
+						$result['rvbarn'][$rvhookupindex] = [
+							'name' => $data[9],
+							'type' => '1'
+						];
+						
+						$typervhookup++;
+					}else{
+						$result['rvbarn'][$rvhookupindex]['rvstall'][] = [
+							'name' 							=> $data[9],
+							'night_price' 					=> isset($data[10]) ? $data[10] : 0,
+							'week_price' 					=> isset($data[11]) ? $data[11] : 0,
+							'month_price' 					=> isset($data[12]) ? $data[12] : 0,
+							'flat_price' 					=> isset($data[13]) ? $data[13] : 0,
+							'subscription_initial_price' 	=> isset($data[14]) ? $data[14] : 0,
+							'subscription_month_price' 		=> isset($data[15]) ? $data[15] : 0,
+						];
+					}
+				}elseif($usertype=='3' && isset($data[4]) && $data[4]!=''){
+					if($typervhookup==0){
+						$result['rvbarn'][$rvhookupindex] = [
+							'name' => $data[4],
+							'type' => '1'
+						];
+						
+						$typervhookup++;
+					}else{
+						$result['rvbarn'][$rvhookupindex]['rvstall'][] = [
+							'name' 			=> $data[4],
+							'charging_id' 	=> isset($data[5]) ? (isset($charging[$data[5]]) ? $charging[$data[5]] : '') : '',
+							'price' 		=> isset($data[6]) ? $data[6] : 0,
+						];
+					}
+				}else{
+					$typervhookup = 0;
+					$rvhookupindex++;
+				}
+				
+				if($usertype=='2' && isset($data[17]) && $data[17]!=''){
+					$result['feed'][$feedindex] = [
+						'name' 			=> $data[17],
+						'quantity' 		=> isset($data[18]) ? $data[18] : 0,
+						'price' 		=> isset($data[19]) ? $data[19] : 0,
+					];
+					
+					$feedindex++;
+				}elseif($usertype=='3' && isset($data[8]) && $data[8]!=''){
+					$result['feed'][$feedindex] = [
+						'name' 			=> $data[8],
+						'quantity' 		=> isset($data[9]) ? $data[9] : 0,
+						'price' 		=> isset($data[10]) ? $data[10] : 0,
+					];
+					
+					$feedindex++;
+				}
+				
+				if($usertype=='2' && isset($data[21]) && $data[21]!=''){
+					$result['shaving'][$shavingindex] = [
+						'name' 			=> $data[21],
+						'quantity' 		=> isset($data[22]) ? $data[22] : 0,
+						'price' 		=> isset($data[23]) ? $data[23] : 0,
+					];
+					
+					$shavingindex++;
+				}elseif($usertype=='2' && isset($data[12]) && $data[12]!=''){
+					$result['shaving'][$shavingindex] = [
+						'name' 			=> $data[12],
+						'quantity' 		=> isset($data[13]) ? $data[13] : 0,
+						'price' 		=> isset($data[14]) ? $data[14] : 0,
+					];
+					
+					$shavingindex++;
+				}
+			}
+		}
+		
+		return $result;
+	}
 	
 	public function importbarnstall()
     {	
