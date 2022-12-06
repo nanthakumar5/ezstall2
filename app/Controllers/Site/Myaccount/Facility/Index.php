@@ -150,7 +150,10 @@ class Index extends BaseController
 	
     public function export($id)
     {	
-    	$data 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'],['id' => $id, 'type' => '2']); 
+		$yesno			= $this->config->yesno;
+		$yesnovalue		= implode(',', array_values($yesno));
+		
+    	$data 			= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'],['id' => $id, 'type' => '2']); 
 		
 		$spreadsheet = new Spreadsheet();
 		$sheet 		 = $spreadsheet->getActiveSheet();
@@ -175,13 +178,6 @@ class Index extends BaseController
 		$sheet->setCellValue('Q'.$row, 'Subscription Month Price');
 		$sheet->setCellValue('R'.$row, 'Cleaning Price');
 		
-		$row++;
-		$sheet->setCellValue('G'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('H'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('I'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('J'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('K'.$row, '1-Yes, 2-No');
-		
         $row++;
 		$pricefee = explode(',', $data['price_fee']);
 		$sheet->setCellValue('A'.$row, $data['name']);
@@ -190,11 +186,11 @@ class Index extends BaseController
 		$sheet->setCellValue('D'.$row, $data['state']);
 		$sheet->setCellValue('E'.$row, $data['zipcode']);
 		$sheet->setCellValue('F'.$row, strip_tags($data['description']));
-		$sheet->setCellValue('G'.$row, $data['feed_flag']);
-		$sheet->setCellValue('H'.$row, $data['shaving_flag']);
-		$sheet->setCellValue('I'.$row, $data['rv_flag']);
-		$sheet->setCellValue('J'.$row, $data['cleaning_flag']);
-		$sheet->setCellValue('K'.$row, $data['notification_flag']);
+		$sheet->setCellValue('G'.$row, (isset($yesno[$data['feed_flag']]) ? $yesno[$data['feed_flag']] : ''));
+		$sheet->setCellValue('H'.$row, (isset($yesno[$data['shaving_flag']]) ? $yesno[$data['shaving_flag']] : ''));
+		$sheet->setCellValue('I'.$row, (isset($yesno[$data['rv_flag']]) ? $yesno[$data['rv_flag']] : ''));
+		$sheet->setCellValue('J'.$row, (isset($yesno[$data['cleaning_flag']]) ? $yesno[$data['cleaning_flag']] : ''));
+		$sheet->setCellValue('K'.$row, (isset($yesno[$data['notification_flag']]) ? $yesno[$data['notification_flag']] : ''));
 		$sheet->setCellValue('L'.$row, (isset($pricefee[0]) ? $pricefee[0] : 0));
 		$sheet->setCellValue('M'.$row, (isset($pricefee[1]) ? $pricefee[1] : 0));
 		$sheet->setCellValue('N'.$row, (isset($pricefee[2]) ? $pricefee[2] : 0));
@@ -202,6 +198,17 @@ class Index extends BaseController
 		$sheet->setCellValue('P'.$row, (isset($pricefee[4]) ? $pricefee[4] : 0));
 		$sheet->setCellValue('Q'.$row, (isset($pricefee[5]) ? $pricefee[5] : 0));
 		$sheet->setCellValue('R'.$row, $data['cleaning_fee']);
+		
+		$dropdownlist = $sheet->getCell('G'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('H'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('I'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('J'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('K'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
 		
 		$row = $row+2;
 		$sheet->setCellValue('A'.$row, 'Barn & Stall');
@@ -291,6 +298,8 @@ class Index extends BaseController
 	
 	public function importfacility()
 	{
+		$yesno			= $this->config->yesno2;
+		
 		$phpspreadsheet = new Spreadsheet();
 
       	$reader 		= new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
@@ -302,9 +311,9 @@ class Index extends BaseController
 		$typebarn = $typervhookup = 0;
 		
 		foreach($sheetdata as $key => $data){
-			if(in_array($key, [0, 1, 3, 4])) continue;
+			if(in_array($key, [0, 2, 3])) continue;
 			
-			if($key==2){
+			if($key==1){
 				$priceflag = [
 					isset($data[11]) && $data[11]!='' && $data[11]!=0 ? 1 : 0,
 					isset($data[12]) && $data[12]!='' && $data[12]!=0 ? 1 : 0,
@@ -329,18 +338,18 @@ class Index extends BaseController
 					'state'					=> isset($data[3]) ? $data[3] : '',
 					'zipcode'				=> isset($data[4]) ? $data[4] : '',
 					'description'			=> isset($data[5]) ? $data[5] : '',
-					'feed_flag'				=> isset($data[6]) ? $data[6] : '',
-					'shaving_flag'			=> isset($data[7]) ? $data[7] : '',
-					'rv_flag'				=> isset($data[8]) ? $data[8] : '',
-					'cleaning_flag'			=> isset($data[9]) ? $data[9] : '',
-					'notification_flag'		=> isset($data[10]) ? $data[10] : '',
+					'feed_flag'				=> isset($data[6]) ? (isset($yesno[$data[6]]) ? $yesno[$data[6]] : '') : '',
+					'shaving_flag'			=> isset($data[7]) ? (isset($yesno[$data[7]]) ? $yesno[$data[7]] : '') : '',
+					'rv_flag'				=> isset($data[8]) ? (isset($yesno[$data[8]]) ? $yesno[$data[8]] : '') : '',
+					'cleaning_flag'			=> isset($data[9]) ? (isset($yesno[$data[9]]) ? $yesno[$data[9]] : '') : '',
+					'notification_flag'		=> isset($data[10]) ? (isset($yesno[$data[10]]) ? $yesno[$data[10]] : '') : '',
 					'price_flag'			=> implode(',', $priceflag),
 					'price_fee'				=> implode(',', $pricefee),
 					'cleaning_fee'			=> isset($data[17]) ? $data[17] : '',
 				];
 			}
 			
-			if($key >= 5){				
+			if($key >= 4){				
 				if(isset($data[0]) && $data[0]!=''){
 					if($typebarn==0){
 						$result['barn'][$barnstallindex] = [

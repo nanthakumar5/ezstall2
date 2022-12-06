@@ -167,6 +167,8 @@ class Index extends BaseController
 		$usertype 		= $userdetail['type'];
 		$charging		= $this->config->chargingflag;
 		$chargingvalue	= implode(',', array_values($charging));
+		$yesno			= $this->config->yesno;
+		$yesnovalue		= implode(',', array_values($yesno));
 		
     	$data = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'], ['id' => $id, 'type' => '1']);
 
@@ -203,14 +205,6 @@ class Index extends BaseController
 			$sheet->setCellValue('R'.$row, 'Cleaning Price');
 		}
 		
-		
-		$row++;
-		$sheet->setCellValue('M'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('N'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('O'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('P'.$row, '1-Yes, 2-No');
-		$sheet->setCellValue('Q'.$row, '1-Yes, 2-No');
-		
         $row++;
 		$pricefee = explode(',', $data['price_fee']);
 		$sheet->setCellValue('A'.$row, $data['name']);
@@ -225,11 +219,11 @@ class Index extends BaseController
 		$sheet->setCellValue('J'.$row, $data['end_time']);
 		$sheet->setCellValue('K'.$row, $data['stalls_price']);
 		$sheet->setCellValue('L'.$row, $data['description']);
-		$sheet->setCellValue('M'.$row, $data['feed_flag']);
-		$sheet->setCellValue('N'.$row, $data['shaving_flag']);
-		$sheet->setCellValue('O'.$row, $data['rv_flag']);
-		$sheet->setCellValue('P'.$row, $data['cleaning_flag']);
-		$sheet->setCellValue('Q'.$row, $data['notification_flag']);
+		$sheet->setCellValue('M'.$row, (isset($yesno[$data['feed_flag']]) ? $yesno[$data['feed_flag']] : ''));
+		$sheet->setCellValue('N'.$row, (isset($yesno[$data['shaving_flag']]) ? $yesno[$data['shaving_flag']] : ''));
+		$sheet->setCellValue('O'.$row, (isset($yesno[$data['rv_flag']]) ? $yesno[$data['rv_flag']] : ''));
+		$sheet->setCellValue('P'.$row, (isset($yesno[$data['cleaning_flag']]) ? $yesno[$data['cleaning_flag']] : ''));
+		$sheet->setCellValue('Q'.$row, (isset($yesno[$data['notification_flag']]) ? $yesno[$data['notification_flag']] : ''));
 		if($usertype=='2'){
 			$sheet->setCellValue('R'.$row, (isset($pricefee[0]) ? $pricefee[0] : 0));
 			$sheet->setCellValue('S'.$row, (isset($pricefee[1]) ? $pricefee[1] : 0));
@@ -242,6 +236,17 @@ class Index extends BaseController
 			$sheet->setCellValue('R'.$row, $data['cleaning_fee']);
 		}
 		
+		$dropdownlist = $sheet->getCell('M'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('N'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('O'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('P'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+		$dropdownlist = $sheet->getCell('Q'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
+				
 		$row = $row+2;
 		$sheet->setCellValue('A'.$row, 'Barn & Stall');
 		if($usertype=='2'){
@@ -295,11 +300,7 @@ class Index extends BaseController
 					$sheet->setCellValue('G'.$row, $stall['subscription_month_price']);
 					
 					$dropdownlist = $sheet->getCell('F'.$row)->getDataValidation();
-					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)    
-					->setAllowBlank(false)
-					->setShowDropDown(true)
-					->setPrompt('Select Charging ID')
-					->setFormula1('"'.$chargingvalue.'"');
+					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Charging ID')->setFormula1('"'.$chargingvalue.'"');
 				}else{
 					$sheet->setCellValue('B'.$row, (isset($charging[$stall['charging_id']]) ? $charging[$stall['charging_id']] : ''));
 					$sheet->setCellValue('C'.$row, $stall['price']);
@@ -334,11 +335,7 @@ class Index extends BaseController
 					$sheet->setCellValue('G'.$row, $stall['price']);
 					
 					$dropdownlist = $sheet->getCell('F'.$row)->getDataValidation();
-					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)    
-					->setAllowBlank(false)
-					->setShowDropDown(true)
-					->setPrompt('Select Charging ID')
-					->setFormula1('"'.$chargingvalue.'"');
+					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Charging ID')->setFormula1('"'.$chargingvalue.'"');
 				}
 				$row++;
 			} 
@@ -388,6 +385,7 @@ class Index extends BaseController
 		$userdetail 	= getSiteUserDetails();
 		$usertype 		= $userdetail['type'];
 		$charging		= $this->config->chargingflag2;
+		$yesno			= $this->config->yesno2;
 		
 		$phpspreadsheet = new Spreadsheet();
 
@@ -400,9 +398,9 @@ class Index extends BaseController
 		$typebarn = $typervhookup = 0;
 		
 		foreach($sheetdata as $key => $data){
-			if(in_array($key, [0, 1, 3, 4])) continue;
+			if(in_array($key, [0, 2, 3])) continue;
 			
-			if($key==2){
+			if($key==1){
 				$priceflag = [
 					isset($data[17]) && $data[17]!='' && $data[17]!=0 ? 1 : 0,
 					isset($data[18]) && $data[18]!='' && $data[18]!=0 ? 1 : 0,
@@ -433,18 +431,18 @@ class Index extends BaseController
 					'end_time'				=> isset($data[9]) ? $data[9] : '',
 					'stalls_price'			=> isset($data[10]) ? $data[10] : '',
 					'description'			=> isset($data[11]) ? $data[11] : '',
-					'feed_flag'				=> isset($data[12]) ? $data[12] : '',
-					'shaving_flag'			=> isset($data[13]) ? $data[13] : '',
-					'rv_flag'				=> isset($data[14]) ? $data[14] : '',
-					'cleaning_flag'			=> isset($data[15]) ? $data[15] : '',
-					'notification_flag'		=> isset($data[16]) ? $data[16] : '',
+					'feed_flag'				=> isset($data[12]) ? (isset($yesno[$data[12]]) ? $yesno[$data[12]] : '') : '',
+					'shaving_flag'			=> isset($data[13]) ? (isset($yesno[$data[13]]) ? $yesno[$data[13]] : '') : '',
+					'rv_flag'				=> isset($data[14]) ? (isset($yesno[$data[14]]) ? $yesno[$data[14]] : '') : '',
+					'cleaning_flag'			=> isset($data[15]) ? (isset($yesno[$data[15]]) ? $yesno[$data[15]] : '') : '',
+					'notification_flag'		=> isset($data[16]) ? (isset($yesno[$data[16]]) ? $yesno[$data[16]] : '') : '',
 					'price_flag'			=> $usertype=='2' ? implode(',', $priceflag) : '',
 					'price_fee'				=> $usertype=='2' ? implode(',', $pricefee) : '',
 					'cleaning_fee'			=> $usertype=='2' ? (isset($data[23]) ? $data[23] : '') : (isset($data[17]) ? $data[17] : ''),
 				];
 			}
 			
-			if($key >= 5){				
+			if($key >= 4){				
 				if($usertype=='2' && isset($data[0]) && $data[0]!=''){
 					if($typebarn==0){
 						$result['barn'][$barnstallindex] = [
