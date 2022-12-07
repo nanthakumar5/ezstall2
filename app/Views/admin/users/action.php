@@ -8,7 +8,6 @@
 		$email 					= isset($result['email']) ? $result['email'] : '';
 		$type 					= isset($result['type']) ? $result['type'] : '';
 		$parentid 				= isset($result['parent_id']) ? $result['parent_id'] : '';
-		$stripe_email 			= isset($result['stripe_email']) ? $result['stripe_email'] : '';
 		$stripe_account_id 		= isset($result['stripe_account_id']) ? $result['stripe_account_id'] : '';
 		$status 				= isset($result['status']) ? $result['status'] : '';
 		$pageaction 			= $id=='' ? 'Add' : 'Update';
@@ -127,10 +126,6 @@
 					},
 					type    : {
 						required	: 	true
-					},
-					stripe_email  	: {	
-						required	: true,
-						email     	: true   
 					},
 					status  : {  
 					    required	: 	true

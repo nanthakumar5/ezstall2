@@ -93,8 +93,7 @@ class Users extends BaseModel
 		if(isset($data['email_status']) && $data['email_status']!='') 	  				$request['email_status'] 			= $data['email_status'];
 		if(isset($data['producercount']) && $data['producercount']!='') 	  			$request['producer_count'] 			= $data['producercount'];
 		if(isset($data['parentid']) && $data['parentid']!='') 	  						$request['parent_id'] 				= $data['parentid'];
-		if(isset($data['stripe_email']) && $data['stripe_email']!='') 	  				$request['stripe_email'] 			= $data['stripe_email'];
-		if(isset($data['stripe_account_id']) && $data['stripe_account_id']!='') 	  	$request['stripe_account_id'] 			= $data['stripe_account_id'];
+		if(isset($data['stripe_account_id']) && $data['stripe_account_id']!='') 	  	$request['stripe_account_id'] 		= $data['stripe_account_id'];
 
 		if(isset($request)){				
 			$request['updated_at'] 	= $datetime;

@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Stripe;
 use App\Models\Cart;
 use App\Models\Paymentmethod;
+use App\Models\Event;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class Index extends BaseController
@@ -17,6 +18,7 @@ class Index extends BaseController
 		$this->stripe  			= new Stripe();
 		$this->cart    			= new Cart(); 
 		$this->paymentmethod    = new Paymentmethod(); 
+		$this->event        	= new Event();
 	}
 	
 	public function index()
@@ -29,6 +31,7 @@ class Index extends BaseController
 		$cartdetail  	= getCart();		
 		$settings		= getSettings();
 		$paymentmethod	= $this->paymentmethod->getPaymentmethod('all', ['paymentmethod']);
+		$event			= $this->event->getEvent('row', ['event'], ['id' => $cartdetail['event_id'], 'status'=> ['1']]);
 		
 		if ($this->request->getMethod()=='post')
 		{    
@@ -82,6 +85,7 @@ class Index extends BaseController
 			'userdetail' 		=> $userdetail, 
 			'cartdetail' 		=> $cartdetail,
 			'paymentmethod' 	=> $paymentmethod,
+			'event' 			=> $event,
 			'stripe'			=> view('site/common/stripe/stripe1')
 		]);
 	}

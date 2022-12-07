@@ -175,6 +175,7 @@
 						<input type="hidden" name="cleaningfee" id="checkout_cleaningfee">
 						<input type="hidden" name="amount" id="checkout_amount">
 						<input type="hidden" name="eventid" value="<?php echo $cartdetail['event_id']; ?>">
+						<input type="hidden" name="eventuserid" value="<?php echo $event['user_id']; ?>">
 						<input type="hidden" name="eventtax" value="<?php echo $cartdetail['event_tax']; ?>">
 						<input type="hidden" name="type" value="<?php echo $cartdetail['type']; ?>">
 						<textarea style="display:none" name="barnstall"><?php echo json_encode($barnstall); ?></textarea>

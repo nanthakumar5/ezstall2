@@ -153,6 +153,7 @@ $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($rout
     $routes->match(['get', 'post'], 'stallmanager/edit/(:num)', 'Site\Myaccount\Stallmanager\Index::action/$1');
     $routes->match(['get', 'post'], 'subscription', 'Site\Myaccount\Subscription\Index::index');
     $routes->match(['get', 'post'], 'account', 'Site\Myaccount\AccountInfo\Index::index');
+    $routes->get('stripeconnect', 'Site\Myaccount\AccountInfo\Index::stripeconnect');
 
     $routes->match(['get', 'post'], 'operators', 'Site\Myaccount\Operators\Index::index');
     $routes->match(['get', 'post'], 'operators/add', 'Site\Myaccount\Operators\Index::action');

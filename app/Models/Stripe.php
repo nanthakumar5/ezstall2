@@ -44,11 +44,22 @@ class Stripe extends BaseModel
 		$name 					= $userdetails['name'];
 		$email 					= $userdetails['email'];
 		$price 					= isset($requestData['amount']) ? $requestData['amount'] * 100 : $requestData['price'] * 100;
+		$transactionfee 		= isset($requestData['transactionfee']) ? $requestData['transactionfee'] * 100 : 0;
         $currency 				= "inr";
 		
 		$customer = $this->customer();
 		if($customer){
-			$paymentintents = $this->createPaymentIntents($customer, $price, $currency);				
+			if(isset($requestData['eventuserid'])){
+				$user = $this->db->table('users')->where('id', $requestData['eventuserid'])->get()->getRowArray();
+				if($user['stripe_account_id']!=''){
+					$retrieveaccount = $this->retrieveAccount($user['stripe_account_id']);
+					if($retrieveaccount && $retrieveaccount['charges_enabled']!=''){
+						$stripeaccountid = $retrieveaccount['id'];
+					}
+				}
+			}
+		
+			$paymentintents = $this->createPaymentIntents($customer, $price, $currency, $transactionfee, (isset($stripeaccountid) ? $stripeaccountid : ''));				
 			if($paymentintents){
 				$paymentData = array(
 					'user_id' 					=> $userid,
@@ -57,6 +68,7 @@ class Stripe extends BaseModel
 					'amount' 					=> $price/100,
 					'currency' 					=> $currency,
 					'stripe_paymentintent_id' 	=> $paymentintents->id,
+					'transfer' 					=> (isset($stripeaccountid) ? 1 : 0),
 					'type' 						=> '1',
 					'status' 					=> '0',
 					'created' 					=> date("Y-m-d H:i:s")
@@ -186,7 +198,6 @@ class Stripe extends BaseModel
 			$customerid 		= $customer->id;
 		}else{
 			$retrievecustomer 	= $this->retrieveCustomer($stripecustomerid);
-			
 			if(!$retrievecustomer){
 				$customer 		= $this->createCustomer($userid, $name, $email);
 				$customerid 	= $customer->id;
@@ -317,19 +328,27 @@ class Stripe extends BaseModel
         }
     } 
 	
-	function createPaymentIntents($customerid, $price, $currency)
+	function createPaymentIntents($customerid, $price, $currency, $transactionfee=0, $accountid='')
     {
 		try{
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
-			$data = $stripe->paymentIntents->create([
+			$createdata = [
 				"customer" => $customerid,
 				'amount' => $price,
 				'currency' => $currency,
 				'payment_method_types' => ['card'],
-			]);
-
+			];
+			
+			if($accountid!=''){
+				$createdata['transfer_data'] = 	[
+					'destination' 	=> $accountid,
+					'amount' 		=> $price - $transactionfee,
+				];
+			}
+			
+			$data = $stripe->paymentIntents->create($createdata);
             return $data;
         }catch(Exception $e){
             return false;
@@ -546,43 +565,22 @@ class Stripe extends BaseModel
         }
     }
 
-    function stripeconnect($requestData)
-    {
-		$stripeemailid		= $requestData['stripe_email'];
-		$stripeaccountid 	= $requestData['stripe_account_id'];
-		
-		if($stripeaccountid == ''){
-			$connectedaccount = $this->createAccount($stripeemailid);
-			return $connectedaccount ? $connectedaccount['id'] : false;			
-		}else{ 
-			$retrieveaccount = $this->retrieveAccount($stripeaccountid);
-			
-			if(!$retrieveaccount){
-				$connectedaccount = $this->createAccount($stripeemailid);
-				return $connectedaccount ? $connectedaccount['id'] : false;
-			}else{
-				return $retrieveaccount ? $retrieveaccount['id'] : false;
-			}
-		}
-    }
-
-	function createAccount($stripeemail)
+	function createAccount()
 	{
 		try{ 
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']); 
 
 			$data = $stripe->accounts->create([
-				'type' 	=> 'standard',
-				'email' => $stripeemail
+				'type' 	=> 'standard'
 			]);
 			
 			return $data;	
-		}catch(Exception $e){ 
-			return false;
-		}catch (\Stripe\Exception\InvalidRequestException $e) {
+		}catch(\Stripe\Exception\InvalidRequestException $e){
 		    return false;
-        }    
+        }catch(Exception $e){ 
+			return false;
+		}
 	}
 
     function retrieveAccount($accountid)
@@ -594,7 +592,11 @@ class Stripe extends BaseModel
 			$data = $stripe->accounts->retrieve($accountid, []);
 
 			return $data;
-		}catch(Exception $e){
+		}catch(\Stripe\Exception\InvalidRequestException $e){
+		    return false;
+        }catch(\Stripe\Exception\PermissionException $e){
+		    return false;
+        }catch(Exception $e){
 			return false;
 		}
     }

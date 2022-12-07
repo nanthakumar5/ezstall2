@@ -22,14 +22,6 @@ class Index extends BaseController
 		{ 
 			$requestData = $this->request->getPost();
 			
-			$stripeemailid	= (isset($requestData['stripe_email'])) ? $requestData['stripe_email'] : '';
-			if($stripeemailid!=''){
-				$stripeRequestData['stripe_email'] = $requestData['stripe_email'];
-				$stripeRequestData['stripe_account_id'] = $stripeaccountid;
-				$stripeconnect = $this->stripe->stripeconnect($stripeRequestData);
-				if($stripeconnect) $requestData['stripe_account_id'] = $stripeconnect;
-			}
-			
 			$userid = $this->users->action($requestData); 
 			if($userid){ 
 				$this->session->setFlashdata('success', 'Your Account Updated Successfully'); 
@@ -41,18 +33,35 @@ class Index extends BaseController
 		}
 		
 		if($stripeaccountid!=''){
-			$data['stripelink'] = '';
 			$retrieveaccount = $this->stripe->retrieveAccount($stripeaccountid);
-			if($retrieveaccount && $retrieveaccount['charges_enabled']==''){
-				$url = base_url().'/myaccount/account';
-				$accountlink = $this->stripe->createAccountLink($stripeaccountid, $url, $url);
-				if($accountlink){
-					$data['stripelink'] = $accountlink['url'];
-				}
+			if($retrieveaccount && $retrieveaccount['charges_enabled']!=''){
+				$data['stripeaccountid'] = $retrieveaccount['id'];
 			}
 		}
 		
 		$data['userdetail'] = $userdetail;
 		return view('site/myaccount/accountinfo/index',$data);
     }
+	
+	public function stripeconnect()
+	{
+		$url 			= base_url().'/myaccount/account';
+		$userdetail 	= getSiteUserDetails();
+		
+		$stripeconnect 	= $this->stripe->createAccount();
+		if($stripeconnect){
+			$this->users->action(['actionid' => $userdetail['id'], 'userid' => $userdetail['id'], 'stripe_account_id' => $stripeconnect['id']]); 
+			
+			$accountlink = $this->stripe->createAccountLink($stripeconnect['id'], $url, $url);
+			if($accountlink){
+				return redirect()->to($accountlink['url']); 
+			}else{
+				$this->session->setFlashdata('danger', 'Try again Later.');
+				return redirect()->to($url); 
+			}
+		}else{
+			$this->session->setFlashdata('danger', 'Try again Later.');
+			return redirect()->to($url); 
+		}
+	}
 }

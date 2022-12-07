@@ -14,23 +14,20 @@
 			<label class="form-label" id="userpass_lbl" >Password</label>
 			<input type="password" name="password" class="form-control"  id="userpassword" value="">
 		</div>
-		<?php if($userdetail['type']!='5'){ ?>
-			<div class="mb-3">
-				<label class="form-label" id="accountid-lbl">Stripe Email ID</label>
-				<input type="email" name="stripe_email" class="form-control"  id="stripeemail" value="<?php echo $userdetail['stripe_email']; ?>">
-				<input type ="hidden" name="stripe_account_id" id="stripe_account_id" class="form-control" value="<?php echo $userdetail['stripe_account_id'];?>">
-				<?php if(isset($stripelink)){ ?>
-					<?php if($stripelink!=''){ ?>
-						<a href="<?php echo $stripelink; ?>" class="btn btn-primary mt-1">Connect with stripe</a>
-					<?php }else{ ?>
-						<a href="javascript:void(0);" class="btn btn-primary mt-1">Connected</a>
-					<?php } ?>
-				<?php } ?>
-			</div>
-		<?php } ?>
-	<input type="hidden" name="actionid" id="userid" value="<?php echo $userdetail['id']; ?>">
-	<button type="submit" class="account-btn" id="updateinfo" >Update</button>
+		<input type="hidden" name="actionid" value="<?php echo $userdetail['id']; ?>">
+		<input type="hidden" name="userid" value="<?php echo $userdetail['id']; ?>">
+		<button type="submit" class="account-btn" id="updateinfo" >Update</button>
 	</form>
+	<?php if(in_array($userdetail['type'], ['2', '3'])){ ?>
+		<h2 class="fw-bold mt-4 mb-2">Stripe</h2>
+		<div class="mb-2">
+			<?php if(isset($stripeaccountid) && $stripeaccountid!=''){ ?>
+				<a href="javascript:void(0);" class="btn btn-primary mt-1">Connected</a>
+			<?php }else{ ?>
+				<a href="<?php echo base_url('myaccount/stripeconnect'); ?>" class="btn btn-primary mt-1">Connect with stripe</a>
+			<?php } ?>
+		</div>
+	<?php } ?>
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <script>
@@ -50,10 +47,6 @@ $(function(){
                       data  :   {id : "<?php echo $userdetail['id']; ?>"},
                       async :   false,
                     }
-      },
-      stripe_email    : { 
-          required  : true,
-          email     : true   
       },
     },
     { 

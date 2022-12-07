@@ -969,7 +969,7 @@ function cartbox(pagetype, result){
 	}
 	
 
-	var cleaningfee = '';
+	var cleaning_fee = '';
 	if(c_cleaningfee!=0){
 		cleaning_fee = '<div class="col-8 event_c_text">Cleaning Fee</div>\
 						<div class="col-4 event_c_text text-end">'+currencysymbol+c_cleaningfee+'\</div>';
