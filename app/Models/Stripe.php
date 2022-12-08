@@ -8,23 +8,44 @@ class Stripe extends BaseModel
 	{ 
 		$this->db->transStart();
 		
-		$id = $data['id'];
-		
-		$payment = $this->db->table('payment')->where('id', $id)->get()->getRowArray();
+		if(isset($data['id'])){
+			$id = $data['id'];
+			
+			$payment = $this->db->table('payment')->where('id', $id)->get()->getRowArray();
+			
+			if($payment['type']=='1'){
+				$data = $this->retrievePaymentIntents($payment['stripe_paymentintent_id']);
 
-		if($payment['type']=='1'){
-			$data = $this->retrievePaymentIntents($payment['stripe_paymentintent_id']);
-
-			if($data->status=='succeeded'){
-				$this->db->table('payment')->update(['status' => '1'], ['id' => $id]);
-				$insertid = $id;
+				if($data->status=='succeeded'){
+					$this->db->table('payment')->update(['status' => '1'], ['id' => $id]);
+					$insertid = $id;
+				}
+			}elseif($payment['type']=='2'){
+				$data = $this->retrieveSubscription($payment['stripe_subscription_id']);
+				if($data->status=='active'){
+					$this->db->table('payment')->update(['status' => '1'], ['id' => $id]);
+					$this->db->table('users')->where(['id' => $payment['user_id']])->update(['subscription_id' => $id]);
+					$insertid = $id;
+				}
 			}
-		}elseif($payment['type']=='2'){
-			$data = $this->retrieveSubscription($payment['stripe_subscription_id']);
-			if($data->status=='active'){
-				$this->db->table('payment')->update(['status' => '1'], ['id' => $id]);
-				$this->db->table('users')->where(['id' => $payment['user_id']])->update(['subscription_id' => $id]);
-				$insertid = $id;
+		}elseif(isset($data['bookingid'])){	
+			$insertid = 1;
+			$id = 1;
+			$bookingid = $data['bookingid'];
+			
+			$spayments = $this->db->table('payment')->where(['booking_id' => $bookingid, 'type' => '3'])->get()->getResultArray();
+			if(!empty($spayments)){
+				if(isset($spayments[0]['stripe_payment_method_id']) &&  $spayments[0]['stripe_payment_method_id']!=''){
+					$customer = $this->customer();
+					$this->attachPaymentMethod($spayments[0]['stripe_payment_method_id'], $customer);
+					foreach($spayments as $spayment){
+						$retrieveschedule = $this->retrieveSchedule($spayment['stripe_subscription_id']);
+						if($retrieveschedule){
+							$this->db->table('payment')->where(['id' => $spayment['id'], 'type' => '3'])->update(['status' => '1']);
+							$this->updateSchedule($retrieveschedule['id'], $spayment['stripe_payment_method_id']);
+						}
+					}
+				}
 			}
 		}
 			
@@ -328,6 +349,40 @@ class Stripe extends BaseModel
         }
     } 
 	
+    function attachPaymentMethod($paymentmethodid, $customerid)
+    {
+		try{
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+			
+			$data = $stripe->paymentMethods->attach(
+				$paymentmethodid,
+				['customer' => $customerid]
+			);
+			
+			return $data;
+		}catch(Exception $e){
+			return false;
+        }
+    }
+	
+    function detachPaymentMethod($paymentmethodid)
+    {
+		try{
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+			
+			$data = $stripe->paymentMethods->detach(
+				$paymentmethodid,
+				[]
+			);
+			
+			return $data;
+		}catch(Exception $e){
+			return false;
+        }
+    }
+	
 	function createPaymentIntents($customerid, $price, $currency, $transactionfee=0, $accountid='')
     {
 		try{
@@ -519,6 +574,40 @@ class Stripe extends BaseModel
 				"end_behavior" 	=> "release",
 				"phases" 		=> [["items" => [["price" => $price, "quantity" => 1]], "end_date" => $endate]],
             ]);
+		
+			return $data;
+        }catch(Exception $e){
+            return false;
+        }
+	}
+	
+	function retrieveSchedule($scheduleid)
+	{
+		try{
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+			
+            $data = $stripe->subscriptionSchedules->retrieve(
+				$scheduleid,
+				[]
+			);
+		
+			return $data;
+        }catch(Exception $e){
+            return false;
+        }
+	}
+	
+	function updateSchedule($scheduleid, $paymentmethodid)
+	{
+		try{
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+			
+            $data = $stripe->subscriptionSchedules->update(
+				$scheduleid,
+				['default_settings' => ['default_payment_method' => $paymentmethodid]]
+			);
 		
 			return $data;
         }catch(Exception $e){

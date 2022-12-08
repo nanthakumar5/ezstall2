@@ -88,24 +88,27 @@
 						var paymentid = data.success.id;
 						
 						if(data.success.subscription && data.success.subscription.length){
-							var subscriptiondata = data.success.subscription;
+							stripe.createPaymentMethod({type: 'card', card: card}).then(function(result){
+								var subscriptiondata = data.success.subscription;
 							
-							for(var i=0; i<2; i++){
-								var selectorname = i==0 ? "barnstall" : "rvbarnstall";
-					
-								var barnstalldata = [];
-								var barnstall = $.parseJSON($(document).find('.stripeextra textarea[name="'+selectorname+'"]').val());	
-								$(barnstall).each(function(i, v){
-									var index = subscriptiondata.findIndex(x => x.stallid == v.stall_id);
-									if(index > -1){
-										v.payment_id = subscriptiondata[index].id;
-									}
-									barnstalldata.push(v);
-								})
-								
-								$(document).find('.stripeextra textarea[name="'+selectorname+'"]').remove();
-								$(document).find('.stripeextra').append('<textarea style="display:none;" name="'+selectorname+'">'+JSON.stringify(barnstalldata)+'</textarea>');
-							}
+								for(var i=0; i<2; i++){
+									var selectorname = i==0 ? "barnstall" : "rvbarnstall";
+						
+									var barnstalldata = [];
+									var barnstall = $.parseJSON($(document).find('.stripeextra textarea[name="'+selectorname+'"]').val());	
+									$(barnstall).each(function(i, v){
+										var index = subscriptiondata.findIndex(x => x.stallid == v.stall_id);
+										if(index > -1){
+											v.payment_id = subscriptiondata[index].id;
+											v.stripe_payment_method_id = result.paymentMethod.id;
+										}
+										barnstalldata.push(v);
+									})
+									
+									$(document).find('.stripeextra textarea[name="'+selectorname+'"]').remove();
+									$(document).find('.stripeextra').append('<textarea style="display:none;" name="'+selectorname+'">'+JSON.stringify(barnstalldata)+'</textarea>');
+								}
+							});
 						}
 
 						stripe.confirmCardPayment(clientsecret, {

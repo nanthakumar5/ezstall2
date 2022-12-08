@@ -54,6 +54,8 @@ class Index extends BaseController
 				
 				$booking = $this->booking->action($requestData);
 				if($booking){
+					if($paymentmethodid!='1') $this->stripe->action(['bookingid' => $booking]);
+					
 					$this->cart->delete(['user_id' => $userid, 'type' => $requestData['type']]);
 					$reservationpdf = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['userid' => [$userid], 'id' => $booking]);
 					
