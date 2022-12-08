@@ -429,3 +429,146 @@ div#usercommentlist::before {
 }
 
 /*22072022 styles end*/
+
+/*08/12/2022 ML start style*/
+.container-lg.m-1rem-sm {
+    margin: 0.7rem;
+}
+.cart-summary-section {
+    border: 1px solid #f0f0f0;
+}
+.stall-summary-list h5 {
+    margin-top: 50px;
+    margin-bottom: 0px;
+    color: #000 !important;
+    font-size: 24px;
+}
+
+.stall-summary-list h5:first-child {
+    margin-top: 0;
+}
+
+.stall-summary-list .table th:last-child, .stall-summary-list .table td:last-child {
+    /* padding-right: 40px !important; */
+    text-align: right;
+}
+
+.stall-summary-list .table {
+    width: 90%;
+    border: 1px solid #f0f0f0;
+    margin-top: 20px;
+    border-left: 3px solid #e00000;
+}
+
+.summary-sec h5 {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 12px;
+    color: #000 !important;
+    font-size: 24px;
+}
+
+.summaryprc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-total .summary-sec .summaryprc {
+    height: auto;
+    padding: 10px 20px;
+    background: #fff;
+    margin-bottom: 12px;
+}
+
+.col-md-5.summary-total {
+    padding: 0;
+}
+
+.summary-sec {
+    border: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+
+.summary-sec h5 {
+    padding-left: 20px;
+}
+
+.totalbg{
+    background-color: #ffffff;
+    /* width: fit-content; */
+    /* float: right; */
+    padding: 8px 0px;
+    color: #e00000;
+    margin: 0;
+}
+
+.stall-summary-list .table th{
+    background-color: transparent;
+}
+
+.stall-summary-list .table th:last-child {
+    padding-right: 0;
+}
+
+.stall-summary-list .table th:first-child {
+    vertical-align: middle;
+}
+
+.summaryprcy {
+    background-color: #e00000;
+    color: #fff !important;
+    padding: 10px 20px !important;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stall-summary-list .table-striped>tbody>tr:nth-of-type(odd)>*, .stall-summary-list .table-striped>tbody>tr:nth-of-type(even)>* {
+    background-color: transparent !important;
+    box-shadow: none;
+    border-bottom: none;
+    padding-top: 0 !important;
+}
+
+.summaryprcy p, .summaryprcy p b {
+    margin: 0;
+    color: #fff;
+    font-weight: 600;
+}
+
+.cart-summary-section {
+    border: 1px solid #f0f0f0;
+}
+
+.cart-summary-section .col-md-7, .cart-summary-section .col-md-5 {
+    padding: 20px;
+}
+
+.cart-summary-section .col-md-5 {
+    background-color: #f0f0f0;
+}
+
+.summaryprc p {
+    margin: 0;
+}
+
+.stall-summary-list .table tr th {
+    border-bottom: none;
+    padding-bottom: 0;
+    padding: 0 15px !important;
+}
+.pricelist_tagline{
+    font-size: 10px;
+    display: block;
+}
+.pricelist .btn-success.price_button {
+    background-color: #3c3c3c;
+    border: none;
+}
+
+.pricelist .priceactive {
+    background-color: #e00000 !important;
+}
+/*End Style*/

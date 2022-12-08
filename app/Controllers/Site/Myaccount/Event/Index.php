@@ -152,6 +152,7 @@ class Index extends BaseController
 	public function view($id)
     {  
 		$data['detail']  	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall'], ['id' => $id, 'type' => '1']);
+		$data['currencysymbol'] = $this->config->currencysymbol;
 		return view('site/myaccount/event/view',$data);
     }
 

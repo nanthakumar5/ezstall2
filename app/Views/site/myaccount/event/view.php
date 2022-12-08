@@ -72,6 +72,24 @@
 					<ul class="list-group">';
 
 					foreach($barndata['stall'] as $stalldata){
+						$initialsub=''; $night_price=''; $month_price=''; $flat_price=''; $week_price='';
+						if($stalldata['night_price']!=''){
+							$night_price = 'N ('.$currencysymbol.$stalldata['night_price'].')';
+						}
+						if($stalldata['week_price']!=''){
+							$week_price = 'W ('. $currencysymbol.$stalldata['week_price'].')';
+						}
+						if($stalldata['night_price']!=''){
+							$month_price = 'M ('. $currencysymbol.$stalldata['month_price'].')';
+						}
+						if($stalldata['flat_price']!=''){
+							$flat_price = 'F ('. $currencysymbol.$stalldata['flat_price'].')';
+						}
+						if($stalldata['subscription_initial_price']!='' && $stalldata['subscription_month_price']!=''){
+							$initial 	= 'S ('. $currencysymbol.$stalldata['subscription_initial_price'].')';
+							$subscrip 	=  'M ('. $currencysymbol.$stalldata['subscription_month_price'].')';
+							$initialsub = $initial.$subscrip;
+						}
 						$bookedstalldata = [];
 						if (!empty($stalldata['bookedstall'])) {
 							foreach($stalldata['bookedstall'] as $bookedstall){
@@ -97,11 +115,20 @@
 								}
 							}
 						}
-
+						
 						$tabcontent .= 	'<li class="list-group-item px-4 py-3">
-						<p class="text-bold mb-1">
-						'.$stalldata['name'].'<div class="row">'.implode('', $bookedstalldata).'
-						</div></p>
+							<p class="text-bold mb-1">
+							'.$stalldata['name'].'<div class="row">'.implode('', $bookedstalldata).'</p> 
+							<p class="text-bold mb-1">
+							'.$night_price.'</p>
+							<p class="text-bold mb-1">
+							'.$week_price.'</p>
+							<p class="text-bold mb-1">
+							'.$month_price.'</p>
+							<p class="text-bold mb-1">
+							'.$flat_price.'</p>
+							<p class="text-bold mb-1">
+							'.$initialsub.'</p>
 						</li>';
 					}
 
@@ -119,6 +146,24 @@
 						$rvtabcontent .= '<div class="tab-pane fade'.$rvbarnactive.'" id="barn'.$barnid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 											<ul class="list-group">';
 							foreach($rvbarndata['rvstall'] as $rvstalldata){
+								$rvinitialsub=''; $rvnight_price=''; $rvmonth_price=''; $rvflat_price=''; $week_price='';
+								if($rvstalldata['night_price']!=''){
+									$rvnight_price = 'N ('.$currencysymbol.$rvstalldata['night_price'].')';
+								}
+								if($stalldata['week_price']!=''){
+									$rvweek_price = 'W ('. $currencysymbol.$rvstalldata['week_price'].')';
+								}
+								if($stalldata['night_price']!=''){
+									$rvmonth_price = 'M ('. $currencysymbol.$rvstalldata['month_price'].')';
+								}
+								if($stalldata['flat_price']!=''){
+									$rvflat_price = 'F ('. $currencysymbol.$rvstalldata['flat_price'].')';
+								}
+								if($stalldata['subscription_initial_price']!='' && $stalldata['subscription_month_price']!=''){
+									$initial 	= 'S ('. $currencysymbol.$rvstalldata['subscription_initial_price'].')';
+									$subscrip 	=  'M ('. $currencysymbol.$rvstalldata['subscription_month_price'].')';
+									$rvinitialsub = $initial.$subscrip;
+								}
 								$rvbookedstalldata = [];
 								if (!empty($rvstalldata['rvbookedstall'])) {
 									foreach($rvstalldata['rvbookedstall'] as $rvbookedstall){
@@ -140,10 +185,20 @@
 									}
 								}
 									$rvtabcontent .= 	'<li class="list-group-item px-4 py-3">
-														<p class="text-bold mb-1">
-														'.$rvstalldata['name'].'<div class="row">'.implode('', $rvbookedstalldata).'</div>
-														</p>
-													</li>';
+															<p class="text-bold mb-1">
+															'.$rvstalldata['name'].'<div class="row">'.implode('', $rvbookedstalldata).'</div>
+															</p>
+															<p class="text-bold mb-1">
+															'.$rvnight_price.'</p>
+															<p class="text-bold mb-1">
+															'.$rvweek_price.'</p>
+															<p class="text-bold mb-1">
+															'.$rvmonth_price.'</p>
+															<p class="text-bold mb-1">
+															'.$rvflat_price.'</p>
+															<p class="text-bold mb-1">
+															'.$rvinitialsub.'</p>
+														</li>';
 						}
 							$rvtabcontent .= '</ul></div>';
 					}

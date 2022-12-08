@@ -74,9 +74,12 @@ class Index extends BaseController
 	
 	public function view($id)
 	{
-		$result = $this->payments->getBooking('row', ['booking', 'event','barnstall','users','paymentmethod'], ['id' => $id]);
+		$result = $this->payments->getBooking('row', ['booking', 'event','barnstall', 'rvbarnstall',  'users', 'feed', 'shaving', 'payment', 'paymentmethod'], ['id' => $id]);
+
 		if($result){
-			$data['result'] = $result;
+			$data['result'] 		= $result;
+			$data['pricelists'] 	= $this->config->pricelist; 
+			$data['currencysymbol'] = $this->config->currencysymbol;
 		}else{
 			$this->session->setFlashdata('danger', 'No Record Found.');
 			return redirect()->to(getAdminUrl().'/reservations'); 

@@ -138,6 +138,7 @@ class Index extends BaseController
 		$data['detail']  	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall'],['id' => $id, 'type' => '2']);
 		$data['occupied'] 	= getOccupied($id); 
 		$data['reserved'] 	= getReserved($id);
+		$data['currencysymbol'] = $this->config->currencysymbol;
 		
 		return view('site/myaccount/facility/view',$data);
     }
