@@ -152,7 +152,7 @@ class Index extends BaseController
 						'id'	       =>  $data['id'],
 						'name'	       =>  $data['name'],
 						'quantity'     =>  $data['quantity'],
-						'price'        =>  $data['price']
+						'price'        =>  $data['price'],
 						'type'        =>  $data['type']
 					];
 				}
