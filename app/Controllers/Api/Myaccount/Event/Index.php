@@ -153,6 +153,7 @@ class Index extends BaseController
 						'name'	       =>  $data['name'],
 						'quantity'     =>  $data['quantity'],
 						'price'        =>  $data['price']
+						'type'        =>  $data['type']
 					];
 				}
 				$json = ['1', count($datas).' Record(s) Found', $result];
