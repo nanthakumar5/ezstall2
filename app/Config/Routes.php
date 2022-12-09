@@ -40,9 +40,20 @@ $routes->post('api/login', 'Api\Login\Index::index');
 $routes->post('api/register', 'Api\Register\Index::action');
 $routes->get('api/verification/(:any)', 'Api\Register\Index::verification/$1');
 
+//Home
+$routes->get('api/home', 'Api\Home\Index::index');
+
 $routes->post('api/upcomingevents', 'Api\Event\Index::upcomingevents');
 $routes->post('api/pastevents', 'Api\Event\Index::pastevents');
 $routes->post('api/viewallevents', 'Api\Event\Index::viewallevents');
+
+//Event
+$routes->get('api/eventlist', 'Api\Event\Index::listandsearch');
+$routes->get('api/eventdetail/(:num)', 'Api\Event\Index::detail/$1');
+
+//Facility
+$routes->get('api/facilitylist', 'Api\Facility\Index::Index');
+$routes->get('api/facilitydetail/(:num)', 'Api\Facility\Index::detail/$1');
 
 //Dashboard Api's
 $routes->post('api/dashboard', 'Api\Myaccount\Dashboard\Index::index');
