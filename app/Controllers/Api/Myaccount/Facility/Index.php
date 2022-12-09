@@ -137,4 +137,35 @@ class Index extends BaseController
         die;
 		
 	}
+	
+	function inventories($id)
+	{
+		if($id!=''){
+			$datas  	= $this->product->getProduct('all', ['product'], ['event_id' => $id]);
+
+			if(count($datas) > 0){
+				$result=[];
+				foreach($datas as $data){
+				   $result[] = [
+						'id'	       =>  $data['id'],
+						'name'	       =>  $data['name'],
+						'quantity'     =>  $data['quantity'],
+						'price'        =>  $data['price'],
+						'type'        =>  $data['type']
+					];
+				}
+				$json = ['1', count($datas).' Record(s) Found', $result];
+			} else {
+                $json = ['0', 'No Records Found.', []];	
+			}
+		}
+		 echo json_encode([
+            'status'         => $json[0],
+            'message'       => $json[1],
+            'result'         => $json[2],
+        ]);
+
+        die;
+
+	}
 }

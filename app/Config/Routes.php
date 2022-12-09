@@ -44,19 +44,27 @@ $routes->post('api/upcomingevents', 'Api\Event\Index::upcomingevents');
 $routes->post('api/pastevents', 'Api\Event\Index::pastevents');
 $routes->post('api/viewallevents', 'Api\Event\Index::viewallevents');
 
-//Myaccount Api's
+//Dashboard Api's
 $routes->post('api/dashboard', 'Api\Myaccount\Dashboard\Index::index');
+$routes->post('api/navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
+
+//Event
 $routes->post('api/events', 'Api\Myaccount\Event\Index::index');
 $routes->post('api/events/view', 'Api\Myaccount\Event\Index::view');
-$routes->post('api/facility', 'Api\Myaccount\Facility\Index::index');
-$routes->post('api/facility/view', 'Api\Myaccount\Facility\Index::view');
 $routes->get('api/events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
 
-$routes->post('api/navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
+//Facility
+$routes->post('api/facility', 'Api\Myaccount\Facility\Index::index');
+$routes->post('api/facility/view', 'Api\Myaccount\Facility\Index::view');
+$routes->get('api/facility/inventories/(:num)', 'Api\Myaccount\Facility\Index::inventories/$1');
+
+//Stallmanager
 $routes->post('api/stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
 $routes->post('api/addstallmanager', 'Api\Myaccount\Stallmanager\Index::add');
 $routes->post('api/editstallmanager', 'Api\Myaccount\Stallmanager\Index::edit');
 $routes->post('api/deletestallmanager', 'Api\Myaccount\Stallmanager\Index::delete');
+
+//Operator api
 $routes->post('api/operator', 'Api\Myaccount\Operators\Index::index');
 $routes->post('api/addoperator', 'Api\Myaccount\Operators\Index::add');
 $routes->post('api/editoperator', 'Api\Myaccount\Operators\Index::edit');
