@@ -36,37 +36,21 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 //Api
-
 $routes->post('api/login', 'Api\Login\Index::index');
 $routes->post('api/register', 'Api\Register\Index::action');
 $routes->get('api/verification/(:any)', 'Api\Register\Index::verification/$1');
-
-//Home
-$routes->get('api/home', 'Api\Home\Index::index');
 
 $routes->post('api/upcomingevents', 'Api\Event\Index::upcomingevents');
 $routes->post('api/pastevents', 'Api\Event\Index::pastevents');
 $routes->post('api/viewallevents', 'Api\Event\Index::viewallevents');
 
-//Events
-$routes->get('api/eventlist', 'Api\Event\Index::listandsearch');
-$routes->get('api/eventdetail/(:num)', 'Api\Event\Index::detail/$1');
-
-//Facility
-$routes->get('api/facilitylist', 'Api\Facility\Index::Index');
-$routes->get('api/facilitydetail/(:num)', 'Api\Facility\Index::detail/$1');
-
 //Myaccount Api's
 $routes->post('api/dashboard', 'Api\Myaccount\Dashboard\Index::index');
-
-//Event
 $routes->post('api/events', 'Api\Myaccount\Event\Index::index');
 $routes->post('api/events/view', 'Api\Myaccount\Event\Index::view');
-$routes->get('api/events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
-
-//Facility
 $routes->post('api/facility', 'Api\Myaccount\Facility\Index::index');
 $routes->post('api/facility/view', 'Api\Myaccount\Facility\Index::view');
+$routes->get('api/events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
 
 $routes->post('api/navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
 $routes->post('api/stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
