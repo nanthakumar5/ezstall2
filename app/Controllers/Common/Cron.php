@@ -4,6 +4,7 @@ namespace App\Controllers\Common;
 
 use App\Controllers\BaseController;
 use App\Models\Booking;
+use App\Models\Stripe;
 
 class Cron extends BaseController
 {
@@ -11,6 +12,7 @@ class Cron extends BaseController
     {
 		$this->db = db_connect();
 		$this->booking = new Booking();	
+		$this->stripe = new Stripe();	
     }
 	
 	public function cartremoval()
@@ -44,9 +46,28 @@ class Cron extends BaseController
 						->where(['b.check_out'=> $date])
 						->get()
 						->getResultArray();
+						
 		if(count($booking) > 0){		
 			foreach($booking as $booking){  
 				$result  = $this->booking->updatedata(['stallid' => $booking['stall_id'], 'lockunlock' => '0', 'dirtyclean' => '0' ]);
+			}
+		}
+		die;
+	}
+	
+	public function stripestallsubscription()
+	{	
+	$x = $this->stripe->retrievePaymentIntents('pi_3MCIXvSBPAfrS2b01rZekyyD');
+	echo '<pre>';print_r($x);die;
+		$date = date('Y-m-d');
+
+		$payments 	= 	$this->db->table('payment p')
+						->where(['DATE(p.plan_period_start) <=' => $date, 'DATE(p.plan_period_end) >=' => $date, 'p.type' => '3'])
+						->get()
+						->getResultArray();
+				
+		if(count($payments) > 0){		
+			foreach($payments as $payment){
 			}
 		}
 		die;

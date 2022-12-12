@@ -85,6 +85,7 @@ $routes->post('ajaxsearchfacility', 'Common\Ajax::ajaxsearchfacility');
 // Cron
 $routes->get('cartremoval', 'Common\Cron::cartremoval');
 $routes->get('bookingenddate', 'Common\Cron::bookingenddate');
+$routes->get('stripestallsubscription', 'Common\Cron::stripestallsubscription');
 
 // Validation
 $routes->post('validation/emailvalidation', 'Common\Validation::emailvalidation');
