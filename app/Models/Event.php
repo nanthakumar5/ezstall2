@@ -70,6 +70,7 @@ class Event extends BaseModel
 				$query->orLike('e.city', $llocation);
 				$query->orLike('e.state', $llocation);
 				$query->orLike('e.zipcode', $llocation);
+				$query->orLike('e.name', $llocation);
 			$query->groupEnd();
 		}
 		

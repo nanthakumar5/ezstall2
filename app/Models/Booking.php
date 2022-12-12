@@ -59,13 +59,11 @@ class Booking extends BaseModel
 		if(isset($requestdata['eventid'])) 				$query->where('b.event_id', $requestdata['eventid']);
 		if(isset($requestdata['user_id'])) 				$query->where('b.user_id', $requestdata['user_id']);		
 		if(isset($requestdata['check_in'])) 			$query->where('b.check_in', $requestdata['check_in']);
-
+		if(isset($requestdata['check_out'])) 		    $query->where('b.check_out', $requestdata['check_out']);
+		if(isset($requestdata['gtcheck_in'])) 			$query->where('b.check_in >=', $requestdata['gtcheck_in']);
+		if(isset($requestdata['ltcheck_out'])) 		    $query->where('b.check_out <=', $requestdata['ltcheck_out']);
 		if(isset($requestdata['stallcheck_in'])) 		$query->whereIn('b.check_in', $requestdata['stallcheck_in']);		
 		if(isset($requestdata['stallcheck_out'])) 		$query->whereIn('b.check_out', $requestdata['stallcheck_out']);		
-		if(isset($requestdata['check_out'])) 		    $query->where('b.check_out', $requestdata['check_out']);
-
-		if(isset($requestdata['gtcheck_in'])) 			$query->where('b.check_in >=', $requestdata['gtcheck_in']);
-		if(isset($requestdata['ltcheck_out'])) 		    $query->where('b.check_out <=', $requestdata['ltcheck_out']);	
 		if(isset($requestdata['status'])) 				$query->where('b.status', $requestdata['status']);	
 
 		if(isset($requestdata['lockunlock'])) 			$query->where('s.lock_unlock', $requestdata['lockunlock']);

@@ -430,13 +430,14 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 		
 		function occupiedreserved(startdate, enddate, stallid=''){
 			var result = 1;
+			
 			ajax(
-				'<?php echo base_url()."/ajax/ajaxoccupied"; ?>',
+				'<?php echo base_url()."/ajax/ajaxoccupiedreservedblockunblock"; ?>',
 				{ eventid : eventid, checkin : startdate, checkout : enddate },
 				{
 					asynchronous : 1,
 					success : function(data){
-						$(data.success).each(function(i,v){ 
+						$(data.success.occupied).each(function(i,v){ 
 							if(stallid==v){
 								result = 0;
 								toastr.warning('Stall is already booked.', {timeOut: 5000});
@@ -447,17 +448,8 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							$('.stallid[value='+v+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("red-box");
 						});
-					}
-				}
-			)
-
-			ajax(
-				'<?php echo base_url()."/ajax/ajaxreserved"; ?>',
-				{ eventid : eventid, checkin : startdate, checkout : enddate },
-				{
-					asynchronous : 1,
-					success : function(data){
-						$.each(data.success, function (i, v) {
+						
+						$.each(data.success.reserved, function (i, v) {
 							if(stallid==i){
 								result = 0;
 								toastr.warning('Stall is already booked.', {timeOut: 5000});
@@ -468,42 +460,24 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							$('.stallid[value='+i+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+i+']').removeClass("green-box").addClass("yellow-box");
 						});
-					}
-				}
-			)
-			
-			ajax(
-				'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
-				{ eventid : eventid },
-				{
-					asynchronous : 1,
-					success : function(data){
-						$(data.success).each(function(i,v){
+						
+						$(data.success.blockunblock1).each(function(i,v){
 							$('.stallid[value='+v+']').attr('disabled', 'disabled');
 							$('.stallid[value='+v+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 							$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("yellow-box");
 						});
-					}
-				}
-			)
-			
-			if(eventtype==2){
-				ajax(
-					'<?php echo base_url()."/ajax/ajaxblockunblock"; ?>',
-					{ eventid : eventid, checkin : startdate, checkout : enddate, type : 2 },
-					{
-						asynchronous : 1,
-						success : function(data){
-							$(data.success).each(function(i,v){
+						
+						if(eventtype==2){
+							$(data.success.blockunblock2).each(function(i,v){
 								$('.stallid[value='+v+']').attr('disabled', 'disabled');
 								$('.stallid[value='+v+']').closest('li').find('.price_button').attr('disabled', 'disabled');
 								$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("yellow-box");
 							});
 						}
 					}
-				)
-			}
-			
+				}
+			)
+						
 			return result;
 		}
 

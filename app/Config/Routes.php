@@ -36,60 +36,63 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 
 //Api
-$routes->post('api/login', 'Api\Login\Index::index');
-$routes->post('api/register', 'Api\Register\Index::action');
-$routes->get('api/verification/(:any)', 'Api\Register\Index::verification/$1');
+$routes->group('api', function ($routes) {
+	$routes->post('login', 'Api\Login\Index::index');
+	$routes->post('register', 'Api\Register\Index::action');
+	$routes->get('verification/(:any)', 'Api\Register\Index::verification/$1');
 
-//Home
-$routes->get('api/home', 'Api\Home\Index::index');
+	//Home
+	$routes->get('home', 'Api\Home\Index::index');
 
-$routes->post('api/upcomingevents', 'Api\Event\Index::upcomingevents');
-$routes->post('api/pastevents', 'Api\Event\Index::pastevents');
-$routes->post('api/viewallevents', 'Api\Event\Index::viewallevents');
+	$routes->post('upcomingevents', 'Api\Event\Index::upcomingevents');
+	$routes->post('pastevents', 'Api\Event\Index::pastevents');
+	$routes->post('viewallevents', 'Api\Event\Index::viewallevents');
 
-//Event
-$routes->get('api/eventlist', 'Api\Event\Index::listandsearch');
-$routes->get('api/eventdetail/(:num)', 'Api\Event\Index::detail/$1');
+	//Event
+	$routes->get('eventlist', 'Api\Event\Index::listandsearch');
+	$routes->get('eventdetail/(:num)', 'Api\Event\Index::detail/$1');
 
-//Facility
-$routes->get('api/facilitylist', 'Api\Facility\Index::Index');
-$routes->get('api/facilitydetail/(:num)', 'Api\Facility\Index::detail/$1');
+	//Facility
+	$routes->get('facilitylist', 'Api\Facility\Index::Index');
+	$routes->get('facilitydetail/(:num)', 'Api\Facility\Index::detail/$1');
 
-//Dashboard Api's
-$routes->post('api/dashboard', 'Api\Myaccount\Dashboard\Index::index');
-$routes->post('api/navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
+	//Dashboard Api's
+	$routes->post('dashboard', 'Api\Myaccount\Dashboard\Index::index');
+	$routes->post('navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
 
-//Event
-$routes->post('api/events', 'Api\Myaccount\Event\Index::index');
-$routes->post('api/events/view', 'Api\Myaccount\Event\Index::view');
-$routes->get('api/events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
+	//Event
+	$routes->post('events', 'Api\Myaccount\Event\Index::index');
+	$routes->post('events/view', 'Api\Myaccount\Event\Index::view');
+	$routes->get('events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
 
-//Facility
-$routes->post('api/facility', 'Api\Myaccount\Facility\Index::index');
-$routes->post('api/facility/view', 'Api\Myaccount\Facility\Index::view');
-$routes->get('api/facility/inventories/(:num)', 'Api\Myaccount\Facility\Index::inventories/$1');
+	//Facility
+	$routes->post('facility', 'Api\Myaccount\Facility\Index::index');
+	$routes->post('facility/view', 'Api\Myaccount\Facility\Index::view');
+	$routes->get('facility/inventories/(:num)', 'Api\Myaccount\Facility\Index::inventories/$1');
 
-//Stallmanager
-$routes->post('api/stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
-$routes->post('api/addstallmanager', 'Api\Myaccount\Stallmanager\Index::add');
-$routes->post('api/editstallmanager', 'Api\Myaccount\Stallmanager\Index::edit');
-$routes->post('api/deletestallmanager', 'Api\Myaccount\Stallmanager\Index::delete');
+	//Stallmanager
+	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
+	$routes->post('addstallmanager', 'Api\Myaccount\Stallmanager\Index::add');
+	$routes->post('editstallmanager', 'Api\Myaccount\Stallmanager\Index::edit');
+	$routes->post('deletestallmanager', 'Api\Myaccount\Stallmanager\Index::delete');
 
-//Operator api
-$routes->post('api/operator', 'Api\Myaccount\Operators\Index::index');
-$routes->post('api/addoperator', 'Api\Myaccount\Operators\Index::add');
-$routes->post('api/editoperator', 'Api\Myaccount\Operators\Index::edit');
-$routes->post('api/deleteoperator', 'Api\Myaccount\Operators\Index::delete');
+	//Operator
+	$routes->post('operator', 'Api\Myaccount\Operators\Index::index');
+	$routes->post('addoperator', 'Api\Myaccount\Operators\Index::add');
+	$routes->post('editoperator', 'Api\Myaccount\Operators\Index::edit');
+	$routes->post('deleteoperator', 'Api\Myaccount\Operators\Index::delete');
 
-//Homepage API
-$routes->get('api/faq', 'Api\Faq\Index::index');
-$routes->get('api/aboutus', 'Api\Aboutus\Index::index');
-$routes->post('api/aboutus/view', 'Api\Aboutus\Index::view');
-$routes->get('api/contactus', 'Api\Contactus\Index::index');
-$routes->post('api/contactus/add', 'Api\Contactus\Index::add');
+	//Homepage
+	$routes->get('faq', 'Api\Faq\Index::index');
+	$routes->get('aboutus', 'Api\Aboutus\Index::index');
+	$routes->post('aboutus/view', 'Api\Aboutus\Index::view');
+	$routes->get('contactus', 'Api\Contactus\Index::index');
+	$routes->post('contactus/add', 'Api\Contactus\Index::add');
+});
 
 // Ajax
 $routes->post('ajax/fileupload', 'Common\Ajax::fileupload');
+$routes->post('ajax/ajaxoccupiedreservedblockunblock', 'Common\Ajax::ajaxoccupiedreservedblockunblock');
 $routes->post('ajax/ajaxoccupied', 'Common\Ajax::ajaxoccupied');
 $routes->post('ajax/ajaxreserved', 'Common\Ajax::ajaxreserved');
 $routes->post('ajax/ajaxstripepayment', 'Common\Ajax::ajaxstripepayment');

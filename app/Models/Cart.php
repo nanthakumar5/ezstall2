@@ -57,8 +57,8 @@ class Cart extends BaseModel
 		
 		if(isset($requestdata['checkin']) && isset($requestdata['checkout'])){
 			$query->groupStart();
-				$query->where("'".date('Y-m-d', strtotime($requestdata['checkin']))."' BETWEEN c.check_in AND DATE_ADD(c.check_out, INTERVAL -1 DAY)");
-				$query->orWhere("'".date('Y-m-d', strtotime($requestdata['checkout']))."' BETWEEN c.check_in AND DATE_ADD(c.check_out, INTERVAL -1 DAY)");
+				$query->where("('".date('Y-m-d', strtotime($requestdata['checkin']))."' BETWEEN c.check_in AND DATE_ADD(c.check_out, INTERVAL -1 DAY))");
+				$query->orWhere("('".date('Y-m-d', strtotime($requestdata['checkout']))."' BETWEEN c.check_in AND DATE_ADD(c.check_out, INTERVAL -1 DAY))");
 			$query->groupEnd();
 		}
 		
@@ -66,7 +66,6 @@ class Cart extends BaseModel
 			$result = $query->countAllResults();
 		}else{
 			$query = $query->get();
-			
 			if($type=='all') 		$result = $query->getResultArray();
 			elseif($type=='row') 	$result = $query->getRowArray();
 			

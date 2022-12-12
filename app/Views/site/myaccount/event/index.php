@@ -159,7 +159,7 @@ $currentdate 	= date("Y-m-d");
 	var currencysymbol = '<?php echo $currencysymbol; ?>';
 	
 	$(function(){
-		dateformat('#checkin, #checkout');
+		uidatepicker('#checkin, #checkout');
 		
 		validation(
 			'#importform',

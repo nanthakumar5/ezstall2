@@ -412,7 +412,7 @@ function getOccupied($eventid, $extras=[]){
 }
 
 function getReserved($eventid, $extras=[]){ 
-	$condition 	= ['eventid' => $eventid];
+	$condition 	= ['event_id' => $eventid];
 	if(count($extras) > 0) $condition 	= $condition+$extras;
 	
 	$cart	= new \App\Models\Cart;
@@ -439,7 +439,7 @@ function getBlockunblock($eventid, $extras=[]){
 
 function getProductQuantity($eventid, $extras=[]){
 	$request 		= service('request');
-	$condition 		= getSiteUserID() ? ['eventid' => $eventid, 'neq_user_id' => getSiteUserID(), 'neq_ip' => $request->getIPAddress()] : ['eventid' => $eventid, 'neq_user_id' => 0, 'neq_ip' =>$request->getIPAddress()] ;
+	$condition 		= getSiteUserID() ? ['event_id' => $eventid, 'neq_user_id' => getSiteUserID(), 'neq_ip' => $request->getIPAddress()] : ['event_id' => $eventid, 'neq_user_id' => 0, 'neq_ip' =>$request->getIPAddress()] ;
 	if(count($extras) > 0) $condition 	= $condition+$extras;
 	
 	$cart	= new \App\Models\Cart;

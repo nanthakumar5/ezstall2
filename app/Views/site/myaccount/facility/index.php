@@ -132,7 +132,7 @@ $currentdate 					= date("Y-m-d");
 	var userid = '<?php echo $userid; ?>';
 	
 	$(function(){
-		dateformat('#checkin, #checkout');
+		uidatepicker('#checkin, #checkout');
 		
 		validation(
 			'#importform',
