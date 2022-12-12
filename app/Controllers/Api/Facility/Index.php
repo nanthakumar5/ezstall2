@@ -29,7 +29,8 @@ class Index extends BaseController
 		if ($data && count($data) > 0){
 			$result=[];
 			foreach($data as $datas){
-				
+				$status = checkEvent($datas);
+				$image = ($datas['image']!='') ? base_url().'/assets/uploads/event/'.$datas['image'] : '';
 				
 				$result[] = [
 					'id'                => $datas['id'],
@@ -45,7 +46,9 @@ class Index extends BaseController
 					'mobile'            => $datas['mobile'],
 					'start_date'        => dateformat($datas['start_date']),
 				    'end_date'          => dateformat($datas['end_date']),
-					'image'             => $datas['image'],
+					'image'             => $image,
+					'status'            => $status['status'],
+					'btn'             	=> $status['btn']  
 				];
 			}
 			
