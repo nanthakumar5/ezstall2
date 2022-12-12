@@ -7,6 +7,7 @@ use App\Controllers\BaseController;
 use App\Models\Event;
 
 use App\Models\Booking;
+use App\Models\Products;
 
 class Index extends BaseController
 {
@@ -14,6 +15,7 @@ class Index extends BaseController
     {
 		$this->event = new Event();
 		$this->booking = new Booking();
+		$this->product = new Products();
     }
 
     public function index()
@@ -106,7 +108,6 @@ class Index extends BaseController
 			
 			if(count($data) > 0){
 				$result1=[];
-				//foreach($datas as $data){
 				   $result1[] = [
 						'id'	       =>  $data['id'],
 						'name'	       =>  $data['name'],
@@ -121,8 +122,6 @@ class Index extends BaseController
 						'barndata'     => $data['barn'],
 						'rvbarndata'   => $data['rvbarn']
 					];
-				//}
-
 				$json = ['1', '1 Record(s) Found', $result1];	
             } else {
                 $json = ['0', 'No Records Found.', []];	
@@ -140,5 +139,35 @@ class Index extends BaseController
 
         die;
 		
+	}
+	function inventories($id)
+	{
+		if($id!=''){
+			$datas  	= $this->product->getProduct('all', ['product'], ['event_id' => $id]);
+
+			if(count($datas) > 0){
+				$result=[];
+				foreach($datas as $data){
+				   $result[] = [
+						'id'	       =>  $data['id'],
+						'name'	       =>  $data['name'],
+						'quantity'     =>  $data['quantity'],
+						'price'        =>  $data['price'],
+						'type'        =>  $data['type']
+					];
+				}
+				$json = ['1', count($datas).' Record(s) Found', $result];
+			} else {
+                $json = ['0', 'No Records Found.', []];	
+			}
+		}
+		 echo json_encode([
+            'status'         => $json[0],
+            'message'       => $json[1],
+            'result'         => $json[2],
+        ]);
+
+        die;
+
 	}
 }
