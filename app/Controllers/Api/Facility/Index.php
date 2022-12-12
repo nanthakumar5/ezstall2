@@ -48,7 +48,7 @@ class Index extends BaseController
 				    'end_date'          => dateformat($datas['end_date']),
 					'image'             => $image,
 					'status'            => $status['status'],
-					'btn'             	=> $status['btn']
+					'btn'             	=> $status['btn']  
 				];
 			}
 			
