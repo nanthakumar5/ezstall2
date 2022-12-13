@@ -23,6 +23,7 @@
 		$sid 				= isset($result['sid']) ? $result['sid'] : '';
 		$token 				= isset($result['token']) ? $result['token'] : '';
 		$fromnumber			= isset($result['fromnumber']) ? $result['fromnumber'] : '';
+		$cartreservedtime	= isset($result['cartreservedtime']) ? $result['cartreservedtime'] : '';
 	?>
 	<section class="content-header">
 		<div class="container-fluid">
@@ -260,6 +261,32 @@
 			</div>
 		</div>
 	</section>
+	
+	<section class="content">
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Cart</h3>
+			</div>
+			<div class="card-body">
+				<form method="post" id="form5" action="<?php echo getAdminUrl(); ?>/settings" autocomplete="off">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label>Reserved Time (Minutes)</label>
+									<input type="number" class="form-control" min="1" name="cartreservedtime" placeholder="Reserved Time (Minutes)" value="<?php echo $cartreservedtime; ?>">
+								</div>
+							</div>	
+							<div class="col-md-12">
+								<input type="hidden" name="actionid" value="1">
+								<input type="submit" class="btn btn-primary" value="Submit">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
 <?php $this->endSection(); ?>
 
 <?php $this->section('js') ?>
@@ -332,10 +359,22 @@
                 },
 
             );
+			
             validation(
 				'#form4',
                 {
 					googleanalytics        : {
+                        required  : true
+                    }
+                    
+                },
+
+            );
+			
+            validation(
+				'#form5',
+                {
+					cartreservedtime        : {
                         required  : true
                     }
                     

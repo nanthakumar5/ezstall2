@@ -59,6 +59,8 @@ class Settings extends BaseModel
 		if(isset($data['producereventfee']) && $data['producereventfee']!='') 	  	$request['producereventfee']            = $data['producereventfee'];
 		if(isset($data['facilitystallfee']) && $data['facilitystallfee']!='') 	  	$request['facilitystallfee']            = $data['facilitystallfee'];
 		if(isset($data['googleanalytics']) && $data['googleanalytics']!='') 	  	$request['googleanalytics']            = $data['googleanalytics'];
+		
+		if(isset($data['cartreservedtime']) && $data['cartreservedtime']!='') 	  	$request['cartreservedtime']            = $data['cartreservedtime'];
 	
 		if(isset($data['image']) && $data['image']!=''){
 			$request['logo'] = $data['image'];		

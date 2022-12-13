@@ -166,4 +166,22 @@ class Cart extends BaseModel
 			return true;
 		}
 	}
+	
+	public function removeReserved($time)
+	{	
+		$datetime 	= 	date("Y-m-d H:i:s");
+		
+		$cart 		= 	$this->db->table('cart')
+						->select('max(datetime) as datetime, user_id')
+						->groupBy('user_id', 'desc')
+						->having('DATE_ADD(datetime, INTERVAL '.$time.' MINUTE) <=', $datetime)
+						->get()
+						->getResultArray();
+		
+		if(count($cart) > 0){
+			foreach($cart as $data){
+				$this->db->table('cart')->delete(['user_id' => $data['user_id']]);
+			}
+		}
+	}
 }

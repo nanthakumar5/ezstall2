@@ -454,6 +454,16 @@ function upcomingEvents()
 	return $event->getEvent('all', ['event'],['status' => ['1'], 'start_date' => date('Y-m-d')], ['orderby' => 'e.id desc', 'limit' => '3', 'type' => '1']);
 }
 
+function removeCartReserved()
+{	
+	$setting = getSettings();
+	
+	$cart	= new \App\Models\Cart;
+	$cart	= $cart->removeReserved($setting['cartreservedtime']);
+	
+	return true;
+}
+
 function getSettings()
 {
 	$settings = new \App\Models\Settings;

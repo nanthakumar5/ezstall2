@@ -1,4 +1,5 @@
 <?php
+	removeCartReserved();
 	$userdetail  	= getSiteUserDetails();
 	$uri 			= service('uri');
 	$segment1 		= $uri->getSegment(1);
