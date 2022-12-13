@@ -336,53 +336,91 @@
 		<?php } ?>
 	</div>
 	<div>
+
+
 	<?php if($userdetail['type']=='6' || $userdetail['type']=='4'){
 		echo '<h4><b>Today Checkin Event</b></h4>';
 		 if(!empty($checkinstall)){
+		 	echo '<button class="btn_dash_lock delete_lockunlockbtn">Unlocked</button>';
+			echo ' ';
+			echo '<button class="btn_dash_lock delete_dirtyclean">Clean</button>';
+			$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock">Locked</button></div>';
+			$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
+
 			foreach($checkinstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
-				foreach($availablestall['barnstall'] as $stall){ 
+				foreach($availablestall['barnstall'] as $stall){
+				if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {
+
+					if($stall['lockunlock']=='0' ){
+						$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$stall['stall_id'].'">Unlocked</button></div>';
+					}
+					if($stall['dirtyclean']=='0'){
+						$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success dirtyclean" data-stallid="'.$stall['stall_id'].'">Cleaned</button></div>'; 
+					}
 						echo '
 								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
-									<div>
+									<div class="bookselect "><div class="form-check">
+	                                <input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'"></div>
 										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
 										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
 									</div>
+									<div>'.$btnlockunlock.'
+										'.$btndirtyclean.'
+									</div>	
 								</div>
 							';
-					
+					}
 				}
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 
-					echo '
-							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
-								<div>
-									<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
-									<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
-								</div>
-							</div>
-						';
 					
+					if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='0')) {
+
+						if($rvbarnstall['lockunlock']=='0' ){
+							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$starvbarnstallll['stall_id'].'">Unlocked</button></div>';
+						}
+						if($rvbarnstall['dirtyclean']=='0'){
+							$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success dirtyclean" data-stallid="'.$rvbarnstall['stall_id'].'">Cleaned</button></div>'; 
+						}
+
+						echo '
+								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
+									<div class="bookselect "><div class="form-check">
+	                                <input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'"></div>
+										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
+										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
+									</div>
+									<div>'.$btnlockunlock.'
+										'.$btndirtyclean.'
+									</div>	
+								</div>
+							';
+						}
+						
 				}
 			}
 		}else{ echo "<p>No Stalls Checkin Today</p>";}
 		echo "<br>";
+
 		echo '<h4><b>Today Checkout Event</b></h4>';		 
 		if(!empty($checkoutstall)){
-			echo '<button class="btn_dash_lock delete_lockunlockbtn">Unlocked</button>';
+			echo '<button class="btn_dash_lock delete_lockunlockbtn_checkout">Locked</button>';
 			echo ' ';
-			echo '<button class="btn_dash_lock delete_dirtyclean">Clean</button>';
+			echo '<button class="btn_dash_lock delete_dirtyclean_checkout">Dirty</button>';
 			foreach($checkoutstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
-				foreach($availablestall['barnstall'] as $stall){ 
+				foreach($availablestall['barnstall'] as $stall){
 
-					$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock lockunlock"  data-stallid="'.$stall['stall_id'].'">Locked</button></div>';
-					$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean" data-stallid="'.$stall['stall_id'].'">Dirty</button></div>';
+					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='1' && $stall['dirtyclean']=='1')){
+
+					$btnlockunlock ='<div class="bookselectbtn"><button class="btn btn-success ">Unlocked</button></div>';
+					$btndirtyclean ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
 
 					if($stall['lockunlock']=='1'){
-						$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success">Unlocked</button></div>';
+						$btnlockunlock = '<div class="bookselectbtn"><button class="btn_dash_lock lockunlock_checkout"  data-stallid="'.$stall['stall_id'].'">Locked</button></div>';
 					}
 					if($stall['dirtyclean']=='1'){
-						$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>'; 
+						$btndirtyclean = '<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean_checkout" data-stallid="'.$stall['stall_id'].'">Dirty</button></div>'; 
 					}
 						echo '
 							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
@@ -397,18 +435,19 @@
 									'.$btndirtyclean.'
 								</div>	
 							</div>';
+						}
 					
 				}
 
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 
-					$btnlockunlocks ='<div class="bookselectbtn"><button class="btn_dash_lock lockunlock"  data-stallid="'.$rvbarnstall['stall_id'].'">Locked</button></div>';
-					$btndirtycleans ='<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean" data-stallid="'.$rvbarnstall['stall_id'].'">Dirty</button></div>';
+					$btnlockunlocks ='<div class="bookselectbtn"><button class="btn btn-success">Unlocked</button></div>';
+					$btndirtycleans ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
 
 					if($rvbarnstall['lockunlock']=='1'){
-						$btnlockunlocks = '<div class="bookselectbtn"><button class="btn btn-success">Unlocked</button></div>';
+						$btnlockunlocks = '<div class="bookselectbtn"><button class="btn_dash_lock lockunlock"  data-stallid="'.$rvbarnstall['stall_id'].'">Locked</button></div>';
 					}
 					if($rvbarnstall['dirtyclean']=='1'){
-						$btndirtycleans = '<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>'; 
+						$btndirtycleans = '<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean" data-stallid="'.$rvbarnstall['stall_id'].'">Dirty</button></div>'; 
 					}
 						echo '
 							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
@@ -428,43 +467,41 @@
 			}
 		}else{ echo "<p>No Stalls Checkout Today</p>";}
 		}?>
+
+
+
 	
 </div>
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <script>
+
 	$(".bookselect input.form-check-input:checkbox").on('click', function(){
         $(this).parent().parent().parent().toggleClass("checked");
-   });
+   	});
+
 	$(document).on('click','.lockunlock',function(){
-		var action 	= 	'<?php echo base_url()."/myaccount/updatedata"; ?>';
-		var data   = '\
-		<input type="hidden" value="'+$(this).attr('data-stallid')+'" name="stallid">\
-		<input type="hidden" value="1" name="lockunlock">\
-		';
-		sweetalert2(action,data);
+		lockunlock($(this).attr('data-stallid'),'lockunlock', '1');
 	});	
 
 	$(document).on('click','.dirtyclean',function(){
-		var action 	= 	'<?php echo base_url()."/myaccount/updatedata"; ?>';
-		var data   = '\
-		<input type="hidden" value="'+$(this).attr('data-stallid')+'" name="stallid">\
-		<input type="hidden" value="1" name="dirtyclean">\
-		';
-		sweetalert2(action,data);
+		lockunlock($(this).attr('data-stallid'),'dirtyclean','1');
 	});	
+
+	$(document).on('click','.lockunlock_checkout',function(){
+		lockunlock($(this).attr('data-stallid'),'lockunlock','0');
+	});	
+
+	$(document).on('click','.dirtyclean_checkout',function(){
+		lockunlock($(this).attr('data-stallid'),'dirtyclean','0');
+	});
 
 	$(document).on('click','.delete_lockunlockbtn',function(){
 	 	var stallid = [];
 	    $.each($("input[name='removestallid']:checked"), function(){
 	        stallid.push($(this).val());
 	    });
-		var action 	= 	'<?php echo base_url()."/myaccount/updatedata"; ?>';
-		var data   = '\
-		<input type="hidden" value="'+stallid+'" name="stallid">\
-		<input type="hidden" value="1" name="lockunlock">\
-		';
-		sweetalert2(action,data);
+	    lockunlock(stallid,'lockunlock','1');
 	});	
 
 	$(document).on('click','.delete_dirtyclean',function(){
@@ -472,12 +509,34 @@
 	    $.each($("input[name='removestallid']:checked"), function(){
 	        stallid.push($(this).val());
 	    });
+	    lockunlock(stallid,'lockunlock','1');
+	});
+
+	$(document).on('click','.delete_lockunlockbtn_checkout',function(){
+	 	var stallid = [];
+	    $.each($("input[name='removestallid']:checked"), function(){
+	        stallid.push($(this).val());
+	    });
+	    lockunlock(stallid,'lockunlock','0');
+	});	
+
+	$(document).on('click','.delete_dirtyclean_checkout',function(){
+	 	var stallid = [];
+	    $.each($("input[name='removestallid']:checked"), function(){
+	        stallid.push($(this).val());
+	    });
+	    lockunlock(stallid,'lockunlock','0');
+	});
+
+	function lockunlock(stallid,name,value){
 		var action 	= 	'<?php echo base_url()."/myaccount/updatedata"; ?>';
+		var status = 'lock_dirty_status';
 		var data   = '\
 		<input type="hidden" value="'+stallid+'" name="stallid">\
-		<input type="hidden" value="1" name="dirtyclean">\
+		<input type="hidden" value="'+value+'" name="'+name+'">\
+		<input type="hidden" value="'+value+'" name="'+status+'">\
 		';
 		sweetalert2(action,data);
-	});
+	}
 </script>
 <?php $this->endSection();?>

@@ -78,14 +78,14 @@
 						</div>
 						<?php foreach ($data['barnstall'] as $stalls) {
 							if($userdetail['type'] =='4'){ 
-								$btnlockunlock = '<i data-stallid="'.$stalls['stall_id'].'"  class="fas fa-lock event_lock lockunlock"></i>';
-								$btndirtyclean = '<i data-stallid="'.$stalls['stall_id'].' " class="fas fa-virus event_virus dirtyclean"></i>';
+								$btnlockunlock = '<i data-stallid="'.$stalls['stall_id'].'" class="fas fa-lock event_lock lockunlock_checkout"></i>';
+								$btndirtyclean = '<i  data-stallid="'.$stalls['stall_id'].'" class="fas fa-virus event_virus dirtyclean_checkout"></i>';
 
-								if($stalls['lockunlock']=='1'){
-									$btnlockunlock = '<i class="fas fa-unlock event_unlock">'; 
+								if($stalls['lockunlock']=='0'){
+									$btnlockunlock = '<i data-stallid="'.$stalls['stall_id'].'" class="fas fa-unlock event_unlock lockunlock">'; 
 								}
-							if($stalls['dirtyclean']=='1'){
-								$btndirtyclean = '<i class="fas fa-broom event_broom"></i>'; 
+							if($stalls['dirtyclean']=='0'){
+								$btndirtyclean = '<i data-stallid="'.$stalls['stall_id'].'" class="fas fa-broom event_broom dirtyclean"></i>'; 
 							}
 						} ?>
 						<div class="d-flex flex-wrap">
@@ -108,15 +108,16 @@
 								<p class="ticket_event_tag">RV HOOKUP</p>
 							</div>
 							<?php foreach ($data['rvbarnstall'] as $rvstall) {
-								if($userdetail['type'] =='4'){ 
-									$btnlockunlock = '<i data-stallid="'.$rvstall['stall_id'].'" class="fas fa-lock event_lock lockunlock"></i>';
-									$btndirtyclean = '<i data-stallid="'.$rvstall['stall_id'].' " class="fas fa-virus event_virus dirtyclean"></i>';
+								if($userdetail['type'] =='4'){
 
-									if($rvstall['lockunlock']=='1'){
-										$btnlockunlock = '<i class="fas fa-unlock event_unlock">'; 
+									$btnlockunlock = '<i data-stallid="'.$rvstall['stall_id'].'" class="fas fa-lock event_lock lockunlock_checkout"></i>';
+									$btndirtyclean = '<i  data-stallid="'.$rvstall['stall_id'].'" class="fas fa-virus event_virus dirtyclean_checkout"></i>';
+
+									if($rvstall['lockunlock']=='0'){
+										$btnlockunlock = '<i class="fas fa-unlock event_unlock lockunlock" data-stallid="'.$rvstall['stall_id'].'">'; 
 									}
-									if($rvstall['dirtyclean']=='1'){
-										$btndirtyclean = '<i class="fas fa-broom event_broom"></i>'; 
+									if($rvstall['dirtyclean']=='0'){
+										$btndirtyclean = '<i data-stallid="'.$rvstall['stall_id'].'" class="fas fa-broom event_broom dirtyclean"></i>'; 
 									}
 								} ?>
 								<div class="d-flex flex-wrap">
@@ -228,25 +229,34 @@
 		<input type="hidden" name="amount" value="'+$(this).attr("data-amount")+'">\
 		';
 		sweetalert2(action,data);
-	});	
+	});
 
 	$(document).on('click','.lockunlock',function(){
-		var action 	= 	'<?php echo base_url()."/myaccount/bookings"; ?>';
-		var data   = '\
-		<input type="hidden" value="'+$(this).attr('data-stallid')+'" name="stallid">\
-		<input type="hidden" value="1" name="lockunlock">\
-		';
-		sweetalert2(action,data);
+		lockunlock($(this).attr('data-stallid'),'lockunlock', '1');
 	});	
 
 	$(document).on('click','.dirtyclean',function(){
+		lockunlock($(this).attr('data-stallid'),'dirtyclean','1');
+	});	
+
+	$(document).on('click','.lockunlock_checkout',function(){
+		lockunlock($(this).attr('data-stallid'),'lockunlock','0');
+	});	
+
+	$(document).on('click','.dirtyclean_checkout',function(){
+		lockunlock($(this).attr('data-stallid'),'dirtyclean','0');
+	});	
+
+	function lockunlock(stallid,name,value){
 		var action 	= 	'<?php echo base_url()."/myaccount/bookings"; ?>';
-		var data   = '\
-		<input type="hidden" value="'+$(this).attr('data-stallid')+'" name="stallid">\
-		<input type="hidden" value="1" name="dirtyclean">\
+		var status = 'lock_dirty_status';
+		var data    = '\
+		<input type="hidden" value="'+stallid+'" name="stallid">\
+		<input type="hidden" value="'+value+'" name="'+name+'">\
+		<input type="hidden" value="'+value+'" name="'+status+'">\
 		';
 		sweetalert2(action,data);
-	});	
+	}
 
 	$(document).ready(function(){
 		$(".ticket__up").click(function(){
