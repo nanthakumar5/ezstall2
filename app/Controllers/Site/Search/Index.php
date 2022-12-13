@@ -25,7 +25,7 @@ class Index extends BaseController
 		if($this->request->getGet('end_date')!="")   	 	$searchdata['btw_end_date']    		= formatdate($this->request->getGet('end_date'));
 		if($this->request->getGet('no_of_stalls')!="")   	$searchdata['no_of_stalls']    		= $this->request->getGet('no_of_stalls');
 		
-		$eventcount = $this->event->getEvent('count', ['event', 'stallavailable'], $searchdata+['status'=> ['1']]);
+		$eventcount = count($this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1']]));
 		$event = $this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'start' => $offset, 'length' => $perpage], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
 		$data['eventdetail'] = $userdetail;

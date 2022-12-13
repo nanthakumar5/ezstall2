@@ -26,15 +26,26 @@ class Event extends BaseModel
 		} 
 
 		if(in_array('stallavailable', $querydata)){
-			$condition = '';
-			if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) 	$condition .= " and '".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date";
-			if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$condition .= " and '".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date";
-			if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$condition .= " and ('".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date or '".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date)";
+			$condition1 = '';
+			if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) 	$condition1 .= " and '".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date";
+			if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$condition1 .= " and '".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date";
+			if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$condition1 .= " and ('".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date or '".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date)";
 			
-			if($condition!=''){
-				$select[] = '((select count("*") from  stall as s where s.event_id = e.id and s.status="1") - (select  count("*") from  booking as b left join booking_details as bd on bd.booking_id = b.id where b.event_id = e.id '.$condition.')) as stallavailable';							
+			if($condition1!=''){
+				$select[] = '((select count("*") from  stall as s where s.event_id = e.id and s.status="1") - (select count(distinct(stall_id)) from  booking as b left join booking_details as bd on bd.booking_id = b.id where b.event_id = e.id '.$condition1.')) as stallavailable1';							
 			}else{
-				$select[] = '(select count("*") from  stall as s where s.event_id = e.id and s.status="1") as stallavailable';							
+				$select[] = '((select count("*") from  stall as s where s.event_id = e.id and s.status="1") - (select count(distinct(stall_id)) from  booking as b left join booking_details as bd on bd.booking_id = b.id where b.event_id = e.id)) as stallavailable1';							
+			}
+			
+			$condition2 = '';
+			if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) 	$condition2 .= " and '".$requestdata['btw_start_date']."' BETWEEN s.start_date AND s.end_date";
+			if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$condition2 .= " and '".$requestdata['btw_end_date']."' BETWEEN s.start_date AND s.end_date";
+			if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$condition2 .= " and ('".$requestdata['btw_start_date']."' BETWEEN s.start_date AND s.end_date or '".$requestdata['btw_end_date']."' BETWEEN s.start_date AND s.end_date)";
+			
+			if($condition2!=''){
+				$select[] = '(select count("*") from  stall as s where s.event_id = e.id and s.status="1" '.$condition2.') as stallavailable2';							
+			}else{
+				$select[] = '(select count("*") from  stall as s where s.event_id = e.id and s.status="1") as stallavailable2';							
 			}
 		}
 		
@@ -54,15 +65,14 @@ class Event extends BaseModel
 		if(isset($requestdata['type'])) 				$query->where('e.type', $requestdata['type']);
 		if(isset($requestdata['latitude'])) 			$query->where('e.latitude <=', $requestdata['latitude']);
 		if(isset($requestdata['longitude'])) 			$query->where('e.longitude >=', $requestdata['longitude']);
-
 		if(isset($requestdata['start_date'])) 			$query->where('e.start_date >=', date('Y-m-d', strtotime($requestdata['start_date'])));
 		if(isset($requestdata['end_date'])) 			$query->where('e.end_date <', date('Y-m-d', strtotime($requestdata['end_date'])));
 		if(isset($requestdata['gtenddate'])) 			$query->where('e.end_date >=', $requestdata['gtenddate']);
-		if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) $query->groupStart()->where("'".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date")->orWhere('e.start_date >=', $requestdata['btw_start_date'])->groupEnd();
-		if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) $query->groupStart()->where("'".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date")->orWhere('e.end_date <=', $requestdata['btw_end_date'])->groupEnd();
-		if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) $query->groupStart()->where("'".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date")->orWhere("'".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date")->groupEnd();
-		if(isset($requestdata['no_of_stalls'])) 		$query->having('stallavailable >=', $requestdata['no_of_stalls']);
 		
+		if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) 	$query->havingGroupStart()->havingGroupStart()->having("('".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date)")->orHavingGroupStart()->having('e.start_date >=', $requestdata['btw_start_date'])->havingGroupEnd()->havingGroupEnd()->orHavingGroupStart()->having('stallavailable2 >=', '1')->havingGroupEnd()->havingGroupEnd();
+		if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$query->havingGroupStart()->havingGroupStart()->having("('".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date)")->orHavingGroupStart()->having('e.end_date <=', $requestdata['btw_end_date'])->havingGroupEnd()->havingGroupEnd()->orHavingGroupStart()->having('stallavailable2 >=', '1')->havingGroupEnd()->havingGroupEnd();
+		if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$query->havingGroupStart()->havingGroupStart()->having("('".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date)")->orHavingGroupStart()->having("('".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date)")->havingGroupEnd()->havingGroupEnd()->orHavingGroupStart()->having('stallavailable2 >=', '1')->havingGroupEnd()->havingGroupEnd();
+		if(isset($requestdata['no_of_stalls'])) 		$query->having('stallavailable1 >=', $requestdata['no_of_stalls']);		
 		if(isset($requestdata['llocation'])){
 			$llocation = $requestdata['llocation'];
 			$query->groupStart();
@@ -112,7 +122,7 @@ class Event extends BaseModel
 			}elseif($type=='row'){
 				$result = $query->getRowArray();
 			}
-			
+			echo '-------'.$this->db->getLastQuery();
 			$result = $this->getEventBarnStall($type, $querydata, $requestdata, ['result' => $result, 'type' => '1', 'barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall']);
 			$result = $this->getEventBarnStall($type, $querydata, $requestdata, ['result' => $result, 'type' => '2', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall']);
 			$result = $this->getEventProducts($type, $querydata, $requestdata, ['result' => $result, 'type' => '1', 'productname' => 'feed']);
