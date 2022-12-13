@@ -377,7 +377,7 @@
 					if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='0')) {
 
 						if($rvbarnstall['lockunlock']=='0' ){
-							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$starvbarnstallll['stall_id'].'">Unlocked</button></div>';
+							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$rvbarnstall['stall_id'].'">Unlocked</button></div>';
 						}
 						if($rvbarnstall['dirtyclean']=='0'){
 							$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success dirtyclean" data-stallid="'.$rvbarnstall['stall_id'].'">Cleaned</button></div>'; 
