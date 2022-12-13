@@ -49,119 +49,62 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 	return $pricelist;
 }
 ?>
-<div class="border rounded py-2 ps-3 pe-3 mt-4 mb-3">
-	<div class="infoPanel form_check bookyourstalls">
-		<span class="infoSection bookborder flex-wrap">
-			<div class="col-md-6">
-				<p class="fw-bold mx-2 fs-5 mb-0">Check In</p>
-				<span class="iconProperty w-100 w-auto pad_100">			
-					<input type="text" name="startdate" id="startdate" class="w-100 land_width checkdate checkin borderyt" autocomplete="off" placeholder="Check-In" readonly/>
-					<img src="<?php echo base_url() ?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
-				</span>
-			</div>
-			<div class="col-md-6">
-				<p class="fw-bold mx-2 fs-5 mb-0">Check Out</p>
-				<span class="iconProperty w-100 col-md-12 w-auto pad_100">
-					<input type="text" name="enddate" id="enddate" class="w-100 land_width checkdate checkout borderyt" autocomplete="off"placeholder="Check-Out" readonly/>
-					<img src="<?php echo base_url() ?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
-				</span>
-			</div>
-		</span>
-	</div>
-</div>
-<div class="border rounded pt-4 ps-3 pe-3 mt-4 mb-3">
-	<h3 class="fw-bold mb-4">Book</h3>
-	<div class="barn-nav mt-4">
-		<nav>
-			<div class="nav nav-tabs" id="multi-nav-tab" role="tablist">
-				<button class="nav-link m-0 show active" data-bs-toggle="tab" data-bs-target="#barnstall" type="button" role="tab" aria-controls="barnstall" aria-selected="true">Stalls</button>
-				<?php if($detail['rv_flag'] =='1' && !empty($detail['rvbarn'])) { ?>
-					<button class="nav-link m-0" data-bs-toggle="tab" data-bs-target="#barnhook" type="button" role="tab" aria-controls="barnhook" aria-selected="false">RV Hookups</button>
-				<?php } ?>
-				<?php if($detail['feed_flag'] =='1' && !empty($detail['feed_flag'])) { ?>
-					<button class="nav-link m-0" data-bs-toggle="tab" data-bs-target="#barnfeed" type="button" role="tab" aria-controls="barnfeed" aria-selected="false">Feed</button>
-				<?php } ?>
-				<?php if($detail['shaving_flag'] =='1' && !empty($detail['shaving_flag'])) { ?>
-					<button class="nav-link m-0" data-bs-toggle="tab" data-bs-target="#barnshaving" type="button" role="tab" aria-controls="barnshaving" aria-selected="false">Shaving</button>	
-				<?php } ?>			
-			</div>
-		</nav>
-		<div class="tab-content" id="nav-tabContent">
-			<div class="tab-pane fade active show" id="barnstall" role="tabpanel" aria-labelledby="nav-home-tab">
-				<div class="border rounded pt-4 ps-3 pe-3 mb-3">
-					<h3 class="fw-bold mb-4">Book Your Stalls</h3>							
-					<?php 
-					$tabbtn = '';
-					$tabcontent = '';
-					foreach ($detail['barn'] as $barnkey => $barndata) {
-						$barnid = $barndata['id'];
-						$barnname = $barndata['name'];
-						$barnactive = $barnkey=='0' ? ' show active' : '';
-						$tabbtn .= '<button class="nav-link m-0'.$barnactive.'" data-bs-toggle="tab" data-bs-target="#barn'.$barnid.'" type="button" role="tab" aria-controls="barn'.$barnid.'" aria-selected="true">'.$barnname.'</button>';
-
-						$tabcontent .= '<div class="tab-pane fade'.$barnactive.'" id="barn'.$barnid.'" role="tabpanel" aria-labelledby="nav-home-tab">
-						<ul class="list-group">';
-						foreach($barndata['stall'] as $stalldata){
-							$typeofprice 	= charging($stalldata['charging_id']);
-							$pricelist 		= pricinglist($stalldata['night_price'], $stalldata['week_price'], $stalldata['month_price'], $stalldata['flat_price'], $stalldata['subscription_initial_price'], $stalldata['subscription_month_price']);
-							$boxcolor  		= 'green-box';
-							$checkboxstatus = '';
-
-							if($cartevent=='1' || $checkeventstatus=='0'){
-								$checkboxstatus = 'disabled';
-							}
-
-							$tabcontent .= 	'<li class="list-group-item d-flex align-items-center justify-content-between '.$typeofprice.'">
-								<div>
-									<input class="form-check-input eventbarnstall stallid me-1" data-price="'.$stalldata['price'].'" data-barnid="'.$stalldata['barn_id'].'" data-flag="1" value="'.$stalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
-									'.$stalldata['name'].'
-								</div>
-								<div class="d-flex align-items-center">
-									<div class="pricelist f-r">'.$pricelist.'</div>
-									<span class="'.$boxcolor.' stallavailability" data-stallid="'.$stalldata['id'].'" ></span>
-								</div>
-							</li>';
-						}
-						$tabcontent .= '</ul></div>';
-					}
-					?>
-					<div class="barn-nav mt-4">
-						<nav>
-							<div class="nav nav-tabs" id="nav-tab" role="tablist">
-								<?php echo $tabbtn; ?>
-							</div>
-						</nav>
-						<div class="tab-content" id="nav-tabContent">
-							<?php echo $tabcontent; ?>
-							<div class="row">
-								<div class="btm-color">
-									<p><span class="green-circle"></span>Available</p>
-									<p><span class="yellow-circle"></span>Reserved</p>
-									<p><span class="red-circle"></span>Occupied</p>
-								</div>
-							</div>
-						</div>    
-					</div>
+<div class="col-md-12 p-0 eventbarnstallwrapper position-relative">
+	<div class="border rounded py-2 ps-3 pe-3 mt-4 mb-3">
+		<div class="infoPanel form_check bookyourstalls">
+			<span class="infoSection bookborder flex-wrap">
+				<div class="col-md-6">
+					<p class="fw-bold mx-2 fs-5 mb-0">Check In</p>
+					<span class="iconProperty w-100 w-auto pad_100">			
+						<input type="text" name="startdate" id="startdate" class="w-100 land_width checkdate checkin borderyt" autocomplete="off" placeholder="Check-In" readonly/>
+						<img src="<?php echo base_url() ?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
+					</span>
 				</div>
-			</div>
-			<?php if($detail['rv_flag'] =='1' && !empty($detail['rvbarn'])) { ?>
-				<div class="tab-pane fade" id="barnhook" role="tabpanel" aria-labelledby="nav-home-tab">
+				<div class="col-md-6">
+					<p class="fw-bold mx-2 fs-5 mb-0">Check Out</p>
+					<span class="iconProperty w-100 col-md-12 w-auto pad_100">
+						<input type="text" name="enddate" id="enddate" class="w-100 land_width checkdate checkout borderyt" autocomplete="off"placeholder="Check-Out" readonly/>
+						<img src="<?php echo base_url() ?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
+					</span>
+				</div>
+			</span>
+		</div>
+	</div>
+	<div class="border rounded pt-4 ps-3 pe-3 mt-4 mb-3">
+		<h3 class="fw-bold mb-4">Book</h3>
+		<div class="barn-nav mt-4">
+			<nav>
+				<div class="nav nav-tabs" id="multi-nav-tab" role="tablist">
+					<button class="nav-link m-0 show active" data-bs-toggle="tab" data-bs-target="#barnstall" type="button" role="tab" aria-controls="barnstall" aria-selected="true">Stalls</button>
+					<?php if($detail['rv_flag'] =='1' && !empty($detail['rvbarn'])) { ?>
+						<button class="nav-link m-0" data-bs-toggle="tab" data-bs-target="#barnhook" type="button" role="tab" aria-controls="barnhook" aria-selected="false">RV Hookups</button>
+					<?php } ?>
+					<?php if($detail['feed_flag'] =='1' && !empty($detail['feed_flag'])) { ?>
+						<button class="nav-link m-0" data-bs-toggle="tab" data-bs-target="#barnfeed" type="button" role="tab" aria-controls="barnfeed" aria-selected="false">Feed</button>
+					<?php } ?>
+					<?php if($detail['shaving_flag'] =='1' && !empty($detail['shaving_flag'])) { ?>
+						<button class="nav-link m-0" data-bs-toggle="tab" data-bs-target="#barnshaving" type="button" role="tab" aria-controls="barnshaving" aria-selected="false">Shaving</button>	
+					<?php } ?>			
+				</div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+				<div class="tab-pane fade active show" id="barnstall" role="tabpanel" aria-labelledby="nav-home-tab">
 					<div class="border rounded pt-4 ps-3 pe-3 mb-3">
-						<h3 class="fw-bold mb-4">Book Your Rvhookups</h3>							
+						<h3 class="fw-bold mb-4">Book Your Stalls</h3>							
 						<?php 
 						$tabbtn = '';
-						$tabcontent = ''; 
-						foreach ($detail['rvbarn'] as $rvkey => $rvdata) { 
-							$rvid = $rvdata['id'];
-							$rvname = $rvdata['name'];
-							$rvactive = $rvkey=='0' ? ' show active' : '';
-							$tabbtn .= '<button class="nav-link m-0'.$rvactive.'" data-bs-toggle="tab" data-bs-target="#barn'.$rvid.'" type="button" role="tab" aria-controls="barn'.$rvid.'" aria-selected="true">'.$rvname.'</button>';
+						$tabcontent = '';
+						foreach ($detail['barn'] as $barnkey => $barndata) {
+							$barnid = $barndata['id'];
+							$barnname = $barndata['name'];
+							$barnactive = $barnkey=='0' ? ' show active' : '';
+							$tabbtn .= '<button class="nav-link m-0'.$barnactive.'" data-bs-toggle="tab" data-bs-target="#barn'.$barnid.'" type="button" role="tab" aria-controls="barn'.$barnid.'" aria-selected="true">'.$barnname.'</button>';
 
-							$tabcontent .= '<div class="tab-pane fade'.$rvactive.'" id="barn'.$rvid.'" role="tabpanel" aria-labelledby="nav-home-tab">
+							$tabcontent .= '<div class="tab-pane fade'.$barnactive.'" id="barn'.$barnid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 							<ul class="list-group">';
-							foreach($rvdata['rvstall'] as $rvstalldata){ 
-								$typeofprice 	= charging($rvstalldata['charging_id']);
-								$pricelist 		= pricinglist($rvstalldata['night_price'], $rvstalldata['week_price'], $rvstalldata['month_price'], $rvstalldata['flat_price'], $rvstalldata['subscription_initial_price'], $rvstalldata['subscription_month_price']);
+							foreach($barndata['stall'] as $stalldata){
+								$typeofprice 	= charging($stalldata['charging_id']);
+								$pricelist 		= pricinglist($stalldata['night_price'], $stalldata['week_price'], $stalldata['month_price'], $stalldata['flat_price'], $stalldata['subscription_initial_price'], $stalldata['subscription_month_price']);
 								$boxcolor  		= 'green-box';
 								$checkboxstatus = '';
 
@@ -169,14 +112,14 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 									$checkboxstatus = 'disabled';
 								}
 
-								$tabcontent .= 	'<li class="list-group-item rvhookups d-flex align-items-center justify-content-between '.$typeofprice.'">
+								$tabcontent .= 	'<li class="list-group-item d-flex align-items-center justify-content-between '.$typeofprice.'">
 									<div>
-										<input class="form-check-input rvbarnstall stallid me-1" data-price="'.$rvstalldata['price'].'" data-barnid="'.$rvstalldata['barn_id'].'" data-flag="2" value="'.$rvstalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
-										'.$rvstalldata['name'].'
+										<input class="form-check-input eventbarnstall stallid me-1" data-price="'.$stalldata['price'].'" data-barnid="'.$stalldata['barn_id'].'" data-flag="1" value="'.$stalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
+										'.$stalldata['name'].'
 									</div>
 									<div class="d-flex align-items-center">
 										<div class="pricelist f-r">'.$pricelist.'</div>
-										<span class="'.$boxcolor.' stallavailability" data-stallid="'.$rvstalldata['id'].'" ></span>
+										<span class="'.$boxcolor.' stallavailability" data-stallid="'.$stalldata['id'].'" ></span>
 									</div>
 								</li>';
 							}
@@ -201,77 +144,136 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							</div>    
 						</div>
 					</div>
-				</div>	
-			<?php } ?>
-			<?php if($detail['feed_flag'] =='1' && !empty($detail['feed_flag'])) { ?>
-				<div class="tab-pane fade" id="barnfeed" role="tabpanel" aria-labelledby="nav-home-tab">
-					<div class="border rounded py-4 ps-3 pe-3 mb-3">
-						<h3 class="fw-bold mb-4">Book Your Feed</h3>							
-						<table class="table table-bordered table-hover mb-0">
-							<thead class="table-dark">
-								<tr>
-									<td class="text-light">Product Name</td>
-									<td class="text-light">Product Price</td>
-									<td class="text-light">Product Quantity</td>
-									<td class="text-light">Action</td>
-								</tr>
-							</thead>
-							<?php foreach ($detail['feed'] as $feed) { ?>
-								<tr>
-									<td style="border: 1px solid #e4e4e4;"><?php echo $feed['name'];?></td>
-									<td style="border: 1px solid #e4e4e4;"><?php echo $feed['price'];?></td>
-									<td style="border: 1px solid #e4e4e4;">
-										<?php if($feed['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
-										<input type="number" <?php echo $readonly ?> min="0" class="form-control quantity" data-productid="<?php echo $feed['id']?>" data-flag="3" <?php if($cartevent=='1' || $checkeventstatus=='0'){ echo 'disabled'; } ?>>
-										<p style="color:red"><?php echo $msg; ?></p>
-									</td>
-									<td style="border: 1px solid #e4e4e4;">
-										<?php if($cartevent!='1' && $checkeventstatus!='0'){ ?>
-											<button class="btn btn-primary feedcart" data-productid="<?php echo $feed['id']?>" data-originalquantity="<?php echo $feed['quantity']?>" data-price="<?php echo $feed['price']?>">Add to Cart</button>
-											<button class="btn btn-danger feedcartremove cartremove displaynone" data-productid="<?php echo $feed['id']?>">Remove</button>
-										<?php } ?>
-									</td>
-								</tr>
-							<?php } ?>
-						</table>
-					</div>
 				</div>
-			<?php } ?>
-			<?php if($detail['shaving_flag'] =='1' && !empty($detail['shaving_flag'])) { ?>
-				<div class="tab-pane fade" id="barnshaving" role="tabpanel" aria-labelledby="nav-home-tab">
-					<div class="border rounded py-4 ps-3 pe-3 mb-3">
-						<h3 class="fw-bold mb-4">Book Your Shaving</h3>							
-						<table class="table table-bordered table-hover mb-0">
-							<thead class="table-dark">
-								<tr>
-									<td class="text-light">Product Name</td>
-									<td class="text-light">Product Price</td>
-									<td class="text-light">Product Quantity</td>
-									<td class="text-light">Action</td>
-								</tr>
-							</thead>
-							<?php foreach ($detail['shaving'] as $shaving) { ?>
-								<tr>
-									<td style="border: 1px solid #e4e4e4;"><?php echo $shaving['name'];?></td>
-									<td style="border: 1px solid #e4e4e4;"><?php echo $shaving['price'];?></td>
-									<td style="border: 1px solid #e4e4e4;">
-										<?php if($shaving['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
-										<input type="number" min="0" class="form-control quantity" <?php echo $readonly;?> data-productid="<?php echo $shaving['id']?>" data-flag="4" <?php if($cartevent=='1' || $checkeventstatus=='0'){ echo 'disabled'; } ?>>
-										<p style="color:red"><?php echo $msg; ?></p>
-									</td>
-									<td style="border: 1px solid #e4e4e4;">
-										<?php if($cartevent!='1' && $checkeventstatus!='0'){ ?>
-											<button class="btn btn-primary shavingcart" data-productid="<?php echo $shaving['id']?>" data-originalquantity="<?php echo $shaving['quantity']?>" data-price="<?php echo $shaving['price']?>">Add to Cart</button>
-											<button class="btn btn-danger shavingcartremove cartremove displaynone" data-productid="<?php echo $shaving['id']?>">Remove</button>
-										<?php } ?>
-									</td>
-								</tr>
-							<?php } ?>
-						</table>
+				<?php if($detail['rv_flag'] =='1' && !empty($detail['rvbarn'])) { ?>
+					<div class="tab-pane fade" id="barnhook" role="tabpanel" aria-labelledby="nav-home-tab">
+						<div class="border rounded pt-4 ps-3 pe-3 mb-3">
+							<h3 class="fw-bold mb-4">Book Your Rvhookups</h3>							
+							<?php 
+							$tabbtn = '';
+							$tabcontent = ''; 
+							foreach ($detail['rvbarn'] as $rvkey => $rvdata) { 
+								$rvid = $rvdata['id'];
+								$rvname = $rvdata['name'];
+								$rvactive = $rvkey=='0' ? ' show active' : '';
+								$tabbtn .= '<button class="nav-link m-0'.$rvactive.'" data-bs-toggle="tab" data-bs-target="#barn'.$rvid.'" type="button" role="tab" aria-controls="barn'.$rvid.'" aria-selected="true">'.$rvname.'</button>';
+
+								$tabcontent .= '<div class="tab-pane fade'.$rvactive.'" id="barn'.$rvid.'" role="tabpanel" aria-labelledby="nav-home-tab">
+								<ul class="list-group">';
+								foreach($rvdata['rvstall'] as $rvstalldata){ 
+									$typeofprice 	= charging($rvstalldata['charging_id']);
+									$pricelist 		= pricinglist($rvstalldata['night_price'], $rvstalldata['week_price'], $rvstalldata['month_price'], $rvstalldata['flat_price'], $rvstalldata['subscription_initial_price'], $rvstalldata['subscription_month_price']);
+									$boxcolor  		= 'green-box';
+									$checkboxstatus = '';
+
+									if($cartevent=='1' || $checkeventstatus=='0'){
+										$checkboxstatus = 'disabled';
+									}
+
+									$tabcontent .= 	'<li class="list-group-item rvhookups d-flex align-items-center justify-content-between '.$typeofprice.'">
+										<div>
+											<input class="form-check-input rvbarnstall stallid me-1" data-price="'.$rvstalldata['price'].'" data-barnid="'.$rvstalldata['barn_id'].'" data-flag="2" value="'.$rvstalldata['id'].'" name="checkbox"  type="checkbox" '.$checkboxstatus.'>
+											'.$rvstalldata['name'].'
+										</div>
+										<div class="d-flex align-items-center">
+											<div class="pricelist f-r">'.$pricelist.'</div>
+											<span class="'.$boxcolor.' stallavailability" data-stallid="'.$rvstalldata['id'].'" ></span>
+										</div>
+									</li>';
+								}
+								$tabcontent .= '</ul></div>';
+							}
+							?>
+							<div class="barn-nav mt-4">
+								<nav>
+									<div class="nav nav-tabs" id="nav-tab" role="tablist">
+										<?php echo $tabbtn; ?>
+									</div>
+								</nav>
+								<div class="tab-content" id="nav-tabContent">
+									<?php echo $tabcontent; ?>
+									<div class="row">
+										<div class="btm-color">
+											<p><span class="green-circle"></span>Available</p>
+											<p><span class="yellow-circle"></span>Reserved</p>
+											<p><span class="red-circle"></span>Occupied</p>
+										</div>
+									</div>
+								</div>    
+							</div>
+						</div>
+					</div>	
+				<?php } ?>
+				<?php if($detail['feed_flag'] =='1' && !empty($detail['feed_flag'])) { ?>
+					<div class="tab-pane fade" id="barnfeed" role="tabpanel" aria-labelledby="nav-home-tab">
+						<div class="border rounded py-4 ps-3 pe-3 mb-3">
+							<h3 class="fw-bold mb-4">Book Your Feed</h3>							
+							<table class="table table-bordered table-hover mb-0">
+								<thead class="table-dark">
+									<tr>
+										<td class="text-light">Product Name</td>
+										<td class="text-light">Product Price</td>
+										<td class="text-light">Product Quantity</td>
+										<td class="text-light">Action</td>
+									</tr>
+								</thead>
+								<?php foreach ($detail['feed'] as $feed) { ?>
+									<tr>
+										<td style="border: 1px solid #e4e4e4;"><?php echo $feed['name'];?></td>
+										<td style="border: 1px solid #e4e4e4;"><?php echo $feed['price'];?></td>
+										<td style="border: 1px solid #e4e4e4;">
+											<?php if($feed['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
+											<input type="number" <?php echo $readonly ?> min="0" class="form-control quantity" data-productid="<?php echo $feed['id']?>" data-flag="3" <?php if($cartevent=='1' || $checkeventstatus=='0'){ echo 'disabled'; } ?>>
+											<p style="color:red"><?php echo $msg; ?></p>
+										</td>
+										<td style="border: 1px solid #e4e4e4;">
+											<?php if($cartevent!='1' && $checkeventstatus!='0'){ ?>
+												<button class="btn btn-primary feedcart" data-productid="<?php echo $feed['id']?>" data-originalquantity="<?php echo $feed['quantity']?>" data-price="<?php echo $feed['price']?>">Add to Cart</button>
+												<button class="btn btn-danger feedcartremove cartremove displaynone" data-productid="<?php echo $feed['id']?>">Remove</button>
+											<?php } ?>
+										</td>
+									</tr>
+								<?php } ?>
+							</table>
+						</div>
 					</div>
-				</div>
-			<?php } ?>
-		</div>    
+				<?php } ?>
+				<?php if($detail['shaving_flag'] =='1' && !empty($detail['shaving_flag'])) { ?>
+					<div class="tab-pane fade" id="barnshaving" role="tabpanel" aria-labelledby="nav-home-tab">
+						<div class="border rounded py-4 ps-3 pe-3 mb-3">
+							<h3 class="fw-bold mb-4">Book Your Shaving</h3>							
+							<table class="table table-bordered table-hover mb-0">
+								<thead class="table-dark">
+									<tr>
+										<td class="text-light">Product Name</td>
+										<td class="text-light">Product Price</td>
+										<td class="text-light">Product Quantity</td>
+										<td class="text-light">Action</td>
+									</tr>
+								</thead>
+								<?php foreach ($detail['shaving'] as $shaving) { ?>
+									<tr>
+										<td style="border: 1px solid #e4e4e4;"><?php echo $shaving['name'];?></td>
+										<td style="border: 1px solid #e4e4e4;"><?php echo $shaving['price'];?></td>
+										<td style="border: 1px solid #e4e4e4;">
+											<?php if($shaving['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
+											<input type="number" min="0" class="form-control quantity" <?php echo $readonly;?> data-productid="<?php echo $shaving['id']?>" data-flag="4" <?php if($cartevent=='1' || $checkeventstatus=='0'){ echo 'disabled'; } ?>>
+											<p style="color:red"><?php echo $msg; ?></p>
+										</td>
+										<td style="border: 1px solid #e4e4e4;">
+											<?php if($cartevent!='1' && $checkeventstatus!='0'){ ?>
+												<button class="btn btn-primary shavingcart" data-productid="<?php echo $shaving['id']?>" data-originalquantity="<?php echo $shaving['quantity']?>" data-price="<?php echo $shaving['price']?>">Add to Cart</button>
+												<button class="btn btn-danger shavingcartremove cartremove displaynone" data-productid="<?php echo $shaving['id']?>">Remove</button>
+											<?php } ?>
+										</td>
+									</tr>
+								<?php } ?>
+							</table>
+						</div>
+					</div>
+				<?php } ?>
+			</div>    
+		</div>
 	</div>
 </div>
 
@@ -619,7 +621,10 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 				'<?php echo base_url()."/cart"; ?>',
 				data,
 				{ 
-					asynchronous : 1,
+					//asynchronous : 1,
+					beforesend: function() {
+						$('.eventbarnstallwrapper').append('<div class="loader_wrapper"><img src="<?php echo base_url()."/assets/site/img/loading.svg"; ?>"></div>');
+					},
 					success  : function(result){
 						if(Object.keys(result).length){  
 							$("#startdate").val(result.check_in); 
@@ -634,6 +639,8 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 						}else{
 							$('.checkout').empty();
 						}
+						
+						$('.loader_wrapper').remove();
 					}
 				}
 			);

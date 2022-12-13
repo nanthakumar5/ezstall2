@@ -28,8 +28,8 @@ class Index extends BaseController
 		$offset = $page * $perpage;
 		$userdetail = getSiteUserDetails();
 
-		$facilitycount = $this->event->getEvent('count', ['event', 'stallavailable'], ['status'=> ['1'], 'type' => '2']);
-		$facility = $this->event->getEvent('all', ['event', 'barn', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '2']);
+		$facilitycount = $this->event->getEvent('count', ['event'], ['status'=> ['1'], 'type' => '2']);
+		$facility = $this->event->getEvent('all', ['event'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '2']);
 	
 		$data['eventdetail'] = $userdetail;
 		$data['userdetail'] = $userdetail;

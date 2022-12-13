@@ -32,8 +32,8 @@ class Index extends BaseController
 		$offset = $page * $perpage;
 		$userdetail = getSiteUserDetails();
 
-		$eventcount = $this->event->getEvent('count', ['event', 'stallavailable'], ['status'=> ['1'], 'type' => '1']);
-		$event = $this->event->getEvent('all', ['event', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
+		$eventcount = $this->event->getEvent('count', ['event'], ['status'=> ['1'], 'type' => '1']);
+		$event = $this->event->getEvent('all', ['event'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
 		$data['eventdetail'] = $userdetail;
 		$data['userdetail'] = $userdetail;
