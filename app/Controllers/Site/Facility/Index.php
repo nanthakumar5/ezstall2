@@ -28,28 +28,13 @@ class Index extends BaseController
 		$offset = $page * $perpage;
 		$userdetail = getSiteUserDetails();
 
-		if($this->request->getVar('q')!==null){
-			$searchdata = ['search' => ['value' => $this->request->getVar('q')], 'page' => 'events'];
-			$data['search'] = $this->request->getVar('q');
-		}else{
-			$searchdata = [];
-			$data['search'] = '';
-		}
-
-		if($this->request->getGet('name')!="")   			$searchdata['lname']    			= $this->request->getGet('name');
-		if($this->request->getGet('location')!="")   		$searchdata['llocation']    		= $this->request->getGet('location');
-		if($this->request->getGet('start_date')!="")   	 	$searchdata['btw_start_date']    	= formatdate($this->request->getGet('start_date'));
-		if($this->request->getGet('end_date')!="")   	 	$searchdata['btw_end_date']    		= formatdate($this->request->getGet('end_date'));
-		if($this->request->getGet('no_of_stalls')!="")   	$searchdata['no_of_stalls']    		= $this->request->getGet('no_of_stalls');
-		
-		$facilitycount = count($this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'type' => '2']));
-		$facility = $this->event->getEvent('all', ['event', 'barn', 'stallavailable'], $searchdata+['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '2']);
+		$facilitycount = $this->event->getEvent('count', ['event', 'stallavailable'], ['status'=> ['1'], 'type' => '2']);
+		$facility = $this->event->getEvent('all', ['event', 'barn', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '2']);
 	
 		$data['eventdetail'] = $userdetail;
 		$data['userdetail'] = $userdetail;
 		$data['usertype'] = $this->config->usertype;
 		$data['list'] = $facility;
-		$data['searchdata'] = $searchdata;
         $data['pager'] = $pager->makeLinks($page, $perpage, $facilitycount);
 		
     	return view('site/facility/list', $data);

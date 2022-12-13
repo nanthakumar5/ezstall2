@@ -70,7 +70,7 @@
 			</div>
 			<?php if($segment1==''){ ?>
 				<div class="bannerItems">
-					<form method="get" autocomplete="off" action="<?php echo base_url();?>/events" class="homeeventsearch eventsearch">
+					<form method="get" autocomplete="off" action="<?php echo base_url();?>/search" class="homeeventsearch eventsearch">
 						<div class="infoPanel">
 							<span class="mx-auto infoSection">
 								<span class="iconProperty">
@@ -85,10 +85,6 @@
 									<input type="text" name="end_date" class="event_search_end_date" placeholder="Check-Out">
 									<img src="<?php echo base_url()?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
 								</span>
-								<!--<select id="event_search_list" class="border-0">
-									<option value="1">Event</option>
-									<option value="2">Facility</option>
-								</select>-->
 								<input type="text" name="no_of_stalls" placeholder="No.of stalls">
 								<span class="searchResult">
 									<button type="submit">
@@ -233,19 +229,6 @@
 			}else if(newselettertoast=='0'){
 				toastr.success('Email ID already Subscribed..', {timeOut: 5000});
 			}
-			
-			$('#event_search_list').change(function (e) {
-				if($(this).val()=='1') $('.homeeventsearch').attr('action', '<?php echo base_url();?>/events')
-				else $('.homeeventsearch').attr('action',  '<?php echo base_url();?>/facility')
-			});
-			
-			$('.homeeventsearch').submit(function (e) {
-				e.preventDefault();
-				var query = $(this).serializeArray().filter(function (i) {
-					return i.value;
-				});
-				window.location.href = $(this).attr('action') + (query ? '?' + $.param(query) : '');
-			});
 		</script>
 	</body>
 </html>

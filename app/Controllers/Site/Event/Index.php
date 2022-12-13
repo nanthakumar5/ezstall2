@@ -32,27 +32,13 @@ class Index extends BaseController
 		$offset = $page * $perpage;
 		$userdetail = getSiteUserDetails();
 
-		if($this->request->getVar('q')!==null){
-			$searchdata = ['search' => ['value' => $this->request->getVar('q')], 'page' => 'events'];
-			$data['search'] = $this->request->getVar('q');
-		}else{
-			$searchdata = [];
-			$data['search'] = '';
-		}
-
-		if($this->request->getGet('location')!="")   		$searchdata['llocation']    		= $this->request->getGet('location');
-		if($this->request->getGet('start_date')!="")   	 	$searchdata['btw_start_date']    	= formatdate($this->request->getGet('start_date'));
-		if($this->request->getGet('end_date')!="")   	 	$searchdata['btw_end_date']    		= formatdate($this->request->getGet('end_date'));
-		if($this->request->getGet('no_of_stalls')!="")   	$searchdata['no_of_stalls']    		= $this->request->getGet('no_of_stalls');
-		
-		$eventcount = count($this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'type' => '1']));
-		$event = $this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
+		$eventcount = $this->event->getEvent('count', ['event', 'stallavailable'], ['status'=> ['1'], 'type' => '1']);
+		$event = $this->event->getEvent('all', ['event', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
 		$data['eventdetail'] = $userdetail;
 		$data['userdetail'] = $userdetail;
 		$data['usertype'] = $this->config->usertype;
 		$data['list'] = $event;
-		$data['searchdata'] = $searchdata;
         $data['pager'] = $pager->makeLinks($page, $perpage, $eventcount);
 		
     	return view('site/events/list', $data);

@@ -126,6 +126,7 @@ $routes->get('event/pdf/(:any)', 'Site\Event\Index::downloadeventflyer/$1');
 $routes->get('event/downloadstallmap/(:any)', 'Site\Event\Index::downloadstallmap/$1');
 $routes->get('facility/download/(:any)', 'Site\Facility\Index::download/$1');
 $routes->match(['get', 'post'], '/', 'Site\Home\Index::index');
+$routes->get('search', 'Site\Search\Index::index');
 $routes->match(['get', 'post'], 'login', 'Site\Login\Index::index', ['filter' => 'siteauthentication1']);
 $routes->match(['get', 'post'], 'register', 'Site\Register\Index::index', ['filter' => 'siteauthentication1']);
 $routes->get('verification/(:any)', 'Site\Register\Index::verification/$1');

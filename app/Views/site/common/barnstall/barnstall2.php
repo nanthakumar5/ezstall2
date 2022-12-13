@@ -1,7 +1,8 @@
 <?php 
-$getcart 					= getCart('1');
+$eventtype					= $detail['type'];
+$getcart 					= getCart($eventtype);
 $cartevent 					= ($getcart && $getcart['event_id'] != $detail['id']) ? 1 : 0;
-$checkeventstatus			= isset($checkevent) ? $checkevent["status"] : '';
+$checkeventstatus			= $eventtype=='1' ? $checkevent["status"] : '';
 $GLOBALS['gdetail']			= $detail;
 $GLOBALS['gcurrencysymbol']	= $currencysymbol;
 
@@ -106,7 +107,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							$boxcolor  		= 'green-box';
 							$checkboxstatus = '';
 
-							if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){
+							if($cartevent=='1' || $checkeventstatus=='0'){
 								$checkboxstatus = 'disabled';
 							}
 
@@ -164,7 +165,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 								$boxcolor  		= 'green-box';
 								$checkboxstatus = '';
 
-								if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){
+								if($cartevent=='1' || $checkeventstatus=='0'){
 									$checkboxstatus = 'disabled';
 								}
 
@@ -221,11 +222,11 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 									<td style="border: 1px solid #e4e4e4;"><?php echo $feed['price'];?></td>
 									<td style="border: 1px solid #e4e4e4;">
 										<?php if($feed['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
-										<input type="number" <?php echo $readonly ?> min="0" class="form-control quantity" data-productid="<?php echo $feed['id']?>" data-flag="3" <?php if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){ echo 'disabled'; } ?>>
+										<input type="number" <?php echo $readonly ?> min="0" class="form-control quantity" data-productid="<?php echo $feed['id']?>" data-flag="3" <?php if($cartevent=='1' || $checkeventstatus=='0'){ echo 'disabled'; } ?>>
 										<p style="color:red"><?php echo $msg; ?></p>
 									</td>
 									<td style="border: 1px solid #e4e4e4;">
-										<?php if($cartevent!='1' && $checkeventstatus!='' && $checkeventstatus!='0'){ ?>
+										<?php if($cartevent!='1' && $checkeventstatus!='0'){ ?>
 											<button class="btn btn-primary feedcart" data-productid="<?php echo $feed['id']?>" data-originalquantity="<?php echo $feed['quantity']?>" data-price="<?php echo $feed['price']?>">Add to Cart</button>
 											<button class="btn btn-danger feedcartremove cartremove displaynone" data-productid="<?php echo $feed['id']?>">Remove</button>
 										<?php } ?>
@@ -255,11 +256,11 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 									<td style="border: 1px solid #e4e4e4;"><?php echo $shaving['price'];?></td>
 									<td style="border: 1px solid #e4e4e4;">
 										<?php if($shaving['quantity']==0){ $msg = '(Sold out)'; $readonly = 'readonly';} else{ $msg = ''; $readonly = ''; } ?>
-										<input type="number" min="0" class="form-control quantity" <?php echo $readonly;?> data-productid="<?php echo $shaving['id']?>" data-flag="4" <?php if($cartevent=='1' || ($checkeventstatus!='' && $checkeventstatus=='0')){ echo 'disabled'; } ?>>
+										<input type="number" min="0" class="form-control quantity" <?php echo $readonly;?> data-productid="<?php echo $shaving['id']?>" data-flag="4" <?php if($cartevent=='1' || $checkeventstatus=='0'){ echo 'disabled'; } ?>>
 										<p style="color:red"><?php echo $msg; ?></p>
 									</td>
 									<td style="border: 1px solid #e4e4e4;">
-										<?php if($cartevent!='1' && $checkeventstatus!='' && $checkeventstatus!='0'){ ?>
+										<?php if($cartevent!='1' && $checkeventstatus!='0'){ ?>
 											<button class="btn btn-primary shavingcart" data-productid="<?php echo $shaving['id']?>" data-originalquantity="<?php echo $shaving['quantity']?>" data-price="<?php echo $shaving['price']?>">Add to Cart</button>
 											<button class="btn btn-danger shavingcartremove cartremove displaynone" data-productid="<?php echo $shaving['id']?>">Remove</button>
 										<?php } ?>
@@ -279,7 +280,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 		var transactionfee		= '<?php echo $settings["transactionfee"];?>';  
 		var currencysymbol 		= '<?php echo $currencysymbol; ?>';
 		var eventid 			= '<?php echo $detail["id"]; ?>';
-		var eventtype 			= '<?php echo $detail["type"]; ?>';
+		var eventtype 			= '<?php echo $eventtype; ?>';
 		var eventusertype 		= '<?php echo $detail["eventusertype"]; ?>';
 		var cartevent 			= '<?php echo $cartevent; ?>';
 		var pricelists 			= $.parseJSON('<?php echo json_encode($pricelists); ?>');

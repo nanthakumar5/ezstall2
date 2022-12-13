@@ -15,59 +15,54 @@
 			  placeholder="Find your event"
 			  class="searchEvent"
 			  id="searchevent"
-			  value="<?php echo $search; ?>"
 			/>
-
 			<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" class="eventSearch" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M456.69 421.39L362.6 327.3a173.81 173.81 0 0034.84-104.58C397.44 126.38 319.06 48 222.72 48S48 126.38 48 222.72s78.38 174.72 174.72 174.72A173.81 173.81 0 00327.3 362.6l94.09 94.09a25 25 0 0035.3-35.3zM97.92 222.72a124.8 124.8 0 11124.8 124.8 124.95 124.95 0 01-124.8-124.8z"></path></svg>
 		  </span>
 		</div>
 		<section class="maxWidth marFiveRes eventPagePanel">
 			<?php if(count($list) > 0) { ?>  
-				<?php foreach ($list as $data) {  
-					$startdate 		= formatdate($data['start_date'], 1);
-					$enddate 		= formatdate($data['end_date'], 1);
-					$booknowBtn 	= checkEvent($data); 
-					$recbooknowBtn 	= $booknowBtn['btn'];
-				?>
-				<div class="ucEventInfo">
-					<div class="EventFlex">
-						<span class="wi-50 m-0">
-							<div class="EventFlex leftdata">
-								<span class="wi-30">
-									<span class="ucimg">
-										<img src="<?php echo base_url() ?>/assets/uploads/event/<?php echo '120x90_'.$data['image']?>"> <!--120x90_-->
+				<?php foreach ($list as $data) { ?>
+					<?php
+						$startdate 		= formatdate($data['start_date'], 1);
+						$enddate 		= formatdate($data['end_date'], 1);
+						$booknowBtn 	= checkEvent($data); 
+						$recbooknowBtn 	= $booknowBtn['btn'];
+					?>
+					<div class="ucEventInfo">
+						<div class="EventFlex">
+							<span class="wi-50 m-0">
+								<div class="EventFlex leftdata">
+									<span class="wi-30">
+										<span class="ucimg">
+											<img src="<?php echo base_url() ?>/assets/uploads/event/<?php echo '120x90_'.$data['image']?>">
+										</span>
 									</span>
-								</span>
-								<span class="wi-70"> 
-									<p class="topdate"> <?php echo $startdate; ?> - 
-										<?php echo $enddate; ?> -  
-										<?php echo $data['location']; ?></p>
-									<a class="text-decoration-none" href="<?php echo base_url() ?>/events/detail/<?php echo $data['id']?>"><h5><?php echo $data['name']; ?><h5></a></h5>
-								</span>
-							</div>
-						</span>
-						<div class="wi-50-2 justify-content-between">
-							<span class="m-left upevent">
-								<p><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/horseShoe.svg">Stalls</p>
-								<h6 class="ucprice"> from $<?php echo $data['stalls_price'] ?> / night</h6>
+									<span class="wi-70"> 
+										<p class="topdate"> <?php echo $startdate; ?> - 
+											<?php echo $enddate; ?> -  
+											<?php echo $data['location']; ?></p>
+										<a class="text-decoration-none" href="<?php echo base_url() ?>/events/detail/<?php echo $data['id']?>"><h5><?php echo $data['name']; ?><h5></a></h5>
+									</span>
+								</div>
 							</span>
-	<!-- 						<span class="m-left">
-								<p><img class="eventSecondIcon" src="<?php //echo base_url()?>/assets/site/img/rvSpot.svg">RV Spots</p>
-								<h6 class="ucprice">from $<?php //echo $data['rvspots_price'] ?> / night</h6>
-							</span> -->
-							<a class="text-decoration-none text-white" id="booknow_link" href="<?php echo base_url() ?>/events/detail/<?php echo $data['id']?>"><button class="ucEventBtn">
-								<?php echo $booknowBtn['btn'];?>
-							</button></a>
+							<div class="wi-50-2 justify-content-between">
+								<span class="m-left upevent">
+									<p><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/horseShoe.svg">Stalls</p>
+									<h6 class="ucprice"> from $<?php echo $data['stalls_price'] ?> / night</h6>
+								</span>
+								<a class="text-decoration-none text-white" id="booknow_link" href="<?php echo base_url() ?>/events/detail/<?php echo $data['id']?>"><button class="ucEventBtn">
+									<?php echo $booknowBtn['btn'];?>
+								</button></a>
+							</div>
 						</div>
 					</div>
-				</div>
-			<?php } ?>
-			<?php echo $pager; ?>
+				<?php } ?>
+				<?php echo $pager; ?>
 			<?php }else{ ?>
 				No Record Found
 			<?php } ?>
 		</section>
-		<div class="recommendedevent"><h3><b>Recommended Event</b></h3></div>
+		<div class="recommendedevent"></div>
 	</section>
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
@@ -131,43 +126,47 @@ $(document).ready(function(){
 					latlongdata.forEach((i, index)=>{
 					  finalArray.push([i,buttonNames[index]])
 					})
+					
+					$('.recommendedevent').empty();
+					
+					if(finalArray.length){
+						$('.recommendedevent').append('<h3><b>Recommended Event</b></h3>');
+						for (j=0; j<finalArray.length; j++){
+							$(finalArray[j][0]).each(function(i,v){
+								var booknowBtn = finalArray[j][1];
+								var result = '\
+												<div class="ucEventInfo">\
+													<div class="EventFlex">\
+														<span class="wi-50 m-0">\
+														   <div class="EventFlex leftdata">\
+															  <span class="wi-30">\
+																 <span class="ucimg">\
+																	<img src="'+ baseurl +'/assets/uploads/event/'+v['image']+'">\
+																 </span>\
+															  </span>\
+															  <span class="wi-70">\
+																 <p class="topdate">'+v['start_date']+' - '+v['end_date']+' - '+v['location']+'</p>\
+																 <a class="text-decoration-none" href="'+baseurl+'/events/detail/'+v['id']+'"><h5>'+v['name']+'<h5></a></h5>\
+															  </span>\
+														   </div>\
+														</span>\
+														<div class="wi-50-2 justify-content-between">\
+														   <span class="m-left upevent">\
+															  <p><img class="eventFirstIcon" src="'+baseurl+'/assets/site/img/horseShoe.svg">Stalls</p>\
+															  <h6 class="ucprice"> from $'+v['stalls_price']+'/ night</h6>\
+														   </span>\
+															<a class="text-decoration-none text-white" id="booknow_link" href="'+baseurl+'/events/detail/'+v['id']+'"><button class="ucEventBtn">\
+																'+booknowBtn+'\
+																</button></a>\
+														</div>\
+													</div>\
+											   </div>\
+											';
+											$('.recommendedevent').append(result);
+										
 
-					for (j=0; j<finalArray.length; j++){
-						$(finalArray[j][0]).each(function(i,v){
-							var booknowBtn = finalArray[j][1];
-							var result = '\
-						                  	<div class="ucEventInfo">\
-						                     	<div class="EventFlex">\
-							                        <span class="wi-50 m-0">\
-							                           <div class="EventFlex leftdata">\
-							                              <span class="wi-30">\
-							                                 <span class="ucimg">\
-							                                    <img src="'+ baseurl +'/assets/uploads/event/'+v['image']+'">\
-							                                 </span>\
-							                              </span>\
-							                              <span class="wi-70">\
-							                                 <p class="topdate">'+v['start_date']+' - '+v['end_date']+' - '+v['location']+'</p>\
-							                                 <a class="text-decoration-none" href="'+baseurl+'/events/detail/'+v['id']+'"><h5>'+v['name']+'<h5></a></h5>\
-							                              </span>\
-							                           </div>\
-							                        </span>\
-							                        <div class="wi-50-2 justify-content-between">\
-							                           <span class="m-left upevent">\
-							                              <p><img class="eventFirstIcon" src="'+baseurl+'/assets/site/img/horseShoe.svg">Stalls</p>\
-							                              <h6 class="ucprice"> from $'+v['stalls_price']+'/ night</h6>\
-							                           </span>\
-									                    <a class="text-decoration-none text-white" id="booknow_link" href="'+baseurl+'/events/detail/'+v['id']+'"><button class="ucEventBtn">\
-															'+booknowBtn+'\
-															</button></a>\
-							                        </div>\
-						                        </div>\
-						                   </div>\
-		               					';
-		               					$('.recommendedevent').append(result);
-		               				
-
-						});	
-
+							});	
+						}
 				    }
 		
 				}
