@@ -96,8 +96,10 @@ class Booking extends BaseModel
 			if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) $query->groupStart()->orWhere("'".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date")->groupEnd();
 
 			$query->groupStart();
-				$query->where("'".date('Y-m-d', strtotime($requestdata['checkin']))."' BETWEEN b.check_in AND DATE_ADD(b.check_out, INTERVAL -1 DAY)");
-				$query->orWhere("'".date('Y-m-d', strtotime($requestdata['checkout']))."' BETWEEN b.check_in AND DATE_ADD(b.check_out, INTERVAL -1 DAY)");
+				$query->where("('".date('Y-m-d', strtotime($requestdata['checkin']))."' BETWEEN b.check_in AND DATE_ADD(b.check_out, INTERVAL -1 DAY))");
+				$query->orWhere("('".date('Y-m-d', strtotime($requestdata['checkout']))."' BETWEEN b.check_in AND DATE_ADD(b.check_out, INTERVAL -1 DAY))");
+				$query->orWhere("(b.check_in BETWEEN '".date('Y-m-d', strtotime($requestdata['checkin']))."' AND '".date('Y-m-d', strtotime($requestdata['checkout']))."')");
+				$query->orWhere("(DATE_ADD(b.check_out, INTERVAL -1 DAY) BETWEEN '".date('Y-m-d', strtotime($requestdata['checkin']))."' AND '".date('Y-m-d', strtotime($requestdata['checkout']))."')");
 			$query->groupEnd();
 		}
 		

@@ -59,6 +59,8 @@ class Cart extends BaseModel
 			$query->groupStart();
 				$query->where("('".date('Y-m-d', strtotime($requestdata['checkin']))."' BETWEEN c.check_in AND DATE_ADD(c.check_out, INTERVAL -1 DAY))");
 				$query->orWhere("('".date('Y-m-d', strtotime($requestdata['checkout']))."' BETWEEN c.check_in AND DATE_ADD(c.check_out, INTERVAL -1 DAY))");
+				$query->orWhere("(c.check_in BETWEEN '".date('Y-m-d', strtotime($requestdata['checkin']))."' AND '".date('Y-m-d', strtotime($requestdata['checkout']))."')");
+				$query->orWhere("(DATE_ADD(c.check_out, INTERVAL -1 DAY) BETWEEN '".date('Y-m-d', strtotime($requestdata['checkin']))."' AND '".date('Y-m-d', strtotime($requestdata['checkout']))."')");
 			$query->groupEnd();
 		}
 		
