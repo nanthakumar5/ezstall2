@@ -101,7 +101,6 @@ $routes->post('ajax/ajaxblockunblock', 'Common\Ajax::ajaxblockunblock');
 $routes->post('ajax/importbarnstall', 'Common\Ajax::importbarnstall');
 $routes->post('ajax/calendar', 'Common\Ajax::calendar');
 $routes->post('ajax/barnstall1', 'Common\Ajax::barnstall1');
-$routes->get('stripe3d', 'Site\Stripe\Index::index');
 
 $routes->post('ajaxsearchevents', 'Common\Ajax::ajaxsearchevents');
 $routes->post('ajaxsearchfacility', 'Common\Ajax::ajaxsearchfacility');
