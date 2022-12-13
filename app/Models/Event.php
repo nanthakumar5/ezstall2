@@ -122,7 +122,7 @@ class Event extends BaseModel
 			}elseif($type=='row'){
 				$result = $query->getRowArray();
 			}
-			echo '-------'.$this->db->getLastQuery();
+			
 			$result = $this->getEventBarnStall($type, $querydata, $requestdata, ['result' => $result, 'type' => '1', 'barnname' => 'barn', 'stallname' => 'stall', 'bookedstall' => 'bookedstall']);
 			$result = $this->getEventBarnStall($type, $querydata, $requestdata, ['result' => $result, 'type' => '2', 'barnname' => 'rvbarn', 'stallname' => 'rvstall', 'bookedstall' => 'rvbookedstall']);
 			$result = $this->getEventProducts($type, $querydata, $requestdata, ['result' => $result, 'type' => '1', 'productname' => 'feed']);
