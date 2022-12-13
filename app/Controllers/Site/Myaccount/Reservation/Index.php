@@ -26,7 +26,7 @@ class Index extends BaseController
     		    $requestData['stallid'] 		= explode(',', $requestData['stallid']);
     			$result = $this->booking->updatedata($requestData);
     			$unlocksms = $this->booking->getBooking('row', ['booking', 'event', 'users', 'cleanbookingdetails', 'cleanstall'], ['stallid' => [$result]]);
-    			if($unlocksms['notification_flag']=='1'){
+    			if($unlocksms['notification_flag']=='1' && $requestData['lock_dirty_status']=='1'){
 	    			unlockedTemplate($unlocksms);
     			}
 	    	}else{
