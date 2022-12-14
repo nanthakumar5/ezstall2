@@ -188,7 +188,7 @@ class Cart extends BaseModel
 		}
 	}
 	
-	public function getReserved($time)
+	public function getReserved($time) 
 	{	
 		$request 	= 	service('request');
 		$ip 		= 	$request->getIPAddress();

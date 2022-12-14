@@ -1076,9 +1076,6 @@ function timer(selector, countDownDate){
 		var now = new Date().getTime();
 		var distance = countDownDate - now;
 		
-		console.log(countDownDate);
-		console.log(now);
-	
 		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
