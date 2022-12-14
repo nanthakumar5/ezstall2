@@ -986,6 +986,7 @@ function cartbox(pagetype, result){
 		<div class="border rounded pt-4 ps-3 pe-3 mb-5">\
 			<div class="row mb-2">\
 				<div class="col-md-12">\
+					<div id="timer"></div>\
 					<div class="row"> <span class="col-6 fw-bold">Total Day :</span><span class="col-6 fw-bold text-end">'+result.interval+'</span></div>\
 					'+barnstalldata+'\
 					'+rvbarnstalldata+'\
@@ -1068,4 +1069,27 @@ function cartsummary(pagetype, type, title, result){
 	}
 
 	return data;
+}
+
+function timer(selector, countDownDate){
+	var x = setInterval(function() {
+		var now = new Date().getTime();
+		var distance = countDownDate - now;
+		
+		console.log(countDownDate);
+		console.log(now);
+	
+		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+		var countdown = minutes + "m " + seconds + "s ";
+		$(document).find(selector).html(countdown);
+		
+		if (distance < 0) {
+			clearInterval(x);
+			//location.reload();
+		}
+	}, 1000);
 }

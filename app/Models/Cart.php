@@ -169,11 +169,14 @@ class Cart extends BaseModel
 	
 	public function removeReserved($time)
 	{	
+		$request 	= 	service('request');
+		$ip 		= 	$request->getIPAddress();
 		$datetime 	= 	date("Y-m-d H:i:s");
 		
 		$cart 		= 	$this->db->table('cart')
 						->select('max(datetime) as datetime, user_id')
 						->groupBy('user_id', 'desc')
+						->where('ip', $ip)
 						->having('DATE_ADD(datetime, INTERVAL '.$time.' MINUTE) <=', $datetime)
 						->get()
 						->getResultArray();
@@ -182,6 +185,27 @@ class Cart extends BaseModel
 			foreach($cart as $data){
 				$this->db->table('cart')->delete(['user_id' => $data['user_id']]);
 			}
+		}
+	}
+	
+	public function getReserved($time)
+	{	
+		$request 	= 	service('request');
+		$ip 		= 	$request->getIPAddress();
+		$datetime 	= 	date("Y-m-d H:i:s");
+		
+		$cart 		= 	$this->db->table('cart')
+						->select('max(datetime) as datetime')
+						->groupBy('user_id', 'desc')
+						->where('ip', $ip)
+						->having('DATE_ADD(datetime, INTERVAL '.$time.' MINUTE) >=', $datetime)
+						->get()
+						->getRowArray();
+		
+		if($cart){
+			return date('Y-m-d H:i:s', strtotime('+'.$time.' minutes', strtotime($cart['datetime'])));
+		}else{
+			return false;
 		}
 	}
 }

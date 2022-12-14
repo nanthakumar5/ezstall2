@@ -188,7 +188,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-lg-3 cartsummary"></div>
+		<div class="col-lg-3 checkout_wrapper"></div>
     </div>
 </section>
 <?php $this->endSection(); ?>
@@ -199,6 +199,7 @@
 		var transactionfee		= '<?php echo $settings["transactionfee"];?>';  
 		var currencysymbol 		= '<?php echo $currencysymbol; ?>';
 		var pricelists 			= $.parseJSON('<?php echo json_encode($pricelists); ?>');
+		var timerdata			= '<?php echo isset($cartdetail["timer"]) ? $cartdetail["timer"] : ''; ?>';
 		
 		$(function(){
 		    $('#mobile').inputmask("(999) 999-9999");
@@ -240,8 +241,8 @@
 				}
 			);
 			
-			var cartdata 	= cartbox(2, $.parseJSON('<?php echo json_encode($cartdetail); ?>'));
-			$('.cartsummary').append(cartdata);
+			$('.checkout_wrapper').empty().append(cartbox(2, $.parseJSON('<?php echo json_encode($cartdetail); ?>')));
+			if(timerdata!='') timer('#timer', new Date(timerdata).getTime());	
 		});
 
 		$('.checkoutpayment').click(function(){

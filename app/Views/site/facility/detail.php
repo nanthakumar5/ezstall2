@@ -48,7 +48,7 @@ $profileimage 	= ($profileimage!="") ? base_url().'/assets/uploads/profile/'.$de
 			<div class="col-md-9">
 				<?php echo $barnstall; ?>
 			</div> 
-			<div class="sticky-top checkout col-md-3 mt-4 h-100"></div>
+			<div class="sticky-top checkout_wrapper col-md-3 mt-4 h-100"></div>
 		</div>
 	</div>
 </section>

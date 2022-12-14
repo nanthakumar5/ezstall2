@@ -190,7 +190,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 						</div>
 					<?php } ?>
 				</div> 
-				<div class="sticky-top checkout col-md-3 mt-4 h-100"></div>
+				<div class="sticky-top checkout_wrapper col-md-3 mt-4 h-100"></div>
 			</div>
 		</div>
 	</section>

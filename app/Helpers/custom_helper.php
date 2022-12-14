@@ -276,6 +276,10 @@ function getCart($type=''){
 	$cart 		    = new \App\Models\Cart;
 	$result         = $cart->getCart('all', ['cart', 'event', 'barn', 'stall', 'product', 'tax'], $condition);
 	if($result){
+		$setting 				= getSettings();
+		$cartreservedtime		= $cart->getReserved($setting['cartreservedtime']);
+		$timer					= $cartreservedtime ? $cartreservedtime : '';
+		
 		$event_id 				= array_unique(array_column($result, 'event_id'))[0];
 		$event_name 			= array_unique(array_column($result, 'eventname'))[0];
 		$event_location 		= array_unique(array_column($result, 'eventlocation'))[0];
@@ -382,7 +386,8 @@ function getCart($type=''){
 			'check_in' 			=> $check_in,
 			'check_out'			=> $check_out,
 			'price' 			=> $price,
-			'type' 				=> $type
+			'type' 				=> $type,
+			'timer' 			=> $timer
 		];	
 	}else{
 		return false;
@@ -426,7 +431,7 @@ function getBlockunblock($eventid, $extras=[]){
 	$condition2 	= ['facilityid' => $eventid, 'status' => ['1'], 'type' => '1'];
 	
 	if(isset($extras['type']) &&  $extras['type']=='1') 	$condition = $condition2+['gtenddate' => date('Y-m-d')];
-	elseif(isset($extras['type']) &&  $extras['type']=='2') $condition = $condition2+['btw_start_date' => $extras['checkin'], 'btw_end_date' => $extras['checkout'], 'nqeventid' => (isset($extras['nqeventid']) ? $extras['nqeventid'] : '')];
+	elseif(isset($extras['type']) &&  $extras['type']=='2') $condition = $condition2+['checkin' => $extras['checkin'], 'checkout' => $extras['checkout'], 'nqeventid' => (isset($extras['nqeventid']) ? $extras['nqeventid'] : '')];
 	else $condition = $condition1;
 		
 	$stall			= new \App\Models\Stall;

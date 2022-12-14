@@ -633,9 +633,8 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							pricelist();
 							occupiedreserved($("#startdate").val(), $("#enddate").val());
 							
-							var result = cartbox(1, result);
-							
-							$('.checkout').empty().append(result);
+							$('.checkout_wrapper').empty().append(cartbox(1, result));
+							if(result.timer!='') timer('#timer', new Date(result.timer).getTime());	
 						}else{
 							$('.checkout').empty();
 						}

@@ -69,6 +69,8 @@ class Event extends BaseModel
 		if(isset($requestdata['end_date'])) 			$query->where('e.end_date <', date('Y-m-d', strtotime($requestdata['end_date'])));
 		if(isset($requestdata['gtenddate'])) 			$query->where('e.end_date >=', $requestdata['gtenddate']);
 		
+		/* START SEARCH */
+		if(isset($requestdata['lenddate']))	$query->groupStart()->where('e.end_date >=', $requestdata['lenddate'])->orWhere('e.end_date', '0000-00-00')->groupEnd();
 		if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) 	$query->havingGroupStart()->havingGroupStart()->having("('".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date)")->orHavingGroupStart()->having('e.start_date >=', $requestdata['btw_start_date'])->havingGroupEnd()->havingGroupEnd()->orHavingGroupStart()->having('stallavailable2 >=', '1')->havingGroupEnd()->havingGroupEnd();
 		if(!isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$query->havingGroupStart()->havingGroupStart()->having("('".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date)")->orHavingGroupStart()->having('e.end_date <=', $requestdata['btw_end_date'])->havingGroupEnd()->havingGroupEnd()->orHavingGroupStart()->having('stallavailable2 >=', '1')->havingGroupEnd()->havingGroupEnd();
 		if(isset($requestdata['btw_start_date']) && isset($requestdata['btw_end_date'])) 	$query->havingGroupStart()->havingGroupStart()->having("('".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date)")->orHavingGroupStart()->having("('".$requestdata['btw_end_date']."' BETWEEN e.start_date AND e.end_date)")->havingGroupEnd()->havingGroupEnd()->orHavingGroupStart()->having('stallavailable2 >=', '1')->havingGroupEnd()->havingGroupEnd();
@@ -83,6 +85,7 @@ class Event extends BaseModel
 				$query->orLike('e.name', $llocation);
 			$query->groupEnd();
 		}
+		/* END SEARCH */
 		
 		if($type!=='count' && isset($requestdata['start']) && isset($requestdata['length'])){
 			$query->limit($requestdata['length'], $requestdata['start']);
