@@ -50,6 +50,7 @@ $routes->group('api', function ($routes) {
 
 	//Event
 	$routes->get('eventlist', 'Api\Event\Index::listandsearch');
+    $routes->post('checkinchecout', 'Api\Event\Index::checkinchecout');
 	$routes->get('eventdetail/(:num)', 'Api\Event\Index::detail/$1');
 
 	//Facility
