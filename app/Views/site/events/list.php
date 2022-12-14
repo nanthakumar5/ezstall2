@@ -48,7 +48,7 @@
 							<div class="wi-50-2 justify-content-between">
 								<span class="m-left upevent">
 									<p><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/horseShoe.svg">Stalls</p>
-									<h6 class="ucprice"> from $<?php echo $data['stalls_price'] ?> / night</h6>
+									<h6 class="ucprice"> starting from $<?php echo $data['startingstallprice']; ?></h6>
 								</span>
 								<a class="text-decoration-none text-white" id="booknow_link" href="<?php echo base_url() ?>/events/detail/<?php echo $data['id']?>"><button class="ucEventBtn">
 									<?php echo $booknowBtn['btn'];?>

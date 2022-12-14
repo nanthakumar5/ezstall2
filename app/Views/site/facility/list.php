@@ -16,13 +16,6 @@
 <div class="infoPanel stallform container-lg">
 </div>
 <section class="maxWidth">
-		<!-- <div class="pageInfo">
-		  <span class="marFive">
-			<a href="<?php echo base_url(); ?>">Home</a> /
-			<a href="javascript:void(0);"> Events</a>
-		  </span>
-		</div> -->
-
 		<div class="marFive dFlexComBetween eventTP">
 			<h1 class="eventPageTitle">Facility</h1>
 			<span class="mar0">
@@ -55,6 +48,10 @@
 								</div>
 							</span>
 							<div class="pr-f2">
+								<span class="m-left upevent">
+									<p><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/horseShoe.svg">Stalls</p>
+									<h6 class="ucprice"> starting from $<?php echo $data['startingstallprice']; ?></h6>
+								</span>
 								<a class="text-decoration-none text-white" id="booknow_link" href="<?php echo base_url() ?>/facility/detail/<?php echo $data['id']?>">
 									<button class="ucEventBtn">
 										Book Now

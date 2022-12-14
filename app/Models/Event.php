@@ -25,6 +25,23 @@ class Event extends BaseModel
 			$select[] 	= 	implode(',', $distance);
 		} 
 
+		if(in_array('startingstallprice', $querydata)){
+			$select[] = '(if(u.type=3, 
+						(select min(price) from  stall as s where s.event_id = e.id and s.status="1"),
+						(
+							select 
+								(CASE 
+									WHEN min(night_price) != 0 THEN min(night_price)
+									WHEN min(week_price) != 0 THEN min(week_price)
+									WHEN min(month_price) != 0 THEN min(month_price)
+									WHEN min(flat_price) != 0 THEN min(flat_price)
+									ELSE 0
+								END)
+							from  stall as s where s.event_id = e.id and s.status="1"
+						)
+						)) as startingstallprice';		
+		} 
+
 		if(in_array('stallavailable', $querydata)){
 			$condition1 = '';
 			if(isset($requestdata['btw_start_date']) && !isset($requestdata['btw_end_date'])) 	$condition1 .= " and '".$requestdata['btw_start_date']."' BETWEEN e.start_date AND e.end_date";

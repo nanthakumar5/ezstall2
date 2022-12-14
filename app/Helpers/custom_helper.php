@@ -493,6 +493,7 @@ function send_message_template($id, $extras=[]){
         $users = $users->getUsers('row', ['users'], ['id' => $extras['userid']]);
         $username  	= $users['name'];
         $email  	= $users['email'];
+        $link  		= base_url().'changepassword/'.base64_encode($users['id']).'/'.base64_encode(date('Y-m-d H:i:s', strtotime('+4 minutes')));
     }else{
 		$email  	= $extras['email'];
 	}
@@ -526,12 +527,14 @@ function send_message_template($id, $extras=[]){
         [
 			'#username',
             '#productname', 
-			'#eventname'
+			'#eventname',
+			'#link'
         ],
         [
             isset($username) ? $username : '',
             isset($productname) ? $productname : '',
-            isset($eventname) ? $eventname : ''
+            isset($eventname) ? $eventname : '',
+            isset($link) ? $link : ''
         ],
 
         $emailtemplate['message']

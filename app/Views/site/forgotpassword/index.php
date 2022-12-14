@@ -7,17 +7,14 @@
 </div>
 <div class="signInRight">
     <div class="signInFormPanel">
-        <h1 class="topPad">Let's Sign In</h1><p>Enter details to Sign In</p>
+        <h1 class="topPad">Forgot Password</h1>
         <form class="signInForm" id="form" method="post" action="" autocomplete="off">
             <span>
                 <input type="email" class="signInEmail" placeholder="Enter email" name="email">
             </span>
-            <span>
-                <input type="password" class="signInPassword" placeholder="Enter password" name="password">
-            </span>
-            <button type="submit" class="signInSubmitBtn">Sign In</button>
+            <button type="submit" class="signInSubmitBtn">Submit</button>
             <p>
-                <a href="<?php echo base_url()?>/forgotpassword" class="signUpLink">Forgot Password</a>
+                <a href="<?php echo base_url()?>/login" class="signUpLink">Sign In</a>
             </p>
             <p>
 				Don't have an account ?
@@ -38,18 +35,12 @@
 					email		: {
 						required  : true,
 						email  	  : true
-					},
-					password	: {
-						required  : true
 					}
 				},
 				{
 					email		: {
 						required  : "Email field is required.",
 						email  	  : "Enter valid email address."
-					},
-					password	: {
-						required  : "Password field is required."
 					}
 				}
 			);

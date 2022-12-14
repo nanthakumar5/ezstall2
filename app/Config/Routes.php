@@ -128,6 +128,8 @@ $routes->match(['get', 'post'], '/', 'Site\Home\Index::index');
 $routes->get('search', 'Site\Search\Index::index');
 $routes->match(['get', 'post'], 'login', 'Site\Login\Index::index', ['filter' => 'siteauthentication1']);
 $routes->match(['get', 'post'], 'register', 'Site\Register\Index::index', ['filter' => 'siteauthentication1']);
+$routes->match(['get', 'post'], 'forgotpassword', 'Site\Forgotpassword\Index::index', ['filter' => 'siteauthentication1']);
+$routes->match(['get', 'post'], 'changepassword/(:any)/(:any)', 'Site\Changepassword\Index::index', ['filter' => 'siteauthentication1']);
 $routes->get('verification/(:any)', 'Site\Register\Index::verification/$1');
 $routes->match(['get', 'post'], 'events', 'Site\Event\Index::lists');
 $routes->match(['get', 'post'], 'events/latlong', 'Site\Event\Index::latlong');
