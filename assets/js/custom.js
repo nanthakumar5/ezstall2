@@ -1089,7 +1089,7 @@ function timer(selector, countDownDate){
 		
 		if (distance < 0) {
 			clearInterval(x);
-			//location.reload();
+			location.reload();
 		}
 	}, 1000);
 }
