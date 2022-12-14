@@ -230,6 +230,34 @@
 			}else if(newselettertoast=='0'){
 				toastr.success('Email ID already Subscribed..', {timeOut: 5000});
 			}
+			
+			if(localStorage.getItem('burger')!=null){
+				$('.sidebar_wrapper li a p').addClass('displaynoneimp');
+				$('#sidebar-nav').addClass('sidebar-nav-burger');
+			}
+			
+			$('#burger').click(function(){
+				$('.sidebar_wrapper li a p').toggleClass('displaynoneimp');
+				$(this).closest('#sidebar-nav').toggleClass('sidebar-nav-burger');
+				
+				if($('#sidebar-nav').hasClass('sidebar-nav-burger')){
+					localStorage.setItem('burger', 1)
+				}else{
+					localStorage.removeItem('burger');
+				}
+			})
+			
+			$('.sidebar_wrapper li').hover(function(){
+				if($(this).find('a p.displaynoneimp').length){
+					$(this).addClass('position-relative');
+					$(this).find('a p.displaynoneimp').addClass('sidebar-nav-burger-text');
+				}
+			}, function() {
+				if($(this).find('a p.displaynoneimp').length){
+					$(this).removeClass('position-relative');
+					$(this).find('a p.displaynoneimp').removeClass('sidebar-nav-burger-text');
+				}
+			})
 		</script>
 	</body>
 </html>

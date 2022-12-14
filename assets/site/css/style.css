@@ -5460,3 +5460,19 @@ div#multi-nav-tab button.nav-link.m-0 {
 	font-size: 10px;
     display: block;
 }
+
+.sidebar-nav-burger{
+	min-width:60px!important;
+}
+
+.sidebar-nav-burger-text{
+	position: absolute;
+    display: block!important;
+    left: 40px;
+    z-index: 9;
+    background: lightgrey;
+    top: 0;
+    width: 200px;
+    padding: 10px;
+    border-radius: 5px;
+}

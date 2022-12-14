@@ -2,17 +2,18 @@
 
 <?php
 	$userdetail 		= getSiteUserDetails();
-	$role 					= $userdetail['type']; 
+	$role 				= $userdetail['type']; 
 	$parentid 			= $userdetail['parent_id'];
-	$parentdetails 	= getSiteUserDetails($parentid);
-	$parenttype   	= $parentdetails ? $parentdetails['type'] : '';
+	$parentdetails 		= getSiteUserDetails($parentid);
+	$parenttype   		= $parentdetails ? $parentdetails['type'] : '';
 ?>
 
 <div class="navbar-header">
   <button type="button" id="sidebarCollapse" class="btn btn-info side-navbar-btn"><i class="side-nav-i bi bi-list"></i></button>
 </div>
 <nav id="sidebar-nav" class="ml-5">
-	<ul class="list-unstyled components">
+	<button id="burger">B</button>
+	<ul class="list-unstyled components sidebar_wrapper">
 		<li class="side-nav-active">
 			<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/dashboard">
 				<i class="side-nav-i bi bi-speedometer"></i>
