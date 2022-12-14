@@ -16,7 +16,7 @@ class Index extends BaseController
     { 
 		if ($this->request->getMethod()=='post')
         {
-			$id = base64_decode($date);
+			$id = base64_decode($id);
 			$password = $this->request->getPost('password');
 			
             $result = $this->users->action(['password' => $password, 'actionid' => $id, 'user_id' => $id]); 
