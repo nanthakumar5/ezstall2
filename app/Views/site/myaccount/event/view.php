@@ -146,7 +146,7 @@
 						$rvtabcontent .= '<div class="tab-pane fade'.$rvbarnactive.'" id="barn'.$barnid.'" role="tabpanel" aria-labelledby="nav-home-tab">
 											<ul class="list-group">';
 							foreach($rvbarndata['rvstall'] as $rvstalldata){
-								$rvinitialsub=''; $rvnight_price=''; $rvmonth_price=''; $rvflat_price=''; $week_price='';
+								$rvinitialsub=''; $rvnight_price=''; $rvmonth_price=''; $rvflat_price=''; $rvweek_price='';
 								if($rvstalldata['night_price']!=''){
 									$rvnight_price = 'N ('.$currencysymbol.$rvstalldata['night_price'].')';
 								}
