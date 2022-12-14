@@ -30,7 +30,7 @@ class Index extends BaseController
         }
 		
 		$data['expired'] = 0;
-		if(base64_decode($date) < date('Y-m-d H:i:s')){
+		if(base64_decode($date) < date('Y-m-d')){
 			$data['expired'] = 1;
 		}
 		
