@@ -137,7 +137,7 @@ class Index extends BaseController
 		
 	}
 	
-	function checkinchecout(){
+	function checkincheckout(){
 		$post 		= $this->request->getPost();
 		$eventid 	= $post['eventid'];
 		$checkin 	= formatdate($post['checkin']);
