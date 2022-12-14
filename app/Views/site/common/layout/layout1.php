@@ -1,10 +1,10 @@
 <?php
-	removeCartReserved();
 	$userdetail  	= getSiteUserDetails();
 	$uri 			= service('uri');
 	$segment1 		= $uri->getSegment(1);
 	$upcoming 		= upcomingEvents(); 
 	$settings 		= getSettings();
+	$cartdata 		= getCart();
 ?>
 
 <!DOCTYPE html>
@@ -43,17 +43,9 @@
 							</div>
 							<?php if($userdetail){ ?>
 								<div class="navbar-nav">
-									<?php if(getCart()){ ?>
-										<a href="<?php echo base_url().'/checkout'; ?>" class="text-decoration-none me-3"><i class="fa fa-shopping-cart text-white"></i></a>
-									<?php } ?>
-									<!-- <a class="text-decoration-none text-white" href="<?php //echo base_url().'/myaccount/dashboard'; ?>" class="ml-2rem nav-link">Hi <?php //echo ucfirst($userdetail['name']);?></a> 
-									<span class="text-white px-2"> /</span> -->
-
-
+									<a href="<?php echo base_url().'/checkout'; ?>" class="text-decoration-none me-3 minicart-wrapper <?php if(!$cartdata){ echo 'displaynone'; }?>"><i class="fa fa-shopping-cart text-white"></i><span class="minicart"><?php echo ($cartdata ? $cartdata['count'] : '0'); ?></span></a>									
 									<a class="text-decoration-none text-white" href="<?php echo base_url().'/myaccount/dashboard'; ?>" class="ml-2rem nav-link">Dashboard</a> 
 									<span class="text-white px-2"> /</span>
-
-
 									<a class="text-decoration-none text-white" href="<?php echo base_url().'/logout'; ?>" class="ml-2rem nav-link">Logout</a> 
 								</div>
 							<?php }else{ ?>

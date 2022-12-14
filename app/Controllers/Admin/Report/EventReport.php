@@ -42,7 +42,6 @@ class EventReport extends BaseController
 			$sheet->setCellValue('F1', 'end_date');
 			$sheet->setCellValue('G1', 'start_time');
 			$sheet->setCellValue('H1', 'end_time');
-			$sheet->setCellValue('I1', 'stalls_price');
 			$sheet->setCellValue('J1', 'Total Amount');
 			
 			$row = 2;
@@ -56,8 +55,6 @@ class EventReport extends BaseController
 				$sheet->setCellValue('F' . $row, formatdate($data['end_date']));
 				$sheet->setCellValue('G' . $row, formattime($data['start_time']));
 				$sheet->setCellValue('H' . $row, formattime($data['end_time']));
-				$sheet->setCellValue('I' . $row, $data['stalls_price']);
-
 				
 				$row++;
 				foreach ($data['barn'] as $key => $barn) { 

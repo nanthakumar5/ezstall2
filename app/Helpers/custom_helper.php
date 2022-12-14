@@ -279,6 +279,7 @@ function getCart($type=''){
 		$setting 				= getSettings();
 		$cartreservedtime		= $cart->getReserved($setting['cartreservedtime']);
 		$timer					= $cartreservedtime ? $cartreservedtime : '';
+		$count					= count($result);
 		
 		$event_id 				= array_unique(array_column($result, 'event_id'))[0];
 		$event_name 			= array_unique(array_column($result, 'eventname'))[0];
@@ -387,7 +388,8 @@ function getCart($type=''){
 			'check_out'			=> $check_out,
 			'price' 			=> $price,
 			'type' 				=> $type,
-			'timer' 			=> $timer
+			'timer' 			=> $timer,
+			'count' 			=> $count
 		];	
 	}else{
 		return false;

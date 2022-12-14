@@ -73,7 +73,7 @@ class Index extends BaseController
 		}
 		
 		$eventcount = $this->event->getEvent('count', ['event'], $searchdata+['status' => ['1'], 'userid' => $userid, 'type' => '1']);
-		$event = $this->event->getEvent('all', ['event'], $searchdata+['status' => ['1'], 'userid' => $userid, 'type' => '1', 'start' => $offset, 'length' => $perpage], ['orderby' => 'e.id desc']);
+		$event = $this->event->getEvent('all', ['event', 'users', 'startingstallprice'], $searchdata+['status' => ['1'], 'userid' => $userid, 'type' => '1', 'start' => $offset, 'length' => $perpage], ['orderby' => 'e.id desc']);
 		$settings = getSettings();
 		
         $data['list'] = $event;
@@ -151,7 +151,7 @@ class Index extends BaseController
 	
 	public function view($id)
     {  
-		$data['detail']  	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall'], ['id' => $id, 'type' => '1']);
+		$data['detail']  	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall', 'users', 'startingstallprice'], ['id' => $id, 'type' => '1']);
 		$data['currencysymbol'] = $this->config->currencysymbol;
 		return view('site/myaccount/event/view',$data);
     }
@@ -187,23 +187,22 @@ class Index extends BaseController
 		$sheet->setCellValue('H'.$row, 'End Date');
 		$sheet->setCellValue('I'.$row, 'Start Time');
 		$sheet->setCellValue('J'.$row, 'End Time');
-		$sheet->setCellValue('K'.$row, 'Stalls Price');
-		$sheet->setCellValue('L'.$row, 'Description');
-		$sheet->setCellValue('M'.$row, 'Will you be selling feed at this event?');
-		$sheet->setCellValue('N'.$row, 'Will you be selling shavings at this event?');
-		$sheet->setCellValue('O'.$row, 'Will you have RV Hookups at this event?');
-		$sheet->setCellValue('P'.$row, 'Will you Collect the Cleaning fee from Horse owner?');
-		$sheet->setCellValue('Q'.$row, 'Send a text message to users when their stall is unlocked and ready for use?');
+		$sheet->setCellValue('K'.$row, 'Description');
+		$sheet->setCellValue('L'.$row, 'Will you be selling feed at this event?');
+		$sheet->setCellValue('M'.$row, 'Will you be selling shavings at this event?');
+		$sheet->setCellValue('N'.$row, 'Will you have RV Hookups at this event?');
+		$sheet->setCellValue('O'.$row, 'Will you Collect the Cleaning fee from Horse owner?');
+		$sheet->setCellValue('P'.$row, 'Send a text message to users when their stall is unlocked and ready for use?');
 		if($usertype=='2'){
-			$sheet->setCellValue('R'.$row, 'Night Price');
-			$sheet->setCellValue('S'.$row, 'Week Price');
-			$sheet->setCellValue('T'.$row, 'Month Price');
-			$sheet->setCellValue('U'.$row, 'Flat Price');
-			$sheet->setCellValue('V'.$row, 'Subscription Initial Price');
-			$sheet->setCellValue('W'.$row, 'Subscription Month Price');
-			$sheet->setCellValue('X'.$row, 'Cleaning Price');
+			$sheet->setCellValue('Q'.$row, 'Night Price');
+			$sheet->setCellValue('R'.$row, 'Week Price');
+			$sheet->setCellValue('S'.$row, 'Month Price');
+			$sheet->setCellValue('T'.$row, 'Flat Price');
+			$sheet->setCellValue('U'.$row, 'Subscription Initial Price');
+			$sheet->setCellValue('V'.$row, 'Subscription Month Price');
+			$sheet->setCellValue('W'.$row, 'Cleaning Price');
 		}else{
-			$sheet->setCellValue('R'.$row, 'Cleaning Price');
+			$sheet->setCellValue('Q'.$row, 'Cleaning Price');
 		}
 		
         $row++;
@@ -218,25 +217,26 @@ class Index extends BaseController
 		$sheet->setCellValue('H'.$row, formatdate($data['end_date'], 1));
 		$sheet->setCellValue('I'.$row, $data['start_time']);
 		$sheet->setCellValue('J'.$row, $data['end_time']);
-		$sheet->setCellValue('K'.$row, $data['stalls_price']);
-		$sheet->setCellValue('L'.$row, $data['description']);
-		$sheet->setCellValue('M'.$row, (isset($yesno[$data['feed_flag']]) ? $yesno[$data['feed_flag']] : ''));
-		$sheet->setCellValue('N'.$row, (isset($yesno[$data['shaving_flag']]) ? $yesno[$data['shaving_flag']] : ''));
-		$sheet->setCellValue('O'.$row, (isset($yesno[$data['rv_flag']]) ? $yesno[$data['rv_flag']] : ''));
-		$sheet->setCellValue('P'.$row, (isset($yesno[$data['cleaning_flag']]) ? $yesno[$data['cleaning_flag']] : ''));
-		$sheet->setCellValue('Q'.$row, (isset($yesno[$data['notification_flag']]) ? $yesno[$data['notification_flag']] : ''));
+		$sheet->setCellValue('K'.$row, $data['description']);
+		$sheet->setCellValue('L'.$row, (isset($yesno[$data['feed_flag']]) ? $yesno[$data['feed_flag']] : ''));
+		$sheet->setCellValue('M'.$row, (isset($yesno[$data['shaving_flag']]) ? $yesno[$data['shaving_flag']] : ''));
+		$sheet->setCellValue('N'.$row, (isset($yesno[$data['rv_flag']]) ? $yesno[$data['rv_flag']] : ''));
+		$sheet->setCellValue('O'.$row, (isset($yesno[$data['cleaning_flag']]) ? $yesno[$data['cleaning_flag']] : ''));
+		$sheet->setCellValue('P'.$row, (isset($yesno[$data['notification_flag']]) ? $yesno[$data['notification_flag']] : ''));
 		if($usertype=='2'){
-			$sheet->setCellValue('R'.$row, (isset($pricefee[0]) ? $pricefee[0] : 0));
-			$sheet->setCellValue('S'.$row, (isset($pricefee[1]) ? $pricefee[1] : 0));
-			$sheet->setCellValue('T'.$row, (isset($pricefee[2]) ? $pricefee[2] : 0));
-			$sheet->setCellValue('U'.$row, (isset($pricefee[3]) ? $pricefee[3] : 0));
-			$sheet->setCellValue('V'.$row, (isset($pricefee[4]) ? $pricefee[4] : 0));
-			$sheet->setCellValue('W'.$row, (isset($pricefee[5]) ? $pricefee[5] : 0));
-			$sheet->setCellValue('X'.$row, $data['cleaning_fee']);
+			$sheet->setCellValue('Q'.$row, (isset($pricefee[0]) ? $pricefee[0] : 0));
+			$sheet->setCellValue('R'.$row, (isset($pricefee[1]) ? $pricefee[1] : 0));
+			$sheet->setCellValue('S'.$row, (isset($pricefee[2]) ? $pricefee[2] : 0));
+			$sheet->setCellValue('T'.$row, (isset($pricefee[3]) ? $pricefee[3] : 0));
+			$sheet->setCellValue('U'.$row, (isset($pricefee[4]) ? $pricefee[4] : 0));
+			$sheet->setCellValue('V'.$row, (isset($pricefee[5]) ? $pricefee[5] : 0));
+			$sheet->setCellValue('W'.$row, $data['cleaning_fee']);
 		}else{
-			$sheet->setCellValue('R'.$row, $data['cleaning_fee']);
+			$sheet->setCellValue('Q'.$row, $data['cleaning_fee']);
 		}
 		
+		$dropdownlist = $sheet->getCell('L'.$row)->getDataValidation();
+		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
 		$dropdownlist = $sheet->getCell('M'.$row)->getDataValidation();
 		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
 		$dropdownlist = $sheet->getCell('N'.$row)->getDataValidation();
@@ -244,8 +244,6 @@ class Index extends BaseController
 		$dropdownlist = $sheet->getCell('O'.$row)->getDataValidation();
 		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
 		$dropdownlist = $sheet->getCell('P'.$row)->getDataValidation();
-		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
-		$dropdownlist = $sheet->getCell('Q'.$row)->getDataValidation();
 		$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Yes or No')->setFormula1('"'.$yesnovalue.'"');
 				
 		$row = $row+2;
@@ -264,24 +262,24 @@ class Index extends BaseController
 			$sheet->setCellValue('N'.$row, 'Flat Price');
 			$sheet->setCellValue('O'.$row, 'Subscription Initial Price');
 			$sheet->setCellValue('P'.$row, 'Subscription Month Price');
-			$sheet->setCellValue('R'.$row, 'Name');
-			$sheet->setCellValue('S'.$row, 'Quantity');
-			$sheet->setCellValue('T'.$row, 'Price');
-			$sheet->setCellValue('V'.$row, 'Name');
-			$sheet->setCellValue('W'.$row, 'Quantity');
-			$sheet->setCellValue('X'.$row, 'Price');
+			$sheet->setCellValue('S'.$row, 'Name');
+			$sheet->setCellValue('T'.$row, 'Quantity');
+			$sheet->setCellValue('U'.$row, 'Price');
+			$sheet->setCellValue('X'.$row, 'Name');
+			$sheet->setCellValue('Y'.$row, 'Quantity');
+			$sheet->setCellValue('Z'.$row, 'Price');
 		}else{
 			$sheet->setCellValue('B'.$row, 'Charging');
 			$sheet->setCellValue('C'.$row, 'Price');
-			$sheet->setCellValue('E'.$row, 'RV Hookups');
-			$sheet->setCellValue('F'.$row, 'Charging');
-			$sheet->setCellValue('G'.$row, 'Price');
-			$sheet->setCellValue('I'.$row, 'Name');
-			$sheet->setCellValue('J'.$row, 'Quantity');
-			$sheet->setCellValue('K'.$row, 'Price');
-			$sheet->setCellValue('M'.$row, 'Name');
-			$sheet->setCellValue('N'.$row, 'Quantity');
-			$sheet->setCellValue('O'.$row, 'Price');
+			$sheet->setCellValue('F'.$row, 'RV Hookups');
+			$sheet->setCellValue('G'.$row, 'Charging');
+			$sheet->setCellValue('H'.$row, 'Price');
+			$sheet->setCellValue('K'.$row, 'Name');
+			$sheet->setCellValue('L'.$row, 'Quantity');
+			$sheet->setCellValue('M'.$row, 'Price');
+			$sheet->setCellValue('P'.$row, 'Name');
+			$sheet->setCellValue('Q'.$row, 'Quantity');
+			$sheet->setCellValue('R'.$row, 'Price');
 		}
 		
 		$row++;
@@ -317,7 +315,7 @@ class Index extends BaseController
 			if($usertype=='2'){
 				$sheet->setCellValue('J'.$row, $barn['name']);
 			}else{
-				$sheet->setCellValue('E'.$row, $barn['name']);
+				$sheet->setCellValue('F'.$row, $barn['name']);
 			}
 			$row++;
 			
@@ -331,9 +329,9 @@ class Index extends BaseController
 					$sheet->setCellValue('O'.$row, $stall['subscription_initial_price']);
 					$sheet->setCellValue('P'.$row, $stall['subscription_month_price']);
 				}else{
-					$sheet->setCellValue('E'.$row, $stall['name']);
-					$sheet->setCellValue('F'.$row, (isset($charging[$stall['charging_id']]) ? $charging[$stall['charging_id']] : ''));
-					$sheet->setCellValue('G'.$row, $stall['price']);
+					$sheet->setCellValue('F'.$row, $stall['name']);
+					$sheet->setCellValue('G'.$row, (isset($charging[$stall['charging_id']]) ? $charging[$stall['charging_id']] : ''));
+					$sheet->setCellValue('H'.$row, $stall['price']);
 					
 					$dropdownlist = $sheet->getCell('F'.$row)->getDataValidation();
 					$dropdownlist->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)->setAllowBlank(false)->setShowDropDown(true)->setPrompt('Select Charging ID')->setFormula1('"'.$chargingvalue.'"');
@@ -347,13 +345,13 @@ class Index extends BaseController
 		$row = $row1;
 		foreach ($data['feed'] as $product) { 
 			if($usertype=='2'){
-				$sheet->setCellValue('R'.$row, $product['name']);
-				$sheet->setCellValue('S'.$row, $product['quantity']);
-				$sheet->setCellValue('T'.$row, $product['price']);
+				$sheet->setCellValue('S'.$row, $product['name']);
+				$sheet->setCellValue('T'.$row, $product['quantity']);
+				$sheet->setCellValue('U'.$row, $product['price']);
 			}else{
-				$sheet->setCellValue('I'.$row, $product['name']);
-				$sheet->setCellValue('J'.$row, $product['quantity']);
-				$sheet->setCellValue('K'.$row, $product['price']);
+				$sheet->setCellValue('K'.$row, $product['name']);
+				$sheet->setCellValue('L'.$row, $product['quantity']);
+				$sheet->setCellValue('M'.$row, $product['price']);
 			}
 			$row++;
 		}
@@ -361,13 +359,13 @@ class Index extends BaseController
 		$row = $row1;
 		foreach ($data['shaving'] as $product) { 
 			if($usertype=='2'){
-				$sheet->setCellValue('V'.$row, $product['name']);
-				$sheet->setCellValue('W'.$row, $product['quantity']);
-				$sheet->setCellValue('X'.$row, $product['price']);
+				$sheet->setCellValue('X'.$row, $product['name']);
+				$sheet->setCellValue('Y'.$row, $product['quantity']);
+				$sheet->setCellValue('Z'.$row, $product['price']);
 			}else{
-				$sheet->setCellValue('M'.$row, $product['name']);
-				$sheet->setCellValue('N'.$row, $product['quantity']);
-				$sheet->setCellValue('O'.$row, $product['price']);
+				$sheet->setCellValue('P'.$row, $product['name']);
+				$sheet->setCellValue('Q'.$row, $product['quantity']);
+				$sheet->setCellValue('R'.$row, $product['price']);
 			}
 			$row++;
 		}
@@ -403,20 +401,20 @@ class Index extends BaseController
 			
 			if($key==1){
 				$priceflag = [
+					isset($data[16]) && $data[16]!='' && $data[16]!=0 ? 1 : 0,
 					isset($data[17]) && $data[17]!='' && $data[17]!=0 ? 1 : 0,
 					isset($data[18]) && $data[18]!='' && $data[18]!=0 ? 1 : 0,
 					isset($data[19]) && $data[19]!='' && $data[19]!=0 ? 1 : 0,
-					isset($data[20]) && $data[20]!='' && $data[20]!=0 ? 1 : 0,
-					isset($data[21]) && $data[21]!='' && $data[21]!=0 ? 1 : 0
+					isset($data[20]) && $data[20]!='' && $data[20]!=0 ? 1 : 0
 				];
 				
 				$pricefee = [
+					isset($data[16]) ? $data[16] : 0,
 					isset($data[17]) ? $data[17] : 0,
 					isset($data[18]) ? $data[18] : 0,
 					isset($data[19]) ? $data[19] : 0,
 					isset($data[20]) ? $data[20] : 0,
-					isset($data[21]) ? $data[21] : 0,
-					isset($data[22]) ? $data[22] : 0
+					isset($data[21]) ? $data[21] : 0
 				];
 				
 				$result = [
@@ -430,16 +428,15 @@ class Index extends BaseController
 					'end_date'				=> isset($data[7]) && $data[7]!='' ? formatdate($data[7]) : '',
 					'start_time'			=> isset($data[8]) ? $data[8] : '',
 					'end_time'				=> isset($data[9]) ? $data[9] : '',
-					'stalls_price'			=> isset($data[10]) ? $data[10] : '',
-					'description'			=> isset($data[11]) ? $data[11] : '',
-					'feed_flag'				=> isset($data[12]) ? (isset($yesno[$data[12]]) ? $yesno[$data[12]] : '') : '',
-					'shaving_flag'			=> isset($data[13]) ? (isset($yesno[$data[13]]) ? $yesno[$data[13]] : '') : '',
-					'rv_flag'				=> isset($data[14]) ? (isset($yesno[$data[14]]) ? $yesno[$data[14]] : '') : '',
-					'cleaning_flag'			=> isset($data[15]) ? (isset($yesno[$data[15]]) ? $yesno[$data[15]] : '') : '',
-					'notification_flag'		=> isset($data[16]) ? (isset($yesno[$data[16]]) ? $yesno[$data[16]] : '') : '',
+					'description'			=> isset($data[10]) ? $data[10] : '',
+					'feed_flag'				=> isset($data[11]) ? (isset($yesno[$data[11]]) ? $yesno[$data[11]] : '') : '',
+					'shaving_flag'			=> isset($data[12]) ? (isset($yesno[$data[12]]) ? $yesno[$data[12]] : '') : '',
+					'rv_flag'				=> isset($data[13]) ? (isset($yesno[$data[13]]) ? $yesno[$data[13]] : '') : '',
+					'cleaning_flag'			=> isset($data[14]) ? (isset($yesno[$data[14]]) ? $yesno[$data[14]] : '') : '',
+					'notification_flag'		=> isset($data[15]) ? (isset($yesno[$data[15]]) ? $yesno[$data[15]] : '') : '',
 					'price_flag'			=> $usertype=='2' ? implode(',', $priceflag) : '',
 					'price_fee'				=> $usertype=='2' ? implode(',', $pricefee) : '',
-					'cleaning_fee'			=> $usertype=='2' ? (isset($data[23]) ? $data[23] : '') : (isset($data[17]) ? $data[17] : ''),
+					'cleaning_fee'			=> $usertype=='2' ? (isset($data[22]) ? $data[22] : '') : (isset($data[16]) ? $data[16] : ''),
 				];
 			}
 			
@@ -502,19 +499,19 @@ class Index extends BaseController
 							'subscription_month_price' 		=> isset($data[15]) ? $data[15] : 0,
 						];
 					}
-				}elseif($usertype=='3' && isset($data[4]) && $data[4]!=''){
+				}elseif($usertype=='3' && isset($data[5]) && $data[5]!=''){
 					if($typervhookup==0){
 						$result['rvbarn'][$rvhookupindex] = [
-							'name' => $data[4],
+							'name' => $data[5],
 							'type' => '1'
 						];
 						
 						$typervhookup++;
 					}else{
 						$result['rvbarn'][$rvhookupindex]['rvstall'][] = [
-							'name' 			=> $data[4],
-							'charging_id' 	=> isset($data[5]) ? (isset($charging[$data[5]]) ? $charging[$data[5]] : '') : '',
-							'price' 		=> isset($data[6]) ? $data[6] : 0,
+							'name' 			=> $data[5],
+							'charging_id' 	=> isset($data[6]) ? (isset($charging[$data[6]]) ? $charging[$data[6]] : '') : '',
+							'price' 		=> isset($data[7]) ? $data[7] : 0,
 						];
 					}
 				}else{
@@ -522,37 +519,37 @@ class Index extends BaseController
 					$rvhookupindex++;
 				}
 				
-				if($usertype=='2' && isset($data[17]) && $data[17]!=''){
+				if($usertype=='2' && isset($data[18]) && $data[18]!=''){
 					$result['feed'][$feedindex] = [
-						'name' 			=> $data[17],
-						'quantity' 		=> isset($data[18]) ? $data[18] : 0,
-						'price' 		=> isset($data[19]) ? $data[19] : 0,
+						'name' 			=> $data[18],
+						'quantity' 		=> isset($data[19]) ? $data[19] : 0,
+						'price' 		=> isset($data[20]) ? $data[20] : 0,
 					];
 					
 					$feedindex++;
-				}elseif($usertype=='3' && isset($data[8]) && $data[8]!=''){
+				}elseif($usertype=='3' && isset($data[10]) && $data[10]!=''){
 					$result['feed'][$feedindex] = [
-						'name' 			=> $data[8],
-						'quantity' 		=> isset($data[9]) ? $data[9] : 0,
-						'price' 		=> isset($data[10]) ? $data[10] : 0,
+						'name' 			=> $data[10],
+						'quantity' 		=> isset($data[11]) ? $data[11] : 0,
+						'price' 		=> isset($data[12]) ? $data[12] : 0,
 					];
 					
 					$feedindex++;
 				}
 				
-				if($usertype=='2' && isset($data[21]) && $data[21]!=''){
+				if($usertype=='2' && isset($data[23]) && $data[23]!=''){
 					$result['shaving'][$shavingindex] = [
-						'name' 			=> $data[21],
-						'quantity' 		=> isset($data[22]) ? $data[22] : 0,
-						'price' 		=> isset($data[23]) ? $data[23] : 0,
+						'name' 			=> $data[23],
+						'quantity' 		=> isset($data[24]) ? $data[24] : 0,
+						'price' 		=> isset($data[25]) ? $data[25] : 0,
 					];
 					
 					$shavingindex++;
-				}elseif($usertype=='2' && isset($data[12]) && $data[12]!=''){
+				}elseif($usertype=='3' && isset($data[15]) && $data[15]!=''){
 					$result['shaving'][$shavingindex] = [
-						'name' 			=> $data[12],
-						'quantity' 		=> isset($data[13]) ? $data[13] : 0,
-						'price' 		=> isset($data[14]) ? $data[14] : 0,
+						'name' 			=> $data[15],
+						'quantity' 		=> isset($data[16]) ? $data[16] : 0,
+						'price' 		=> isset($data[17]) ? $data[17] : 0,
 					];
 					
 					$shavingindex++;

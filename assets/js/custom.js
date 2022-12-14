@@ -1071,8 +1071,8 @@ function cartsummary(pagetype, type, title, result){
 	return data;
 }
 
-function timer(selector, countDownDate){
-	var x = setInterval(function() {
+function timer(selector, countDownDate){	
+	var result = setInterval(function() {
 		var now = new Date().getTime();
 		var distance = countDownDate - now;
 		
@@ -1085,8 +1085,10 @@ function timer(selector, countDownDate){
 		$(document).find(selector).html(countdown);
 		
 		if (distance < 0) {
-			clearInterval(x);
+			clearInterval(result);
 			location.reload();
 		}
 	}, 1000);
+	
+	return result;
 }

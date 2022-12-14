@@ -167,7 +167,7 @@ class Stripe extends BaseModel
 		$email 					= $userdetails['email'];
 		
 		$customer 				= $this->customer();
-		$interval				= 'week';
+		$interval				= 'month';
 		
 		$result = [];
 		if(isset($requestData[$barnstallname])){

@@ -65,12 +65,8 @@
                 			<div class="wi-50-2 justify-content-between">
                 				<span class="m-left upevent">
                 					<p><img class="eventFirstIcon" src="<?php echo base_url();?>/assets/site/img/horseShoe.svg">Stalls</p>
-                					<h6>from $<?php echo $row['stalls_price'];?> / night</h6>
+                					<h6>starting from $<?php echo $row['startingstallprice'];?></h6>
                 				</span>
-                				<!--<span class="m-left">
-                					<p><img class="eventSecondIcon" src="<?php echo base_url();?>/assets/site/img/rvSpot.svg">RV Spot</p>
-                					<h6>from $<?php echo $row['rvspots_price'];?> / night</h6>
-                				</span>-->
                 				<a class="text-decoration-none text-white" href="<?php echo base_url()?>/events/detail/<?php echo $row['id']?>"><button class="ucEventBtn">Book Now</button></a>
                 			</div>
                 		</div>
@@ -101,12 +97,8 @@
                 			<div class="wi-50-2 justify-content-between">
                 				<span class="m-left">
                 					<p><img class="eventFirstIcon" src="<?php echo base_url();?>/assets/site/img/horseShoe.svg">Stalls</p>
-                					<h6>from $<?php echo $row['stalls_price'];?> / night</h6>
+                					<h6>starting from $<?php echo $row['startingstallprice'];?></h6>
                 				</span>
-                				<!--<span class="m-left">
-                					<p><img class="eventSecondIcon" src="<?php echo base_url();?>/assets/site/img/rvSpot.svg">RV Spot</p>
-                					<h6>from $<?php echo $row['rvspots_price'];?> / night</h6>
-                				</span>-->
                 				<a class="text-decoration-none text-white" href="<?php echo $viewpath; ?>"><button class="ucEventBtn">View</button></a>
                 			</div>
                 		</div>

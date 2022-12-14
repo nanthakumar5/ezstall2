@@ -5476,3 +5476,20 @@ div#multi-nav-tab button.nav-link.m-0 {
     padding: 10px;
     border-radius: 5px;
 }
+
+.minicart-wrapper{
+	position: relative;
+}
+
+.minicart{
+	color: white;
+    position: absolute;
+    top: -15px;
+    background: red;
+    border-radius: 25px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 21px;
+    padding: 3px 10px;
+    left: 8px;
+}

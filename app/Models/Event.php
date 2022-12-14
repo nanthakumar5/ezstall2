@@ -272,8 +272,6 @@ class Event extends BaseModel
 		if(isset($data['end_date']) && $data['end_date']!='')           		$request['end_date'] 			= date('Y-m-d', strtotime($data['end_date']));
 		if(isset($data['start_time']) && $data['start_time']!='')       		$request['start_time'] 			= $data['start_time'];
 		if(isset($data['end_time']) && $data['end_time']!='')           		$request['end_time'] 			= $data['end_time'];
-		if(isset($data['stalls_price']) && $data['stalls_price']!='')   		$request['stalls_price']		= $data['stalls_price'];
-		if(isset($data['rvspots_price']) && $data['rvspots_price']!='') 		$request['rvspots_price'] 		= $data['rvspots_price'];
 		if(isset($data['feed_flag']) && $data['feed_flag']!='') 				$request['feed_flag'] 			= $data['feed_flag'];
 		if(isset($data['shaving_flag']) && $data['shaving_flag']!='') 			$request['shaving_flag'] 		= $data['shaving_flag'];
 		if(isset($data['rv_flag']) && $data['rv_flag']!='') 					$request['rv_flag'] 			= $data['rv_flag'];

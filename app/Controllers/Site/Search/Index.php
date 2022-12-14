@@ -27,7 +27,7 @@ class Index extends BaseController
 		
 		$date = date('Y-m-d');
 		$eventcount = count($this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'lenddate' => $date]));
-		$event = $this->event->getEvent('all', ['event', 'stallavailable'], $searchdata+['status'=> ['1'], 'lenddate' => $date, 'start' => $offset, 'length' => $perpage], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
+		$event = $this->event->getEvent('all', ['event', 'users', 'startingstallprice', 'stallavailable'], $searchdata+['status'=> ['1'], 'lenddate' => $date, 'start' => $offset, 'length' => $perpage], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
 		$data['eventdetail'] = $userdetail;
 		$data['userdetail'] = $userdetail;

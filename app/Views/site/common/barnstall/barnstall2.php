@@ -286,6 +286,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 		var eventusertype 		= '<?php echo $detail["eventusertype"]; ?>';
 		var cartevent 			= '<?php echo $cartevent; ?>';
 		var pricelists 			= $.parseJSON('<?php echo json_encode($pricelists); ?>');
+		var resulttimer 		= '';
 		
 		$(document).ready(function (){
 			if(cartevent == 0 ){
@@ -634,8 +635,16 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							occupiedreserved($("#startdate").val(), $("#enddate").val());
 							
 							$('.checkout_wrapper').empty().append(cartbox(1, result));
-							if(result.timer!='') timer('#timer', new Date(result.timer).getTime());	
+							
+							if(resulttimer!='') clearInterval(resulttimer);
+							if(result.timer!='') resulttimer = timer('#timer', new Date(result.timer).getTime());	
+							
+							$('.minicart-wrapper').removeClass('displaynone');
+							$('.minicart').text(result.count);							
 						}else{
+							$('.minicart-wrapper').addClass('displaynone');
+							$('.minicart').text(0);
+							
 							$('.checkout').empty();
 						}
 						

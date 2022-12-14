@@ -67,12 +67,8 @@ $comments        	= (isset($comments)) ? $comments : [];
 							<div class="row">
 								<span class="col-6">
 									<p class="mb-1 fw-bold"><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/stall.jpg">Stalls</p>
-									<h6 class="ucprice"> from $<?php echo $detail['stalls_price'] ?> / night</h6>
+									<h6 class="ucprice"> starting from $<?php echo $detail['startingstallprice'] ?></h6>
 								</span>
-								<!-- <span class="col-6">
-									<p class="mb-1 fw-bold"><img class="eventSecondIcon" src="<?php //echo base_url()?>/assets/site/img/rv.jpg">RV Spots</p>
-									<h6 class="ucprice">from $<?php //echo $detail['rvspots_price'] ?> / night</h6>
-								</span> -->
 							</div>
 							<?php echo $detail['description'] ?>
 						</ul>
