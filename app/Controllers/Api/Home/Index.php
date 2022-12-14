@@ -83,67 +83,40 @@ class Index extends BaseController
     }	
 	
 	public function viewallevents(){
-		
-		$post = $this->request->getPost();
 
-        $validation = \Config\Services::validation();
+		$datas = $this->event->getEvent('all', ['event'], ['status'=> ['1'], 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
-        $validation->setRules([
-                'length'         => 'required'
-            ],
-            [ 
-                'length' => [
-                    'required'  => 'Length is required.',
-                ]
-            ]
-        );
+        if (count($datas) > 0) {
+            $results = [];
+			foreach ($datas as $data) {
 
-        if($validation->withRequest($this->request)->run()){            
+				$start_on   = (isset($data['start_date']) && $data['start_date']!='0000-00-00') ? date("M d, Y", strtotime($data['start_date'])) : '';
+				$end_on     = (isset($data['end_date']) && $data['end_date']!='0000-00-00') ? date("M d, Y", strtotime($data['end_date'])) : '';
+				$event_on   = ($start_on!='' && $end_on!='') ? $start_on.' - '.$end_on : '';
+			
+				$results[] = [
+					'id'           => $data['id'],
+					'name'         => $data['name'],
+					'start_date'   => $start_on,
+					'end_date'     => $end_on,
+					'time'         => $event_on,
+					'location'     => $data['location'],
+					'stalls_price' => $data['stalls_price'],
+				];
+            }
 
-            $perpage = 10;
-            if ($post['length'] == '' || $post['length'] == 0) {
-                $offset = 0;
-            }else{
-                $offset = $post['length'];
-            }  
+            $json = ['1', count($datas) . ' Record(s) Found', $results];
 
-			$datas = $this->event->getEvent('all', ['event', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
+        } else {
+            $json = ['0', 'No Record(s) Found', []];
+        }  
 
-            if (count($datas) > 0) {
-                $results = [];
-				foreach ($datas as $data) {
-
-					$start_on   = (isset($data['start_date']) && $data['start_date']!='0000-00-00') ? date("M d, Y", strtotime($data['start_date'])) : '';
-					$end_on     = (isset($data['end_date']) && $data['end_date']!='0000-00-00') ? date("M d, Y", strtotime($data['end_date'])) : '';
-					$event_on   = ($start_on!='' && $end_on!='') ? $start_on.' - '.$end_on : '';
-				
-					$results[] = [
-						'id'           => $data['id'],
-						'name'         => $data['name'],
-						'start_date'   => $start_on,
-						'end_date'     => $end_on,
-						'time'         => $event_on,
-						'location'     => $data['location'],
-						'stalls_price' => $data['stalls_price'],
-					];
-                }
-
-                $json = ['1', count($datas) . ' Record(s) Found', $results];
-
-            } else {
-                $json = ['0', 'No Record(s) Found', []];
-            }       
-
-        }else{
-            $json = ['0', $validation->getErrors(), []];
-        }
-
-        echo json_encode([
-            'status'  => $json[0],
-            'message' => $json[1],
-            'result'  => $json[2],
-        ]);
-        die();
+	    echo json_encode([
+	        'status'  => $json[0],
+	        'message' => $json[1],
+	        'result'  => $json[2],
+	    ]);
+	    die();
 		
 		
 	}

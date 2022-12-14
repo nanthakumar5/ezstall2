@@ -118,7 +118,7 @@ class Index extends BaseController
                 $offset = $post['length'];
             }  
 
-			$datas = $this->event->getEvent('all', ['event', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
+			$datas = $this->event->getEvent('all', ['event'], ['status'=> ['1'], 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
             if (count($datas) > 0) {
                 $results = [];

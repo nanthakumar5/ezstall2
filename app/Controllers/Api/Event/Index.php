@@ -51,8 +51,8 @@ class Index extends BaseController
 					'longitude'         => $datas['longitude'],
 					'mobile'            => $datas['mobile'],
 					'stalls_price'      => $datas['stalls_price'],
-					'start_date'        => dateformat($datas['start_date']),
-				    'end_date'          => dateformat($datas['end_date']),
+					'start_date'        => formatdate($datas['start_date'],1),
+				    'end_date'          => formatdate($datas['end_date'],1),
 					'image'             => $image,
 					'status'			=> $status['status'],
 					'btn'				=> $status['btn'] 
@@ -103,45 +103,20 @@ class Index extends BaseController
 	
 	public function viewallevents(){
 		
-		$post = $this->request->getPost();
-
-        $validation = \Config\Services::validation();
-
-        $validation->setRules([
-                'length'         => 'required'
-            ],
-            [ 
-                'length' => [
-                    'required'  => 'Length is required.',
-                ]
-            ]
-        );
-
-        if($validation->withRequest($this->request)->run()){            
-
-            $perpage = 10;
-            if ($post['length'] == '' || $post['length'] == 0) {
-                $offset = 0;
-            }else{
-                $offset = $post['length'];
-            }  
-
-			$datas = $this->event->getEvent('all', ['event', 'stallavailable'], ['status'=> ['1'], 'start' => $offset, 'length' => $perpage, 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
+		$datas = $this->event->getEvent('all', ['event'], ['status'=> ['1'], 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 
             if (count($datas) > 0) {
                 $results = [];
 				foreach ($datas as $data) {
 
-					$start_on   = (isset($data['start_date']) && $data['start_date']!='0000-00-00') ? date("M d, Y", strtotime($data['start_date'])) : '';
-					$end_on     = (isset($data['end_date']) && $data['end_date']!='0000-00-00') ? date("M d, Y", strtotime($data['end_date'])) : '';
-					$event_on   = ($start_on!='' && $end_on!='') ? $start_on.' - '.$end_on : '';
+					$startdate   = isset($data['start_date']) ? formatdate($data['start_date'],1) : '';
+					$enddate     = isset($data['end_date'])  ? formatdate($data['end_date'],1) : '';
 				
 					$results[] = [
 						'id'           => $data['id'],
 						'name'         => $data['name'],
-						'start_date'   => $start_on,
-						'end_date'     => $end_on,
-						'time'         => $event_on,
+						'start_date'   => $startdate,
+						'end_date'     => $enddate,
 						'location'     => $data['location'],
 						'stalls_price' => $data['stalls_price']
 					];
@@ -151,20 +126,36 @@ class Index extends BaseController
 
             } else {
                 $json = ['0', 'No Record(s) Found', []];
-            }       
+            }    
 
-        }else{
-            $json = ['0', $validation->getErrors(), []];
+	        echo json_encode([
+	            'status'  => $json[0],
+	            'message' => $json[1],
+	            'result'  => $json[2],
+	        ]);
+	        die();
+		
+	}
+	
+	function checkinchecout(){
+		$post 		= $this->request->getPost();
+		$eventid 	= $post['eventid'];
+		$checkin 	= formatdate($post['checkin']);
+		$checkout   = formatdate($post['checkout']); 
+		$result['occupied']  	= getOccupied($eventid, ['checkin' => $checkin, 'checkout' => $checkout]);
+		$result['reserved'] 	= getReserved($eventid,['checkin' => $checkin, 'checkout' => $checkout]);
+
+		if(count($result)>0){
+			$json = ['1', count($result) . ' Record(s) Found', $result];
+		} else {
+            $json = ['0', 'No Record(s) Found', []];
         }
 
-        echo json_encode([
+		echo json_encode([
             'status'  => $json[0],
             'message' => $json[1],
             'result'  => $json[2],
         ]);
         die();
-		
-		
 	}
-	
 }
