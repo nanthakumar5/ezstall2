@@ -150,7 +150,7 @@ $routes->match(['get', 'post'], 'events/updatestall/action', 'Site\Event\Index::
 $routes->match(['get', 'post'], 'facility/updatereservation/(:num)/(:num)', 'Site\Facility\Index::updatereservation/$1');
 $routes->match(['get', 'post'], 'facility/updatestall/action', 'Site\Facility\Index::updatereservation');
 
-$routes->get('stripe/webhook', 'Common\Stripe::webhook');
+$routes->post('stripe/webhook', 'Common\Stripe::webhook');
 $routes->get('stripe/createwebhook', 'Common\Stripe::createwebhook');
 
 $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($routes) {
