@@ -32,35 +32,23 @@ class Index extends BaseController
         $validation->setRules(
             [
                 'user_id'       => 'required',
-				'length'        => 'required',
             ],
 
             [
                 'user_id' => [
                     'required' => 'User id is required.',
                 ],
-				'length' => [
-                    'required' => 'Length is required.',
-                ],
             ]
         );
 
         if ($validation->withRequest($this->request)->run()) {
-			
-			$perpage = 10;
-            if ($post['length'] == '' || $post['length'] == 0) {
-                $offset = 0;
-            }else{
-                $offset = $post['length'];
-            }  
-
-            //facility
-			$datas = $this->event->getEvent('all', ['event'], ['status' => ['1'], 'userid' => $post['user_id'], 'type' => '2', 'start' => $offset, 'length' => $perpage], ['orderby' => 'e.id desc']);
+        	
+			$datas = $this->event->getEvent('all', ['event'], ['status' => ['1'], 'userid' => $post['user_id'], 'type' => '2'], ['orderby' => 'e.id desc']);
 
 			if(count($datas) > 0){
-				$result1=[];
+				$result=[];
 				foreach($datas as $data){
-				  $result1[] = [
+				  $result[] = [
 						'id'	       =>  $data['id'],
 						'name'	       =>  $data['name'],
 						'image'        => ($data['image']!='') ? base_url().'/assets/uploads/event/'.$data['image'] : '',
@@ -68,7 +56,7 @@ class Index extends BaseController
 					];
 				}
 
-				$json = ['1', count($datas).' Record(s) Found', $result1];				
+				$json = ['1', count($datas).' Record(s) Found', $result];				
 
 			} else {
                  $json = ['0', 'No Records Found.', []];	

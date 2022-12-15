@@ -50,7 +50,7 @@ class Index extends BaseController
 					'latitude'          => $datas['latitude'],
 					'longitude'         => $datas['longitude'],
 					'mobile'            => $datas['mobile'],
-					'stalls_price'      => $datas['stalls_price'],
+					'stalls_price'      => ($datas['stalls_price']!='') ? $datas['stalls_price'] : '0',
 					'start_date'        => formatdate($datas['start_date'],1),
 				    'end_date'          => formatdate($datas['end_date'],1),
 					'image'             => $image,
@@ -118,7 +118,7 @@ class Index extends BaseController
 						'start_date'   => $startdate,
 						'end_date'     => $enddate,
 						'location'     => $data['location'],
-						'stalls_price' => $data['stalls_price']
+						'stalls_price' => ($data['stalls_price']!='') ? $data['stalls_price'] : '0'
 					];
                 }
 
