@@ -485,6 +485,7 @@ function getBooking($condition=[])
 
 function send_emailsms_template($id, $extras=[]){  
 	$emailsmstemplate 	= new \App\Models\Emailsmstemplate;
+	$emailsms 			= new \App\Models\Emailsms;
 	$users 				= new \App\Models\Users;
 	$products 			= new \App\Models\Products;
 	$event 				= new \App\Models\Event;
@@ -533,7 +534,7 @@ function send_emailsms_template($id, $extras=[]){
             isset($username) ? $username : '',
             isset($productname) ? $productname : '',
             isset($eventname) ? $eventname : '',
-            isset($extras['stallsname']) ? $extras['stallsname'] : ''
+            isset($extras['stallsname']) ? $extras['stallsname'] : '',
             isset($link) ? $link : ''
         ],
         $emailsmstemplate['message']
@@ -550,20 +551,38 @@ function send_emailsms_template($id, $extras=[]){
 			$emailsmstemplate['subject']
 		);
 		
-		send_mail($email, $subject, $message,$attachment);
+		send_mail($email, $subject, $message, $attachment);
+		
+		$emailsms->action([
+			'userid' 		=> (isset($extras['userid']) ? $extras['userid'] : ''),
+			'templateid' 	=> $id,
+			'email' 		=> $email,
+			'subject' 		=> $subject,
+			'message' 		=> $message,
+			'type' 			=> '1'
+		]);
 	}elseif($emailsmstemplate['type']=='2'){
 		$setting = getSettings();
 		
 		try{
 			$client = new Twilio\Rest\Client($setting['sid'], $setting['token']);
+			$mobile	= '1'.$extras['mobile'];
 			
 			$message = $client->messages->create(
-				'1'.$extras['mobile'],
+				$mobile,
 				[
 					'from' => $setting['fromnumber'],
 					'body' => $message,
 				]
 			);
+			
+			$emailsms->action([
+				'userid' 		=> (isset($extras['userid']) ? $extras['userid'] : ''),
+				'templateid' 	=> $id,
+				'mobile' 		=> $mobile,
+				'message' 		=> $message,
+				'type' 			=> '2'
+			]);
 		}catch(Exception $e){
 			echo $e->getCode() . ' : ' . $e->getMessage();
 		}
