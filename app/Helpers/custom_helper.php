@@ -490,7 +490,7 @@ function send_emailsms_template($id, $extras=[]){
 	$products 			= new \App\Models\Products;
 	$event 				= new \App\Models\Event;
 
-    $emailsmstemplate 	= $emailsmstemplate->getEmailTemplate('row', ['emailsmstemplate'], ['id' => $id]);
+    $emailsmstemplate 	= $emailsmstemplate->getEmailsmsTemplate('row', ['emailsmstemplate'], ['id' => $id]);
     
     if(isset($extras['userid'])){
         $users 		= $users->getUsers('row', ['users'], ['id' => $extras['userid']]);
