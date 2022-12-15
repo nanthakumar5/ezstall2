@@ -33,7 +33,7 @@ class Index extends BaseController
 		$paymentmethod	= $this->paymentmethod->getPaymentmethod('all', ['paymentmethod']);
 		$event			= $this->event->getEvent('row', ['event'], ['id' => $cartdetail['event_id'], 'status'=> ['1']]);
 		
-		if ($this->request->getMethod()=='post')
+		if($this->request->getMethod()=='post')
 		{    
 			$requestData 				= $this->request->getPost();
 			$userid             		= $userdetail['id'];

@@ -22,30 +22,19 @@ class Stripe extends BaseController
 			$event = \Stripe\Event::constructFrom(
 				json_decode($payload, true)
 			);
+			
+			$response = $event->data->object;
+			$fp = fopen('./assets/stripe.txt', 'a');
+			fwrite($fp, json_encode($response).PHP_EOL);
+			fclose($fp);
 		} catch(\UnexpectedValueException $e) {
 			http_response_code(400);
 			exit();
 		}
-
-		switch ($event->type) {
-			case 'payment_intent.succeeded':
-				$paymentIntent = $event->data->object;
-				
-				$fp = fopen('./assets/stripe.txt', 'a');
-				fwrite($fp, json_encode($paymentIntent));
-				fclose($fp);
-				
-				break;
-			case 'payment_method.attached':
-				$paymentMethod = $event->data->object;
-				
-				$fp = fopen('./assets/stripe.txt', 'a');
-				fwrite($fp, json_encode($paymentMethod));
-				fclose($fp);
-				
-				break;
-			default:
-				echo 'Received unknown event type ' . $event->type;
+		
+		$eventtype = $event->type;
+		if($eventtype = 'payment_intent.succeeded'){
+			$paymentIntent = $event->data->object;
 		}
 
 		http_response_code(200);

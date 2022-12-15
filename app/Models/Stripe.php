@@ -94,7 +94,8 @@ class Stripe extends BaseModel
 					'transfer' 					=> (isset($stripeaccountid) ? 1 : 0),
 					'type' 						=> '1',
 					'status' 					=> '0',
-					'created' 					=> date("Y-m-d H:i:s")
+					'created' 					=> date("Y-m-d H:i:s"),
+					'stripe_data'				=> json_encode($requestData)
 				);
 				
 				$this->db->table('payment')->insert($paymentData);
@@ -783,7 +784,9 @@ class Stripe extends BaseModel
 
 			$data = $stripe->webhookEndpoints->create([
 						'url' => base_url().'/stripe/webhook',
-						'enabled_events' => ['*']
+						'enabled_events' => [
+							'payment_intent.succeeded'
+						]
 					]);
 
 			$this->db->table('webhook')->insert(['id' => '1', 'stripe_webhook_id' => $data->id]);			
