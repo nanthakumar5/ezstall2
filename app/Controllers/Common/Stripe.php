@@ -3,14 +3,14 @@
 namespace App\Controllers\Common;
 
 use App\Controllers\BaseController;
-use App\Models\Stripe;
+use App\Models\Stripe as StripeModel;
 
-class Cron extends BaseController
+class Stripe extends BaseController
 {
     public function __construct()
     {
 		$this->db = db_connect();
-		$this->stripe = new Stripe();	
+		$this->stripe = new StripeModel();	
     }
 	
 	public function webhook()
