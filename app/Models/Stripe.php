@@ -744,5 +744,24 @@ class Stripe extends BaseModel
             return false;
         }
     }
+	
+    function createWebhook()
+    {
+        try{			
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+
+			$data = $stripe->webhookEndpoints->create([
+						'url' => base_url().'/stripe/webhook',
+						'enabled_events' => ['*']
+					]);
+
+			return $data;
+		}catch(Exception $e){
+			return false;
+		}catch (\Stripe\Exception\InvalidRequestException $e) {
+		    return false;
+        }
+    }
 }
 

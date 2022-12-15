@@ -102,7 +102,6 @@ $routes->post('ajax/ajaxblockunblock', 'Common\Ajax::ajaxblockunblock');
 $routes->post('ajax/importbarnstall', 'Common\Ajax::importbarnstall');
 $routes->post('ajax/calendar', 'Common\Ajax::calendar');
 $routes->post('ajax/barnstall1', 'Common\Ajax::barnstall1');
-
 $routes->post('ajaxsearchevents', 'Common\Ajax::ajaxsearchevents');
 $routes->post('ajaxsearchfacility', 'Common\Ajax::ajaxsearchfacility');
 
@@ -114,17 +113,7 @@ $routes->get('stripestallsubscription', 'Common\Cron::stripestallsubscription');
 // Validation
 $routes->post('validation/emailvalidation', 'Common\Validation::emailvalidation');
 
-// event updatereservation
-$routes->match(['get', 'post'], 'events/updatereservation/(:num)/(:num)', 'Site\Event\Index::updatereservation/$1');
-$routes->match(['get', 'post'], 'events/updatestall/action', 'Site\Event\Index::updatereservation');
-
-// facility updatereservation
-$routes->match(['get', 'post'], 'facility/updatereservation/(:num)/(:num)', 'Site\Facility\Index::updatereservation/$1');
-$routes->match(['get', 'post'], 'facility/updatestall/action', 'Site\Facility\Index::updatereservation');
-
-$routes->get('event/pdf/(:any)', 'Site\Event\Index::downloadeventflyer/$1');
-$routes->get('event/downloadstallmap/(:any)', 'Site\Event\Index::downloadstallmap/$1');
-$routes->get('facility/download/(:any)', 'Site\Facility\Index::download/$1');
+//Site
 $routes->match(['get', 'post'], '/', 'Site\Home\Index::index');
 $routes->get('search', 'Site\Search\Index::index');
 $routes->match(['get', 'post'], 'login', 'Site\Login\Index::index', ['filter' => 'siteauthentication1']);
@@ -135,8 +124,11 @@ $routes->get('verification/(:any)', 'Site\Register\Index::verification/$1');
 $routes->match(['get', 'post'], 'events', 'Site\Event\Index::lists');
 $routes->match(['get', 'post'], 'events/latlong', 'Site\Event\Index::latlong');
 $routes->match(['get', 'post'], 'events/detail/(:num)', 'Site\Event\Index::detail/$1');
+$routes->get('event/pdf/(:any)', 'Site\Event\Index::downloadeventflyer/$1');
+$routes->get('event/downloadstallmap/(:any)', 'Site\Event\Index::downloadstallmap/$1');
 $routes->match(['get', 'post'], 'facility', 'Site\Facility\Index::lists');
 $routes->match(['get', 'post'], 'facility/detail/(:num)', 'Site\Facility\Index::detail/$1');
+$routes->get('facility/download/(:any)', 'Site\Facility\Index::download/$1');
 $routes->get('aboutus', 'Site\Aboutus\Index::index');
 $routes->get('aboutus/detail/(:num)', 'Site\Aboutus\Index::detail/$1');
 $routes->get('faq', 'Site\Faq\Index::index');
@@ -148,8 +140,17 @@ $routes->match(['get', 'post'], 'checkout', 'Site\Checkout\Index::index', ['filt
 $routes->get('paymentsuccess', 'Site\Checkout\Index::success');
 $routes->match(['get', 'post'], 'cart', 'Site\Cart\Index::action');
 $routes->match(['get', 'post'], 'contactus', 'Site\Contactus\Index::index');
-
 $routes->get('logout', 'Site\Logout\Index::index');
+
+// event updatereservation
+$routes->match(['get', 'post'], 'events/updatereservation/(:num)/(:num)', 'Site\Event\Index::updatereservation/$1');
+$routes->match(['get', 'post'], 'events/updatestall/action', 'Site\Event\Index::updatereservation');
+
+// facility updatereservation
+$routes->match(['get', 'post'], 'facility/updatereservation/(:num)/(:num)', 'Site\Facility\Index::updatereservation/$1');
+$routes->match(['get', 'post'], 'facility/updatestall/action', 'Site\Facility\Index::updatereservation');
+
+$routes->get('stripe/webhook', 'Common\Stripe::webhook');
 
 $routes->group('myaccount', ['filter' => 'siteauthentication2'], function ($routes) {
     $routes->match(['get', 'post'], 'dashboard', 'Site\Myaccount\Dashboard\Index::index');
