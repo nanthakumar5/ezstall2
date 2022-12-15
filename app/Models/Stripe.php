@@ -60,6 +60,8 @@ class Stripe extends BaseModel
 
 	function stripepayment($requestData)
 	{
+		$this->stripewebhook();
+		
 		$userdetails			= getSiteUserDetails();
 		$userid 				= $userdetails['id'];
 		$name 					= $userdetails['name'];
@@ -114,6 +116,8 @@ class Stripe extends BaseModel
 	
 	function striperecurringpayment($requestData)
 	{
+		$this->stripewebhook();
+		
 		$userdetails			= getSiteUserDetails();
 		$userid 				= $userdetails['id'];
 		$name 					= $userdetails['name'];
@@ -205,6 +209,32 @@ class Stripe extends BaseModel
 		return $result;
 	}
 
+	function stripewebhook()
+	{
+		$webhook	= $this->db->table('webhook')->where('id', '1')->get()->getRowArray();
+		
+		if($webhook){
+			$stripewebhookid = $webhook['stripe_webhook_id'];
+			
+			$retrievewebhook 	= $this->retrieveWebhook($stripewebhookid);
+			if(!$retrievewebhook){
+				$hook 		= $this->createWebhook();
+				$webhookid 	= $hook->id;
+			}else{
+				$webhookid 	= $retrievewebhook->id;
+			}
+		}else{
+			$hook 		= $this->createWebhook();
+			$webhookid 	= $hook->id;
+		}
+		
+		if(isset($webhookid)){
+			return $webhookid;
+		}else{
+			return false;
+		}
+	}
+	
 	function customer()
 	{
 		$userdetails			= getSiteUserDetails();
@@ -755,6 +785,26 @@ class Stripe extends BaseModel
 						'url' => base_url().'/stripe/webhook',
 						'enabled_events' => ['*']
 					]);
+
+			$this->db->table('webhook')->insert(['id' => '1', 'stripe_webhook_id' => $data->id]);			
+			return $data;
+		}catch(Exception $e){
+			return false;
+		}catch (\Stripe\Exception\InvalidRequestException $e) {
+		    return false;
+        }
+    }
+	
+    function retrieveWebhook($webhookid)
+    {
+        try{			
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+
+			$data = $stripe->webhookEndpoints->retrieve(
+						$webhookid,
+						[]
+					);
 
 			return $data;
 		}catch(Exception $e){
