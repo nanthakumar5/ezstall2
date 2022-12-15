@@ -4,13 +4,13 @@ namespace App\Controllers\Admin\EmailTemplate;
 
 use App\Controllers\BaseController;
 
-use App\Models\Emailtemplate;
+use App\Models\Emailsmstemplate;
 
 class Index extends BaseController
 {
 	public function __construct()
 	{  
-		$this->emailtemplate  = new Emailtemplate();
+		$this->emailsmstemplate  = new Emailsmstemplate();
     }
 	
 	public function index() 
@@ -21,8 +21,8 @@ class Index extends BaseController
 	public function DTtemplates()
 	{		
 		$post 			= $this->request->getPost(); 
-		$totalcount 	= $this->emailtemplate->getEmailTemplate('count', ['emailtemplate']+$post);
-		$results 		= $this->emailtemplate->getEmailTemplate('all', ['emailtemplate']+$post);
+		$totalcount 	= $this->emailsmstemplate->getEmailsmsTemplate('count', ['emailsmstemplate']+$post);
+		$results 		= $this->emailsmstemplate->getEmailsmsTemplate('all', ['emailsmstemplate']+$post);
 
 		$totalrecord 	= [];
 				
@@ -34,6 +34,7 @@ class Index extends BaseController
 										'name' 	    => 	$result['name'],
 										'subject'  	=>  $result['subject'],
 										'message'  	=>  $result['message'],
+										'type'  	=>  $this->config->emailsms[$result['type']],
 										'action'	=> 	'
 															<div class="table-action">
 																'.$action.'
@@ -58,7 +59,7 @@ class Index extends BaseController
 		$data = [];
 
 		if($id!=''){
-			$result = $this->emailtemplate->getEmailTemplate('row', ['emailtemplate'], ['id' => $id]);
+			$result = $this->emailsmstemplate->getEmailsmsTemplate('row', ['emailsmstemplate'], ['id' => $id]);
 			if($result){
 				$data['result'] = $result;
 			}else{
@@ -70,7 +71,7 @@ class Index extends BaseController
 		if ($this->request->getMethod()=='post')
         {
 			$requestdata 	= $this->request->getPost();
-            $result 		= $this->emailtemplate->action($requestdata);
+            $result 		= $this->emailsmstemplate->action($requestdata);
 			
 			if($result){
 				$this->session->setFlashdata('success', 'Template Updated successfully.');

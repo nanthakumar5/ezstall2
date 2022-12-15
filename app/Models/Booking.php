@@ -298,7 +298,7 @@ class Booking extends BaseModel
 				
 				$products = $this->db->table('products')->where('id', $result['product_id'])->get()->getRowArray();
 				$event = $this->db->table('event')->where('id', $extras['event_id'])->get()->getRowArray();
-				if($products['quantity']=='0') send_message_template('2', ['productid' => $result['product_id'], 'userid' => $event['user_id']]);
+				if($products['quantity']=='0') send_emailsms_template('4', ['productid' => $result['product_id'], 'userid' => $event['user_id']]);
 			}
         }
     }

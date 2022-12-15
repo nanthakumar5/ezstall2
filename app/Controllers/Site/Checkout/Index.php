@@ -59,7 +59,6 @@ class Index extends BaseController
 					$this->cart->delete(['user_id' => $userid, 'type' => $requestData['type']]);
 					$reservationpdf = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['userid' => [$userid], 'id' => $booking]);
 					
-					//smsTemplate(['mobile' => $reservationpdf['mobile'],'eventname' => $reservationpdf['eventname'],'username' => $reservationpdf['username']]);
 					$data['reservationpdf'] = $reservationpdf;
 					$data['usertype'] 		= $this->config->usertype;
 					$data['settings'] 		= getSettings();
@@ -68,7 +67,10 @@ class Index extends BaseController
 					$mpdf->WriteHTML($html);
 					$this->response->setHeader('Content-Type', 'application/pdf');
 					$attachment = $mpdf->Output('Eventinvoice.pdf', 'S');
-					send_message_template('1', ['userid' => $userid,'eventid' => $reservationpdf['event_id'],'attachment' => $attachment]);
+					
+					send_emailsms_template('3', ['userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id'], 'attachment' => $attachment]);
+					send_emailsms_template('5', ['mobile' => $reservationpdf['mobile'], 'userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id']]);
+					
 					return redirect()->to(base_url().'/paymentsuccess'); 
 				}else{
 					$this->session->setFlashdata('danger', 'Try Later.');

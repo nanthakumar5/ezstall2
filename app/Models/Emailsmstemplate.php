@@ -4,30 +4,30 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 
-class Emailtemplate extends BaseModel
+class Emailsmstemplate extends BaseModel
 {	
-	public function getEmailTemplate($type, $querydata=[], $requestdata=[], $extras=[])
+	public function getEmailsmsTemplate($type, $querydata=[], $requestdata=[], $extras=[])
     { 
     	$select 			= [];
 		
-		if(in_array('emailtemplate', $querydata)){
-			$data		= 	['et.*'];							
+		if(in_array('emailsmstemplate', $querydata)){
+			$data		= 	['est.*'];							
 			$select[] 	= 	implode(',', $data);
 		}
 
-		$query = $this->db->table('email_template et');  
+		$query = $this->db->table('email_sms_template est');  
 				
 		if(isset($extras['select'])) 					$query->select($extras['select']);
 		else											$query->select(implode(',', $select));
 		
-		if(isset($requestdata['id'])) 					$query->where('et.id', $requestdata['id']);
+		if(isset($requestdata['id'])) 					$query->where('est.id', $requestdata['id']);
 
 		if($type!=='count' && isset($requestdata['start']) && isset($requestdata['length'])){
 			$query->limit($requestdata['length'], $requestdata['start']);
 		}
 		if(isset($requestdata['order']['0']['column']) && isset($requestdata['order']['0']['dir'])){
 			if(isset($requestdata['page']) && $requestdata['page']=='emailtemplates'){
-				$column = ['et.name','et.subject', 'et.message'];
+				$column = ['est.name','est.subject', 'est.message'];
 				$query->orderBy($column[$requestdata['order']['0']['column']], $requestdata['order']['0']['dir']);
 			}
 		}
@@ -39,16 +39,16 @@ class Emailtemplate extends BaseModel
 				
 				$query->groupStart();
 					if($page=='emailtemplates'){				
-						$query->like('et.name', $searchvalue);
-						$query->orLike('et.subject', $searchvalue);
-						$query->orLike('et.message', $searchvalue);
+						$query->like('est.name', $searchvalue);
+						$query->orLike('est.subject', $searchvalue);
+						$query->orLike('est.message', $searchvalue);
 					}
 				$query->groupEnd();
 			}			
 		}
 		
 		if(isset($extras['groupby'])) 	$query->groupBy($extras['groupby']);
-		else $query->groupBy('et.id');
+		else $query->groupBy('est.id');
 		
 		if($type=='count'){
 			$result = $query->countAllResults();
@@ -74,10 +74,10 @@ class Emailtemplate extends BaseModel
 		if(isset($request)){
 
 			if($actionid==''){
-				$templates = $this->db->table('email_template')->insert($request);
+				$templates = $this->db->table('email_sms_template')->insert($request);
 				$templateinsertid = $this->db->insertID();
 			}else{
-				$templates = $this->db->table('email_template')->update($request, ['id' => $actionid]);
+				$templates = $this->db->table('email_sms_template')->update($request, ['id' => $actionid]);
 				$templateinsertid = $actionid;
 			}
 		}

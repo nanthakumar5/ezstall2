@@ -35,10 +35,27 @@
 	</a>
 </li>
 <li class="nav-item">
-	<a href="<?php echo getAdminUrl().'/plan'; ?>" class="nav-link nav-hov">
-		<i class="nav-icon fas fa-tasks"></i>
-		<p>Plans</p>
+	<a href="#" class="nav-link nav-hov">
+		<i class="nav-icon fas fa-book"></i>
+		<p>
+			Report
+			<i class="fas fa-angle-left right"></i>
+		</p>
 	</a>
+	<ul class="nav nav-treeview" style="display: none;">
+		<li class="nav-item">
+			<a href="<?php echo getAdminUrl().'/eventreport'; ?>" class="nav-link nav-hov">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Export Event</p>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a href="<?php echo getAdminUrl().'/financialreport'; ?>" class="nav-link nav-hov">
+				<i class="far fa-circle nav-icon"></i>
+				<p>Financial Report</p>
+			</a>
+		</li>
+	</ul>
 </li>
 <li class="nav-item">
 	<a href="#" class="nav-link nav-hov">
@@ -82,6 +99,24 @@
 	</ul>
 </li>
 <li class="nav-item">
+	<a href="<?php echo getAdminUrl().'/emailtemplate'; ?>" class="nav-link nav-hov">
+		<i class="nav-icon fa fa-envelope"></i>
+		<p>Email & SMS Template</p>
+	</a>
+</li>
+<li class="nav-item">
+	<a href="<?php echo getAdminUrl().'/plan'; ?>" class="nav-link nav-hov">
+		<i class="nav-icon fas fa-tasks"></i>
+		<p>Plans</p>
+	</a>
+</li>
+<li class="nav-item">
+	<a href="<?php echo getAdminUrl().'/tax'; ?>" class="nav-link nav-hov">
+		<i class="nav-icon far fa-newspaper"></i>
+		<p>Tax</p>
+	</a>
+</li>
+<li class="nav-item">
 	<a href="<?php echo getAdminUrl().'/contactus'; ?>" class="nav-link nav-hov">
 		<i class="nav-icon far fa-address-book"></i>
 		<p>Contact Us</p>
@@ -97,41 +132,6 @@
 	<a href="<?php echo getAdminUrl().'/settings'; ?>" class="nav-link nav-hov">
 		<i class="nav-icon fa fa-cog"></i>
 		<p>Settings</p>
-	</a>
-</li>
-<li class="nav-item">
-	<a href="#" class="nav-link nav-hov">
-		<i class="nav-icon fas fa-book"></i>
-		<p>
-			Report
-			<i class="fas fa-angle-left right"></i>
-		</p>
-	</a>
-	<ul class="nav nav-treeview" style="display: none;">
-		<li class="nav-item">
-			<a href="<?php echo getAdminUrl().'/eventreport'; ?>" class="nav-link nav-hov">
-				<i class="far fa-circle nav-icon"></i>
-				<p>Export Event</p>
-			</a>
-		</li>
-		<li class="nav-item">
-			<a href="<?php echo getAdminUrl().'/financialreport'; ?>" class="nav-link nav-hov">
-				<i class="far fa-circle nav-icon"></i>
-				<p>Financial Report</p>
-			</a>
-		</li>
-	</ul>
-</li>
-<li class="nav-item">
-	<a href="<?php echo getAdminUrl().'/tax'; ?>" class="nav-link nav-hov">
-		<i class="nav-icon far fa-newspaper"></i>
-		<p>Tax</p>
-	</a>
-</li>
-<li class="nav-item">
-	<a href="<?php echo getAdminUrl().'/emailtemplate'; ?>" class="nav-link nav-hov">
-		<i class="nav-icon fa fa-envelope"></i>
-		<p>SMS & Email Template</p>
 	</a>
 </li>
 <li class="nav-item">

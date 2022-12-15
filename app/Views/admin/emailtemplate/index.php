@@ -4,12 +4,12 @@
 			<div class="container-fluid">			
 				<div class="row mb-2">				
 					<div class="col-sm-6">					
-						<h1>Email Template</h1>				
+						<h1>Email & SMS Template</h1>				
 					</div>				
 					<div class="col-sm-6">					
 						<ol class="breadcrumb float-sm-right">						
 							<li class="breadcrumb-item"><a href="javascript:void(0);">Home</a></li>
-							<li class="breadcrumb-item active">Email Templete</li>
+							<li class="breadcrumb-item active">Email & SMS Templete</li>
 						</ol>				
 					</div>			
 				</div>
@@ -18,7 +18,7 @@
 		<section class="content">
 			<div class="card">			
 				<div class="card-header">
-					<h3 class="card-title">Email Template</h3>
+					<h3 class="card-title">Email & SMS Template</h3>
 				</div>
 				<div class="card-body">
 					<table class="table table-striped table-hover datatables">
@@ -26,6 +26,7 @@
 							<th>Name</th>
 							<th>Subject</th>
 							<th>Message</th>
+							<th>Type</th>
 							<th>Action</th>	
 						</thead>
 					</table>
@@ -43,10 +44,11 @@
     				                { 'data' : 'name' },
                     				{ 'data' : 'subject' },
                     				{ 'data' : 'message' },
+                    				{ 'data' : 'type' },
                     				{ 'data' : 'action' }								
 				
                 				],
-				columndefs	:	[{"sortable": false, "targets": [3]}]											
+				columndefs	:	[{"sortable": false, "targets": [3, 4]}]											
 									
 			};				
 			

@@ -21,7 +21,7 @@ class Index extends BaseController
 			if($result){
 				if($result['status']=='1' && $result['email_status']=='1'){ 
 					$this->session->setFlashdata('success', 'Check the email.');
-					send_message_template('6', ['userid' => $result['id']]);
+					send_emailsms_template('2', ['userid' => $result['id']]);
 					return redirect()->to(base_url().'/login'); 
 				} else {
 					$this->session->setFlashdata('danger', 'Email not found');

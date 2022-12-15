@@ -483,21 +483,27 @@ function getBooking($condition=[])
 	return $booking->getBooking('all', ['booking','users','barnstall','rvbarnstall','feed','shaving'], $condition);
 }
 
-function send_message_template($id, $extras=[]){  
-	$emailtempate 	= new \App\Models\Emailtemplate;
-	$users 			= new \App\Models\Users;
-	$products 		= new \App\Models\Products;
-	$event 			= new App\Models\Event;
+function send_emailsms_template($id, $extras=[]){  
+	$emailsmstemplate 	= new \App\Models\Emailsmstemplate;
+	$users 				= new \App\Models\Users;
+	$products 			= new \App\Models\Products;
+	$event 				= new \App\Models\Event;
 
-    $emailtemplate = $emailtempate->getEmailTemplate('row', ['emailtemplate'], ['id' => $id]);
+    $emailsmstemplate 	= $emailsmstemplate->getEmailTemplate('row', ['emailsmstemplate'], ['id' => $id]);
     
     if(isset($extras['userid'])){
-        $users = $users->getUsers('row', ['users'], ['id' => $extras['userid']]);
+        $users 		= $users->getUsers('row', ['users'], ['id' => $extras['userid']]);
         $username  	= $users['name'];
         $email  	= $users['email'];
-        $link  		= base_url().'/changepassword/'.base64_encode($users['id']).'/'.base64_encode(date('Y-m-d H:i:s', strtotime('+1 day')));
+		
+		if($id=='1'){
+			$encryptid 	= substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$result.substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
+			$link		= base_url()."/verification/".$encryptid;
+		}elseif($id=='2'){
+			$link  		= base_url().'/changepassword/'.base64_encode($users['id']).'/'.base64_encode(date('Y-m-d H:i:s', strtotime('+1 day')));
+		}
     }else{
-		$email  	= $extras['email'];
+		$email  	= isset($extras['email']) ? $extras['email'] : '';
 	}
     
     if(isset($extras['productid'])){ 
@@ -515,119 +521,51 @@ function send_message_template($id, $extras=[]){
         $attachment = $extras['attachment'];
     }
 	
-    $subject = str_replace(
-		[
-			'#productname'
-		],
-		[
-			isset($productname) ? $productname : '',
-		],
-		$emailtemplate['subject']
-	);
-	
     $message = str_replace(
         [
 			'#username',
             '#productname', 
 			'#eventname',
+			'#stallname',
 			'#link'
         ],
         [
             isset($username) ? $username : '',
             isset($productname) ? $productname : '',
             isset($eventname) ? $eventname : '',
+            isset($extras['stallsname']) ? $extras['stallsname'] : ''
             isset($link) ? $link : ''
         ],
-
-        $emailtemplate['message']
+        $emailsmstemplate['message']
     );
 
-
-    send_mail($email, $subject, $message,$attachment);
-}
-
-function smsTemplate($data){
-
-	$sms = new App\Models\Emailtemplate;
-	$sms 	 = $sms->getEmailTemplate('row', ['emailtemplate'],['id' => '3']);
-
-	$sid 		= $sms['sid'];
-	$token 		= $sms['token'];
-  	$client 	= new Twilio\Rest\Client($sid, $token);
-
-  	try{
-  		$msg = str_replace(
-		        [
-					'#username',
-					'#eventname'
-		        ],
-		        [
-		            $data['username'],
-		            $data['eventname']
-		        ],
-
-		      $sms['message']
+	if($emailsmstemplate['type']=='1'){
+		$subject = str_replace(
+			[
+				'#productname'
+			],
+			[
+				isset($productname) ? $productname : '',
+			],
+			$emailsmstemplate['subject']
+		);
+		
+		send_mail($email, $subject, $message,$attachment);
+	}elseif($emailsmstemplate['type']=='2'){
+		$setting = getSettings();
+		
+		try{
+			$client = new Twilio\Rest\Client($setting['sid'], $setting['token']);
+			
+			$message = $client->messages->create(
+				'1'.$extras['mobile'],
+				[
+					'from' => $setting['fromnumber'],
+					'body' => $message,
+				]
 			);
-
-  	$message = $client->messages->create(
-
-		'1'.$data['mobile'],
-
-		[
-			'from' => $sms['from_number'],
-			'body' => $msg,
-		]
-	);
-	
-  }catch(Exception $e){
-    echo $e->getCode() . ' : ' . $e->getMessage()."<br>";
-  }
-
-  	
-}
-
-function unlockedTemplate($data){
-
-	if($data['lockunlock']=='1'){
-		$id = '4';
-	}else if($data['dirtyclean']=='1'){
-		$id = '5';
+		}catch(Exception $e){
+			echo $e->getCode() . ' : ' . $e->getMessage();
+		}
 	}
-
-	$sms = new App\Models\Emailtemplate;
-	$sms 	 = $sms->getEmailTemplate('row', ['emailtemplate'],['id' => $id]);
-
-	$sid 		= $sms['sid'];
-	$token 		= $sms['token'];
-  	$client 	= new Twilio\Rest\Client($sid, $token);
-
-  	try{
-  		$msg = str_replace(
-		        [
-					'#username',
-					'#stallname'
-		        ],
-		        [
-		            $data['username'],
-		            $data['stallsname']
-		        ],
-
-		      $sms['message']
-			);
-
-  	$message = $client->messages->create(
-
-			'1'.$data['mobile'],
-
-		[
-			'from' => $sms['from_number'],
-			'body' => $msg,
-		]
-	);
-	
-  }catch(Exception $e){
-    echo $e->getCode() . ' : ' . $e->getMessage()."<br>";
-  }
-
-  	
 }

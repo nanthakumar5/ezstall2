@@ -20,14 +20,8 @@ class Index extends BaseController
             $post = $this->request->getPost();  
             $result = $this->users->action($post); 
 			
-			if($result){ 
-				$encryptid = substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$result.substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
-				$verificationurl= base_url()."/verification/".$encryptid;
-				$email_subject = "Ezstall Registration";
-				$email_message = "Hi ".$post['name'].","." \n\n Thank you for Registering in Ezstall.
-				\n To activate your account please click below link.".' '.$verificationurl."";
-
-				send_mail($post['email'],$email_subject,$email_message);
+			if($result){ 				
+				send_emailsms_template('1', ['userid' => $result]);
 				
 				$this->session->setFlashdata('success', 'Registered successfully. Check mail for verification.'); 
 				return redirect()->to(base_url().'/login'); 
