@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\Stripe as StripeModel;
 use App\Models\Event;
 use App\Models\Booking;
+use App\Models\Users;
 
 class Stripe extends BaseController
 {
@@ -15,6 +16,7 @@ class Stripe extends BaseController
 		$this->stripe 	= new StripeModel();	
 		$this->event 	= new Event();
 		$this->booking 	= new Booking();
+		$this->users 	= new Users();
     }
 	
 	public function webhook()
@@ -34,10 +36,8 @@ class Stripe extends BaseController
 		$eventtype = $event->type;
 		if($eventtype = 'payment_intent.succeeded'){
 			$paymentIntent = $event->data->object;
-			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
+			
 			$fp = fopen('./assets/stripe.txt', 'a');
-			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
-			fwrite($fp, $paymentIntent->id);
 			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			fclose($fp);
 			
