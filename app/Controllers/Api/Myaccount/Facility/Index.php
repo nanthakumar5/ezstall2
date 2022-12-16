@@ -68,79 +68,72 @@ class Index extends BaseController
 
         echo json_encode([
             'status'         => $json[0],
-            'message'       => $json[1],
+            'message'        => $json[1],
             'result'         => $json[2],
         ]);
 
         die;
     }
 	
-	public function view()
+	public function view($id)
 	{
-		$post       = $this->request->getPost(); 
 
-        $validation = \Config\Services::validation();
-
-        $validation->setRules(
-            [
-                'event_id'       => 'required',
-            ],
-
-            [
-                'event_id' => [
-                    'required' => 'Event id is required.',
-                ],
-            ]
-        );
-
-        if ($validation->withRequest($this->request)->run()) {
-			
-			$data	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall'],['id' => $post['event_id'], 'type' => '2']);
+		$data  	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall'],['id' => $id, 'type' => '2']);
 			if(count($data) > 0){
-				$result1=[];
-				   $result1[] = [
+				$result=[];
+				   $result[] = [
 						'id'	       =>  $data['id'],
 						'name'	       =>  $data['name'],
 						'image'        => ($data['image']!='') ? base_url().'/assets/uploads/event/'.$data['image'] : '',
-						'description'  =>  $data['description'],
+						'location'     =>  $data['location'],
+						'mobile'       =>  $data['mobile'],
+						'start_date'   => ($data['start_date']!='' && $data['start_date']!='0000-00-00') ? formatdate($data['start_date'], 1) : '',
+						'end_date'     => ($data['end_date']!='' && $data['end_date']!='0000-00-00') ? formatdate($data['end_date'], 1) : '',
+						'start_time'   => ($data['start_time']!='') ? formattime($data['start_time']) : '',
+						'end_time'     => ($data['end_time']!='') ? formattime($data['end_time']) : '',
 						'barndata'     => $data['barn'],
-						'rvbarndata'   => $data['rvbarn'],
+						'rvbarndata'   => $data['rvbarn']
 					];
-
-				$json = ['1', '1 Record(s) Found', $result1];	
+				$json = ['1', '1 Record(s) Found', $result];	
             } else {
                 $json = ['0', 'No Records Found.', []];	
-			}				
+			}	
 
-		} else {
-            $json = ['0', $validation->getErrors(), []];
-        }
+	        echo json_encode([
+	            'status'         => $json[0],
+	            'message'       => $json[1],
+	            'result'         => $json[2],
+	        ]);
 
-        echo json_encode([
-            'status'         => $json[0],
-            'message'       => $json[1],
-            'result'         => $json[2],
-        ]);
-
-        die;
+	        die;
 		
 	}
 	
 	function inventories($id)
 	{
 		if($id!=''){
-			$datas  	= $this->product->getProduct('all', ['product'], ['event_id' => $id]);
+			$datas 		= $this->product->getProduct('all', ['product'], ['event_id' => $id]);
 
 			if(count($datas) > 0){
 				$result=[];
-				foreach($datas as $data){
-				   $result[] = [
-						'id'	       =>  $data['id'],
-						'name'	       =>  $data['name'],
-						'quantity'     =>  $data['quantity'],
-						'price'        =>  $data['price'],
-						'type'        =>  $data['type']
-					];
+				foreach($datas as $data){ 
+					if($data['type']=='1'){
+					   $result['feed'][] = [
+							'id'	       =>  $data['id'],
+							'name'	       =>  $data['name'],
+							'quantity'     =>  $data['quantity'],
+							'price'        =>  $data['price'],
+							'type'        =>  $data['type']
+						];
+					}else if($data['type']=='2'){
+						$result['shavings'][] = [
+							'id'	       =>  $data['id'],
+							'name'	       =>  $data['name'],
+							'quantity'     =>  $data['quantity'],
+							'price'        =>  $data['price'],
+							'type'        =>  $data['type']
+						];
+					}
 				}
 				$json = ['1', count($datas).' Record(s) Found', $result];
 			} else {

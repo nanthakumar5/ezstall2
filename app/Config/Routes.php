@@ -63,12 +63,12 @@ $routes->group('api', function ($routes) {
 
 	//Event
 	$routes->post('events', 'Api\Myaccount\Event\Index::index');
-	$routes->post('events/view', 'Api\Myaccount\Event\Index::view');
+    $routes->get('events/view/(:num)', 'Api\Myaccount\Event\Index::view/$1');
 	$routes->get('events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
 
 	//Facility
 	$routes->post('facility', 'Api\Myaccount\Facility\Index::index');
-	$routes->post('facility/view', 'Api\Myaccount\Facility\Index::view');
+    $routes->get('facility/view/(:num)', 'Api\Myaccount\Facility\Index::view/$1');
 	$routes->get('facility/inventories/(:num)', 'Api\Myaccount\Facility\Index::inventories/$1');
 
 	//Stallmanager

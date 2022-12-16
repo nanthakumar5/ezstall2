@@ -18,7 +18,7 @@ class Index extends BaseController
     }
     
     public function listandsearch()
-    {
+    { 
     	$todaydate = date('Y_m_d');
 
         $searchdata = [];
@@ -34,7 +34,7 @@ class Index extends BaseController
 		
 		if ($data && count($data) > 0){
 			$result=[];
-			foreach($data as $datas){
+			foreach($data as $datas){  
 				$status = checkEvent($datas); 
 				$image = ($datas['image']!='') ? base_url().'/assets/uploads/event/'.$datas['image'] : '';
 				
@@ -50,7 +50,6 @@ class Index extends BaseController
 					'latitude'          => $datas['latitude'],
 					'longitude'         => $datas['longitude'],
 					'mobile'            => $datas['mobile'],
-					'stalls_price'      => ($datas['stalls_price']!='') ? $datas['stalls_price'] : '0',
 					'start_date'        => formatdate($datas['start_date'],1),
 				    'end_date'          => formatdate($datas['end_date'],1),
 					'image'             => $image,
@@ -118,7 +117,6 @@ class Index extends BaseController
 						'start_date'   => $startdate,
 						'end_date'     => $enddate,
 						'location'     => $data['location'],
-						'stalls_price' => ($data['stalls_price']!='') ? $data['stalls_price'] : '0'
 					];
                 }
 
