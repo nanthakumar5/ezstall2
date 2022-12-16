@@ -88,8 +88,10 @@ class Index extends BaseController
 						'end_date'     => formatdate($data['end_date'], 1),
 						'start_time'   => ($data['start_time']!='') ? formattime($data['start_time']) : '',
 						'end_time'     => ($data['end_time']!='') ? formattime($data['end_time']) : '',
-						'barndata'     => $data['barn'],
-						'rvbarndata'   => $data['rvbarn']
+						'barn'     	   => $data['barn'],
+						'rvbarn'     => $data['rvbarn'],
+						'feed'         => [],
+						'shavings'     => []
 					];
 				$json = ['1', '1 Record(s) Found', $result];	
             } else {
