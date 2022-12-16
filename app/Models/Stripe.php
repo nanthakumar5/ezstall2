@@ -94,7 +94,8 @@ class Stripe extends BaseModel
 					'plan_period_end' 			=> date("Y-m-d H:i:s", $subscription->current_period_end),
 					'type' 						=> '2',
 					'status' 					=> '0',
-					'created' 					=> date("Y-m-d H:i:s")
+					'created' 					=> date("Y-m-d H:i:s"),
+					'stripe_data'				=> json_encode($requestData)
 				);
 
 				$this->db->table('payment')->insert($paymentData);
