@@ -54,23 +54,4 @@ class Cron extends BaseController
 		}
 		die;
 	}
-	
-	public function stripestallsubscription()
-	{	
-	$x = $this->stripe->retrieveSchedule('sub_sched_1MEtDCSBPAfrS2b07Vw3sp85');
-	echo '<pre>';print_r($x);die;
-		$date = date('Y-m-d');
-
-		$payments 	= 	$this->db->table('payment p')
-						->where(['DATE(p.plan_period_start) <=' => $date, 'DATE(p.plan_period_end) >=' => $date, 'p.type' => '3'])
-						->get()
-						->getResultArray();
-				
-		if(count($payments) > 0){		
-			foreach($payments as $payment){
-			}
-		}
-		die;
-	}
-
 }
