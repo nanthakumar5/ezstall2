@@ -727,8 +727,14 @@ class Stripe extends BaseModel
 							'payment_intent.succeeded'
 						]
 					]);
-
-			$this->db->table('webhook')->insert(['id' => '1', 'stripe_webhook_id' => $data->id]);			
+			
+			$webhook = $this->db->table('webhook')->where(['id' => '1'])->get()->getRowArray();
+			if($webhook){
+				$this->db->table('webhook')->update(['stripe_webhook_id' => $data->id], ['id' => '1']);	
+			}else{
+				$this->db->table('webhook')->insert(['id' => '1', 'stripe_webhook_id' => $data->id]);	
+			}
+			
 			return $data;
 		}catch(Exception $e){
 			return false;
