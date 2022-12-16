@@ -99,7 +99,7 @@
 					stripe.createPaymentMethod({type: 'card', card: card}).then(function(result){
 						$(document).find('.stripeextra').append('<input type="hidden" name="stripe_payment_method_id" value="'+result.paymentMethod.id+'">');
 						stripepay(card);
-					}
+					})
 				}else if(schedulesubscribe==1){
 					stripe.createPaymentMethod({type: 'card', card: card}).then(function(result){
 						for(var i=0; i<2; i++){
