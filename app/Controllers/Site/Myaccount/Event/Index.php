@@ -36,15 +36,7 @@ class Index extends BaseController
 			$requestData = $this->request->getPost();
 
 			if(isset($requestData['stripepay'])){
-				$payment = $this->stripe->action(['id' => $requestData['stripepayid']]);
-				if($payment){
-					$usersubscriptioncount = $userdetail['producer_count'];
-					$this->users->action(['user_id' => $userid, 'actionid' => $userid, 'producercount' => $usersubscriptioncount+1]);
-					$this->session->setFlashdata('success', 'Your payment is processed successfully');
-				}else{
-					$this->session->setFlashdata('danger', 'Your payment is not processed successfully.');
-				}
-				
+				$this->session->setFlashdata('success', 'Your payment is processed successfully');				
 				return redirect()->to(base_url().'/myaccount/events'); 
 			}else{
 				$result = $this->event->delete($requestData);

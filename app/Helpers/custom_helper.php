@@ -483,6 +483,26 @@ function getBooking($condition=[])
 	return $booking->getBooking('all', ['booking','users','barnstall','rvbarnstall','feed','shaving'], $condition);
 }
 
+function checkoutEmailSms($bookingid)
+{
+	$booking 		= new \App\Models\Booking;
+	$reservationpdf = $booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['id' => $bookingid]);
+					
+	$data['reservationpdf'] = $reservationpdf;
+	$data['usertype'] 		= $this->config->usertype;
+	$data['settings'] 		= getSettings();
+	$data['currencysymbol'] = $this->config->currencysymbol;
+	$html 					=  view('site/common/pdf/userreservation', $data);
+	
+	$mpdf = new \Mpdf\Mpdf();
+	$mpdf->WriteHTML($html);
+	$this->response->setHeader('Content-Type', 'application/pdf');
+	$attachment = $mpdf->Output('Eventinvoice.pdf', 'S');
+	
+	send_emailsms_template('3', ['userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id'], 'attachment' => $attachment]);
+	send_emailsms_template('5', ['mobile' => $reservationpdf['mobile'], 'userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id']]);	
+}
+
 function send_emailsms_template($id, $extras=[]){  
 	$emailsmstemplate 	= new \App\Models\Emailsmstemplate;
 	$emailsms 			= new \App\Models\Emailsms;

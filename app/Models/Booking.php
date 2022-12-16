@@ -251,7 +251,6 @@ class Booking extends BaseModel
 
 			$this->db->table('booking')->insert($request);
 			$insertid = $this->db->insertID();
-			if(isset($data['paymentid']) && $data['paymentid']!='') $this->db->table('payment')->where('id', $data['paymentid'])->update(['booking_id' => $insertid]);
 		}
 
 		$this->bookingdetailaction(json_decode($data['barnstall'], true), ['event_id' => $data['eventid'], 'booking_id' => $insertid, 'flag' => '1']);
@@ -289,9 +288,6 @@ class Booking extends BaseModel
 			
             $this->db->table('booking_details')->insert($bookingdetails);
 			$insertid = $this->db->insertID();
-			if(isset($result['payment_id']) && $result['payment_id']!=''){	
-				$this->db->table('payment')->where('id', $result['payment_id'])->update(['booking_id' => $extras['booking_id'], 'booking_details_id' => $insertid, 'stripe_payment_method_id' => (isset($result['stripe_payment_method_id']) ? $result['stripe_payment_method_id'] : '')]);
-			} 
 			
 			if(isset($result['product_id']) && isset($result['quantity']) && isset($extras['flag']) && ($extras['flag']==3 || $extras['flag']==4)){
 				$datass = $this->db->table('products')->where('id', $result['product_id'])->set('quantity', 'quantity-'.$result['quantity'], FALSE)->update();

@@ -101,9 +101,11 @@ class Index extends BaseController
 				$data['result'] 		= $this->importfacility();
 			}else{
 				$requestData 			= $this->request->getPost();
-				if(isset($requestData['stripepayid'])) $payment = $this->stripe->action(['id' => $requestData['stripepayid']]);
 				
-				if(!isset($requestData['stripepayid']) || (isset($requestData['stripepayid']) && isset($payment))){
+				if(isset($requestData['stripepay'])){
+					$this->session->setFlashdata('success', 'Facility submitted successfully.');				
+					return redirect()->to(base_url().'/myaccount/facility'); 
+				}else{
 					$requestData['type'] 	= '2';
 					$requestData['name'] 	= $requestData['facility_name'];
 					
@@ -115,9 +117,6 @@ class Index extends BaseController
 						$this->session->setFlashdata('danger', 'Try Later.');
 						return redirect()->to(base_url().'/myaccount/facility'); 
 					}
-				}else{
-					$this->session->setFlashdata('danger', 'Your payment is not processed successfully.');
-					return redirect()->to(base_url().'/myaccount/facility'); 
 				}
 			}
         } 

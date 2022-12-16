@@ -4,60 +4,6 @@ use App\Models\BaseModel;
 
 class Stripe extends BaseModel
 {	
-	public function action($data)
-	{ 
-		$this->db->transStart();
-		
-		if(isset($data['id'])){
-			$id = $data['id'];
-			
-			$payment = $this->db->table('payment')->where('id', $id)->get()->getRowArray();
-			
-			if($payment['type']=='1'){
-				$data = $this->retrievePaymentIntents($payment['stripe_paymentintent_id']);
-
-				if($data->status=='succeeded'){
-					$this->db->table('payment')->update(['status' => '1'], ['id' => $id]);
-					$insertid = $id;
-				}
-			}elseif($payment['type']=='2'){
-				$data = $this->retrieveSubscription($payment['stripe_subscription_id']);
-				if($data->status=='active'){
-					$this->db->table('payment')->update(['status' => '1'], ['id' => $id]);
-					$this->db->table('users')->where(['id' => $payment['user_id']])->update(['subscription_id' => $id]);
-					$insertid = $id;
-				}
-			}
-		}elseif(isset($data['bookingid'])){	
-			$insertid = 1;
-			$id = 1;
-			$bookingid = $data['bookingid'];
-			
-			$spayments = $this->db->table('payment')->where(['booking_id' => $bookingid, 'type' => '3'])->get()->getResultArray();
-			if(!empty($spayments)){
-				if(isset($spayments[0]['stripe_payment_method_id']) &&  $spayments[0]['stripe_payment_method_id']!=''){
-					$customer = $this->customer();
-					$this->attachPaymentMethod($spayments[0]['stripe_payment_method_id'], $customer);
-					foreach($spayments as $spayment){
-						$retrieveschedule = $this->retrieveSchedule($spayment['stripe_subscription_id']);
-						if($retrieveschedule){
-							$this->db->table('payment')->where(['id' => $spayment['id'], 'type' => '3'])->update(['status' => '1']);
-							$this->updateSchedule($retrieveschedule['id'], $spayment['stripe_payment_method_id']);
-						}
-					}
-				}
-			}
-		}
-			
-		if(!isset($insertid) || $this->db->transStatus() === FALSE){
-			$this->db->transRollback();
-			return false;
-		}else{
-			$this->db->transCommit();
-			return $id;
-		}
-	}
-
 	function stripepayment($requestData)
 	{
 		$this->stripewebhook();
@@ -101,11 +47,9 @@ class Stripe extends BaseModel
 				$this->db->table('payment')->insert($paymentData);
 				$paymentinsertid = $this->db->insertID();
 				
-				$barnstall 		= $this->stripescheduledpayment($requestData, ['name' => 'barnstall']);
-				$rvbarnstall 	= $this->stripescheduledpayment($requestData, ['name' => 'rvbarnstall']);
-				$subscription 	= array_merge($barnstall, $rvbarnstall);
+				$this->stripescheduledpayment($requestData);
 				
-				return ['paymentintents' => $paymentintents, 'id' => $paymentinsertid, 'subscription' => $subscription];
+				return ['paymentintents' => $paymentintents, 'id' => $paymentinsertid];
 			}else{
 				return false;
 			}
@@ -124,12 +68,14 @@ class Stripe extends BaseModel
 		$name 					= $userdetails['name'];
 		$email 					= $userdetails['email'];
 		$planid 				= $requestData['plan_id'];
+		$stripepaymentmethodid 	= $requestData['stripe_payment_method_id'];
 		
 		$customer 			= $this->customer();
 		$productandprice 	= $this->productandprice('1', $planid);
 		
 		if ($customer && $productandprice){
-			$subscription = $this->createSubscription($customer, $productandprice);
+			$this->attachPaymentMethod($stripepaymentmethodid, $customer);
+			$subscription = $this->createSubscription($customer, $productandprice, $stripepaymentmethodid);
 			if($subscription){
 				$paymentintents = $subscription->latest_invoice->payment_intent;
 				
@@ -141,6 +87,7 @@ class Stripe extends BaseModel
 					'currency' 					=> $subscription->plan->currency,
 					'stripe_paymentintent_id' 	=> $paymentintents->id,
 					'stripe_subscription_id' 	=> $subscription->id,
+					'stripe_payment_method_id' 	=> $stripepaymentmethodid,
 					'plan_id'					=> $planid,
 					'plan_interval' 			=> $subscription->plan->interval,
 					'plan_period_start' 		=> date("Y-m-d H:i:s", $subscription->current_period_start),
@@ -162,10 +109,8 @@ class Stripe extends BaseModel
 		}
 	}
 	
-	function stripescheduledpayment($requestData, $extras)
+	function stripescheduledpayment($requestData)
 	{
-		$barnstallname 			= $extras['name'];
-		
 		$userdetails			= getSiteUserDetails();
 		$userid 				= $userdetails['id'];
 		$name 					= $userdetails['name'];
@@ -173,41 +118,50 @@ class Stripe extends BaseModel
 		
 		$customer 				= $this->customer();
 		$interval				= 'month';
+		$attachcard				= 1;
 		
-		$result = [];
-		if(isset($requestData[$barnstallname])){
-			foreach(json_decode($requestData[$barnstallname], true) as $barnstall){
-				$planid = $barnstall['stall_id'];
-				$subscriptionprice = $barnstall['subscriptionprice'];
+		for($i=0; $i<2; $i++){
+			$barnstallname 		= $i=='0' ? 'barnstall' : 'rvbarnstall';
 				
-				if($barnstall['pricetype']=='5' && $subscriptionprice!='' && $subscriptionprice!='0'){
-					$productandprice = $this->productandprice('2', $planid, ['interval' => $interval]);
-					$subscription = $this->createSchedule($customer, strtotime($requestData['checkin']), strtotime($requestData['checkout']), $productandprice);
+			if(isset($requestData[$barnstallname])){
+				foreach(json_decode($requestData[$barnstallname], true) as $barnstall){
+					$planid = $barnstall['stall_id'];
+					$subscriptionprice = $barnstall['subscriptionprice'];
 					
-					$paymentData = array(
-						'user_id' 					=> $userid,
-						'name' 						=> $name,
-						'email' 					=> $email,
-						'amount' 					=> $subscriptionprice,
-						'currency' 					=> $subscription->phases[0]->currency,
-						'stripe_subscription_id' 	=> $subscription->id,
-						'plan_id'					=> $planid,
-						'plan_interval' 			=> $interval,
-						'plan_period_start' 		=> date("Y-m-d H:i:s", $subscription->phases[0]->start_date),
-						'plan_period_end' 			=> date("Y-m-d H:i:s", $subscription->phases[0]->end_date),
-						'type' 						=> '3',
-						'status' 					=> '1',
-						'created' 					=> date("Y-m-d H:i:s")
-					);
+					if($barnstall['pricetype']=='5' && $subscriptionprice!='' && $subscriptionprice!='0'){
+						$stripepaymentmethodid = $barnstall['stripe_payment_method_id'];
+						if($attachcard==1){
+							$this->attachPaymentMethod($stripepaymentmethodid, $customer);
+							$attachcard = 0;
+						}
+						
+						$productandprice = $this->productandprice('2', $planid, ['interval' => $interval]);
+						$subscription = $this->createSchedule($customer, strtotime($requestData['checkin']), strtotime($requestData['checkout']), $productandprice, $stripepaymentmethodid);
+						
+						$paymentData = array(
+							'user_id' 					=> $userid,
+							'name' 						=> $name,
+							'email' 					=> $email,
+							'amount' 					=> $subscriptionprice,
+							'currency' 					=> $subscription->phases[0]->currency,
+							'stripe_subscription_id' 	=> $subscription->id,
+							'stripe_payment_method_id' 	=> $stripepaymentmethodid,
+							'plan_id'					=> $planid,
+							'plan_interval' 			=> $interval,
+							'plan_period_start' 		=> date("Y-m-d H:i:s", $subscription->phases[0]->start_date),
+							'plan_period_end' 			=> date("Y-m-d H:i:s", $subscription->phases[0]->end_date),
+							'type' 						=> '3',
+							'status' 					=> '0',
+							'created' 					=> date("Y-m-d H:i:s"),
+							'stripe_data'				=> json_encode(['stallid' => $planid])
+						);
 
-					$this->db->table('payment')->insert($paymentData);
-					$paymentinsertid = $this->db->insertID();
-					$result[] = ['id' => $paymentinsertid, 'stallid' => $planid];
+						$this->db->table('payment')->insert($paymentData);
+					}
 				}
 			}
 		}
-		
-		return $result;
+		return true;
 	}
 
 	function stripewebhook()
@@ -555,7 +509,7 @@ class Stripe extends BaseModel
         }
     }
 
-    function createSubscription($customerid, $priceid)
+    function createSubscription($customerid, $priceid, $stripepaymentmethodid)
     {
         try{
 			$settings = getSettings();
@@ -566,6 +520,7 @@ class Stripe extends BaseModel
 				"items" => [
 					["price" => $priceid]
 				],
+				'default_payment_method' => $stripepaymentmethodid,
 				'payment_behavior' => 'default_incomplete', 
                 'expand' => ['latest_invoice.payment_intent']
             ]);
@@ -593,17 +548,18 @@ class Stripe extends BaseModel
         }
     } 
 	
-    function createSchedule($customerid, $startdate, $endate, $price)
+    function createSchedule($customerid, $startdate, $endate, $price, $paymentmethodid)
 	{
 		try{
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
             $data = $stripe->subscriptionSchedules->create([
-                "customer" 		=> $customerid,
-                "start_date" 	=> $startdate,
-				"end_behavior" 	=> "release",
-				"phases" 		=> [["items" => [["price" => $price, "quantity" => 1]], "end_date" => $endate]],
+                "customer" 			=> $customerid,
+                "start_date" 		=> $startdate,
+				"end_behavior" 		=> "release",
+				"phases" 			=> [["items" => [["price" => $price, "quantity" => 1]], "end_date" => $endate]],
+				"default_settings" 	=> ["default_payment_method" => $paymentmethodid]
             ]);
 		
 			return $data;
@@ -621,23 +577,6 @@ class Stripe extends BaseModel
             $data = $stripe->subscriptionSchedules->retrieve(
 				$scheduleid,
 				[]
-			);
-		
-			return $data;
-        }catch(Exception $e){
-            return false;
-        }
-	}
-	
-	function updateSchedule($scheduleid, $paymentmethodid)
-	{
-		try{
-			$settings = getSettings();
-			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
-			
-            $data = $stripe->subscriptionSchedules->update(
-				$scheduleid,
-				['default_settings' => ['default_payment_method' => $paymentmethodid]]
 			);
 		
 			return $data;

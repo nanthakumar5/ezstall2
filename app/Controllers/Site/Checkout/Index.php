@@ -37,45 +37,21 @@ class Index extends BaseController
 		{    
 			$requestData 				= $this->request->getPost();
 			$userid             		= $userdetail['id'];
-			$paymentmethodid			= $requestData['paymentmethodid'];
-			$mpdf 						= new \Mpdf\Mpdf();
 
-			if($paymentmethodid!='1') $payment = $this->stripe->action(['id' => $requestData['stripepayid']]);
-			else $payment = 1;
-			
-			if($payment){
-				$requestData['paymentid'] 	=  0;
-				$requestData['paidunpaid']  =  0;
-				
-				if($paymentmethodid!='1'){
-					$requestData['paymentid'] 	= $payment;
-					$requestData['paidunpaid']  = 1;
-				}
-				
-				$booking = $this->booking->action($requestData);
+			if(isset($requestData['paymentmethodid'])){
+				$booking 	= $this->booking->action($requestData);
 				if($booking){
-					if($paymentmethodid!='1') $this->stripe->action(['bookingid' => $booking]);
-					
 					$this->cart->delete(['user_id' => $userid, 'type' => $requestData['type']]);
-					$reservationpdf = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['userid' => [$userid], 'id' => $booking]);
-					
-					$data['reservationpdf'] = $reservationpdf;
-					$data['usertype'] 		= $this->config->usertype;
-					$data['settings'] 		= getSettings();
-					$data['currencysymbol'] = $this->config->currencysymbol;
-					$html 					=  view('site/common/pdf/userreservation', $data);
-					$mpdf->WriteHTML($html);
-					$this->response->setHeader('Content-Type', 'application/pdf');
-					$attachment = $mpdf->Output('Eventinvoice.pdf', 'S');
-					
-					send_emailsms_template('3', ['userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id'], 'attachment' => $attachment]);
-					send_emailsms_template('5', ['mobile' => $reservationpdf['mobile'], 'userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id']]);
+					checkoutEmailSms($booking);
 					
 					return redirect()->to(base_url().'/paymentsuccess'); 
 				}else{
 					$this->session->setFlashdata('danger', 'Try Later.');
 					return redirect()->to(base_url().'/checkout'); 
 				}
+			}elseif(isset($requestData['stripepay'])){
+				$this->cart->delete(['user_id' => $userid, 'type' => $requestData['type']]);				
+				return redirect()->to(base_url().'/paymentsuccess'); 
 			}else{
 				$this->session->setFlashdata('danger', 'Your payment is not processed successfully.');
 				return redirect()->to(base_url().'/checkout'); 

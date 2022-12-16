@@ -38,9 +38,7 @@
 
 <form action="" method="post" class="stripeconfirm">
 	<div class="mb-3 stripepaybutton">
-		<input type="hidden" value="<?php echo $userdetails['id']; ?>" name="id">
 		<input type="hidden" value="1" name="stripepay">
-		<input type="hidden" name="stripepayid" class="stripepayid">
 	</div>
 </form>
 
@@ -74,63 +72,100 @@
 			if (result.error) {
 				displayError.textContent = result.error.message;
 			} else {
-				var basedata = {};
-				$('.stripeextra input, .stripeextra textarea').each(function(){
-					basedata[$(this).attr('name')] = $(this).val();
-				})
+				var subscribe = 0;
+				var schedulesubscribe = 0;
 				
-				ajax('<?php echo base_url()."/ajax/ajaxstripepayment"; ?>', basedata, {
-					beforesend: function() {
-						$('.modal-content').append('<div class="loader_wrapper"><img src="<?php echo base_url()."/assets/site/img/loading.svg"; ?>"></div>');
-					},
-					success: function(data){
-						var clientsecret = data.success.paymentintents.client_secret;
-						var paymentid = data.success.id;
-						
-						if(data.success.subscription && data.success.subscription.length){
-							stripe.createPaymentMethod({type: 'card', card: card}).then(function(result){
-								var subscriptiondata = data.success.subscription;
-							
-								for(var i=0; i<2; i++){
-									var selectorname = i==0 ? "barnstall" : "rvbarnstall";
-						
-									var barnstalldata = [];
-									var barnstall = $.parseJSON($(document).find('.stripeextra textarea[name="'+selectorname+'"]').val());	
-									$(barnstall).each(function(i, v){
-										var index = subscriptiondata.findIndex(x => x.stallid == v.stall_id);
-										if(index > -1){
-											v.payment_id = subscriptiondata[index].id;
-											v.stripe_payment_method_id = result.paymentMethod.id;
-										}
-										barnstalldata.push(v);
-									})
-									
-									$(document).find('.stripeextra textarea[name="'+selectorname+'"]').remove();
-									$(document).find('.stripeextra').append('<textarea style="display:none;" name="'+selectorname+'">'+JSON.stringify(barnstalldata)+'</textarea>');
-								}
-							});
-						}
-
-						stripe.confirmCardPayment(clientsecret, {
-							payment_method: {
-								card: card
+				if($(document).find('.stripeextra input[name="page"]').length && $(document).find('.stripeextra input[name="page"]').val()=='myaccountsubscription'){
+					subscribe = 1;
+				}
+				
+				for(var i=0; i<2; i++){
+					var selectorname = i==0 ? "barnstall" : "rvbarnstall";
+					
+					if($(document).find('.stripeextra textarea[name="'+selectorname+'"]').length){
+						var barnstall = $.parseJSON($(document).find('.stripeextra textarea[name="'+selectorname+'"]').val());	
+						$(barnstall).each(function(i, v){
+							if(v.pricetype=='5' && v.subscriptionprice!='' && v.subscriptionprice!='0'){
+								schedulesubscribe = 1;
+								return false;
 							}
-						}).then(function(res) {
-							if (res.error) {
-								displayError.textContent = res.error.message;
-								$('.loader_wrapper').remove();
-							} else {
-								if (res.paymentIntent.status === 'succeeded') {
-									$('.stripepayid').val(paymentid);
-									$(".stripeconfirm").submit();
-								}else{
-									$('.loader_wrapper').remove();
-								}
-							}
-						});
+						})		
+						
+						if(schedulesubscribe==1) break;
 					}
-				})
+				}
+				
+				if(schedulesubscribe==1){
+					stripe.createPaymentMethod({type: 'card', card: card}).then(function(result){
+						$(document).find('.stripeextra').append('<input type="hidden" name="stripe_payment_method_id" value="'+result.paymentMethod.id+'">');
+						stripepay(card);
+					}
+				}else if(schedulesubscribe==1){
+					stripe.createPaymentMethod({type: 'card', card: card}).then(function(result){
+						for(var i=0; i<2; i++){
+							var selectorname = i==0 ? "barnstall" : "rvbarnstall";
+							
+							if($(document).find('.stripeextra textarea[name="'+selectorname+'"]').length){
+								var barnstalldata = [];
+								var barnstall = $.parseJSON($(document).find('.stripeextra textarea[name="'+selectorname+'"]').val());	
+								$(barnstall).each(function(i, v){
+									if(v.pricetype=='5' && v.subscriptionprice!='' && v.subscriptionprice!='0'){
+										v.stripe_payment_method_id = result.paymentMethod.id;
+									}
+									barnstalldata.push(v);
+								})
+								
+								$(document).find('.stripeextra textarea[name="'+selectorname+'"]').remove();
+								$(document).find('.stripeextra').append('<textarea style="display:none;" name="'+selectorname+'">'+JSON.stringify(barnstalldata)+'</textarea>');
+							}
+						}
+						
+						stripepay(card)
+					});
+				}else{
+					stripepay(card)
+				}				
 			}
 		})
 	})
+	
+	function stripepay(card)
+	{
+		var basedata = {};
+		$('.stripeextra input, .stripeextra textarea').each(function(){
+			basedata[$(this).attr('name')] = $(this).val();
+		})
+		
+		ajax('<?php echo base_url()."/ajax/ajaxstripepayment"; ?>', basedata, {
+			beforesend: function() {
+				$('.modal-content').append('<div class="loader_wrapper"><img src="<?php echo base_url()."/assets/site/img/loading.svg"; ?>"></div>');
+			},
+			success: function(data){
+				var clientsecret = data.success.paymentintents.client_secret;
+				var paymentid = data.success.id;
+				
+				stripe.confirmCardPayment(clientsecret, {
+					payment_method: {
+						card: card
+					}
+				}).then(function(res) {
+					if (res.error) {
+						displayError.textContent = res.error.message;
+						$('.loader_wrapper').remove();
+					} else {
+						if(res.paymentIntent.status === 'succeeded'){
+							if($(document).find('input[name="type"]').length){
+								$(document).find('.stripepaybutton').append('<input type="hidden" name="type" value="'+$(document).find('input[name="type"]').val()+'">');
+							}
+							
+							$(document).find('.stripeextra').remove();
+							$(".stripeconfirm").submit();
+						}else{
+							$('.loader_wrapper').remove();
+						}
+					}
+				});
+			}
+		})
+	}
 </script>

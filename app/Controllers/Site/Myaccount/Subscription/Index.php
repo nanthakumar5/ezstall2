@@ -18,8 +18,8 @@ class Index extends BaseController
     {
     	if ($this->request->getMethod() == 'post'){
 	        $requestData = $this->request->getPost();
-			$payment = $this->stripe->action(['id' => $requestData['stripepayid']]);
-			if($payment){
+			
+			if(isset($requestData['stripepay'])){
 				$this->session->setFlashdata('success', 'Your payment is processed successfully.');
 				return redirect()->to(base_url().'/myaccount/dashboard'); 
 			}else{

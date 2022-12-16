@@ -192,7 +192,12 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 		
 		$('.stripeextra').remove();
 		var price = $(document).find('.stall_id[value=""]').length * parseFloat(stallpercost);
-		var data = 	'<div class="stripeextra"><input type="hidden" value="'+price+'" name="price">'+eventdata.join("")+'</div>';
+		var data = 	'<div class="stripeextra">\
+						<input type="hidden" value="'+price+'" name="price">\
+						<input type="hidden" value="myaccountfacility" name="page">\
+						'+eventdata.join("")+'\
+					</div>';
+					
 		$('.stripetotal').text('(Total - '+currencysymbol+price+')');
 
 		$('.stripepaybutton').append(data);

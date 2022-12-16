@@ -29,6 +29,7 @@
 					<div class="paymentfields">
 						<input type="hidden" value="<?php echo $plan['id']; ?>" name="plan_id">
 						<input type="hidden" value="2" name="type">
+						<input type="hidden" value="myaccountsubscription" name="page">
 					</div>
 				</div>
 				<div class="choose_subscription_btn text-center">
