@@ -159,19 +159,22 @@ class Index extends BaseController
         $validation = \Config\Services::validation();
         $validation->setRules(
             [
-				'id' => 'required'
+				'id' 		=> 'required',
+				'user_id' 	=> 'required'
             ],
 
             [
 				'id' => [
+                    'required' => 'User id is required.',
+                ],
+                'user_id' => [
                     'required' => 'User id is required.',
                 ]
             ]
         );
 
         if ($validation->withRequest($this->request)->run()) {
-				$userdetail 		= getSiteUserDetails();
-				$post['userid'] 	= $userdetail['id'];
+				$post['userid'] 	= $post['user_id'];
 				$post['id']         = $post['id'];
 			
 				$result = $this->event->delete($post); 
