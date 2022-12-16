@@ -117,7 +117,7 @@ class Stripe extends BaseModel
 		$email 					= $userdetails['email'];
 		
 		$customer 				= $this->customer();
-		$interval				= 'month';
+		$interval				= 'day';
 		$attachcard				= 1;
 		
 		for($i=0; $i<2; $i++){
@@ -478,7 +478,8 @@ class Stripe extends BaseModel
 			$data = $stripe->prices->create([
 				'unit_amount' => $amount,
 				'currency' => $currency,
-				'recurring' => ['interval' => $planinterval],
+				//'recurring' => ['interval' => $planinterval],
+				'recurring' => ['interval' => 'day'],
 				'product' => $productid
 			]);
 			
@@ -724,7 +725,8 @@ class Stripe extends BaseModel
 			$data = $stripe->webhookEndpoints->create([
 						'url' => base_url().'/stripe/webhook',
 						'enabled_events' => [
-							'payment_intent.succeeded'
+							'*',
+							//'payment_intent.succeeded'
 						]
 					]);
 			
