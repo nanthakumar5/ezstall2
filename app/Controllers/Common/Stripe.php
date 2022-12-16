@@ -39,6 +39,7 @@ class Stripe extends BaseController
 		$eventtype = $event->type;
 		if($eventtype = 'payment_intent.succeeded'){
 			$paymentIntent = $event->data->object;
+			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			$fp = fopen('./assets/stripe.txt', 'a');
 			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			fclose($fp);
