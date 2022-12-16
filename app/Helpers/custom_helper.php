@@ -485,13 +485,14 @@ function getBooking($condition=[])
 
 function checkoutEmailSms($bookingid)
 {
+	$config			= new \Config\Custom;
 	$booking 		= new \App\Models\Booking;
 	$reservationpdf = $booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'], ['id' => $bookingid]);
 					
 	$data['reservationpdf'] = $reservationpdf;
-	$data['usertype'] 		= $this->config->usertype;
+	$data['usertype'] 		= $config->usertype;
 	$data['settings'] 		= getSettings();
-	$data['currencysymbol'] = $this->config->currencysymbol;
+	$data['currencysymbol'] = $config->currencysymbol;
 	$html 					=  view('site/common/pdf/userreservation', $data);
 	
 	$mpdf = new \Mpdf\Mpdf();
