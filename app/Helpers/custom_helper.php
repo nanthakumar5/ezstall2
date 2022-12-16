@@ -517,7 +517,7 @@ function send_emailsms_template($id, $extras=[]){
         $email  	= $users['email'];
 		
 		if($id=='1'){
-			$encryptid 	= substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$result.substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
+			$encryptid 	= substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 10).$extras['userid'].substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, 5);
 			$link		= base_url()."/verification/".$encryptid;
 		}elseif($id=='2'){
 			$link  		= base_url().'/changepassword/'.base64_encode($users['id']).'/'.base64_encode(date('Y-m-d H:i:s', strtotime('+1 day')));
