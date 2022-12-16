@@ -188,7 +188,6 @@ function createDirectory($path)
 
 function send_mail($to,$subject,$message,$attachment='')
 {
-
 	$email = \Config\Services::email();
 
 	$config['protocol']  	= 'smtp';
@@ -497,7 +496,6 @@ function checkoutEmailSms($bookingid)
 	
 	$mpdf = new \Mpdf\Mpdf();
 	$mpdf->WriteHTML($html);
-	$this->response->setHeader('Content-Type', 'application/pdf');
 	$attachment = $mpdf->Output('Eventinvoice.pdf', 'S');
 	
 	send_emailsms_template('3', ['userid' => $reservationpdf['user_id'],'eventid' => $reservationpdf['event_id'], 'attachment' => $attachment]);

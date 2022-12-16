@@ -1,5 +1,4 @@
 <?php 
-
 namespace App\Controllers\Site\Event;
 
 use App\Controllers\BaseController;
@@ -9,8 +8,6 @@ use App\Models\Comments;
 use App\Models\Booking;
 use App\Models\Cart;
 use App\Models\Bookingdetails;
-
-
 
 class Index extends BaseController
 {
