@@ -26,11 +26,6 @@ class Stripe extends BaseController
 			$event = \Stripe\Event::constructFrom(
 				json_decode($payload, true)
 			);
-			
-			$response = $event->data->object;
-			$fp = fopen('./assets/stripe.txt', 'a');
-			fwrite($fp, json_encode($response).PHP_EOL);
-			fclose($fp);
 		} catch(\UnexpectedValueException $e) {
 			http_response_code(400);
 			exit();
@@ -41,6 +36,8 @@ class Stripe extends BaseController
 			$paymentIntent = $event->data->object;
 			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			$fp = fopen('./assets/stripe.txt', 'a');
+			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
+			fwrite($fp, $paymentIntent->id);
 			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			fclose($fp);
 			
@@ -59,27 +56,28 @@ class Stripe extends BaseController
 			$paymentid 		= $payment['id'];
 			$paymentuserid 	= $payment['user_id'];
 			$paymenttype 	= $payment['type'];
+			$data 			= $payment['stripe_data']!='' ? json_decode($payment['stripe_data'], true) : '';
 			
-			if($paymenttype=='1'){
-				$data = json_decode($payment['stripe_data'], true);
-				
-				if(isset($data['page']) && $data['page']=='checkout'){
-					$booking = $this->booking->action($data+['paymentid' => $paymentid, 'paidunpaid' => 1]);
-					$this->db->table('payment')->update(['booking_id' => $booking, 'status' => '1'], ['id' => $paymentid]);
-					checkoutEmailSms($booking);
-				}elseif(isset($data['page']) && $data['page']=='myaccountevent'){
-					$userdetail 			= getSiteUserDetails($paymentuserid);
-					$userid 				= $userdetail['id'];
-					$usersubscriptioncount 	= $userdetail['producer_count'];
-					
-					$this->users->action(['user_id' => $userid, 'actionid' => $userid, 'producercount' => $usersubscriptioncount+1]);
-					$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
-				}elseif(isset($data['page']) && $data['page']=='myaccountfacility'){
-					$data['type'] 	= '2';
-					$data['name'] 	= $data['facility_name'];
-					
-					$this->event->action($data);
-					$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
+			if($paymenttype=='1'){	
+				if($data!=''){			
+					if(isset($data['page']) && $data['page']=='checkout'){
+						$booking = $this->booking->action($data+['paymentid' => $paymentid, 'paidunpaid' => 1]);
+						$this->db->table('payment')->update(['booking_id' => $booking, 'status' => '1'], ['id' => $paymentid]);
+						checkoutEmailSms($booking);
+					}elseif(isset($data['page']) && $data['page']=='myaccountevent'){
+						$userdetail 			= getSiteUserDetails($paymentuserid);
+						$userid 				= $userdetail['id'];
+						$usersubscriptioncount 	= $userdetail['producer_count'];
+						
+						$this->users->action(['user_id' => $userid, 'actionid' => $userid, 'producercount' => $usersubscriptioncount+1]);
+						$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
+					}elseif(isset($data['page']) && $data['page']=='myaccountfacility'){
+						$data['type'] 	= '2';
+						$data['name'] 	= $data['facility_name'];
+						
+						$this->event->action($data);
+						$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
+					}
 				}
 			}elseif($paymenttype=='2'){
 				$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
