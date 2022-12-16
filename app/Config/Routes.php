@@ -65,11 +65,13 @@ $routes->group('api', function ($routes) {
 	$routes->post('events', 'Api\Myaccount\Event\Index::index');
     $routes->get('events/view/(:num)', 'Api\Myaccount\Event\Index::view/$1');
 	$routes->get('events/inventories/(:num)', 'Api\Myaccount\Event\Index::inventories/$1');
+    $routes->post('events/delete', 'Api\Myaccount\Event\Index::delete');
 
 	//Facility
 	$routes->post('facility', 'Api\Myaccount\Facility\Index::index');
     $routes->get('facility/view/(:num)', 'Api\Myaccount\Facility\Index::view/$1');
 	$routes->get('facility/inventories/(:num)', 'Api\Myaccount\Facility\Index::inventories/$1');
+    $routes->post('facility/delete', 'Api\Myaccount\Facility\Index::delete');
 
 	//Stallmanager
 	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');

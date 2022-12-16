@@ -87,8 +87,8 @@ class Index extends BaseController
 						'image'        => ($data['image']!='') ? base_url().'/assets/uploads/event/'.$data['image'] : '',
 						'location'     =>  $data['location'],
 						'mobile'       =>  $data['mobile'],
-						'start_date'   => ($data['start_date']!='' && $data['start_date']!='0000-00-00') ? formatdate($data['start_date'], 1) : '',
-						'end_date'     => ($data['end_date']!='' && $data['end_date']!='0000-00-00') ? formatdate($data['end_date'], 1) : '',
+						'start_date'   => ($data['start_date']!='') ? formatdate($data['start_date'], 1) : '',
+						'end_date'     => ($data['end_date']!='') ? formatdate($data['end_date'], 1) : '',
 						'start_time'   => ($data['start_time']!='') ? formattime($data['start_time']) : '',
 						'end_time'     => ($data['end_time']!='') ? formattime($data['end_time']) : '',
 						'barndata'     => $data['barn'],
@@ -148,5 +148,49 @@ class Index extends BaseController
 
         die;
 
+	}
+
+	public function delete(){
+
+		$post      			= $this->request->getPost();  
+
+        $validation = \Config\Services::validation();
+        $validation->setRules(
+            [
+				'id' => 'required'
+            ],
+
+            [
+				'id' => [
+                    'required' => 'User id is required.',
+                ]
+            ]
+        );
+
+        if ($validation->withRequest($this->request)->run()) {
+				$userdetail 		= getSiteUserDetails();
+				$post['userid'] 	= $userdetail['id'];
+				$post['id']         = $post['id'];
+			
+				$result = $this->event->delete($post); 
+                
+				if($result){
+                    $json = ['1', 'Facility Deleted Successfully.', []];
+                } else {
+                    $json = ['0', 'Try Later.', []];
+                }
+            
+		} else {
+            $json = ['0', $validation->getErrors(), []];
+        }
+
+        echo json_encode([
+            'status'    => $json[0],
+            'message'   => $json[1],
+            'result'    => $json[2],
+        ]);
+
+        die;
+		
 	}
 }

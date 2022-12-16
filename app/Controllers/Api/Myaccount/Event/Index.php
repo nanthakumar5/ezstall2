@@ -146,4 +146,48 @@ class Index extends BaseController
         die;
 
 	}
+
+	public function delete(){
+
+		$post      			= $this->request->getPost();  
+
+        $validation = \Config\Services::validation();
+        $validation->setRules(
+            [
+				'id' => 'required'
+            ],
+
+            [
+				'id' => [
+                    'required' => 'User id is required.',
+                ]
+            ]
+        );
+
+        if ($validation->withRequest($this->request)->run()) {
+				$userdetail 		= getSiteUserDetails();
+				$post['userid'] 	= $userdetail['id'];
+				$post['id']         = $post['id'];
+			
+				$result = $this->event->delete($post); 
+                
+				if($result){
+                    $json = ['1', 'Event Deleted Successfully.', []];
+                } else {
+                    $json = ['0', 'Try Later.', []];
+                }
+            
+		} else {
+            $json = ['0', $validation->getErrors(), []];
+        }
+
+        echo json_encode([
+            'status'    => $json[0],
+            'message'   => $json[1],
+            'result'    => $json[2],
+        ]);
+
+        die;
+		
+	}
 }
