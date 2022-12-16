@@ -47,8 +47,7 @@ class Index extends BaseController
 						'image'        => ($data['image']!='') ? base_url().'/assets/uploads/event/'.$data['image'] : '',
 						'location'     =>  $data['location'],
 						'start_date'   => formatdate($data['start_date'], 1),
-						'end_date'     => formatdate($data['end_date'], 1),
-						'stalls_price' => $data['stalls_price']
+						'end_date'     => formatdate($data['end_date'], 1)
 					];
 				}
 
