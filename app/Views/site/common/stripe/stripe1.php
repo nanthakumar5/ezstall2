@@ -142,7 +142,6 @@
 			},
 			success: function(data){
 				var clientsecret = data.success.paymentintents.client_secret;
-				var paymentid = data.success.id;
 				
 				stripe.confirmCardPayment(clientsecret, {
 					payment_method: {

@@ -47,9 +47,9 @@ class Stripe extends BaseModel
 				$this->db->table('payment')->insert($paymentData);
 				$paymentinsertid = $this->db->insertID();
 				
-				$this->stripescheduledpayment($requestData);
+				$this->stripescheduledpayment($requestData, ['paymentid' => $paymentinsertid]);
 				
-				return ['paymentintents' => $paymentintents, 'id' => $paymentinsertid];
+				return ['paymentintents' => $paymentintents];
 			}else{
 				return false;
 			}
@@ -99,9 +99,8 @@ class Stripe extends BaseModel
 				);
 
 				$this->db->table('payment')->insert($paymentData);
-				$paymentinsertid = $this->db->insertID();
 				
-				return ['paymentintents' => $paymentintents, 'id' => $paymentinsertid];
+				return ['paymentintents' => $paymentintents];
 			}else{
 				return false;
 			}
@@ -110,7 +109,7 @@ class Stripe extends BaseModel
 		}
 	}
 	
-	function stripescheduledpayment($requestData)
+	function stripescheduledpayment($requestData, $extras=[])
 	{
 		$userdetails			= getSiteUserDetails();
 		$userid 				= $userdetails['id'];
@@ -140,6 +139,7 @@ class Stripe extends BaseModel
 						$subscription = $this->createSchedule($customer, strtotime($requestData['checkin']), strtotime($requestData['checkout']), $productandprice, $stripepaymentmethodid);
 						
 						$paymentData = array(
+							'payment_id' 				=> (isset($extras['paymentid']) ? $extras['paymentid'] : ''),
 							'user_id' 					=> $userid,
 							'name' 						=> $name,
 							'email' 					=> $email,
@@ -153,8 +153,7 @@ class Stripe extends BaseModel
 							'plan_period_end' 			=> date("Y-m-d H:i:s", $subscription->phases[0]->end_date),
 							'type' 						=> '3',
 							'status' 					=> '0',
-							'created' 					=> date("Y-m-d H:i:s"),
-							'stripe_data'				=> json_encode(['stallid' => $planid])
+							'created' 					=> date("Y-m-d H:i:s")
 						);
 
 						$this->db->table('payment')->insert($paymentData);

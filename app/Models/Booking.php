@@ -283,7 +283,7 @@ class Booking extends BaseModel
                 'total'      					=> isset($result['total']) ? $result['total'] : '',
                 'flag'      					=> isset($extras['flag']) ? $extras['flag'] : '',
                 'status'      					=> 1,
-				'subscription_status' 			=> 1
+				'subscription_status' 			=> isset($result['subscriptionprice']) && $result['subscriptionprice']!='' && $result['subscriptionprice']!='0' ? 0 : 1
             );
 			
             $this->db->table('booking_details')->insert($bookingdetails);

@@ -63,6 +63,16 @@ class Stripe extends BaseController
 					if(isset($data['page']) && $data['page']=='checkout'){
 						$booking = $this->booking->action($data+['paymentid' => $paymentid, 'paidunpaid' => 1]);
 						$this->db->table('payment')->update(['booking_id' => $booking, 'status' => '1'], ['id' => $paymentid]);
+						
+						$schedulepayments = $this->db->table('payment')->where(['payment_id' => $paymentid, 'type' => '3'])->get()->getResultArray();
+						if(!empty($schedulepayments)){
+							foreach($schedulepayments as $schedulepayment){
+								$bookingdetails = $this->db->table('booking_details')->where(['booking_id' => $booking, 'stall_id' => $schedulepayment['plan_id']])->get()->getRowArray();
+								$this->db->table('payment')->update(['booking_id' => $booking, 'booking_details_id' => $bookingdetails['id'], 'status' => '1'], ['id' => $schedulepayment['id']]);
+								$this->db->table('booking_details')->update(['payment_id' => $schedulepayment['id'], 'subscription_status' => '1'], ['booking_id' => $booking, 'stall_id' => $schedulepayment['plan_id']]);
+							}
+						}
+						
 						checkoutEmailSms($booking);
 					}elseif(isset($data['page']) && $data['page']=='myaccountevent'){
 						$userdetail 			= getSiteUserDetails($paymentuserid);
