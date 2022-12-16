@@ -74,7 +74,7 @@ class Stripe extends BaseController
 							}
 						}
 						
-						checkoutEmailSms($booking);
+						//checkoutEmailSms($booking);
 					}elseif(isset($data['page']) && $data['page']=='myaccountevent'){
 						$userdetail 			= getSiteUserDetails($paymentuserid);
 						$userid 				= $userdetail['id'];
