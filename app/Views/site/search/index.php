@@ -78,11 +78,11 @@
 									</span>
 									<span class="wi-70"> 
 										<a class="text-decoration-none" href="<?php echo base_url() ?>/facility/detail/<?php echo $data['id']?>"><h5><?php echo $data['name']; ?><h5></a>
-										<p class=""><?php echo strip_tags(substr($data['description'],0,30)) ; ?></p>
+										<p class="facilityDes"><?php echo strip_tags(substr($data['description'],0,30)) ; ?></p>
 									</span>
 								</div>
 							</span>
-							<div class="pr-f2">
+							<div class="wi-50-2 justify-content-between">
 								<span class="m-left upevent">
 									<p><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/horseShoe.svg">Stalls</p>
 									<h6 class="ucprice"> starting from $<?php echo $data['startingstallprice']; ?></h6>
