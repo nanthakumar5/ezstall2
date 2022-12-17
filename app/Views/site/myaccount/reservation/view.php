@@ -99,14 +99,13 @@
 		</div>
 	</div>
 </section>
-<div><?php 
- if($result['usertype']!='5'){
- 	if($result['status']!='2'){
-    	if($result['type']=='2'){?> 
+<div>
+<?php if($result['usertype']!='5' && $result['status']!='2'){ ?>
+ 	<?php if($result['type']=='2'){?> 
 		<button class="btn btn-danger"><a style="color:white; text-decoration: none" href='<?php echo base_url().'/facility/updatereservation/'.$eventid.'/'.$bookingid; ?>'>Updated Stalls</a></button>
-	<?php }else if($result['type']=='1'){?>
+	<?php }else if($result['type']=='3'){?>
 		<button class="btn btn-danger"><a style="color:white; text-decoration: none" href='<?php echo base_url().'/events/updatereservation/'.$eventid.'/'.$bookingid; ?>'>Updated Stalls</a></button>
-<?php }  } } ?>
+<?php }} ?>
  </div>
 <section class="container-lg">
 	<div class="row">
