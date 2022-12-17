@@ -66,11 +66,8 @@ class Index extends BaseController
 	
 	public function facilitydetail($id, $bookingid='')
     {  
-		$userdetail 		= getSiteUserDetails() ? getSiteUserDetails() : [];
-		$userid 			= (isset($userdetail['id'])) ? $userdetail['id'] : 0;
-		
 		if($bookingid!=''){
-			$booked = $this->booking->getBooking('row', ['booking', 'barnstall', 'rvbarnstall'], ['id' => $bookingid, 'eventid' => $id, 'user_id' => $userid, 'status'=> ['1']]);
+			$booked = $this->booking->getBooking('row', ['booking', 'barnstall', 'rvbarnstall'], ['id' => $bookingid, 'eventid' => $id, 'status'=> ['1']]);
 			if(!$booked){
 				$this->session->setFlashdata('danger', 'No Record Found');
 				return redirect()->to(base_url().'/myaccount/dashboard'); 
