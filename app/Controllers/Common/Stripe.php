@@ -39,6 +39,7 @@ class Stripe extends BaseController
 			
 			createDirectory('./assets/uploads/stripe');
 			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
+			fwrite($fp, $eventtype.PHP_EOL);
 			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			fclose($fp);
 			
@@ -47,6 +48,7 @@ class Stripe extends BaseController
 			$paymentIntent = $event->data->object;
 			createDirectory('./assets/uploads/stripe');
 			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
+			fwrite($fp, $eventtype.PHP_EOL);
 			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
 			fclose($fp);
 		}
