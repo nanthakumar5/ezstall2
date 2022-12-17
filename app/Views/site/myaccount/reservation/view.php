@@ -32,7 +32,7 @@
 <section class="maxWidp eventPagePanel">
 	<div class="event__ticket mx-auto p-3">
 		<p class="text-center h5 mb-3 fw-bold">View Reservation</p>
-		<div class="row mx-5 col-md-12 px-2">
+		<div class="col-md-12 px-2">
 			<div class="row base_stripe">
 				<div class="col-md-6 px-0">
 					<p class="ticket_title_tag">Booking ID</p>
