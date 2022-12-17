@@ -71,7 +71,7 @@ class Stripe extends BaseController
 				if($data!=''){			
 					if(isset($data['page']) && $data['page']=='checkout'){
 						$booking = $this->booking->action($data+['paymentid' => $paymentid, 'paidunpaid' => 1]);
-						$this->db->table('payment')->update(['booking_id' => $booking, 'status' => '1'], ['id' => $paymentid]);
+						$this->db->table('payment')->update(['booking_id' => $booking, 'status' => '1', 'stripe_data' => ''], ['id' => $paymentid]);
 						
 						$schedulepayments = $this->db->table('payment')->where(['payment_id' => $paymentid, 'type' => '3'])->get()->getResultArray();
 						if(!empty($schedulepayments)){
@@ -82,20 +82,20 @@ class Stripe extends BaseController
 							}
 						}
 						
-						//checkoutEmailSms($booking);
+						checkoutEmailSms($booking);
 					}elseif(isset($data['page']) && $data['page']=='myaccountevent'){
 						$userdetail 			= getSiteUserDetails($paymentuserid);
 						$userid 				= $userdetail['id'];
 						$usersubscriptioncount 	= $userdetail['producer_count'];
 						
 						$this->users->action(['user_id' => $userid, 'actionid' => $userid, 'producercount' => $usersubscriptioncount+1]);
-						$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
+						$this->db->table('payment')->update(['status' => '1', 'stripe_data' => ''], ['id' => $paymentid]);
 					}elseif(isset($data['page']) && $data['page']=='myaccountfacility'){
 						$data['type'] 	= '2';
 						$data['name'] 	= $data['facility_name'];
 						
 						$this->event->action($data);
-						$this->db->table('payment')->update(['status' => '1'], ['id' => $paymentid]);
+						$this->db->table('payment')->update(['status' => '1', 'stripe_data' => ''], ['id' => $paymentid]);
 					}
 				}
 			}elseif($paymenttype=='2'){
