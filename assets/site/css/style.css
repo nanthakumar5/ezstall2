@@ -5532,10 +5532,6 @@ section.maxWidth {
     max-width: none;
 }
 
-span.m-left.upevent {
-    padding-left: 6%;
-}
-
 @media (min-width: 769px) and (max-width: 998px){
     span.wi-50 {
     width: 100%;
@@ -5742,10 +5738,11 @@ nav#sidebar-nav {
 
 @media only screen and (max-width: 1024px) {
   .searchPanel {
-    margin: 0 auto 2rem auto;
+    margin: 0 auto 2rem auto !important;
+    width: 90% !important;
   }
 
   .maxWidth.marFiveRes.eventPagePanel {
-    width: 100%;
+    width: 100% !important;
   }
 }
