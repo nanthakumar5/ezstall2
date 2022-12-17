@@ -61,7 +61,8 @@ class Bookingdetails extends BaseModel
 
 	public function updatestall($data)
 	{
-		$bookingdata = $this->db->table('booking_details')->update(['stall_id' => $data['stallid']], ['id' => $data['id']]);	
+		$stalldata = $this->db->table('stall')->where('id', $data['stallid'])->get()->getRowArray();
+		$bookingdata = $this->db->table('booking_details')->update(['barn_id' => $stalldata['barn_id'], 'stall_id' => $data['stallid']], ['id' => $data['id']]);	
 		
 		if($this->db->transStatus() === FALSE){ 
 			$this->db->transRollback();

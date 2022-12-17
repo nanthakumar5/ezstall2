@@ -5470,7 +5470,6 @@ div#multi-nav-tab button.nav-link.m-0 {
     display: block!important;
     left: 40px;
     z-index: 9;
-    background: #e00000;
 	color: #fff;
     top: 0;
     width: 200px;
@@ -5671,10 +5670,12 @@ button#burger {
     position: inherit;
     margin-top: 3.3rem;
     margin-left: 1rem;
+	border: none;
+    background: none;
 }
 
 .sidebar-nav-burger-text {
-    background: #f1f1f1;
+    background: #e00000;
     text-align: center;
     font-weight: 600;
     font-size: 14px;
