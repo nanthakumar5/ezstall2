@@ -143,7 +143,10 @@ class Index extends BaseController
 	
 	public function view($id)
     {  
-		$data['detail']  	= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall', 'users', 'startingstallprice'], ['id' => $id, 'type' => '1']);
+		$event  			= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'bookedstall', 'rvbookedstall', 'users', 'startingstallprice'], ['id' => $id, 'type' => '1']);
+		$data['detail']  			= $event;
+		$data['barnstall'] 			= view('site/common/barnstall/barnstall3', ['checkevent' => checkEvent($event), 'settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol, 'pricelists' => $this->config->pricelist]+$data);
+
 		$data['currencysymbol'] = $this->config->currencysymbol;
 		return view('site/myaccount/event/view',$data);
     }
