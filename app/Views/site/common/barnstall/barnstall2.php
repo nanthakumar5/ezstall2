@@ -6,6 +6,14 @@ $checkeventstatus			= $eventtype=='1' ? $checkevent["status"] : '';
 $GLOBALS['gdetail']			= $detail;
 $GLOBALS['gcurrencysymbol']	= $currencysymbol;
 
+if(isset($booked) && $booked!=''){
+	$bookedcheckin		= formatdate($booked['check_in'], 1);
+	$bookedcheckout		= formatdate($booked['check_out'], 1);
+	$bookedbarnstall 	= array_column($booked['barnstall'], 'stall_id', 'id');
+	$bookedrvbarnstall 	= array_column($booked['rvbarnstall'], 'stall_id', 'id');
+	$bookedbarnrv  		= $bookedbarnstall+$bookedrvbarnstall;
+}
+
 function charging($chargingid){
 	$typeofprice = '';
 	if($chargingid=='1'){ 
@@ -289,6 +297,13 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 		var time 				= '<?php echo time(); ?>';
 		var resulttimer 		= '';
 		
+		var bookedflag			= 0;
+		var bookedcheckin		= '<?php echo isset($bookedcheckin) ? $bookedcheckin : ""; ?>';
+		var bookedcheckout		= '<?php echo isset($bookedcheckout) ? $bookedcheckout : ""; ?>';
+		var bookedbarnrv		= $.parseJSON('<?php echo json_encode(isset($bookedbarnrv) ? $bookedbarnrv : []); ?>');
+		var bookedbarnstall		= $.parseJSON('<?php echo json_encode(isset($bookedbarnstall) ? $bookedbarnstall : []); ?>');
+		var bookedrvbarnstall	= $.parseJSON('<?php echo json_encode(isset($bookedrvbarnstall) ? $bookedrvbarnstall : []); ?>');
+		
 		$(document).ready(function (){
 			if(cartevent == 0 ){
 				cart();
@@ -334,6 +349,33 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 				);
 
 				uidatepicker('#enddate', { 'mindate' : '0' });
+			}
+			
+			if(bookedcheckin!='' && bookedcheckout!='' && Object.keys(bookedbarnrv).length){
+				$("#startdate").val(bookedcheckin);
+				$("#enddate").val(bookedcheckout);
+				
+				$("#startdate, #enddate").attr('disabled', 'disabled');				
+				$('.quantity').attr('disabled', 'disabled');
+				$('.feedcart, .shavingcart').addClass('displaynone');
+				
+				occupiedreserved(bookedcheckin, bookedcheckout);
+
+				$.each(bookedbarnrv, function (i, v) {
+					$('.stallid[value='+v+']').prop('checked', true).removeAttr('disabled');
+					$('.stallavailability[data-stallid='+v+']').removeClass("green-box").addClass("yellow-box");
+				});
+				
+				bookedflag = 1;
+				
+				var bookedappend = '\
+					<form action="" method="post">\
+						<textarea name="updatereservation" class="displaynone" id="updatereservation">'+JSON.stringify(bookedbarnrv)+'</textarea>\
+						<input type="submit" class="btn btn-danger col-md-3 mt-4 h-100" name="updatereservationbtn" id="updatereservationbtn" value="Update Reservation">\
+					</form>\
+				';
+				
+				$('.eventbarnstallwrapper').append(bookedappend)
 			}
 		});
 
@@ -523,53 +565,101 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 		})
 
 		function cartaction(_this, flag){
-			var datevalidation = checkdate(flag);
-			if(!datevalidation) return false;
-
-			var startdate 	= $("#startdate").val(); 
-			var enddate   	= $("#enddate").val(); 
-
-			if(flag==1 || flag==2){			
-				var barnid    			= _this.attr('data-barnid');
-				var stallid				= _this.val(); 
-				var price 				= _this.attr('data-price');
-				var pricetype   		= _this.closest('li').find('.priceactive').attr('data-pricetype'); 
-				var subscriptionprice  	= _this.closest('li').find('.priceactive').attr('data-sprice'); 
-
-				if($(_this).is(':checked')){  
-					var pricevalidation = checkprice(_this);
-					if(!pricevalidation) return false;
+			if(bookedflag==1){
+				var bookedstall 	= flag==1 ? Object.keys(bookedbarnstall) : Object.keys(bookedrvbarnstall);
+				var selectedstall 	= flag==1 ? $('.eventbarnstall.stallid:not(:disabled):checked') : $('.rvbarnstall.stallid:not(:disabled):checked');
 				
-					var checkoccupiedreserved = occupiedreserved(startdate, enddate, stallid);
-					if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, subscriptionprice : subscriptionprice, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
-				}else{ 
-					$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
-					$('.stallavailability[data-stallid='+stallid+']').closest("li").find('.price_button').removeClass('priceactive');
-					cart({stall_id : stallid, type : eventtype, checked : 0}); 
-				}		
-			}else{
-				var productid      		= _this.attr('data-productid');
-				var quantitywrapper		= _this.parent().parent().find('.quantity');
-
-				if(!_this.hasClass('cartremove')){
-					var price         		= _this.attr('data-price'); 
-					var originalquantity	= _this.attr('data-originalquantity'); 
-					var cartquantity		= productquantity(productid);
-					var quantity 			= quantitywrapper.val();
-
-					if(quantity==""){ 
-						quantitywrapper.focus();
-						toastr.warning('Please Enter Quantity .', {timeOut: 5000});
-					}else if(parseInt(quantity) > (parseInt(originalquantity) - parseInt(cartquantity))){
-						quantitywrapper.focus();
-						toastr.warning('Please Select Quantity Less Than or equal to.'+(parseInt(originalquantity) - parseInt(cartquantity)), {timeOut: 5000});
-					}else{ 
-						cart({event_id : eventid, product_id : productid, price : price, quantity : quantity, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
-					}
+				if(bookedstall.length < selectedstall.length){
+					_this.prop('checked', false);
+					toastr.warning('Please remove any stall and add the current stall.', {timeOut: 5000});
 				}else{
-					quantitywrapper.val('');
-					$('.cartremove[data-productid='+productid+']').addClass('displaynone'); 
-					cart({product_id : productid, type : eventtype, checked : 0});
+					var bookeddata = {};
+					var bookedvalue = _this.val();
+					var bookedform = $.parseJSON($(document).find('#updatereservation').val());
+					
+					if(_this.is(':checked')){
+						var bookval = 0;
+						$.each(bookedform, function(i, v){
+							if(bookedbarnrv[i]==bookedvalue && v==0 && bookval==0){
+								bookeddata[i] = bookedvalue;
+								bookval = 1;
+							}else if(v==0 && bookval==0){
+								bookeddata[i] = bookedvalue;
+								bookval = 1;
+							}else{
+								bookeddata[i] = v;
+							}
+						})
+						
+						_this.closest('li').find('.stallavailability').addClass("yellow-box").removeClass("green-box");
+					}else{
+						$.each(bookedform, function(i, v){
+							if(v==bookedvalue) bookeddata[i] = 0;
+							else bookeddata[i] = v;
+						})
+						
+						_this.closest('li').find('.stallavailability').removeClass("yellow-box").addClass("green-box");
+					}
+					
+					$(document).find('#updatereservationbtn').removeClass('displaynone');
+					$.each(bookeddata, function(i, v){
+						if(v==0){
+							$(document).find('#updatereservationbtn').addClass('displaynone');
+							return false;
+						}
+					})
+				
+					$(document).find('#updatereservation').val(JSON.stringify(bookeddata));
+				}
+			}else{
+				var datevalidation = checkdate(flag);
+				if(!datevalidation) return false;
+
+				var startdate 	= $("#startdate").val(); 
+				var enddate   	= $("#enddate").val(); 
+
+				if(flag==1 || flag==2){			
+					var barnid    			= _this.attr('data-barnid');
+					var stallid				= _this.val(); 
+					var price 				= _this.attr('data-price');
+					var pricetype   		= _this.closest('li').find('.priceactive').attr('data-pricetype'); 
+					var subscriptionprice  	= _this.closest('li').find('.priceactive').attr('data-sprice'); 
+
+					if($(_this).is(':checked')){  
+						var pricevalidation = checkprice(_this);
+						if(!pricevalidation) return false;
+					
+						var checkoccupiedreserved = occupiedreserved(startdate, enddate, stallid);
+						if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, subscriptionprice : subscriptionprice, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
+					}else{ 
+						$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
+						$('.stallavailability[data-stallid='+stallid+']').closest("li").find('.price_button').removeClass('priceactive');
+						cart({stall_id : stallid, type : eventtype, checked : 0}); 
+					}		
+				}else{
+					var productid      		= _this.attr('data-productid');
+					var quantitywrapper		= _this.parent().parent().find('.quantity');
+
+					if(!_this.hasClass('cartremove')){
+						var price         		= _this.attr('data-price'); 
+						var originalquantity	= _this.attr('data-originalquantity'); 
+						var cartquantity		= productquantity(productid);
+						var quantity 			= quantitywrapper.val();
+
+						if(quantity==""){ 
+							quantitywrapper.focus();
+							toastr.warning('Please Enter Quantity .', {timeOut: 5000});
+						}else if(parseInt(quantity) > (parseInt(originalquantity) - parseInt(cartquantity))){
+							quantitywrapper.focus();
+							toastr.warning('Please Select Quantity Less Than or equal to.'+(parseInt(originalquantity) - parseInt(cartquantity)), {timeOut: 5000});
+						}else{ 
+							cart({event_id : eventid, product_id : productid, price : price, quantity : quantity, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
+						}
+					}else{
+						quantitywrapper.val('');
+						$('.cartremove[data-productid='+productid+']').addClass('displaynone'); 
+						cart({product_id : productid, type : eventtype, checked : 0});
+					}
 				}
 			}
 		}

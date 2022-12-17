@@ -59,13 +59,11 @@ class Bookingdetails extends BaseModel
 		}
 	}
 
-	public function updatedbkstall($data){
-					
-		if($data!=''){
-			$bookingdata = $this->db->table('booking_details')->update(['stall_id' => $data['updastallid']], ['id' => $data['bdid']]);	
-		}
-
-		if(isset($bookingdata) && $this->db->transStatus() === FALSE){ 
+	public function updatestall($data)
+	{
+		$bookingdata = $this->db->table('booking_details')->update(['stall_id' => $data['stallid']], ['id' => $data['id']]);	
+		
+		if($this->db->transStatus() === FALSE){ 
 			$this->db->transRollback();
 			return false;
 		}else{

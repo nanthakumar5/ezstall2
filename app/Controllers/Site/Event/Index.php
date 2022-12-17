@@ -57,17 +57,49 @@ class Index extends BaseController
 			}
 		}
 
+		return $this->eventdetail($id);
+    }
+	
+	public function updatereservation($id, $bookingid)
+	{  
+		if ($this->request->getMethod()=='post'){ 
+			$requestData = $this->request->getPost();
+			
+			if(isset($requestData['updatereservation'])){ 
+				$updatereservation = json_decode($requestData['updatereservation'], true);
+				
+				foreach($updatereservation as $key => $value){
+					$this->bookingdetails->updatestall(['id' => $key, 'stallid' => $value]);
+				}
+			}
+			$this->session->setFlashdata('success', 'Your Stall is Updated Successfully');
+			return redirect()->to(base_url().'/myaccount/bookings');
+		}
+		
+		return $this->eventdetail($id, $bookingid);
+	}
+	
+	public function eventdetail($id, $bookingid='')
+    {  	
 		$userdetail 		= getSiteUserDetails() ? getSiteUserDetails() : [];
 		$userid 			= (isset($userdetail['id'])) ? $userdetail['id'] : 0;
 		$usertype 			= (isset($userdetail['type'])) ? $userdetail['type'] : 0;
-
+		
+		if($bookingid!=''){
+			$booked = $this->booking->getBooking('row', ['booking', 'barnstall', 'rvbarnstall'], ['id' => $bookingid, 'eventid' => $id, 'user_id' => $userid, 'status'=> ['1']]);
+			if(!$booked){
+				$this->session->setFlashdata('danger', 'No Record Found');
+				return redirect()->to(base_url().'/myaccount/dashboard'); 
+			}
+		}
+		
 		$event 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users', 'startingstallprice'],['id' => $id, 'type' =>'1']);
 
 		$bookings 	= $this->booking->getBooking('row', ['booking', 'event'],['user_id' => $userid, 'eventid' => $id,'status'=> ['1']]);
 		$comments 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $id,'status'=> ['1']]);
 
 		$data['detail']  			= $event;
-		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['checkevent' => checkEvent($event), 'settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol, 'pricelists' => $this->config->pricelist]+$data);		
+		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['checkevent' => checkEvent($event), 'settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol, 'pricelists' => $this->config->pricelist, 'booked' => (isset($booked) ? $booked : '')]+$data);		
 		$data['usertype']			= $usertype;
 		$data['bookings']  			= $bookings;
 		$data['comments']  			= $comments;
@@ -107,46 +139,5 @@ class Index extends BaseController
 		}
 		
 		echo json_encode(['latlongs' => $latlongs, 'bookingbtn' => $bookingbtn]);
-	}
-	
-	public function updatereservation($id='')
-	{  
-		$userdetail 		= getSiteUserDetails() ? getSiteUserDetails() : [];
-		$userid 			= (isset($userdetail['id'])) ? $userdetail['id'] : 0;
-		$usertype 			= (isset($userdetail['type'])) ? $userdetail['type'] : 0;
-		
-		$uri 				= current_url(true);
-		$bookingid 			= $uri->getSegment(4);
-		
-		if ($this->request->getMethod()=='post'){ 
-			$requestData 	= $this->request->getPost();
-			if(isset($requestData['uncheckedstallid'])){ 
-				foreach($requestData['uncheckedstallid'] as $akey => $bkids){
-					foreach($requestData['updatedbookingstall'] as $bkey => $ubstallid){
-						if($akey==$bkey){
-							$bk = $this->bookingdetails->getBookingdetails('row', ['bookingdetails'],['booking_id' => $requestData['bookingid'],'id' => $bkids['bkid']]);
-							$result = $this->bookingdetails->action($bk);
-							
-							$this->bookingdetails->updatedbkstall(['bdid' => $bkids['bkid'], 'updastallid' => $ubstallid['stallid']]);
-						}
-					}
-				}
-			}
-			$this->session->setFlashdata('success', 'Your Stall is Updated Successfully');
-			return redirect()->to(base_url().'/myaccount/bookings');
-		}
-    
-		$event 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'],['id' => $id, 'type' =>'1']);
-
-		$bookings 	= $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'],['id' => $bookingid,'status'=> ['1']]);
-
-		$data['checkevent'] 		= checkEvent($event);
-		$data['detail']  			= $event;
-		$data['bookings']  			= $bookings;
-		$data['settings']  			= getSettings();
-		$data['currencysymbol']  	= $this->config->currencysymbol;
-		$data['usertype']			= $usertype;
-		
-		return view('site/events/updatereservation',$data);
 	}
 }

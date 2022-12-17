@@ -1,6 +1,6 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
-<div class="welcome-content mb-5">
+<div class="welcome-content mb-5 mt-2">
 	<h3 class="fw-bold d-flex flex-wrap">Welcome to EZ Stall, <p class="welcome-user"><?php echo $userdetail['name']; ?></p></h3>
 	<p class="c-5">
 		<?php echo "Thank you for being an EZ Stall"." ".$usertype[$userdetail['type']]?>

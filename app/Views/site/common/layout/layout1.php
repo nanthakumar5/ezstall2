@@ -29,7 +29,7 @@
 		<section <?php if($segment1==''){ echo 'class="home-banner"'; } ?> >
 			<div class="top-nav">
 				<nav class="navbar navbar-expand-lg <?php if($segment1!=''){ echo 'bg-dark'; } ?> navbar-dark">
-					<div class="container-lg m-1rem-sm">
+					<div class="container-xxl m-1rem-sm mx-3">
 						<a href="<?php echo base_url(); ?>" class="navbar-brand"><img src="<?php echo base_url().'/assets/uploads/settings/'.$settings['logo'] ?>" class="logo" alt="Logo"></a>
 						<button aria-controls="responsive-navbar-nav" type="button" aria-label="Toggle navigation" class="navbar-toggler collapsed"><span class="navbar-toggler-icon"></span></button>
 						<div class="navbar-collapse collapse" id="responsive-navbar-nav">

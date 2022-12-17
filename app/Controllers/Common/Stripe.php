@@ -101,8 +101,8 @@ class Stripe extends BaseController
 					}
 				}
 			}elseif($paymenttype=='2'){
-				$this->db->table('payment')->update(['status' => '1', 'stripe_data' => ''], ['id' => $paymentid]);
 				$this->db->table('users')->where(['id' => $paymentuserid])->update(['subscription_id' => $paymentid]);
+				$this->db->table('payment')->update(['status' => '1', 'stripe_data' => ''], ['id' => $paymentid]);
 			}
 		}
 	}

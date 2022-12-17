@@ -658,7 +658,7 @@ a.carousel-control-next {
 }
 
 .marFive {
-    margin: 0 5.5%;
+    margin: 0px 2%;
 }
 
 .marFiveRes {
@@ -1011,7 +1011,7 @@ li.nav-item {
     justify-content: space-between;
     align-items: center;
     max-width: 1350px;
-    padding: 3% 5.5rem;
+    padding: 3% 2%;
     border-bottom: 1px solid #343434;
 }
 
@@ -1047,7 +1047,7 @@ input.subscriptionInput:focus {
 .footerBottom {
     max-width: 1350px;
     display: flex;
-    padding: 5.5% 5.5rem;
+    padding: 5.5% 2%;
     border-bottom: 1px solid #343434;
 }
 
@@ -2328,7 +2328,7 @@ button.payment-btn {
 }
 
 #sidebar-nav ul.components {
-    margin: 5rem 0;
+    margin: 0.1rem 0;
     border: 1px solid #e4e4e4;
     border-radius: 7px;
     padding: 10px;
@@ -2492,8 +2492,8 @@ li.side-nav-active {
 ----------------------------------------------------- */
 
 #content {
-    padding: 5rem 0 0 2rem;
-    margin-right: 5%;
+	padding: 1.5rem 0 0 1rem;
+	margin-right: 2%;
     width: 100%;
     height: 100%;
     transition: all 0.3s;
@@ -2618,7 +2618,7 @@ ul.pagination li:hover a {
 }
 
 .ml-5 {
-    margin-left: 5.5%;
+    margin-left: 2%;
 }
 
 a.btn-custom-black {
@@ -3188,7 +3188,7 @@ td {
 .dash-stall-base:nth-child(odd) {
     background-color: #f5f5f5;
     border-radius: 7px;
-    padding-top: 1rem;
+    padding-top: 0.8rem;
 }
 
 .dash-stall-base:nth-child(even) {
@@ -5470,7 +5470,8 @@ div#multi-nav-tab button.nav-link.m-0 {
     display: block!important;
     left: 40px;
     z-index: 9;
-    background: lightgrey;
+    background: #e00000;
+	color: #fff;
     top: 0;
     width: 200px;
     padding: 10px;
@@ -5522,7 +5523,7 @@ div#multi-nav-tab button.nav-link.m-0 {
 }
 
 section.maxWidth.marFiveRes.eventPagePanel {
-    width: 90%;
+    width: 96%;
     max-width: none;
     margin: auto;
 }
@@ -5585,7 +5586,7 @@ span.m-left.upevent>p:first-child, span.m-left.upevent>h6:nth-child(2) {
 .marFive.dFlexComBetween.eventTP {
     margin: auto;
 	flex-wrap: wrap;
-    width: 90%;
+    width: 96%;
 }
 
 .hamburger-inner {
@@ -5658,21 +5659,18 @@ span.m-left.upevent>p:first-child, span.m-left.upevent>h6:nth-child(2) {
 }
 
 .hamburger-box {
-    position: relative;
-    left: -16px;
+    position: absolute;
+    left: 1rem;
+    top: -4px;
 }
 
 button#burger {
-    background: white;
-    border: none;
-    background: white;
-}
-
-button#burger {
-    position: relative;
-    top: 2%;
-    left: 50%;
     transform: translate(-50%, -50%);
+    padding-top: 1.5rem;
+    padding-left: 1.5rem;
+    position: inherit;
+    margin-top: 3.3rem;
+    margin-left: 1rem;
 }
 
 .sidebar-nav-burger-text {
@@ -5693,7 +5691,7 @@ p.displaynoneimp.sidebar-nav-burger-text::before {
     position: absolute;
     left: 0%;
     top: 50%;
-    background: #f1f1f1;
+    background: #e00000;
     transform: translate(-100%, -50%);
 }
 
@@ -5713,10 +5711,6 @@ p.displaynoneimp.sidebar-nav-burger-text::before {
     background-color: #dc3545;
     display: block;
     content: "";
-}
-
-nav#sidebar-nav {
-    position: relative;
 }
 
 .searchPanel {
@@ -5754,3 +5748,15 @@ nav#sidebar-nav {
     margin-top: 1rem;
   }
 }
+
+@media (max-width: 768px){
+	button#burger {
+		display: none;
+	}
+}
+
+
+input[type=checkbox] {
+    accent-color: #dc3545;
+}
+

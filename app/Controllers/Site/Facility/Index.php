@@ -41,11 +41,46 @@ class Index extends BaseController
     }
 	
 	public function detail($id)
+	{
+		return $this->facilitydetail($id);
+	}
+	
+	public function updatereservation($id, $bookingid)
+	{  
+		if ($this->request->getMethod()=='post'){ 
+			$requestData = $this->request->getPost();
+			
+			if(isset($requestData['updatereservation'])){ 
+				$updatereservation = json_decode($requestData['updatereservation'], true);
+				
+				foreach($updatereservation as $key => $value){
+					$this->bookingdetails->updatestall(['id' => $key, 'stallid' => $value]);
+				}
+			}
+			$this->session->setFlashdata('success', 'Your Stall is Updated Successfully');
+			return redirect()->to(base_url().'/myaccount/bookings');
+		}
+		
+		return $this->facilitydetail($id, $bookingid);
+	}
+	
+	public function facilitydetail($id, $bookingid='')
     {  
+		$userdetail 		= getSiteUserDetails() ? getSiteUserDetails() : [];
+		$userid 			= (isset($userdetail['id'])) ? $userdetail['id'] : 0;
+		
+		if($bookingid!=''){
+			$booked = $this->booking->getBooking('row', ['booking', 'barnstall', 'rvbarnstall'], ['id' => $bookingid, 'eventid' => $id, 'user_id' => $userid, 'status'=> ['1']]);
+			if(!$booked){
+				$this->session->setFlashdata('danger', 'No Record Found');
+				return redirect()->to(base_url().'/myaccount/dashboard'); 
+			}
+		}
+		
 		$currentdate = date("Y-m-d");
 		$event = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users'],['id' => $id, 'type' =>'2']);
 		$data['detail'] 			= $event;
-		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol, 'pricelists' => $this->config->pricelist]+$data);		
+		$data['barnstall'] 			= view('site/common/barnstall/barnstall2', ['settings' => getSettings(), 'currencysymbol' => $this->config->currencysymbol, 'pricelists' => $this->config->pricelist, 'booked' => (isset($booked) ? $booked : '')]+$data);		
 		
     	return view('site/facility/detail',$data);
     }
@@ -57,52 +92,5 @@ class Index extends BaseController
         header("Content-Disposition: attachment; filename=\"". basename($filepath) ."\"");
         readfile ($filepath);
         exit();
-	}
-	
-	public function updatereservation($id='')
-	{ 
-		$userdetail 		= getSiteUserDetails() ? getSiteUserDetails() : [];
-		$userid 			= (isset($userdetail['id'])) ? $userdetail['id'] : 0;
-		$usertype 			= (isset($userdetail['type'])) ? $userdetail['type'] : 0;
-		$uri 				= current_url(true);
-		$bookingid 			= $uri->getSegment(4);
-
-		if ($this->request->getMethod()=='post'){ 
-			$requestData 	= $this->request->getPost();
-			$datauncheckedstallid = $requestData['uncheckedstallid'];
-			$updatedbookingstall = $requestData['updatedbookingstall'];
-
-			foreach($requestData['uncheckedstallid'] as $akey => $bkids){
-				foreach($requestData['updatedbookingstall'] as $bkey => $ubstallid){
-					
-					if($akey==$bkey){
-						$bk = $this->bookingdetails->getBookingdetails('row', ['bookingdetails'],['booking_id' => $requestData['bookingid'],'id' => $bkids['bkid']]);
-						$result = $this->bookingdetails->action($bk);
-
-						
-						$this->bookingdetails->updatedbkstall(['bdid' => $bkids['bkid'], 'updastallid' => $ubstallid['stallid']]);
-						}
-				}
-			}
-
-			if($result){
-				$this->session->setFlashdata('success', 'Your Stall is Updated Successfully');
-				return redirect()->to(base_url().'/myaccount/bookings'); 
-        	}
-
-		}
-
-		$event 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving'],['id' => $id, 'type' =>'2']);
-
-		$bookings 	= $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving','payment','paymentmethod'],['id' => $bookingid,'status'=> ['1']]);
-
-		$data['checkevent'] 		= checkEvent($event);
-		$data['detail']  			= $event;
-		$data['bookings']  			= $bookings;
-		$data['settings']  			= getSettings();
-		$data['currencysymbol']  	= $this->config->currencysymbol;
-		$data['usertype']			= $usertype;
-		
-		return view('site/facility/updatereservation',$data);
 	}
 }

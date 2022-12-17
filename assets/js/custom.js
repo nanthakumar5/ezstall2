@@ -506,49 +506,49 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var blockunblock = '';		
 		if(nobtn==''){
 			availability = 	blockedavailability ? blockedavailability : availability;
-			blockunblock = 	'<div class="col-md-6 mb-3 '+blockedunblockedstyle+'">\
+			blockunblock = 	'<div class="col-md-11 mb-2 '+blockedunblockedstyle+'">\
 								<input type="checkbox" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> Reserved\
 							</div>';
 		}else{
 			availability =	'';
-			blockunblock = 	'<div class="col-md-6 mb-3">\
+			blockunblock = 	'<div class="col-md-11 mb-2">\
 								<input type="checkbox" data-stallid="'+fstallId+'" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : (block_unblock=="2" ? "checked disabled" : ""))+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> '+(block_unblock=="2" ? "Reserved" : "Add this stall for facility event")+'\
 							</div>';
 		}
 		
 		var stallbox = '';
 		if(usertype==2){
-			stallbox = 	'<div class="col-md-6 mb-3">\
+			stallbox = 	'<div class="col-md-12 mb-2">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
 						</div>\
-						<div class="col-md-6 mb-3 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
+						<div class="col-md-2 mb-2 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_night_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][night_price]" class="form-control fs-7" placeholder="Enter Your '+srnightprice+'" value="'+stallNightPrice+'">\
 						</div>\
-						<div class="col-md-6 mb-3 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
+						<div class="col-md-2 mb-2 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_week_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][week_price]" class="form-control fs-7" placeholder="Enter Your '+srweekprice+'" value="'+stallWeekPrice+'">\
 						</div>\
-						<div class="col-md-6 mb-3 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
+						<div class="col-md-2 mb-2 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][month_price]" class="form-control fs-7" placeholder="Enter Your '+srmonthprice+'" value="'+stallMonthPrice+'">\
 						</div>\
-						<div class="col-md-6 mb-3 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
+						<div class="col-md-2 mb-2 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="Enter Your '+srflatprice+'" value="'+stallFlatPrice+'">\
 						</div>\
-						<div class="col-md-6 mb-3 pricelistwrapper51 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
+						<div class="col-md-2 mb-2 pricelistwrapper51 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_initial_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_initial_price]" class="form-control fs-7" placeholder="Enter Your '+srsubscriptioninitialprice+'" value="'+stallSubscriptionInitialPrice+'">\
 						</div>\
-						<div class="col-md-6 mb-3 pricelistwrapper52 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
+						<div class="col-md-2 mb-2 pricelistwrapper52 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_month_price]" class="form-control fs-7" placeholder="Enter Your '+srsubscriptionmonthprice+'" value="'+stallSubscriptionMonthPrice+'">\
 						</div>';
 		}else if(usertype==3){
-			stallbox = 	'<div class="col-md-6 mb-3">\
+			stallbox = 	'<div class="col-md-12 mb-2">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+						</div>\
+						<div class="col-md-6 mb-2">\
 							<select class="form-control" id="stall_'+barnstallname+'_'+stallIndex+'_chargingflag" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][chargingflag]">\
 							'+charging_flag+'\
 							</select>\
 						</div>\
-						<div class="col-md-6 mb-3">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
-						</div>\
-						<div class="col-md-6 mb-3">\
+						<div class="col-md-6 mb-2">\
 							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="Enter Your '+srprice+'" value="'+stallPrice+'">\
 						</div>';
 		}
@@ -569,7 +569,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		<div class="row mb-2 dash-stall-base">\
 			'+stallbox+'\
 			'+blockunblock+'\
-			<div class="col-md-1 mb-3 delete">\
+			<div class="col-md-1 mb-2 delete">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][id]" value="'+stallId+'" class="stall_id">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][stall_id]" value="'+fstallId+'">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][status]" value="1">\

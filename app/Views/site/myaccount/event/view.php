@@ -1,6 +1,7 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
-<div class="page-action mb-4 m-0" align="left">
+
+<div class="page-action mb-3 mt-2 m-0" align="right">
 	<a href="<?php echo base_url(); ?>/myaccount/events" class="btn btn-dark">Back</a>
 </div>
 <section class="container-lg">
@@ -61,4 +62,4 @@
 			</div>
 		</div>
 	</section>
-	<?php $this->endSection() ?>
+<?php $this->endSection() ?>
