@@ -5,7 +5,7 @@
 			<h1 class="eventPageTitle">Events / Facility</h1>
 		</div>
 		<form method="get" autocomplete="off" action="<?php echo base_url();?>/search" class="homeeventsearch eventsearch">
-			<div class="infoPanel">
+			<div class="infoPanel searchPanel">
 				<span class="mx-auto infoSection">
 					<span class="iconProperty">
 						<input type="text" name="location" placeholder="Search" value="<?php echo isset($searchdata['llocation']) ? $searchdata['llocation'] : ''; ?>">

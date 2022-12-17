@@ -5721,3 +5721,12 @@ p.displaynoneimp.sidebar-nav-burger-text::before {
 nav#sidebar-nav {
     position: relative;
 }
+
+.searchPanel {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+.searchPanel .infoSection {
+    box-shadow: 0px 0px 9px 3px #8080803b;
+}
