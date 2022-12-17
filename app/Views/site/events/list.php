@@ -9,7 +9,7 @@
 
 		<div class="marFive dFlexComBetween eventTP">
 		  <h1 class="eventPageTitle">Events</h1>
-		  <span class="mar0">
+		  <span class="mar0 searchBar">
 			<input
 			  type="text"
 			  placeholder="Find your event"

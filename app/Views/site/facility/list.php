@@ -18,7 +18,7 @@
 <section class="maxWidth">
 		<div class="marFive dFlexComBetween eventTP">
 			<h1 class="eventPageTitle">Facility</h1>
-			<span class="mar0">
+			<span class="mar0 searchBar">
 				<input
 				type="text"
 				placeholder="Find your facility"
@@ -47,7 +47,7 @@
 									</span>
 								</div>
 							</span>
-							<div class="pr-f2">
+							<div class="wi-50-2 justify-content-between">
 								<span class="m-left upevent">
 									<p><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/horseShoe.svg">Stalls</p>
 									<h6 class="ucprice"> starting from $<?php echo $data['startingstallprice']; ?></h6>

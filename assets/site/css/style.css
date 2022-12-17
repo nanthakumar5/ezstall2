@@ -379,7 +379,7 @@ span.signInContent {
 }
 
 .eventTP {
-    padding: 2.2rem 0px;
+    padding: 1.2rem 0px;
 }
 
 .searchEvent {
@@ -5584,6 +5584,7 @@ span.m-left.upevent>p:first-child, span.m-left.upevent>h6:nth-child(2) {
 
 .marFive.dFlexComBetween.eventTP {
     margin: auto;
+	flex-wrap: wrap;
     width: 90%;
 }
 
@@ -5744,5 +5745,12 @@ nav#sidebar-nav {
 
   .maxWidth.marFiveRes.eventPagePanel {
     width: 100% !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .searchBar {
+    width: 100%;
+    margin-top: 1rem;
   }
 }
