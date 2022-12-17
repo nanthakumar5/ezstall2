@@ -412,7 +412,7 @@ svg.eventSearch {
 }
 
 .eventPagePanel {
-    margin-bottom: 5rem !important;
+	margin-bottom: 1.2rem !important;
 }
 
 .wi-50-2 span.closeLeft p {
@@ -4885,7 +4885,7 @@ div#multi-nav-tab button.nav-link.m-0 {
         }        
         
         .event__ticket {
-            box-shadow: 0px 3px 7px 2px #1717170d;
+			box-shadow: 0px 1px 7px 2px #17171726;
             border-radius: 5px;
         }
 
@@ -5122,7 +5122,6 @@ div#multi-nav-tab button.nav-link.m-0 {
         }        
         
         .event__ticket {
-            box-shadow: 0px 3px 7px 2px #1717170d;
             border-radius: 5px;
         }
 
@@ -5272,7 +5271,8 @@ div#multi-nav-tab button.nav-link.m-0 {
 }
 
 .cart-summary-section {
-    border: 1px solid #f0f0f0;
+    box-shadow: 0px 1px 7px 2px #17171726;
+    border-radius: 5px;
 }
 
 .cart-summary-section .col-md-7, .cart-summary-section .col-md-5 {

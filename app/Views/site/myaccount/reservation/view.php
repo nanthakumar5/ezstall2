@@ -30,11 +30,11 @@
 	</div>
 </div>
 <section class="maxWidp eventPagePanel">
-	<div class="container event__ticket mx-auto p-3 my-5">
-		<p class="text-center h5 my-4 fw-bold">View Reservation</p>
-		<div class="row mx-5 px-4">
+	<div class="event__ticket mx-auto p-3">
+		<p class="text-center h5 mb-3 fw-bold">View Reservation</p>
+		<div class="row mx-5 col-md-12 px-2">
 			<div class="row base_stripe">
-				<div class="col-md-6">
+				<div class="col-md-6 px-0">
 					<p class="ticket_title_tag">Booking ID</p>
 					<p class="ticket_values"><?php echo $bookingid;?></p>
 				</div>
@@ -44,7 +44,7 @@
 				</div>
 			</div>
 			<div class="row base_stripe">
-				<div class="res_mt_3 col-md-6">
+				<div class="res_mt_3 col-md-6 px-0">
 					<p class="ticket_title_tag">Mobile</p>
 					<p class="ticket_values"><?php echo $mobile;?></p>
 				</div>
@@ -54,7 +54,7 @@
 				</div>
 			</div>
 			<div class="row base_stripe">
-				<div class="res_mt_3 col-md-6">
+				<div class="res_mt_3 col-md-6 px-0">
 					<p class="ticket_title_tag">Check In</p>
 					<p class="ticket_values"><?php echo $checkin;?></p>
 				</div>
@@ -64,7 +64,7 @@
 				</div>
 			</div>
 			<div class="row base_stripe">
-				<div class="col-md-6">
+				<div class="col-md-6 px-0">
 					<p class="ticket_title_tag">Payment Method</p>
 					<p class="ticket_values"><?php echo $paymentmethod;?>
 						<?php if($paymentmethod=='Cash on Delivery'){
@@ -80,7 +80,7 @@
 				</div>
 			</div>
 			<div class="row base_stripe">
-				<div class="col-md-6">
+				<div class="col-md-6 px-0">
 					<p class="ticket_title_tag">Booked Event</p>
 					<p class="ticket_values">Event (<?php echo $eventname;?>)</p>
 				</div>
@@ -89,10 +89,10 @@
 					<p class="ticket_values"><?php if(!empty($specialnotice)){ echo $specialnotice; } else{ echo "No Special Request";}?></p>
 				</div>
 			</div>
-			<div class="row base_stripe">
-				<div class="res_mt_3 col-md-2">
+			<div class="row base_stripe py-0 mt-3">
+				<div class="res_mt_3 col-md-2 px-0">
 					<?php $statuscolor = ($result['status']=='2') ? "cancelcolor" : "activecolor"; ?>
-					<p class="my-2 ticket_values ticket_status <?php echo  $statuscolor;?>"><?php echo $bookingstatus[$result['status']];?></p>
+					<p class="ticket_values ticket_status <?php echo  $statuscolor;?>"><?php echo $bookingstatus[$result['status']];?></p>
 				</div>
 			</div>
 
@@ -107,7 +107,7 @@
 		<button class="btn btn-danger"><a style="color:white; text-decoration: none" href='<?php echo base_url().'/events/updatereservation/'.$eventid.'/'.$bookingid; ?>'>Updated Stalls</a></button>
 <?php }} ?>
  </div>
-<section class="container-lg">
+<section class="container-lg mx-3 mt-4">
 	<div class="row">
 		<div class="col-12">
 			<div class="rounded ">
