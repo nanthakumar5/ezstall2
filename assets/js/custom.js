@@ -1071,10 +1071,13 @@ function cartsummary(pagetype, type, title, result){
 	return data;
 }
 
-function timer(selector, countDownDate){	
+function timer(selector, countdowntime, currenttime){	
+	countdowntime = countdowntime * 1000;
+	currenttime = currenttime * 1000;
+	
 	var result = setInterval(function() {
-		var now = new Date().getTime();
-		var distance = countDownDate - now;
+		currenttime = currenttime + 1000;
+		var distance = countdowntime - currenttime;
 		
 		var days = Math.floor(distance / (1000 * 60 * 60 * 24));
 		var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

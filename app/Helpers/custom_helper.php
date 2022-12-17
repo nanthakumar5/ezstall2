@@ -277,7 +277,7 @@ function getCart($type=''){
 	if($result){
 		$setting 				= getSettings();
 		$cartreservedtime		= $cart->getReserved($setting['cartreservedtime']);
-		$timer					= $cartreservedtime ? $cartreservedtime : '';
+		$timer					= $cartreservedtime ? strtotime($cartreservedtime) : '';
 		$count					= count($result);
 		
 		$event_id 				= array_unique(array_column($result, 'event_id'))[0];

@@ -5493,3 +5493,231 @@ div#multi-nav-tab button.nav-link.m-0 {
     padding: 3px 10px;
     left: 8px;
 }
+
+
+.subscriptionPanel input.subscriptionInput::placeholder {
+    text-align: left;
+}
+
+.subscriptionPanel .subscriptionArea {
+    width: 100%;
+}
+
+.subscriptionPanel>form:nth-child(2) {
+    width: 50%;
+}
+
+.subscriptionPanel .subscriptionArea {
+    display: flex;
+}
+
+.subscriptionPanel .subscriptionArea input.subscriptionInput {
+    padding-left: 20px;
+}
+
+.pr-f2 {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+section.maxWidth.marFiveRes.eventPagePanel {
+    width: 90%;
+    max-width: none;
+    margin: auto;
+}
+
+section.maxWidth {
+    width: 100%;
+    max-width: none;
+}
+
+span.m-left.upevent {
+    padding-left: 6%;
+}
+
+@media (min-width: 769px) and (max-width: 998px){
+    span.wi-50 {
+    width: 100%;
+}
+
+span.wi-50, .pr-f2, .EventFlex .wi-50-2 {
+    width: 100%;
+}
+
+
+.EventFlex.facility {
+    display: block;
+}
+    .EventFlex {
+    display: block;
+}
+.EventFlex.leftdata {
+    display: flex;
+}
+
+span.m-left.upevent {
+    padding-left: 6%;
+    display: flex;
+    align-items: center;
+    width: -webkit-fill-available;
+}
+
+h6.ucprice {
+    margin-left: 3%;
+}
+
+span.m-left.upevent>p:first-child, span.m-left.upevent>h6:nth-child(2) {
+    margin-bottom: 0;
+}
+
+.marFive {
+    width: 90%;
+}
+}
+
+.events-facility .infoPanel {
+    width: 90%;
+}
+
+.events-facility span.mx-auto.infoSection {
+    border: 1px solid lightgrey;
+    margin-bottom: 2%;
+    border-radius: 5px;
+}
+
+.marFive.dFlexComBetween.eventTP {
+    margin: auto;
+    width: 90%;
+}
+
+.hamburger-inner {
+    transition: background-color 0s linear .13s;
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    transition-timing-function: ease;
+    transition-duration: .15s;
+    transition-property: transform;
+    border-radius: 4px;
+    background-color: #dc3545;
+    display: block;
+    transform: translate(-50%, -150%);
+}
+
+.hamburger--spring .hamburger-inner:before {
+    top: 10px;
+    transition: top .1s cubic-bezier(.33333,.66667,.66667,1) .2s,transform .13s cubic-bezier(.55,.055,.675,.19);
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    transition-timing-function: ease;
+    transition-duration: .15s;
+    transition-property: transform;
+    border-radius: 4px;
+    background-color: #dc3545;
+    display: block;
+    content: "";
+}
+
+.hamburger--spring .hamburger-inner:after {
+    top: 20px;
+    transition: top .2s cubic-bezier(.33333,.66667,.66667,1) .2s,transform .13s cubic-bezier(.55,.055,.675,.19);
+    bottom: -10px;
+    display: block;
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    transition-timing-function: ease;
+    transition-duration: .15s;
+    transition-property: transform;
+    border-radius: 4px;
+    background-color: #dc3545;
+}
+
+
+.hamburger.is-active:hover, .hamburger:hover {
+    opacity: .7;
+}
+
+.is-active .hamburger-inner {
+    transition-delay: .22s;
+    background-color: transparent!important;
+}
+
+.is-active .hamburger-inner:before {
+    top: 0;
+    transition: top .1s cubic-bezier(.33333,0,.66667,.33333) .15s,transform .13s cubic-bezier(.215,.61,.355,1) .22s;
+    transform: translate3d(0,10px,0) rotate(45deg);
+    background-color: #dc3545;
+}
+
+.is-active .hamburger-inner:after {
+    top: 0;
+    transition: top .2s cubic-bezier(.33333,0,.66667,.33333),transform .13s cubic-bezier(.215,.61,.355,1) .22s;
+    transform: translate3d(0,10px,0) rotate(-45deg);
+    background-color: #dc3545;
+}
+
+.hamburger-box {
+    position: relative;
+    left: -16px;
+}
+
+button#burger {
+    background: white;
+    border: none;
+    background: white;
+}
+
+button#burger {
+    position: relative;
+    top: 2%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sidebar-nav-burger-text {
+    background: #f1f1f1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    left: 50px;
+}
+
+p.displaynoneimp.sidebar-nav-burger-text::before {
+    clip-path: polygon(43% 51%, 100% 100%, 100% 3%);
+    content: " ";
+    clip-path: polygon(43% 51%, 100% 100%, 100% 3%);
+    height: 15px;
+    width: 15px;
+    z-index: 424;
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    background: #f1f1f1;
+    transform: translate(-100%, -50%);
+}
+
+
+.hamburger-inner {
+    height: 15px;
+    width: 40px;
+    top: 10px;
+    transition: top .1s cubic-bezier(.33333,.66667,.66667,1) .2s,transform .13s cubic-bezier(.55,.055,.675,.19);
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    transition-timing-function: ease;
+    transition-duration: .15s;
+    transition-property: transform;
+    border-radius: 4px;
+    background-color: #dc3545;
+    display: block;
+    content: "";
+}
+
+nav#sidebar-nav {
+    position: relative;
+}

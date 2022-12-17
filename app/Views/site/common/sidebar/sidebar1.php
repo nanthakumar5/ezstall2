@@ -12,7 +12,13 @@
   <button type="button" id="sidebarCollapse" class="btn btn-info side-navbar-btn"><i class="side-nav-i bi bi-list"></i></button>
 </div>
 <nav id="sidebar-nav" class="ml-5">
-	<button id="burger">B</button>
+	<button id="burger">
+		<div class="hamburger hamburger--spring js-hamburger">
+			<div class="hamburger-box">
+				<div class="hamburger-inner"></div>
+			</div>
+		</div>
+	</button>
 	<ul class="list-unstyled components sidebar_wrapper">
 		<li class="side-nav-active">
 			<a class="side-nav-a" href="<?php echo base_url();?>/myaccount/dashboard">

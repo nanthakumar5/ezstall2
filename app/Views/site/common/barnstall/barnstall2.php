@@ -286,6 +286,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 		var eventusertype 		= '<?php echo $detail["eventusertype"]; ?>';
 		var cartevent 			= '<?php echo $cartevent; ?>';
 		var pricelists 			= $.parseJSON('<?php echo json_encode($pricelists); ?>');
+		var time 				= '<?php echo time(); ?>';
 		var resulttimer 		= '';
 		
 		$(document).ready(function (){
@@ -637,7 +638,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							$('.checkout_wrapper').empty().append(cartbox(1, result));
 							
 							if(resulttimer!='') clearInterval(resulttimer);
-							if(result.timer!='') resulttimer = timer('#timer', new Date(result.timer).getTime());	
+							if(result.timer!='') resulttimer = timer('#timer', result.timer, time);	
 							
 							$('.minicart-wrapper').removeClass('displaynone');
 							$('.minicart').text(result.count);							
