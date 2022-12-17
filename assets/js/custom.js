@@ -417,9 +417,9 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		
 		if(nobtn==''){
 			var stalltabbtns	= '\
-				<button class="btn-stall stallbtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'" >Add '+stallcamp+'</button>\
+				<button class="btn-stall m-0 stallbtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'" >Add '+stallcamp+'</button>\
 				<button class="btn-stall bulkstallmodal_'+barnstallname+'" data-barnIndex="'+barnIndex+'" data-bs-toggle="modal" data-bs-target="#bulkstallmodal_'+barnstallname+'">Add Bulk '+stallcamp+'</button>\
-				<a href="javascript:void(0);" class="btn btn-info bulkbtn_'+barnstallname+'">Upload '+uploadName+'</a>\
+				<a href="javascript:void(0);" class="btn btn-info btn-stall bulkbtn_'+barnstallname+'">Upload '+uploadName+'</a>\
 				<input type="file" class="bulkfile_'+barnstallname+'" style="display:none;">\
 				<button class="btn-stall barnremovebtn_'+barnstallname+'">Remove '+BarnLots+' and '+stallcamp+'</button>\
 			';
@@ -747,8 +747,8 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 							</div>';
 	}else if(usertype==3){
 		var modaldata 	= 	'<div class="col-md-12 my-2">\
-								<div class="form-group">\
-									<label>'+srrate+'</label>\
+								<div class="form-group text-start">\
+									<label class="mb-1">'+srrate+'</label>\
 									<select class="form-control stall_charging_id_'+barnstallname+'">\
 									'+charging_flagmodal+'\
 									</select>\
@@ -808,7 +808,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 							<div class="modal-footer">\
 								<input type="hidden" class="barnIndexValue_'+barnstallname+'" value="0">\
 								<button type="button" class="btn btn-info bulkstallbtn_'+barnstallname+'">Submit</button>\
-								<button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>\
+								<button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>\
 							</div>\
 						</div>\
 					</div>\

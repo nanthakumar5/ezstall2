@@ -35,32 +35,25 @@ class Stripe extends BaseController
 		
 		$eventtype = $event->type;
 		if($eventtype = 'payment_intent.succeeded'){
-			$paymentIntent = $event->data->object;
+			$paymentintent = $event->data->object;
 			
 			createDirectory('./assets/uploads/stripe');
 			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
-			fwrite($fp, date('d-m-Y H:i:s').PHP_EOL);
-			fwrite($fp, $eventtype.PHP_EOL);
-			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
+			fwrite($fp, date('d-m-Y H:i:s').$eventtype.PHP_EOL);
+			fwrite($fp, json_encode($paymentintent).PHP_EOL);
 			fclose($fp);
 			
-			$this->action('1', $paymentIntent->id);
-		}else{
-			$paymentIntent = $event->data->object;
-			createDirectory('./assets/uploads/stripe');
-			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
-			fwrite($fp, date('d-m-Y H:i:s').PHP_EOL);
-			fwrite($fp, $eventtype.PHP_EOL);
-			fwrite($fp, json_encode($paymentIntent).PHP_EOL);
-			fclose($fp);
+			$this->action($paymentintent->id, ($paymentintent->subscription ? $paymentintent->subscription : ''));
 		}
 
 		http_response_code(200);
 	}
 	
-	public function action($type, $id)
+	public function action($paymentintentid, $subscriptionid='')
 	{
-		if($type=='1') $condition = ['stripe_paymentintent_id' =>  $id];
+		$condition = ['stripe_paymentintent_id' =>  $paymentintentid];
+		if($subscriptionid!='') $condition = ['stripe_subscription_id' =>  $subscriptionid];
+		
 		$payment = $this->db->table('payment')->where($condition)->get()->getRowArray();
 		
 		if($payment){

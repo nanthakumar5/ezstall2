@@ -725,8 +725,8 @@ class Stripe extends BaseModel
 			$data = $stripe->webhookEndpoints->create([
 						'url' => base_url().'/stripe/webhook',
 						'enabled_events' => [
-							'*',
-							//'payment_intent.succeeded'
+							//'*',
+							'payment_intent.succeeded'
 						]
 					]);
 			
