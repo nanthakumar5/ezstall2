@@ -115,31 +115,84 @@ class Index extends BaseController
         }
     }
 
-    public function send_mail($to, $subject, $message)
-    {
-        $email = \Config\Services::email();
+    function forgotpassword(){
 
-        $config['protocol'] = 'sendmail';
-        $config['mailPath'] = '/usr/sbin/sendmail';
-        $config['charset']  = 'iso-8859-1';
-        $config['wordWrap'] = true;
+        $post = $this->request->getPost();
+        $validation = \Config\Services::validation();
+        $validation->setRules(
+            [
+                'email'         => 'required|valid_email',
+            ],
 
-        //$email->initialize($config);
+            [
+                'email'        => [
+                    'required' => 'Email is required.',
+                ],
+            ]
+        );
 
-        //$email->setFrom('muthulakshmi@itflexsolutions.com', 'Ezstall');
-		$email->setFrom('no-reply@ezstall.com', 'Ezstall');
-        $email->setTo($to);
-        $email->setSubject($subject);
-        $email->setMessage($message);
+        if ($validation->withRequest($this->request)->run()) {
 
-        if ($email->send()) {
-            //echo "sent";
-			return true;
+            $email = $post['email'];          
+            $result = $this->users->getUsers('row', ['users'], ['email' => $email, 'type' => ['2', '3', '4', '5', '6'],'status' => ['1','2']]);
+            if($result){
+                if($result['status']=='1' && $result['email_status']=='1'){ 
+                   send_emailsms_template('2', ['userid' => $result['id']]);
+                    $json = ['1', 'Check your email.', []];
+                }
+            }else {
+                $json = ['0', 'Try Later.', []];
+            }
         } else {
-            //echo "not sent";
-			return false;
+                $json = ['0', $validation->getErrors(), []];
+            }
+         echo json_encode([
+            'status'         => $json[0],
+            'message'       => $json[1],
+            'result'         => $json[2],
+        ]);
+
+        die;
+    }
+
+    public function changepassword($id, $date){
+        $post = $this->request->getPost();
+        $validation = \Config\Services::validation();
+        $validation->setRules(
+            [
+                'password'           => 'required',
+                'confirmpassword'    => 'required',
+            ],
+
+            [
+                'password'        => [
+                    'required' => 'password is required.',
+                ],
+                'confirmpassword' => [
+                    'required' => 'confirmpassword is required.',
+                ],
+            ]
+        );
+
+        if ($validation->withRequest($this->request)->run()) {
+            $id = base64_decode($id);
+            $password = $post['password'];
+            $result = $this->users->action(['password' => $password, 'actionid' => $id, 'user_id' => $id]); 
+            if($result){
+                $json = ['1','Password is changed successfully.',[]];
+            }else{
+                $json = ['0', 'Try Later.', []];
+            }
+        }else {
+            $json = ['0', $validation->getErrors(), []];
         }
 
-        //die;
+        echo json_encode([
+            'status' => $json[0],
+            'message' => $json[1],
+            'result' => $json[2],
+        ]);
+
+        die;
     }
 }

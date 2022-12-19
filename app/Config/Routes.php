@@ -39,7 +39,9 @@ $routes->setAutoRoute(true);
 $routes->group('api', function ($routes) {
 	$routes->post('login', 'Api\Login\Index::index');
 	$routes->post('register', 'Api\Register\Index::action');
-	$routes->get('verification/(:any)', 'Api\Register\Index::verification/$1');
+    $routes->get('verification/(:any)', 'Api\Register\Index::verification/$1');
+    $routes->post('forgotpassword', 'Api\Register\Index::forgotpassword');
+	$routes->post('changepassword/(:any)/(:any)', 'Api\Register\Index::changepassword/$1/$2');
 
 	//Home
 	$routes->get('home', 'Api\Home\Index::index');
