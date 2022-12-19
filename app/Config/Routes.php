@@ -76,8 +76,12 @@ $routes->group('api', function ($routes) {
     $routes->post('facility/delete', 'Api\Myaccount\Facility\Index::delete');
 
     //Current Reservation
-
     $routes->post('list', 'Api\Myaccount\Currentreservation\Index::index');
+    $routes->post('view', 'Api\Myaccount\Currentreservation\Index::view');
+
+    //Past Reservation
+    $routes->post('pastlist', 'Api\Myaccount\Pastreservation\Index::index');
+    $routes->post('pastview', 'Api\Myaccount\Pastreservation\Index::view');
 
 	//Stallmanager
 	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');

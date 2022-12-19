@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Myaccount\Currentreservation;
+namespace App\Controllers\Api\Myaccount\Pastreservation;
 
 use App\Controllers\BaseController;
 use App\Models\Booking;
@@ -20,15 +20,11 @@ class Index extends BaseController
     	$validation->setRules(
 	            [
 	                'user_id'   => 'required',
-	                'parent_id'   => 'required',
 	            ],
 
 	            [
 	                'user_id' => [
 	                    'required' => 'User ID is required.',
-	                ],
-	                'parent_id' => [
-	                    'required' => 'Parent_id is required.',
 	                ],
 	            ]
 	        );
@@ -36,11 +32,11 @@ class Index extends BaseController
     	if ($validation->withRequest($this->request)->run()) {
 
 			$date	= date('Y-m-d');
-			$userid = ($post['parent_id']!=0) ? $post['parent_id'] : $post['user_id']; 
+			$userid = $post['user_id']; 
 			$allids = getStallManagerIDS($userid);
 			array_push($allids, $userid);
 
-			$bookings = $this->booking->getBooking('all', ['booking', 'event', 'users', 'barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment','paymentmethod'], ['userid'=> $allids, 'gtenddate'=> $date], ['orderby' => 'b.id desc']);
+			$bookings = $this->booking->getBooking('all', ['booking', 'event', 'users', 'barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment','paymentmethod'], ['userid'=> $allids, 'ltenddate'=> $date], ['orderby' => 'b.id desc']);
 			if($bookings){
 				$result = [];
 				foreach ($bookings as $data) {
@@ -102,6 +98,7 @@ class Index extends BaseController
 	    );
 
 	    if ($validation->withRequest($this->request)->run()) {
+	    	
 	    	$data = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment', 'paymentmethod'], ['userid' => [$post['user_id']], 'id' => $post['id']]);
 
 	    	if($data){
