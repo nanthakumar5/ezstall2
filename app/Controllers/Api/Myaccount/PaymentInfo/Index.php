@@ -41,7 +41,7 @@ class Index extends BaseController
 				$result = [];
 				foreach ($payments as $data) {
 					$result[] =[
-						'payment_id' 		=> $data['payment_id'],
+						'id' 				=> $data['id'],
 						'name' 				=> $data['name'],
 						'amount' 			=> $data['amount'],
 						'status' 			=> $data['status'],
@@ -93,7 +93,7 @@ class Index extends BaseController
 	    	if($data){
 	    		$result = [];
 	    			$result[] =[
-						'payment_id' 			=> $data['payment_id'],
+						'id' 					=> $data['id'],
 						'name' 					=> $data['name'],
 						'firstname' 			=> $data['firstname'],
 						'lastname' 				=> $data['lastname'],
