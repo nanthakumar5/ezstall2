@@ -14,31 +14,49 @@ class Index extends BaseController
     }
 
     public function index()
-    {
-    	$post = $this->request->getPost();
-        $validation = \Config\Services::validation();
-        $validation->setRules(
-            [
-                'userid'     => 'required',
-            ],
+    { 
+		$date	= date('Y-m-d');
+    	$userdetail 	= getSiteUserDetails();
+		$userid 		= ($userdetail['type']=='4' || $userdetail['type']=='6') ? $userdetail['parent_id'] : getSiteUserID();
+		$allids 		= getStallManagerIDS($userid);
+		array_push($allids, $userid);
 
-            [
-                'userid' => [
-                    'required' => 'userid is required.',
-                ],
-            ]
-        );
+		$bookings = $this->booking->getBooking('all', ['booking', 'event', 'users', 'barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment','paymentmethod'], ['userid'=> $allids, 'gtenddate'=> $date], ['orderby' => 'b.id desc']);
+		if($bookings){
+			$result = [];
+			foreach ($bookings as $data) {
+				$result[] =[
+					'id' 					=> $data['id'],
+					'firstname' 			=> $data['firstname'],
+					'lastname' 				=> $data['lastname'],
+					'mobile' 				=> $data['mobile'],
+					'check_in' 				=> $data['check_in'],
+					'check_out' 			=> $data['check_out'],
+					'amount' 				=> $data['amount'],
+					'special_notice'		=> $data['special_notice'],
+					'usertype' 				=> $data['usertype'],
+					'paymentmethod_name' 	=> $data['paymentmethod_name'],
+					'created_at' 			=> $data['created_at'],
+					'status' 				=> $data['status'],
+					'eventname' 			=> $data['eventname'],
+					'barn'   				=> $data['barnstall'],
+					'rvstall' 				=> ($data['rvbarnstall']!='') ? $data['rvbarnstall']: [],
+					'feed' 					=> ($data['feed']!='') ? $data['feed']: [],
+					'shaving' 				=> ($data['shaving']!='') ? $data['shaving']: [],
+				];
+			}
+			$json = ['1', count($result).' Record Found.', $result];		 
+		}else{
+			$json = ['0', 'Try Later.', []];		 
+		}
 
-       // if ($validation->withRequest($this->request)->run()) {echo "Fasd";die;
+		echo json_encode([
+			'status' => $json[0],
+			'message' => $json[1],
+			'result' => $json[2],
+		]);
 
-        	$userdetail 	= getSiteUserDetails();
-			$userid 		= ($userdetail['type']=='4' || $userdetail['type']=='6') ? $userdetail['parent_id'] : getSiteUserID();
-			print_r($userid);die;
-			$allids 		= getStallManagerIDS($userid);
-			array_push($allids, $userid);
-			$data['bookings'] = $this->booking->getBooking('all', ['booking', 'event', 'users', 'barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment','paymentmethod'], ['userid'=> $allids, 'gtenddate'=> $date, 'start' => $offset, 'length' => $perpage], ['orderby' => 'b.id desc']);
-		/*}else {
-            $json = ['0', $validation->getErrors(), []];
-        }*/
+		die;
+		
     }
 }
