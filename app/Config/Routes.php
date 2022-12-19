@@ -83,6 +83,10 @@ $routes->group('api', function ($routes) {
     $routes->post('pastlist', 'Api\Myaccount\Pastreservation\Index::index');
     $routes->post('pastview', 'Api\Myaccount\Pastreservation\Index::view');
 
+    //Payment Info
+    $routes->post('payment/list', 'Api\Myaccount\PaymentInfo\Index::index');
+    $routes->post('payment/view', 'Api\Myaccount\PaymentInfo\Index::view');
+
 	//Stallmanager
 	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
 	$routes->post('addstallmanager', 'Api\Myaccount\Stallmanager\Index::add');
