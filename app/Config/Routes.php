@@ -75,6 +75,10 @@ $routes->group('api', function ($routes) {
 	$routes->get('facility/inventories/(:num)', 'Api\Myaccount\Facility\Index::inventories/$1');
     $routes->post('facility/delete', 'Api\Myaccount\Facility\Index::delete');
 
+    //Current Reservation
+
+    $routes->post('list', 'Api\Myaccount\Currentreservation\Index::index');
+
 	//Stallmanager
 	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
 	$routes->post('addstallmanager', 'Api\Myaccount\Stallmanager\Index::add');
