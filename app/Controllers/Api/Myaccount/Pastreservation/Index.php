@@ -98,7 +98,7 @@ class Index extends BaseController
 	    );
 
 	    if ($validation->withRequest($this->request)->run()) {
-	    	
+
 	    	$data = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment', 'paymentmethod'], ['userid' => [$post['user_id']], 'id' => $post['id']]);
 
 	    	if($data){
@@ -138,6 +138,8 @@ class Index extends BaseController
 	    	'message' 	=> $json[1],
 	    	'result' 	=> $json[2],
 	    ]);
+	    
+	    die;
 
     }
 }

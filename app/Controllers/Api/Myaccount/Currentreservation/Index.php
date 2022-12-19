@@ -137,10 +137,12 @@ class Index extends BaseController
 	    }
 
 	    echo json_encode([
-	    	'status' 	=> $json[0],
-	    	'message' 	=> $json[1],
-	    	'result' 	=> $json[2],
-	    ]);
+			'status' => $json[0],
+			'message' => $json[1],
+			'result' => $json[2],
+		]);
+
+		die;
 
     }
 }
