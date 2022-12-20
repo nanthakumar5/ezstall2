@@ -59,6 +59,11 @@ $routes->group('api', function ($routes) {
 	$routes->get('facilitylist', 'Api\Facility\Index::Index');
 	$routes->get('facilitydetail/(:num)', 'Api\Facility\Index::detail/$1');
 
+    //cart
+    $routes->post('cart', 'Api\Cart\Index::index');
+    $routes->post('stallcartinsert', 'Api\Cart\Index::stallcartinsert');
+    $routes->post('stallcartdelete', 'Api\Cart\Index::stallcartdelete');
+
 	//Dashboard Api's
 	$routes->post('dashboard', 'Api\Myaccount\Dashboard\Index::index');
 	$routes->post('navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
@@ -86,6 +91,9 @@ $routes->group('api', function ($routes) {
     //Payment Info
     $routes->post('payment/list', 'Api\Myaccount\PaymentInfo\Index::index');
     $routes->post('payment/view', 'Api\Myaccount\PaymentInfo\Index::view');
+
+    //Payment Info
+    $routes->post('transaction', 'Api\Myaccount\TransactionInfo\Index::index');
 
 	//Stallmanager
 	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
