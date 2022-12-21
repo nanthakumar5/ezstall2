@@ -141,7 +141,9 @@ class Stripe extends BaseController
     				    $this->db->table('users')->where(['id' => $subscription['user_id']])->update(['subscription_id' => $paymentinsertid]);
     				}elseif($subscription['type']=='3'){
 						$this->db->table('payment')->insert($paymentData);
-    				    $this->db->table('booking_details')->where(['id' => $subscription['booking_details_id']])->update(['subscription_status' => '1']);
+						$paymentinsertid = $this->db->insertID();
+						
+    				    $this->db->table('booking_details')->where(['id' => $subscription['booking_details_id']])->update(['subscription_status' => '1', 'payment_id' => $paymentinsertid]);
     				}
 	            }
 	        }

@@ -54,4 +54,26 @@ class Cron extends BaseController
 		}
 		die;
 	}
+	
+	public function bookingsubscriptionstall()
+	{	
+		$datetime	= date('Y-m-d H:i:s');
+		$fdatetime	= date('Y-m-d H:i:s', strtotime('+6 hours'));
+		$subquery 	= "(select max(id) from payment p1 where p1.type='3' group by p1.stripe_payment_method_id)";
+		
+		$payments 	= 	$this->db->table('payment p')
+						->where(['p.type'=> '3', 'p.plan_period_end <' => $datetime])
+						->where('p.id in '.$subquery)
+						->groupBy('p.stripe_payment_method_id')
+						->get()
+						->getResultArray();
+		
+		foreach($payments as $payment){
+			if($payment['plan_period_end'] < $fdatetime && $payment['booking_details_id']!=''){
+				$this->db->table('booking_details')->where(['id' => $payment['booking_details_id']])->update(['subscription_status' => '0']);
+			}
+		}
+		
+		die;
+	}
 }
