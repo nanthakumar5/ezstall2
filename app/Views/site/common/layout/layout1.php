@@ -12,16 +12,15 @@
 	<head>
 		<title>EZSTALL</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="<?php echo base_url(); ?>/assets/plugins/sweetalert2/sweetalert2.min.css"  />		
-		<link rel="stylesheet" href="<?php echo base_url(); ?>/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
-		<link rel="stylesheet" href="<?php echo base_url();?>/assets/plugins/jquery-ui/jquery-ui.css">
-		<link href="<?php echo base_url() ?>/assets/site/css/bootstrap.min.css" rel="stylesheet">
-		<link href="<?php echo base_url() ?>/assets/plugins/fullcalendar-premium/main.min.css" rel="stylesheet">
-		<link href="<?php echo base_url() ?>/assets/plugins/toastr/toastr.min.css" rel="stylesheet">
-		<link href="<?php echo base_url() ?>/assets/site/css/style.css" rel="stylesheet">
-		<link href="<?php echo base_url() ?>/assets/plugins/fontawesome-free/css/all.css" rel="stylesheet">
+		<link rel="stylesheet" href="<?php echo base_url(); ?>/assets/plugins/sweetalert2/sweetalert2.min.css?v=1.0"  />		
+		<link rel="stylesheet" href="<?php echo base_url(); ?>/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css?v=1.0">
+		<link rel="stylesheet" href="<?php echo base_url();?>/assets/plugins/jquery-ui/jquery-ui.css?v=1.0">
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/site/css/bootstrap.min.css?v=1.0">
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/plugins/fullcalendar-premium/main.min.css?v=1.0">
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/plugins/toastr/toastr.min.css?v=1.0">
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/site/css/style.css?v=1.0">
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/plugins/fontawesome-free/css/all.css?v=1.0">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
-
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 		<?php echo $settings['googleanalytics']; ?>
 	</head>
@@ -197,21 +196,21 @@
 			</div>
 		</section>
 	
-		<script src="<?php echo base_url();?>/assets/plugins/jquery/jquery.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/jquery-validation/additional-methods.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/site/js/bootstrap.bundle.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/jquery/jquery.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/jquery-validation/jquery.validate.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/jquery-validation/additional-methods.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/sweetalert2/sweetalert2.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/site/js/bootstrap.bundle.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js?v=1.0"></script>
 
-	    <script src="<?php echo base_url();?>/assets/plugins/fullcalendar-premium/main.min.js"></script>
-	    <script src="<?php echo base_url();?>/assets/plugins/toastr/toastr.min.js"></script>
-	    <script src="<?php echo base_url();?>/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
-    	<script src="<?php echo base_url();?>/assets/plugins/tinymce/tinymce.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/inputmask/inputmask.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/rater/rater.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/plugins/party/party.min.js"></script>
-		<script src="<?php echo base_url();?>/assets/js/custom.js"></script>
+	    <script src="<?php echo base_url();?>/assets/plugins/fullcalendar-premium/main.min.js?v=1.0"></script>
+	    <script src="<?php echo base_url();?>/assets/plugins/toastr/toastr.min.js?v=1.0"></script>
+	    <script src="<?php echo base_url();?>/assets/plugins/jquery-ui/jquery-ui.min.js?v=1.0"></script>
+    	<script src="<?php echo base_url();?>/assets/plugins/tinymce/tinymce.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/inputmask/inputmask.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/rater/rater.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/plugins/party/party.min.js?v=1.0"></script>
+		<script src="<?php echo base_url();?>/assets/js/custom.js?v=1.0"></script>
 		<?php $this->renderSection('js') ?>
 		<script>
 			uidatepicker(".event_search_start_date, .event_search_end_date");

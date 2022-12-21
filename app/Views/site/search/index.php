@@ -12,11 +12,11 @@
 						<img src="<?php echo base_url()?>/assets/site/img/location.svg" class="iconPlace" alt="Map Icon">
 					</span>
 					<span class="iconProperty">
-						<input type="text" name="start_date" class="event_search_start_date" placeholder="Check-In" value="<?php echo isset($searchdata['btw_start_date']) ? $searchdata['btw_start_date'] : ''; ?>">
+						<input type="text" name="start_date" class="event_search_start_date" placeholder="Check-In" value="<?php echo isset($searchdata['btw_start_date']) ? formatdate($searchdata['btw_start_date'], 1) : ''; ?>">
 						<img src="<?php echo base_url()?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
 					</span>
 					<span class="iconProperty">
-						<input type="text" name="end_date" class="event_search_end_date" placeholder="Check-Out" value="<?php echo isset($searchdata['btw_end_date']) ? $searchdata['btw_end_date'] : ''; ?>">
+						<input type="text" name="end_date" class="event_search_end_date" placeholder="Check-Out" value="<?php echo isset($searchdata['btw_end_date']) ? formatdate($searchdata['btw_end_date'], 1) : ''; ?>">
 						<img src="<?php echo base_url()?>/assets/site/img/calendar.svg" class="iconPlace" alt="Calender Icon">
 					</span>
 					<input type="text" name="no_of_stalls" placeholder="No.of stalls" value="<?php echo isset($searchdata['no_of_stalls']) ? $searchdata['no_of_stalls'] : ''; ?>">

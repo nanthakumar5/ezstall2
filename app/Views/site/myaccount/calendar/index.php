@@ -38,7 +38,7 @@
 					var calendarEl = document.getElementById('calendar');
 					calendardata = new FullCalendar.Calendar(calendarEl, {
 						schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-						initialView: 'resourceTimelineMonth',
+						initialView: 'dayGridMonth',
 						headerToolbar: {
 							left: 'prev,next',
 							center: 'title',

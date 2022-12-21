@@ -2801,8 +2801,9 @@ label.subscription_select_label:nth-child(3) {
 /*21-03-2022 styles starts from here*/
 
 .accordion-button:not(.collapsed) {
-    color: #e00000;
-    background-color: #fff2f2;
+    color: #0f5132;
+    background-color: #d1e7dd;
+	border-color: #badbcc;
     box-shadow: none;
 }
 
@@ -2811,7 +2812,7 @@ label.subscription_select_label:nth-child(3) {
 }
 
 .accordion-button:not(.collapsed)::after {
-    filter: invert(12%) sepia(88%) saturate(5533%) hue-rotate(1deg) brightness(89%) contrast(118%);
+    filter: invert(17%) sepia(47%) saturate(5450%) hue-rotate(1deg) brightness(100%) contrast(47%)
 }
 
 .faq-c-link {
