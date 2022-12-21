@@ -33,39 +33,37 @@ class Stripe extends BaseController
 			exit();
 		}
 		
+		createDirectory('./assets/uploads/stripe');
+		$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
+		fwrite($fp, date('d-m-Y H:i:s').PHP_EOL);
+		fwrite($fp, json_encode($event).PHP_EOL);
+		
 		$eventtype = $event->type;
 		if($eventtype = 'payment_intent.succeeded'){
 			$paymentintent = $event->data->object;
 			
-			createDirectory('./assets/uploads/stripe');
-			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
-			fwrite($fp, date('d-m-Y H:i:s').$eventtype.PHP_EOL);
+			fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
 			fwrite($fp, json_encode($paymentintent).PHP_EOL);
-			fclose($fp);
 			
 			$this->action('1', $paymentintent->id, ($paymentintent->subscription ? $paymentintent->subscription : ''));
 		}elseif($eventtype = 'invoice.paid'){
 			$invoicepaid = $event->data->object;
 			
-			createDirectory('./assets/uploads/stripe');
-			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
-			fwrite($fp, date('d-m-Y H:i:s').$eventtype.PHP_EOL);
+			fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
 			fwrite($fp, json_encode($invoicepaid).PHP_EOL);
-			fclose($fp);
 			
 			$this->action('2', '', '', $invoicepaid);
 		}elseif($eventtype = 'customer.subscription.updated'){
 			$subscriptionupdated = $event->data->object;
 			
-			createDirectory('./assets/uploads/stripe');
-			$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
-			fwrite($fp, date('d-m-Y H:i:s').$eventtype.PHP_EOL);
+			fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
 			fwrite($fp, json_encode($subscriptionupdated).PHP_EOL);
-			fclose($fp);
 			
 			$this->action('3', '', '', $subscriptionupdated);
 		}
 
+		fclose($fp);
+		
 		http_response_code(200);
 	}
 	
