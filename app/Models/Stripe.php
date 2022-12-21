@@ -14,7 +14,7 @@ class Stripe extends BaseModel
 		$email 					= $userdetails['email'];
 		$price 					= isset($requestData['amount']) ? $requestData['amount'] * 100 : $requestData['price'] * 100;
 		$transactionfee 		= isset($requestData['transactionfee']) ? $requestData['transactionfee'] * 100 : 0;
-        $currency 				= "inr";
+        $currency 				= "usd";
 		
 		$customer = $this->customer();
 		if($customer){
@@ -477,7 +477,7 @@ class Stripe extends BaseModel
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
 			$amount = ($planprice * 100);
-			$currency = "inr";
+			$currency = "usd";
 			
 			$data = $stripe->prices->create([
 				'unit_amount' => $amount,
@@ -692,7 +692,7 @@ class Stripe extends BaseModel
 
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
-				$currency = "inr";
+				$currency = "usd";
 	            $data = $stripe->transfers->create([
 	  				'amount' 			=> $amount * 100,
 	  				'currency' 			=> $currency,
