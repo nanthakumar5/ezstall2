@@ -303,9 +303,12 @@ class Stripe extends BaseModel
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
+			$clock = $this->createTestClock();
+			
 			$data = $stripe->customers->create([
 				'name' 				=> $name,
-				'email' 			=> $email
+				'email' 			=> $email,
+				'clock'				=> $clock->id
 			]);
 			
 			$this->db->table('users')->update(['stripe_customer_id' => $data->id], ['id' => $id]);			
@@ -763,6 +766,22 @@ class Stripe extends BaseModel
 		}catch (\Stripe\Exception\InvalidRequestException $e) {
 		    return false;
         }
+    }
+	
+	function createTestClock()
+    {
+        try{			
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+
+			$data = $stripe->testHelpers->testClocks->create([
+						'frozen_time' => strtotime(date('Y-m-d H:i:s')),
+					]);
+			
+			return $data;
+		}catch(Exception $e){
+			return false;
+		}
     }
 }
 
