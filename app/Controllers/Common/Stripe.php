@@ -33,37 +33,25 @@ class Stripe extends BaseController
 			exit();
 		}
 		
+		$eventtype = $event->type;
+		
 		createDirectory('./assets/uploads/stripe');
 		$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
-		fwrite($fp, date('d-m-Y H:i:s').PHP_EOL);
+		fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
 		fwrite($fp, json_encode($event).PHP_EOL);
+		fclose($fp);
 		
-		$eventtype = $event->type;
-		if($eventtype = 'payment_intent.succeeded'){
+		if($eventtype == 'payment_intent.succeeded'){
 			$paymentintent = $event->data->object;
-			
-			fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
-			fwrite($fp, json_encode($paymentintent).PHP_EOL);
-			
 			$this->action('1', $paymentintent->id, ($paymentintent->subscription ? $paymentintent->subscription : ''));
-		}elseif($eventtype = 'invoice.paid'){
+		}elseif($eventtype == 'invoice.paid'){
 			$invoicepaid = $event->data->object;
-			
-			fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
-			fwrite($fp, json_encode($invoicepaid).PHP_EOL);
-			
 			$this->action('2', '', '', $invoicepaid);
-		}elseif($eventtype = 'customer.subscription.updated'){
+		}elseif($eventtype == 'customer.subscription.updated'){
 			$subscriptionupdated = $event->data->object;
-			
-			fwrite($fp, date('d-m-Y H:i:s').'---'.$eventtype.PHP_EOL);
-			fwrite($fp, json_encode($subscriptionupdated).PHP_EOL);
-			
 			$this->action('3', '', '', $subscriptionupdated);
 		}
 
-		fclose($fp);
-		
 		http_response_code(200);
 	}
 	
@@ -119,7 +107,8 @@ class Stripe extends BaseController
 	    }elseif($type=='2'){
 	        if($result!=''){
 	            $subscription = $this->db->table('payment')->where(['stripe_subscription_id' => $result->subscription])->get()->getRowArray();
-	            if($subscription){
+				
+	            if($subscription){					
 	                $paymentData = array(
 	                    'payment_id' 				=> $subscription['payment_id'],
 	                    'booking_id' 				=> $subscription['booking_id'],
@@ -127,21 +116,21 @@ class Stripe extends BaseController
     					'user_id' 					=> $subscription['user_id'],
     					'name' 						=> $subscription['name'],
     					'email' 					=> $subscription['email'],
-    					'amount' 					=> $result->plan->amount/100,
-    					'currency' 					=> $result->plan->currency,
+    					'amount' 					=> ($result->amount_paid)/100,
+    					'currency' 					=> $result->currency,
     					'stripe_paymentintent_id' 	=> $result->payment_intent,
     					'stripe_subscription_id' 	=> $result->subscription,
     					'stripe_scheduled_id' 	    => $subscription['stripe_scheduled_id'],
     					'stripe_payment_method_id' 	=> $subscription['stripe_payment_method_id'],
     					'plan_id'					=> $subscription['plan_id'],
-    					'plan_interval' 			=> $result->plan->interval,
+    					'plan_interval' 			=> $subscription['plan_interval'],
     					'plan_period_start' 		=> date("Y-m-d H:i:s", $result->period_start),
     					'plan_period_end' 			=> date("Y-m-d H:i:s", $result->period_end),
     					'type' 						=> $subscription['type'],
     					'status' 					=> '1',
     					'created' 					=> date("Y-m-d H:i:s")
     				);
-    
+					
     				$this->db->table('payment')->insert($paymentData);
     				$paymentinsertid = $this->db->insertID();
     				

@@ -516,6 +516,7 @@ class Stripe extends BaseModel
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
+			$startdate = strtotime(date('Y-m-d 00:00:00'));
             $data = $stripe->subscriptions->create([
                 "customer" => $customerid,
 				"items" => [
@@ -523,6 +524,7 @@ class Stripe extends BaseModel
 				],
 				'default_payment_method' => $stripepaymentmethodid,
 				'payment_behavior' => 'default_incomplete', 
+				'backdate_start_date' => $startdate,
                 'expand' => ['latest_invoice.payment_intent']
             ]);
 			
