@@ -4,6 +4,9 @@ namespace App\Controllers\Api\Myaccount\Currentreservation;
 
 use App\Controllers\BaseController;
 use App\Models\Booking;
+use App\Models\Payments;
+use App\Models\Bookingdetails;
+use App\Models\Stripe;
 
 class Index extends BaseController
 {
@@ -11,6 +14,9 @@ class Index extends BaseController
 	public function __construct()
     {
     	$this->booking = new Booking();
+    	$this->payments = new Payments();
+		$this->bookingdetails = new Bookingdetails();	
+		$this->stripe  = new Stripe();
     }
 
     public function index()
@@ -134,7 +140,9 @@ class Index extends BaseController
 	    	}else{
 	    			$json = ['0', 'Try Later.', []];		 
 	    	}
-	    }
+	    }else{
+            $json = ['0', $validation->getErrors(), []];
+		}
 
 	    echo json_encode([
 			'status' => $json[0],
@@ -144,5 +152,89 @@ class Index extends BaseController
 
 		die;
 
+    }
+
+    public function paidunpaid(){ 
+    	$post = $this->request->getPost();
+    	$validation = \Config\Services::validation();
+
+    	$validation->setRules(
+    		[
+                'bookingid'   => 'required',
+                'paid_unpaid'   => 'required',
+            ],
+
+            [
+                'bookingid' => [
+                    'required' => 'Booking Id is required.',
+                ],
+                'paid_unpaid' => [
+                    'required' => 'Paid Unpaid status is required.',
+                ],
+            ]
+	    );
+
+	    if ($validation->withRequest($this->request)->run()) {
+			$id = $this->booking->paiddata($post);
+			if($id){ 
+				$json = ['1', ' Updated successfully.', $id];
+			}else{ 
+				$json = ['0', ' Try Later.', []];
+			}
+	    }else{ 
+            $json = ['0', $validation->getErrors(), []];
+		}
+
+		echo json_encode([
+			'status' => $json[0],
+			'message' => $json[1],
+			'result' => $json[2],
+		]);
+
+		die;
+    }
+
+    public function cancelsubscription(){
+    	$post = $this->request->getPost();
+    	$validation = \Config\Services::validation();
+
+    	$validation->setRules(
+    		[
+                'bookingid'   => 'required',
+                'paymentid'   => 'required',
+            ],
+
+            [
+                'bookingid' => [
+                    'required' => 'Booking Id is required.',
+                ],
+                'paymentid' => [
+                    'required' => 'Payment Id status is required.',
+                ],
+            ]
+	    );
+
+	    if ($validation->withRequest($this->request)->run()) {
+
+	    	$payment = $this->payments->getPayments('row', ['payment'], ['id' => $post['paymentid']]);
+			if($payment){
+				$this->stripe->cancelSchedule($payment['stripe_subscription_id']);
+				$this->bookingdetails->cancelsubscription(['booking_details_id' => $payment['booking_details_id']]);
+				echo "fasd";die;
+				$json = ['1', ' Subscription Cancelled.'];
+			}else{ 
+				$json = ['0', ' Try Later.', []];
+			}
+	    }else{ 
+            $json = ['0', $validation->getErrors(), []];
+		}
+
+		echo json_encode([
+			'status' => $json[0],
+			'message' => $json[1],
+			'result' => $json[2],
+		]);
+
+		die;
     }
 }

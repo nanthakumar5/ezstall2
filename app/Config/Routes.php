@@ -68,6 +68,10 @@ $routes->group('api', function ($routes) {
 	$routes->post('dashboard', 'Api\Myaccount\Dashboard\Index::index');
 	$routes->post('navigationmenu', 'Api\Myaccount\Navigationmenu\Index::index');
 
+    //Account Info
+    $routes->post('account/view', 'Api\Myaccount\AccountInfo\Index::index');
+    $routes->post('account/action', 'Api\Myaccount\AccountInfo\Index::action');
+
 	//Event
 	$routes->post('events', 'Api\Myaccount\Event\Index::index');
     $routes->get('events/view/(:num)', 'Api\Myaccount\Event\Index::view/$1');
@@ -83,6 +87,8 @@ $routes->group('api', function ($routes) {
     //Current Reservation
     $routes->post('list', 'Api\Myaccount\Currentreservation\Index::index');
     $routes->post('view', 'Api\Myaccount\Currentreservation\Index::view');
+    $routes->post('paidunpaid', 'Api\Myaccount\Currentreservation\Index::paidunpaid');
+    $routes->post('cancelsubscription', 'Api\Myaccount\Currentreservation\Index::cancelsubscription');
 
     //Past Reservation
     $routes->post('pastlist', 'Api\Myaccount\Pastreservation\Index::index');
@@ -92,7 +98,7 @@ $routes->group('api', function ($routes) {
     $routes->post('payment/list', 'Api\Myaccount\PaymentInfo\Index::index');
     $routes->post('payment/view', 'Api\Myaccount\PaymentInfo\Index::view');
 
-    //Payment Info
+    //Transaction
     $routes->post('transaction', 'Api\Myaccount\TransactionInfo\Index::index');
 
 	//Stallmanager
@@ -106,6 +112,9 @@ $routes->group('api', function ($routes) {
 	$routes->post('addoperator', 'Api\Myaccount\Operators\Index::add');
 	$routes->post('editoperator', 'Api\Myaccount\Operators\Index::edit');
 	$routes->post('deleteoperator', 'Api\Myaccount\Operators\Index::delete');
+
+    //Checkout
+     $routes->get('checkout', 'Api\Checkout\Index::index');
 
 	//Homepage
 	$routes->get('faq', 'Api\Faq\Index::index');
