@@ -308,7 +308,7 @@ class Stripe extends BaseModel
 			$data = $stripe->customers->create([
 				'name' 				=> $name,
 				'email' 			=> $email,
-				'clock'				=> $clock->id
+				'test_clock'		=> $clock->id
 			]);
 			
 			$this->db->table('users')->update(['stripe_customer_id' => $data->id], ['id' => $id]);			
