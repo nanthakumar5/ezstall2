@@ -106,6 +106,9 @@ class Stripe extends BaseController
     		}
 	    }elseif($type=='2'){
 	        if($result!=''){
+				$start = date("Y-m-d H:i:s", $result->period_start);
+				$end = date("Y-m-d H:i:s", $result->period_end);
+				
 	            $subscription = $this->db->table('payment')->where(['stripe_subscription_id' => $result->subscription])->get()->getRowArray();
 				
 	            if($subscription){					
@@ -124,19 +127,20 @@ class Stripe extends BaseController
     					'stripe_payment_method_id' 	=> $subscription['stripe_payment_method_id'],
     					'plan_id'					=> $subscription['plan_id'],
     					'plan_interval' 			=> $subscription['plan_interval'],
-    					'plan_period_start' 		=> date("Y-m-d H:i:s", $result->period_start),
-    					'plan_period_end' 			=> date("Y-m-d H:i:s", $result->period_end),
+    					'plan_period_start' 		=> $start,
+    					'plan_period_end' 			=> $end,
     					'type' 						=> $subscription['type'],
     					'status' 					=> '1',
     					'created' 					=> date("Y-m-d H:i:s")
     				);
 					
-    				$this->db->table('payment')->insert($paymentData);
-    				$paymentinsertid = $this->db->insertID();
-    				
-    				if($subscription['type']=='2'){
+    				if($subscription['type']=='2' && $start!=$subscription['plan_period_start'] && $end!=$subscription['plan_period_end']){
+						$this->db->table('payment')->insert($paymentData);
+						$paymentinsertid = $this->db->insertID();
+						
     				    $this->db->table('users')->where(['id' => $subscription['user_id']])->update(['subscription_id' => $paymentinsertid]);
     				}elseif($subscription['type']=='3'){
+						$this->db->table('payment')->insert($paymentData);
     				    $this->db->table('booking_details')->where(['id' => $subscription['booking_details_id']])->update(['subscription_status' => '1']);
     				}
 	            }
