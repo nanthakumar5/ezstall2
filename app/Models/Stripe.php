@@ -136,7 +136,7 @@ class Stripe extends BaseModel
 						}
 						
 						$productandprice = $this->productandprice('2', $planid, ['interval' => $interval]);
-						$subscription = $this->createSchedule($customer, strtotime($requestData['checkin']), strtotime($requestData['checkout']), $productandprice, $stripepaymentmethodid);
+						$scheduled = $this->createSchedule($customer, strtotime($requestData['checkin']), strtotime($requestData['checkout']), $productandprice, $stripepaymentmethodid);
 						
 						$paymentData = array(
 							'payment_id' 				=> (isset($extras['paymentid']) ? $extras['paymentid'] : ''),
@@ -144,13 +144,13 @@ class Stripe extends BaseModel
 							'name' 						=> $name,
 							'email' 					=> $email,
 							'amount' 					=> $subscriptionprice,
-							'currency' 					=> $subscription->phases[0]->currency,
-							'stripe_subscription_id' 	=> $subscription->id,
+							'currency' 					=> $scheduled->phases[0]->currency,
+							'stripe_scheduled_id' 	    => $scheduled->id,
 							'stripe_payment_method_id' 	=> $stripepaymentmethodid,
 							'plan_id'					=> $planid,
 							'plan_interval' 			=> $interval,
-							'plan_period_start' 		=> date("Y-m-d H:i:s", $subscription->phases[0]->start_date),
-							'plan_period_end' 			=> date("Y-m-d H:i:s", $subscription->phases[0]->end_date),
+							'plan_period_start' 		=> date("Y-m-d H:i:s", $scheduled->phases[0]->start_date),
+							'plan_period_end' 			=> date("Y-m-d H:i:s", $scheduled->phases[0]->end_date),
 							'type' 						=> '3',
 							'status' 					=> '0',
 							'created' 					=> date("Y-m-d H:i:s")
@@ -725,8 +725,9 @@ class Stripe extends BaseModel
 			$data = $stripe->webhookEndpoints->create([
 						'url' => base_url().'/stripe/webhook',
 						'enabled_events' => [
-							//'*',
-							'payment_intent.succeeded'
+							'payment_intent.succeeded',
+							'invoice.paid',
+							'customer.subscription.updated'
 						]
 					]);
 			
