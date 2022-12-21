@@ -106,8 +106,8 @@ class Stripe extends BaseController
     		}
 	    }elseif($type=='2'){
 	        if($result!=''){
-				$start = date("Y-m-d H:i:s", $result->period_start);
-				$end = date("Y-m-d H:i:s", $result->period_end);
+				$start = date("Y-m-d H:i:s", $result->lines->data[0]->period->start);
+				$end = date("Y-m-d H:i:s", $result->lines->data[0]->period->end);
 				
 	            $subscription = $this->db->table('payment')->where(['stripe_subscription_id' => $result->subscription])->get()->getRowArray();
 				
