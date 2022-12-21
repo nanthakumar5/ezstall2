@@ -193,48 +193,4 @@ class Index extends BaseController
 
 		die;
     }
-
-    public function cancelsubscription(){
-    	$post = $this->request->getPost();
-    	$validation = \Config\Services::validation();
-
-    	$validation->setRules(
-    		[
-                'bookingid'   => 'required',
-                'paymentid'   => 'required',
-            ],
-
-            [
-                'bookingid' => [
-                    'required' => 'Booking Id is required.',
-                ],
-                'paymentid' => [
-                    'required' => 'Payment Id status is required.',
-                ],
-            ]
-	    );
-
-	    if ($validation->withRequest($this->request)->run()) {
-
-	    	$payment = $this->payments->getPayments('row', ['payment'], ['id' => $post['paymentid']]);
-			if($payment){
-				$this->stripe->cancelSchedule($payment['stripe_subscription_id']);
-				$this->bookingdetails->cancelsubscription(['booking_details_id' => $payment['booking_details_id']]);
-				echo "fasd";die;
-				$json = ['1', ' Subscription Cancelled.'];
-			}else{ 
-				$json = ['0', ' Try Later.', []];
-			}
-	    }else{ 
-            $json = ['0', $validation->getErrors(), []];
-		}
-
-		echo json_encode([
-			'status' => $json[0],
-			'message' => $json[1],
-			'result' => $json[2],
-		]);
-
-		die;
-    }
 }
