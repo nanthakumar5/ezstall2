@@ -146,7 +146,6 @@ class Stripe extends BaseModel
 							'amount' 					=> $subscriptionprice,
 							'currency' 					=> $scheduled->phases[0]->currency,
 							'stripe_scheduled_id' 	    => $scheduled->id,
-							'stripe_subscription_id' 	=> $scheduled->subscription,
 							'stripe_payment_method_id' 	=> $stripepaymentmethodid,
 							'plan_id'					=> $planid,
 							'plan_interval' 			=> $interval,
