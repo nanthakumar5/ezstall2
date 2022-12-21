@@ -304,12 +304,12 @@ class Stripe extends BaseModel
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
-			$clock = $this->createTestClock();
+			//$clock = $this->createTestClock();
 			
 			$data = $stripe->customers->create([
 				'name' 				=> $name,
 				'email' 			=> $email,
-				'test_clock'		=> $clock->id
+				//'test_clock'		=> $clock->id
 			]);
 			
 			$this->db->table('users')->update(['stripe_customer_id' => $data->id], ['id' => $id]);			
