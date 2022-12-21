@@ -68,7 +68,7 @@ function checkEvent($data)
 	$userid 		= isset($userdetail['id']) ? $userdetail['id'] : '';
 	$parentid 		= isset($userdetail['parent_id']) ? $userdetail['parent_id'] : '';
 	$usertype 		= isset($userdetail['type']) ? $userdetail['type'] : '';
-	$userplanend 	= isset($userdetail['subscriptionenddate']) ? date('Y-m-d', strtotime($userdetail['subscriptionenddate'])) : '';
+	//$userplanend 	= isset($userdetail['subscriptionenddate']) ? date('Y-m-d', strtotime($userdetail['subscriptionenddate'])) : '';
 	$strstartdate 	= date("Y-m-d", strtotime($data['start_date']));
 	$strenddate 	= date("Y-m-d", strtotime($data['end_date']));
 
@@ -110,7 +110,7 @@ function getStallManagerIDS($parentid)
 
 function checkSubscription()
 {
-	$date = date('Y-m-d');
+	$date = date('Y-m-d H:i:s');
 	$userdetails = getSiteUserDetails();
 	$type = '0';
 	$facility = '0';

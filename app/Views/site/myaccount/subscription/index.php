@@ -9,13 +9,12 @@
 	<?php  	 
 		$currentdate 	  		= date("Y-m-d"); 
 		$subscriptionenddate	= $userdetail['subscriptionenddate'];
-		$subscriptiondate 		= $subscriptionenddate != NULL ? date("Y-m-d", strtotime($subscriptionenddate)) : '';
+		$subscriptiondate 		= $subscriptionenddate != NULL ? date("Y-m-d H:i:s", strtotime($subscriptionenddate)) : '';
 	?>		
-	<?php if($subscriptionenddate=='' || $subscriptiondate=='0000-00-00' || $subscriptiondate < $currentdate){ ?>			
+	<?php if($subscriptionenddate=='' || $subscriptiondate=='0000-00-00 00:00:00' || $subscriptiondate < $currentdate){ ?>			
 		<?php if($subscriptionenddate!='' && $subscriptiondate < $currentdate){ ?>
 			<div class="">
 				<h6><?php echo 'Your Subscription plan ended'; ?></h6>
-				<h6>Your Last Subscription Plan is : </h6>
 				<h6>Amount : <?php echo $currencysymbol.$subscriptions['amount']; ?></h6>
 				<h6>Subscription Plan : <?php echo $subscriptions['planname']; ?></h6>
 			</div>
@@ -41,7 +40,7 @@
 	<?php } else{ ?>
 		<div class="col payment-border">
 			<div>
-				<h6>Your subscription was activated.</h6><h6>Your next subscription payment will be due by <?php echo formatdate($userdetail['subscriptionenddate'], 1);?></h6>
+				<h6>Your subscription was activated.</h6><h6>Your next subscription payment will be due by <?php echo formatdate($userdetail['subscriptionenddate'], 1).' '.date('H:i:s', strtotime($userdetail['subscriptionenddate']));?></h6>
 			</div>
 		</div>
 	<?php } ?>
