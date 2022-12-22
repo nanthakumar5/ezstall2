@@ -519,29 +519,29 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var stallbox = '';
 		if(usertype==2){
 			stallbox = 	'<div class="col-md-12 mb-2">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="'+srname+'" value="'+stallName+'">\
 						</div>\
 						<div class="col-md-2 mb-2 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_night_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][night_price]" class="form-control fs-7" placeholder="Enter Your '+srnightprice+'" value="'+stallNightPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_night_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][night_price]" class="form-control fs-7" placeholder="'+srnightprice+'" value="'+stallNightPrice+'">\
 						</div>\
 						<div class="col-md-2 mb-2 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_week_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][week_price]" class="form-control fs-7" placeholder="Enter Your '+srweekprice+'" value="'+stallWeekPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_week_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][week_price]" class="form-control fs-7" placeholder="'+srweekprice+'" value="'+stallWeekPrice+'">\
 						</div>\
 						<div class="col-md-2 mb-2 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][month_price]" class="form-control fs-7" placeholder="Enter Your '+srmonthprice+'" value="'+stallMonthPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][month_price]" class="form-control fs-7" placeholder="'+srmonthprice+'" value="'+stallMonthPrice+'">\
 						</div>\
 						<div class="col-md-2 mb-2 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="Enter Your '+srflatprice+'" value="'+stallFlatPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_flat_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][flat_price]" class="form-control fs-7" placeholder="'+srflatprice+'" value="'+stallFlatPrice+'">\
 						</div>\
 						<div class="col-md-2 mb-2 pricelistwrapper51 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_initial_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_initial_price]" class="form-control fs-7" placeholder="Enter Your '+srsubscriptioninitialprice+'" value="'+stallSubscriptionInitialPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_initial_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_initial_price]" class="form-control fs-7" placeholder="'+srsubscriptioninitialprice+'" value="'+stallSubscriptionInitialPrice+'">\
 						</div>\
 						<div class="col-md-2 mb-2 pricelistwrapper52 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_month_price]" class="form-control fs-7" placeholder="Enter Your '+srsubscriptionmonthprice+'" value="'+stallSubscriptionMonthPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_subscription_month_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][subscription_month_price]" class="form-control fs-7" placeholder="'+srsubscriptionmonthprice+'" value="'+stallSubscriptionMonthPrice+'">\
 						</div>';
 		}else if(usertype==3){
 			stallbox = 	'<div class="col-md-12 mb-2">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="Enter Your '+srname+'" value="'+stallName+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_name" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][name]" class="form-control  fs-7" placeholder="'+srname+'" value="'+stallName+'">\
 						</div>\
 						<div class="col-md-6 mb-2">\
 							<select class="form-control" id="stall_'+barnstallname+'_'+stallIndex+'_chargingflag" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][chargingflag]">\
@@ -549,7 +549,7 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 							</select>\
 						</div>\
 						<div class="col-md-6 mb-2">\
-							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="Enter Your '+srprice+'" value="'+stallPrice+'">\
+							<input type="text" id="stall_'+barnstallname+'_'+stallIndex+'_price" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][price]" class="form-control fs-7" placeholder="'+srprice+'" value="'+stallPrice+'">\
 						</div>';
 		}
 		
@@ -706,47 +706,53 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 		var modaldata 	= 	'<div class="col-md-12 my-2">\
 								<div class="form-group">\
 									<label>'+srname+'</label>\
-									<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="Enter Your '+srname+'">\
+									<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="'+srname+'">\
 								</div>\
 							</div>\
 							<div class="col-md-12 my-2 pricelistwrapper1 '+(price_flagdata[0] && price_flagdata[0]==1 ? '' : 'displaynone')+'">\
 								<div class="form-group">\
 									<label>'+srnightprice+'</label>\
-									<input type="number" class="form-control stall_night_price_'+barnstallname+'" placeholder="Enter Your '+srnightprice+'" value="'+(price_feedata[0] ? price_feedata[0] : '')+'">\
+									<input type="number" class="form-control stall_night_price_'+barnstallname+'" placeholder="'+srnightprice+'" value="'+(price_feedata[0] ? price_feedata[0] : '')+'">\
 								</div>\
 							</div>\
 							<div class="col-md-12 my-2 pricelistwrapper2 '+(price_flagdata[1] && price_flagdata[1]==1 ? '' : 'displaynone')+'">\
 								<div class="form-group">\
 									<label>'+srnightprice+'</label>\
-									<input type="number" class="form-control stall_week_price_'+barnstallname+'" placeholder="Enter Your '+srweekprice+'" value="'+(price_feedata[1] ? price_feedata[1] : '')+'">\
+									<input type="number" class="form-control stall_week_price_'+barnstallname+'" placeholder="'+srweekprice+'" value="'+(price_feedata[1] ? price_feedata[1] : '')+'">\
 								</div>\
 							</div>\
 							<div class="col-md-12 my-2 pricelistwrapper3 '+(price_flagdata[2] && price_flagdata[2]==1 ? '' : 'displaynone')+'">\
 								<div class="form-group">\
 									<label>'+srmonthprice+'</label>\
-									<input type="number" class="form-control stall_month_price_'+barnstallname+'" placeholder="Enter Your '+srmonthprice+'" value="'+(price_feedata[2] ? price_feedata[2] : '')+'">\
+									<input type="number" class="form-control stall_month_price_'+barnstallname+'" placeholder="'+srmonthprice+'" value="'+(price_feedata[2] ? price_feedata[2] : '')+'">\
 								</div>\
 							</div>\
 							<div class="col-md-12 my-2 pricelistwrapper4 '+(price_flagdata[3] && price_flagdata[3]==1 ? '' : 'displaynone')+'">\
 								<div class="form-group">\
 									<label>'+srflatprice+'</label>\
-									<input type="number" class="form-control stall_flat_price_'+barnstallname+'" placeholder="Enter Your '+srflatprice+'" value="'+(price_feedata[3] ? price_feedata[3] : '')+'">\
+									<input type="number" class="form-control stall_flat_price_'+barnstallname+'" placeholder="'+srflatprice+'" value="'+(price_feedata[3] ? price_feedata[3] : '')+'">\
 								</div>\
 							</div>\
 							<div class="col-md-12 my-2 pricelistwrapper51 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
 								<div class="form-group">\
 									<label>'+srsubscriptioninitialprice+'</label>\
-									<input type="number" class="form-control stall_subscription_initial_price_'+barnstallname+'" placeholder="Enter Your '+srsubscriptioninitialprice+'" value="'+(price_feedata[4] ? price_feedata[4] : '')+'">\
+									<input type="number" class="form-control stall_subscription_initial_price_'+barnstallname+'" placeholder="'+srsubscriptioninitialprice+'" value="'+(price_feedata[4] ? price_feedata[4] : '')+'">\
 								</div>\
 							</div>\
 							<div class="col-md-12 my-2 pricelistwrapper52 '+(price_flagdata[4] && price_flagdata[4]==1 ? '' : 'displaynone')+'">\
 								<div class="form-group">\
 									<label>'+srsubscriptionmonthprice+'</label>\
-									<input type="number" class="form-control stall_subscription_month_price_'+barnstallname+'" placeholder="Enter Your '+srsubscriptionmonthprice+'" value="'+(price_feedata[5] ? price_feedata[5] : '')+'">\
+									<input type="number" class="form-control stall_subscription_month_price_'+barnstallname+'" placeholder="'+srsubscriptionmonthprice+'" value="'+(price_feedata[5] ? price_feedata[5] : '')+'">\
 								</div>\
 							</div>';
 	}else if(usertype==3){
 		var modaldata 	= 	'<div class="col-md-12 my-2">\
+								<div class="form-group">\
+									<label>'+srname+'</label>\
+									<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="'+srname+'">\
+								</div>\
+							</div>\
+							<div class="col-md-12 my-2">\
 								<div class="form-group text-start">\
 									<label class="mb-1">'+srrate+'</label>\
 									<select class="form-control stall_charging_id_'+barnstallname+'">\
@@ -756,14 +762,8 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 							</div>\
 							<div class="col-md-12 my-2">\
 								<div class="form-group">\
-									<label>'+srname+'</label>\
-									<input type="text" class="form-control stall_name_'+barnstallname+'" placeholder="Enter Your '+srname+'">\
-								</div>\
-							</div>\
-							<div class="col-md-12 my-2">\
-								<div class="form-group">\
 									<label>'+srprice+'</label>\
-									<input type="number" class="form-control stall_price_'+barnstallname+'" placeholder="Enter Your '+srprice+'">\
+									<input type="number" class="form-control stall_price_'+barnstallname+'" placeholder="'+srprice+'">\
 								</div>\
 							</div>';
 	}
@@ -795,13 +795,13 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 								<div class="col-md-12 my-2">\
 									<div class="form-group">\
 										<label>'+srtotalnumber+'</label>\
-										<input type="number" class="form-control stall_total_'+barnstallname+'" placeholder="Enter Your '+srtotalnumber+'" min="1" required>\
+										<input type="number" class="form-control stall_total_'+barnstallname+'" placeholder="'+srtotalnumber+'" min="1" required>\
 									</div>\
 								</div>\
 								<div class="col-md-12 my-2">\
 									<div class="form-group">\
 										<label>'+srfirstnumber+'</label>\
-										<input type="text" class="form-control stall_number_'+barnstallname+'" placeholder="Enter Your '+srfirstnumber+'" min="1" required>\
+										<input type="text" class="form-control stall_number_'+barnstallname+'" placeholder="'+srfirstnumber+'" min="1" required>\
 									</div>\
 								</div>\
 							</div>\

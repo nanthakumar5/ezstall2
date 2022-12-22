@@ -44,7 +44,7 @@ class Index extends BaseController
 		$date	= date('Y-m-d');
 
     	$userdetail 	= getSiteUserDetails();
-		$userid 		= ($userdetail['type']=='4' || $userdetail['type']=='6') ? $userdetail['parent_id'] : getSiteUserID();
+		$userid 		= ($userdetail['type']=='4' || $userdetail['type']=='6') ? $userdetail['parent_id'] : $userdetail['id'];
 		$allids 		= getStallManagerIDS($userid);
 		array_push($allids, $userid);
 
@@ -80,6 +80,8 @@ class Index extends BaseController
 		$data['bookingstatus'] 	= $this->config->bookingstatus;
 		$data['currencysymbol'] = $this->config->currencysymbol; 
 		$data['pricelists'] 	= $this->config->pricelist; 
+		$data['userdetail'] 	= getSiteUserDetails();
+		
 		return view('site/myaccount/reservation/view', $data);
 	}	
 

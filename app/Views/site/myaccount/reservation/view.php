@@ -18,7 +18,6 @@
 	$paymentmethod      = isset($result['paymentmethod_name']) ? $result['paymentmethod_name'] : '';
 	$paidunpaid         = isset($result['paid_unpaid']) ? $result['paid_unpaid'] : '';
 	$specialnotice      = isset($result['special_notice']) ? $result['special_notice'] : '';
-
 ?>
 
 <div class="row">
@@ -67,10 +66,12 @@
 				<div class="col-md-6 px-0">
 					<p class="ticket_title_tag">Payment Method</p>
 					<p class="ticket_values"><?php echo $paymentmethod;?>
-						<?php if($paymentmethod=='Cash on Delivery'){
+						<?php if($paymentmethod=='Cash on Delivery' && $userdetail['type']!='5'){
 							if($paidunpaid!='1'){
 								echo '<button data-bookingid="'.$bookingid.'" class="btn btn-primary paid_unpaid">Unpaid</button>';
-							}else{ echo '<button class="btn btn-danger">Paid</button>'; }
+							}else{ 
+								echo '<button class="btn btn-danger">Paid</button>'; 
+							}
 						} ?>
 					</p>
 				</div>
@@ -250,12 +251,8 @@
 						<div class="summaryprc"><p><b>Tax</b></p><p align="right"><?php echo $currencysymbol.$result['event_tax'];?></div>
 						<?php } ?>
 						</div>
-						<div class="summaryprcy"><p><b>Amount</b></p><p align="right"><?php echo $currencysymbol.$result['amount'];?></p></div>
-						
+						<div class="summaryprcy"><p><b>Amount</b></p><p align="right"><?php echo $currencysymbol.$result['amount'];?></p></div>						
 					</div>
-							
-
-						
 				</div>
 			</div>
 		</div>

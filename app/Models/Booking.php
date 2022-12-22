@@ -325,18 +325,14 @@ class Booking extends BaseModel
 	{	
 		$this->db->transStart();
 
-		if(isset($data['paid_unpaid'])) $request['paid_unpaid'] 	=  $data['paid_unpaid'];
+		$booking = $this->db->table('booking')->update(['paid_unpaid' => $data['paid_unpaid']], ['id' => $data['bookingid']]);
 
-		$booking = $this->db->table('booking')->update($request , ['id' => $data['bookingid']]);
-
-		$bookingupdateid = $data['bookingid']; 
-
-		if(isset($bookingupdateid) && $this->db->transStatus() === FALSE){ 
+		if($this->db->transStatus() === FALSE){ 
 			$this->db->transRollback();
 			return false;
 		}else{
 			$this->db->transCommit();
-			return $bookingupdateid;
+			return $data['bookingid'];
 		}
 	}	
 }

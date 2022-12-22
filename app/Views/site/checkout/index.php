@@ -5,6 +5,8 @@
 	$rvbarnstall            = $cartdetail['rvbarnstall'];
 	$feed             		= $cartdetail['feed'];
 	$shaving             	= $cartdetail['shaving'];
+	
+	$subscriptionstall = in_array('5', array_column($barnstall, 'pricetype')) ? '1' : (in_array('5', array_column($rvbarnstall, 'pricetype')) ? '1' : '');
 ?>
 <section class="maxWidth">
 	<div class="pageInfo">
@@ -60,6 +62,7 @@
 								<div>
 									<?php foreach ($paymentmethod as $key => $method){ ?>
 										<?php if(in_array($userdetail['type'], explode(',', $method['type']))){ ?>
+											<?php if($method['id']=='1' && $subscriptionstall=='1') continue; ?>
 											<div class="px-3">
 												<input type="radio" id="paymentmethod<?php echo $key; ?>" data-error="firstparent" name="paymentmethodid" value="<?php echo $method['id'];?>" style="display: inline;width: auto; margin-right: 10px;"><label for="paymentmethod<?php echo $key; ?>"><?php echo $method['name']; ?></label>
 											</div>
