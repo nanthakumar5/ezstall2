@@ -552,6 +552,22 @@ class Stripe extends BaseModel
         }
     } 
 	
+    function cancelSubscription($subscriptionid)
+	{
+		try{
+			$settings = getSettings();
+			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
+			
+            $data = $stripe->subscriptions->cancel(
+                $subscriptionid
+            );
+		
+			return $data;
+        }catch(Exception $e){
+            return false;
+        }
+	}
+	
     function createSchedule($customerid, $startdate, $endate, $price, $paymentmethodid)
 	{
 		try{
@@ -730,7 +746,8 @@ class Stripe extends BaseModel
 						'enabled_events' => [
 							'payment_intent.succeeded',
 							'invoice.paid',
-							'customer.subscription.updated'
+							'customer.subscription.updated',
+							'invoice.payment_failed'
 						]
 					]);
 			

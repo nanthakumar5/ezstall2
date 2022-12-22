@@ -34,6 +34,7 @@ class Stripe extends BaseController
 		}
 		
 		$eventtype = $event->type;
+		$eventdata = $event->data->object;
 		
 		createDirectory('./assets/uploads/stripe');
 		$fp = fopen('./assets/uploads/stripe/stripe.txt', 'a');
@@ -42,14 +43,13 @@ class Stripe extends BaseController
 		fclose($fp);
 		
 		if($eventtype == 'payment_intent.succeeded'){
-			$paymentintent = $event->data->object;
-			$this->action('1', $paymentintent->id, ($paymentintent->subscription ? $paymentintent->subscription : ''));
+			$this->action('1', $eventdata->id, ($eventdata->subscription ? $eventdata->subscription : ''));
 		}elseif($eventtype == 'invoice.paid'){
-			$invoicepaid = $event->data->object;
-			$this->action('2', '', '', $invoicepaid);
+			$this->action('2', '', '', $eventdata);
 		}elseif($eventtype == 'customer.subscription.updated'){
-			$subscriptionupdated = $event->data->object;
-			$this->action('3', '', '', $subscriptionupdated);
+			$this->action('3', '', '', $eventdata);
+		}elseif($eventtype == 'invoice.payment_failed'){
+			$this->action('4', '', '', $eventdata);
 		}
 
 		http_response_code(200);
@@ -152,6 +152,9 @@ class Stripe extends BaseController
             if($scheduledsubscription){
                 $this->db->table('payment')->where(['id' => $scheduledsubscription['id']])->update(['stripe_subscription_id' => $result->id]);
             }
+	    }elseif($type=='4'){
+	        $subscription = $this->db->table('payment')->where(['stripe_subscription_id' => $result->subscription])->get()->getRowArray();
+            
 	    }
 	}
 }
