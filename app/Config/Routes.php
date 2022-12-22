@@ -112,9 +112,10 @@ $routes->group('api', function ($routes) {
 	$routes->post('addoperator', 'Api\Myaccount\Operators\Index::add');
 	$routes->post('editoperator', 'Api\Myaccount\Operators\Index::edit');
 	$routes->post('deleteoperator', 'Api\Myaccount\Operators\Index::delete');
-
+    
     //Checkout
-     $routes->get('checkout', 'Api\Checkout\Index::index');
+    $routes->post('checkout', 'Api\Checkout\Index::index'); 
+    $routes->post('checkout/action', 'Api\Checkout\Index::action'); 
 
 	//Homepage
 	$routes->get('faq', 'Api\Faq\Index::index');
