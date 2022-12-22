@@ -28,7 +28,6 @@ class Index extends BaseController
 		$yesterday 	=  date("Y-m-d", strtotime("yesterday")); 
 		$tday 		=  date("Y-m-d", strtotime("today"));
 
-
      	$date				= date('Y-m-d');
     	$userdetail 		= getSiteUserDetails();
     	$usertype 			= $userdetail['type'];
@@ -74,7 +73,6 @@ class Index extends BaseController
 	      	}
       	
 	      	$pastevent = $this->booking->getBooking('all', ['booking','event','payment','barnstall','rvbarnstall'],['userid'=> $allids, 'ltenddate' => $date, 'status' => '1']);
-
 			foreach ($pastevent as $event) {  
 	  			$countpastevent[] = $event['event_id'];
 	  			$barnstall = $event['barnstall'];
@@ -85,7 +83,6 @@ class Index extends BaseController
 	      	}
       	}
 		
-
 		$data['monthlyincome'] = $this->booking->getBooking('all', ['booking', 'event', 'payment'],['userid'=> $allids, 'status' => '1'], ['groupby' => 'DATE_FORMAT(b.created_at, "%M %Y")', 'select' => 'SUM(p.amount) as paymentamount, DATE_FORMAT(b.created_at, "%M %Y") AS month']);
 		
 		if($usertype=='2' || ($usertype=='4' && $parenttype == '2')){
@@ -97,7 +94,6 @@ class Index extends BaseController
 		}
     	
     	if($usertype=='5'){
-
     		$horseevent = $this->booking->getBooking('all', ['booking','event','payment','barnstall','rvbarnstall'],['userid'=> $allids,'ltcheck_out' => $date, 'status' => '1']);
 
     		foreach ($horseevent as $event) {  

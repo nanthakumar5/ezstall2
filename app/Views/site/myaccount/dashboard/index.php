@@ -186,10 +186,7 @@
 					<div class="card">
 						<div class="row mt-4 p-3">
 							<div class="col-md-3">
-								<img
-								src="<?php echo base_url()?>/assets/site/img/currently_available.png"
-								class="rounded d-block"
-								/>
+								<img src="<?php echo base_url()?>/assets/site/img/currently_available.png" class="rounded d-block"/>
 							</div>
 							<div class="col-md-9"> 
 								<h2><?php echo $countpayedamount;?></h2>
@@ -202,10 +199,7 @@
 					<div class="card">
 						<div class="row mt-4 p-3">
 							<div class="col-md-3">
-								<img
-								src="<?php echo base_url()?>/assets/site/img/currently_booked.png"
-								class="rounded d-block"
-								/>
+								<img src="<?php echo base_url()?>/assets/site/img/currently_booked.png" class="rounded d-block"/>
 							</div>
 							<div class="col-md-9">
 								<h2><?php echo $countcurrentevent;?></h2>
@@ -281,7 +275,7 @@
 							<tr class="monthlyincome">
 								<td><?php echo $key+1; ?></td>
 								<td><?php echo $income['month']?></td>
-								<td><?php echo $income['paymentamount'] ?></td>
+								<td><?php echo number_format($income['paymentamount'], 2); ?></td>
 								<td>
 									<button class="View">
 										<a href="<?php echo base_url();?>/myaccount/payments" >View</a>
@@ -312,9 +306,9 @@
 					</thead>
 					<tbody>
 						<?php foreach ($upcomingevents as $value){ 
-						$url = ($value['type']=='2') ? 'facility' : 'events'; ?>
+							$url = ($value['type']=='2') ? 'facility' : 'events'; ?>
 							<tr class="upcoming"> 
-								<td><?php echo  date('m-d-Y',strtotime($value['start_date'])); ?></td>
+								<td><?php echo  $value['type']=='2' ? '-' : date('m-d-Y',strtotime($value['start_date'])); ?></td>
 								<td><?php echo $value['name']; ?></td>
 								<td>
 									<button class="View">

@@ -14,7 +14,6 @@ class Stripe extends BaseModel
 		$email 					= $userdetails['email'];
 		$price 					= isset($requestData['amount']) ? $requestData['amount'] * 100 : $requestData['price'] * 100;
 		$transactionfee 		= isset($requestData['transactionfee']) ? $requestData['transactionfee'] * 100 : 0;
-        $currency 				= "usd";
 		
 		$customer = $this->customer();
 		if($customer){
@@ -28,14 +27,14 @@ class Stripe extends BaseModel
 				}
 			}
 		
-			$paymentintents = $this->createPaymentIntents($customer, $price, $currency, $transactionfee, (isset($stripeaccountid) ? $stripeaccountid : ''));				
+			$paymentintents = $this->createPaymentIntents($customer, $price, $transactionfee, (isset($stripeaccountid) ? $stripeaccountid : ''));				
 			if($paymentintents){
 				$paymentData = array(
 					'user_id' 					=> $userid,
 					'name' 						=> $name,
 					'email' 					=> $email,
 					'amount' 					=> $price/100,
-					'currency' 					=> $currency,
+					'currency' 					=> getStripeCurrency(),
 					'stripe_paymentintent_id' 	=> $paymentintents->id,
 					'transfer' 					=> (isset($stripeaccountid) ? 1 : 0),
 					'type' 						=> '1',
@@ -371,7 +370,7 @@ class Stripe extends BaseModel
         }
     }
 	
-	function createPaymentIntents($customerid, $price, $currency, $transactionfee=0, $accountid='')
+	function createPaymentIntents($customerid, $price, $transactionfee=0, $accountid='')
     {
 		try{
 			$settings = getSettings();
@@ -380,7 +379,7 @@ class Stripe extends BaseModel
 			$createdata = [
 				"customer" => $customerid,
 				'amount' => $price,
-				'currency' => $currency,
+				'currency' => getStripeCurrency(),
 				'payment_method_types' => ['card'],
 			];
 			
@@ -476,11 +475,10 @@ class Stripe extends BaseModel
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
 			
 			$amount = ($planprice * 100);
-			$currency = "usd";
 			
 			$data = $stripe->prices->create([
 				'unit_amount' => $amount,
-				'currency' => $currency,
+				'currency' => getStripeCurrency(),
 				//'recurring' => ['interval' => $planinterval],
 				'recurring' => ['interval' => 'day'],
 				'product' => $productid
@@ -707,12 +705,12 @@ class Stripe extends BaseModel
 
 			$settings = getSettings();
 			$stripe = new \Stripe\StripeClient($settings['stripeprivatekey']);
-				$currency = "usd";
-	            $data = $stripe->transfers->create([
-	  				'amount' 			=> $amount * 100,
-	  				'currency' 			=> $currency,
-	  				'destination' 		=> $accountid
-				]);
+			
+			$data = $stripe->transfers->create([
+				'amount' 			=> $amount * 100,
+				'currency' 			=> getStripeCurrency(),
+				'destination' 		=> $accountid
+			]);
 
 			return ['status' => '1', 'message' => '', 'result' => $data];
         }catch(Exception $e){

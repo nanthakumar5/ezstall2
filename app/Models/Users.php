@@ -21,7 +21,7 @@ class Users extends BaseModel
 		}
 			
 		$query = $this->db->table('users u');
-		if(in_array('payment', $querydata)) $query->join('payment p', 'p.id =u.subscription_id' , 'left');
+		if(in_array('payment', $querydata)) $query->join('payment p', 'p.id=u.subscription_id and p.status="1"' , 'left');
 
 				
 		if(isset($extras['select'])) 					$query->select($extras['select']);

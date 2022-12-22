@@ -186,6 +186,11 @@ function createDirectory($path)
 	}
 }
 
+function getStripeCurrency()
+{
+	return 'inr';
+}
+
 function send_mail($to,$subject,$message,$attachment='')
 {
 	$email = \Config\Services::email();
