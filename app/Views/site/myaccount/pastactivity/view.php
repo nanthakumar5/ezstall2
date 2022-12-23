@@ -110,9 +110,9 @@
 								<table class="table-hover table-striped table-light table">	
 								<?php 	
 									$barnname = '';
-									foreach ($barnstalls as $barnstall) {
-										if($barnname!=$barnstall['barnname']){
-											$barnname = $barnstall['barnname']; 
+									foreach ($barnstalls as $barnstalldata) {
+										if($barnname!=$barnstalldata['barnname']){
+											$barnname = $barnstalldata['barnname']; 
 								?>							
 											<thead>
 												<tr>
@@ -123,25 +123,20 @@
 										<?php 
 										} 										
 										$pricetype = '';
-										if($barnstall['price_type']!=0){ 
-											$pricetype = '<span class="pricelist_tagline">('.$pricelists[$barnstall['price_type']].')</span>'; 
+										if($barnstalldata['price_type']!=0){ 
+											$pricetype = '<span class="pricelist_tagline">('.$pricelists[$barnstalldata['price_type']].')</span>'; 
 										}	
 										?>
 											<tbody>
 												<tr>
-													<td><?php echo $barnstall['stallname'].$pricetype; ?></td>
-													<td><?php echo '('.$currencysymbol.$barnstall['price'].'x'.$barnstall['quantity'].')'.$currencysymbol.$barnstall['total']; ?></td>
+													<td><?php echo $barnstalldata['stallname'].$pricetype; ?></td>
+													<td><?php echo '('.$currencysymbol.$barnstalldata['price'].'x'.$barnstalldata['quantity'].')'.$currencysymbol.$barnstalldata['total']; ?></td>
 												</tr>
-												<?php if($barnstall['price_type']==5){ ?>
+												<?php if($barnstalldata['price_type']==5){ ?>
 													<tr>
-														<td><span class="subscriptionprice_date"><?php echo 'Date : ('.formatdate($barnstall['subscriptionstartdate'], 1).')'; ?></span></td>
+														<td><span class="subscriptionprice_date"><?php echo 'Date : ('.formatdate($barnstalldata['subscriptionstartdate'], 1).')'; ?></span></td>
 														<td>
-															<span class="subscriptionprice_amount"><?php echo $currencysymbol.$barnstall['subscription_price']; ?></span>
-															<?php if($barnstall['subscription_status']=='1'){ ?>
-																<a href="javascript:void(0);" class="btn btn-primary cancelsubscription" data-bookingid="<?php echo $bookingid; ?>" data-paymentid="<?php echo $barnstall['payment_id']; ?>">Cancel</a>
-															<?php }else{ ?>
-																<a href="javascript:void(0);" class="btn btn-danger">Cancelled</a>
-															<?php } ?>
+															<span class="subscriptionprice_amount"><?php echo $currencysymbol.$barnstalldata['subscription_price']; ?></span>
 														</td>
 													</tr>
 												<?php } ?>
@@ -150,18 +145,18 @@
 								</table>
 							<?php } ?>
 
-							<?php if(!empty($rvbarnstall)){ ?>
+							<?php if(!empty($rvbarnstalldata)){ ?>
 								<h5 class="fw-bold text-muted">Campsites</h5>
 								<table class="table-hover table-striped table-light table">
 								<?php 	
 									$rvbarnstalls = '';
-									foreach ($rvbarnstall as $rvbarnstall) {
-										$rvstallname = $rvbarnstall['stallname'];
-										$rvprice     = $rvbarnstall['price'];
-										$rvtotal     = $rvbarnstall['total'];
-										$rvquantity  = $rvbarnstall['quantity'];
-										if($rvbarnstall!=$rvbarnstall['barnname']){
-											$rvbarnstalls = $rvbarnstall['barnname']; 
+									foreach ($rvbarnstall as $rvbarnstalldata) {
+										$rvstallname = $rvbarnstalldata['stallname'];
+										$rvprice     = $rvbarnstalldata['price'];
+										$rvtotal     = $rvbarnstalldata['total'];
+										$rvquantity  = $rvbarnstalldata['quantity'];
+										if($rvbarnstalls!=$rvbarnstalldata['barnname']){
+											$rvbarnstalls = $rvbarnstalldata['barnname']; 
 								?>
 											<thead>
 													<tr>
@@ -172,8 +167,8 @@
 										<?php 
 										}
 										$pricetype = '';
-										if($rvbarnstall['price_type']!=0){ 
-											$pricetype = '<span class="pricelist_tagline">('.$pricelists[$rvbarnstall['price_type']].')</span>'; 
+										if($rvbarnstalldata['price_type']!=0){ 
+											$pricetype = '<span class="pricelist_tagline">('.$pricelists[$rvbarnstalldata['price_type']].')</span>'; 
 										}
 										?>
 										<tbody>
@@ -196,10 +191,10 @@
 										</tr>
 									</thead>
 									<tbody>
-									<?php foreach ($feed as $feed){ ?>
+									<?php foreach ($feed as $feeddata){ ?>
 										<tr>
-											<td><?php echo $feed['productname'];?></td>
-											<td><?php echo '('.$currencysymbol.$feed['price'].'x'.$feed['quantity'].')'.$currencysymbol.$feed['total']?></td>
+											<td><?php echo $feeddata['productname'];?></td>
+											<td><?php echo '('.$currencysymbol.$feeddata['price'].'x'.$feeddata['quantity'].')'.$currencysymbol.$feeddata['total']?></td>
 										</tr>
 									<?php } ?>
 									</tbody>
@@ -216,10 +211,10 @@
 										</tr>
 									</thead>
 									<tbody>
-									<?php foreach ($shaving as $shaving){ ?>
+									<?php foreach ($shaving as $shavingdata){ ?>
 										<tr>
-											<td><?php echo $shaving['productname']?></td>
-											<td><?php echo '('.$currencysymbol.$shaving['price'].'x'.$shaving['quantity'].')'.$currencysymbol.$shaving['total']?></td>
+											<td><?php echo $shavingdata['productname']?></td>
+											<td><?php echo '('.$currencysymbol.$shavingdata['price'].'x'.$shavingdata['quantity'].')'.$currencysymbol.$shavingdata['total']?></td>
 										</tr>
 									<?php } ?>
 									</tbody>
