@@ -81,14 +81,14 @@ class Booking extends BaseModel
 		if(isset($requestdata['gtenddate'])){
 			$query->groupStart();
 				$query->groupStart()->where(['b.type' => '1', 'e.type' => '1', 'e.end_date >=' => date('Y-m-d', strtotime($requestdata['gtenddate'])), 'b.check_out >=' => date('Y-m-d', strtotime($requestdata['gtenddate']))])->groupEnd();
-				$query->orGroupStart()->where(['b.type' => '2', 'e.type' => '2', 'e.end_date >=' => date('Y-m-d', strtotime($requestdata['gtenddate'])), 'b.check_out >=' => date('Y-m-d', strtotime($requestdata['gtenddate']))])->groupEnd();
+				$query->orGroupStart()->where(['b.type' => '2', 'e.type' => '2', 'b.check_out >=' => date('Y-m-d', strtotime($requestdata['gtenddate']))])->groupEnd();
 			$query->groupEnd();
 		}
 		
 		if(isset($requestdata['ltenddate'])){
 			$query->groupStart();
 				$query->groupStart()->where(['b.type' => '1', 'e.type' => '1', 'e.end_date <' => date('Y-m-d', strtotime($requestdata['ltenddate'])), 'b.check_out <' => date('Y-m-d', strtotime($requestdata['ltenddate']))])->groupEnd();
-				$query->orGroupStart()->where(['b.type' => '2', 'e.type' => '2', 'e.end_date <' => date('Y-m-d', strtotime($requestdata['ltenddate'])), 'b.check_out <' => date('Y-m-d', strtotime($requestdata['ltenddate']))])->groupEnd();
+				$query->orGroupStart()->where(['b.type' => '2', 'e.type' => '2', 'b.check_out <' => date('Y-m-d', strtotime($requestdata['ltenddate']))])->groupEnd();
 			$query->groupEnd();
 		}
 		
