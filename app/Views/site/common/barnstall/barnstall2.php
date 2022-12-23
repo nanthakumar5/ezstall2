@@ -713,7 +713,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 				'<?php echo base_url()."/cart"; ?>',
 				data,
 				{ 
-					//asynchronous : 1,
+					asynchronous : 1,
 					beforesend: function() {
 						$('.eventbarnstallwrapper').append('<div class="loader_wrapper"><img src="<?php echo base_url()."/assets/site/img/loading.svg"; ?>"></div>');
 					},
