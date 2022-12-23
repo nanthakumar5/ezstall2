@@ -36,15 +36,12 @@ class Index extends BaseController
         );
 
         if ($validation->withRequest($this->request)->run()) {
+			$request 		= service('request');
 
-		$settings		= getSettings();
-		$request 		= service('request');
+			$paymentmethod	= $this->paymentmethod->getPaymentmethod('all', ['paymentmethod']);
+		    $condition 			= ($post['user_id']!='') ? ['user_id' => $post['user_id'], 'ip' => $request->getIPAddress()] : ['user_id' => 0, 'ip' =>$request->getIPAddress()];
 
-		$paymentmethod	= $this->paymentmethod->getPaymentmethod('all', ['paymentmethod']);
-
-	    $condition 			= ($post['user_id']!='') ? ['user_id' => $post['user_id'], 'ip' => $request->getIPAddress()] : ['user_id' => 0, 'ip' =>$request->getIPAddress()];
-
-		$result         = $this->cart->getCart('all', ['cart', 'event', 'barn', 'stall', 'product', 'tax'], $condition);
+			$result         = $this->cart->getCart('all', ['cart', 'event', 'barn', 'stall', 'product', 'tax'], $condition);
 
 		if($result){
 			$setting 				= getSettings();
@@ -166,6 +163,7 @@ class Index extends BaseController
 				'timer' 			=> $timer,
 				'count' 			=> $count,
 				'paymentmethod' 	=> $paymentmethod,
+				'stripepublickey' 	=> $setting['stripepublickey'],
 			];
 
 			if(count($result)>0){

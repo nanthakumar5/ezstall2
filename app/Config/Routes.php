@@ -50,6 +50,9 @@ $routes->group('api', function ($routes) {
 	$routes->post('pastevents', 'Api\Event\Index::pastevents');
 	$routes->post('viewallevents', 'Api\Event\Index::viewallevents');
 
+    // Operator Lockunlock
+    $routes->post('lockunlock', 'Api\Myaccount\Dashboard\Index::lockunlock');
+
 	//Event
 	$routes->get('eventlist', 'Api\Event\Index::listandsearch');
 	$routes->get('eventdetail/(:num)', 'Api\Event\Index::detail/$1');
@@ -116,6 +119,7 @@ $routes->group('api', function ($routes) {
     //Checkout
     $routes->post('checkout', 'Api\Checkout\Index::index'); 
     $routes->post('checkout/action', 'Api\Checkout\Index::action'); 
+    $routes->post('stripepayment', 'Api\Stripe\Index::stripepayment'); 
 
 	//Homepage
 	$routes->get('faq', 'Api\Faq\Index::index');
