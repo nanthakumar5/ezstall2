@@ -79,11 +79,11 @@ class Index extends BaseController
 	  			$rvbarnstall = $event['rvbarnstall'];
 	  			if(count($barnstall) > 0) $countpaststall += count(array_column($barnstall, 'stall_id'));
 	  			if(count($rvbarnstall) > 0) $countpaststall += count(array_column($rvbarnstall, 'stall_id'));
-	  			$countpastamount += $event['amount'];
+	  			$countpastamount += ($event['amount']-$event['transaction_fee']);
 	      	}
       	}
 		
-		$data['monthlyincome'] = $this->booking->getBooking('all', ['booking', 'event', 'payment'],['userid'=> $allids, 'status' => '1'], ['groupby' => 'DATE_FORMAT(b.created_at, "%M %Y")', 'select' => 'SUM(p.amount) as paymentamount, DATE_FORMAT(b.created_at, "%M %Y") AS month']);
+		$data['monthlyincome'] = $this->booking->getBooking('all', ['booking', 'event', 'payment'],['userid'=> $allids, 'status' => '1'], ['groupby' => 'DATE_FORMAT(b.created_at, "%M %Y")', 'select' => '(SUM(b.amount)-SUM(b.transaction_fee)) as paymentamount, DATE_FORMAT(b.created_at, "%M %Y") AS month']);
 		
 		if($usertype=='2' || ($usertype=='4' && $parenttype == '2')){
 			$data['upcomingevents'] = $this->event->getEvent('all', ['event'],['userids' => $allids, 'fenddate'=> $date, 'status' => ['1']]);

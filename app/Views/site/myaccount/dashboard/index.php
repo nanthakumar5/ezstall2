@@ -189,7 +189,7 @@
 								<img src="<?php echo base_url()?>/assets/site/img/currently_available.png" class="rounded d-block"/>
 							</div>
 							<div class="col-md-9"> 
-								<h2><?php echo $countpayedamount;?></h2>
+								<h2>$<?php echo $countpayedamount;?></h2>
 								<p>Total Paid</p>
 							</div>
 						</div>
