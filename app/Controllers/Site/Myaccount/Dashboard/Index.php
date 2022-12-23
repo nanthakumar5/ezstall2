@@ -48,21 +48,20 @@ class Index extends BaseController
       	}
       	
       	if($usertype=='2' || $usertype =='3' || ($usertype=='4' && $parenttype == '2') || ($usertype=='4' && $parenttype == '3')){
-	  		foreach ($currentreservation as $event) {  
-	  			foreach ($event['barn'] as $barn) {
+	  		foreach($currentreservation as $event){  
+	  			foreach($event['barn'] as $barn){
 					$countcurrentstall += count(array_column($barn['stall'], 'id'));
 				}
+				
 				if($event['rvbarn']!=''){
-					foreach ($event['rvbarn'] as $rvbarn) {
+					foreach($event['rvbarn'] as $rvbarn){
 						$countcurrentrvlots += count(array_column($rvbarn['rvstall'], 'id'));
 					}
 				}
 
-
 				$bookedevents = $this->booking->getBooking('all', ['users','booking','event','barnstall','rvbarnstall'],['eventid'=> $event['id'], 'status' => '1']);
 
-				if(count($bookedevents) > 0){
-					
+				if(count($bookedevents) > 0){					
 					foreach($bookedevents as $bookedevent){
 						$barnstall = $bookedevent['barnstall'];
 						$rvbarnstall = $bookedevent['rvbarnstall'];
@@ -72,8 +71,8 @@ class Index extends BaseController
 				}
 	      	}
       	
-	      	$pastevent = $this->booking->getBooking('all', ['booking','event','payment','barnstall','rvbarnstall'],['userid'=> $allids, 'ltenddate' => $date, 'status' => '1']);
-			foreach ($pastevent as $event) {  
+	      	$pastevent = $this->booking->getBooking('all', ['booking','event','payment','barnstall','rvbarnstall'], ['userid'=> $allids, 'ltenddate' => $date, 'status' => '1']);
+			foreach($pastevent as $event){  
 	  			$countpastevent[] = $event['event_id'];
 	  			$barnstall = $event['barnstall'];
 	  			$rvbarnstall = $event['rvbarnstall'];
