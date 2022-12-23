@@ -35,6 +35,7 @@ class Index extends BaseController
 		$data['paymentstatus']   = $this->config->paymentstatus;
 		$data['usertype']        = $this->config->usertype;
 		$data['currencysymbol']  = $this->config->currencysymbol;
+		$data['userdetail']		 = getSiteUserDetails();
 
     	return view('site/myaccount/paymentinfo/index',$data);
 
@@ -56,6 +57,8 @@ class Index extends BaseController
 		$data['usertype']        = $this->config->usertype;
 		$data['paymenttype']     = $this->config->paymenttype;
 		$data['currencysymbol']  = $this->config->currencysymbol;
+		$data['userdetail']		 = getSiteUserDetails();
+		
 		return view('site/myaccount/paymentinfo/view', $data);
 	}	
 }

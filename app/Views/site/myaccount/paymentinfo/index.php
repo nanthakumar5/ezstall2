@@ -1,6 +1,6 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
-
+<?php $currentusertype = $userdetail['type']; ?>
 <h2 class="fw-bold mb-4">Payment Details</h2>
 <section class="maxWidth eventPagePanel">
 <?php if(!empty($payments)) {  ?>
@@ -29,7 +29,7 @@
 	<div class="col-md-2">
 	<div>
 	<p class="mb-0 text-sm fs-7 fw-600">Amout:</p>
-	<p class="mb-0 fs-7"><?php echo $currencysymbol.($data['status']=='1' ? $data['amount'] : $data['refund_amount']);?></p>
+	<p class="mb-0 fs-7"><?php echo $currencysymbol.($data['status']=='1' ? ($currentusertype=='5' ? $data['amount'] : $data['amount']-$data['transaction_fee']) : $data['refund_amount']);?></p>
 	</div>
 	</div>
 	<div class="col-md-2">

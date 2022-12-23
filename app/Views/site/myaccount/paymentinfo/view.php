@@ -1,5 +1,6 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
+<?php $currentusertype = $userdetail['type']; ?>
 <?php
       $transactionid  	= isset($result['id']) ? $result['id'] : '';
       $name       	    = isset($result['username']) ? $result['username'] : '';
@@ -7,7 +8,7 @@
       $lastname         = isset($result['lastname']) ? $result['lastname'] : '';
       $email          	= isset($result['email']) ? $result['email'] : '';
       $type           	= isset($result['type']) ? $paymenttype[$result['type']] : '';
-      $amount         	= isset($result['amount']) ? $result['amount'] : '';
+      $amount         	= isset($result['amount']) ? ($currentusertype=='5' ? $result['amount'] : $result['amount']-$result['transaction_fee']) : '';
       $plan_start     	= isset($result['plan_period_start']) ? formatdate($result['plan_period_start'], 1) : '';
       $plan_end       	= isset($result['plan_period_start']) ? formatdate($result['plan_period_start'], 1) : '';
       $created        	= isset($result['created']) ? formatdate($result['created'], 2) : '';
