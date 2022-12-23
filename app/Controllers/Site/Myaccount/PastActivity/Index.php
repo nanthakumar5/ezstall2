@@ -54,7 +54,8 @@ class Index extends BaseController
 			$this->session->setFlashdata('danger', 'No Record Found.');
 			return redirect()->to(base_url().'/myaccount/pastactivity'); 
 		}
-		$data['usertype'] = $this->config->usertype;
+		$data['usertype'] 	= $this->config->usertype;
+		$data['userdetail']	= getSiteUserDetails();
 		return view('site/myaccount/pastactivity/view', $data);
 	}
 }

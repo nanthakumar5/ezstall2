@@ -1,5 +1,6 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content'); ?>
+<?php $currentusertype = $userdetail['type']; ?>
 <?php
 	$bookingid          = isset($result['id']) ? $result['id'] : '';
 	$firstname          = isset($result['firstname']) ? $result['firstname'] : '';
@@ -241,17 +242,17 @@
 						<div class="summary-sec">
 							<h5 class="fw-bold">Cart Summary</h5>
 							<div class="summaryprc"><p><b>Total</b></p> <p align="right"><?php echo $currencysymbol.$result['price'];?></p></div>
-						<div class="summaryprc"><p><b>Transaction Fees</b></p><p align="right"><?php echo $currencysymbol.$result['transaction_fee'];?></p></div>
-						<?php 
-						if($result['cleaning_fee']!=""){?>
-						<div class="summaryprc"><p><b>Cleaning Fee</b></p><p align="right"><?php echo $currencysymbol.$result['cleaning_fee'];?></div>
-						<?php } ?>
-						<?php 
-						if($result['event_tax']!='0'){?>
-						<div class="summaryprc"><p><b>Tax</b></p><p align="right"><?php echo $currencysymbol.$result['event_tax'];?></div>
-						<?php } ?>
+							<?php if($currentusertype=='5'){ ?>
+								<div class="summaryprc"><p><b>Transaction Fees</b></p><p align="right"><?php echo $currencysymbol.$result['transaction_fee'];?></p></div>
+							<?php } ?>
+							<?php if($result['cleaning_fee']!=""){?>
+								<div class="summaryprc"><p><b>Cleaning Fee</b></p><p align="right"><?php echo $currencysymbol.$result['cleaning_fee'];?></div>
+							<?php } ?>
+							<?php if($result['event_tax']!='0'){?>
+								<div class="summaryprc"><p><b>Tax</b></p><p align="right"><?php echo $currencysymbol.$result['event_tax'];?></div>
+							<?php } ?>
 						</div>
-						<div class="summaryprcy"><p><b>Amount</b></p><p align="right"><?php echo $currencysymbol.$result['amount'];?></p></div>						
+						<div class="summaryprcy"><p><b>Amount</b></p><p align="right"><?php echo $currencysymbol.($currentusertype=='5' ? $result['amount'] : $result['amount']-$result['transaction_fee']);?></p></div>						
 					</div>
 				</div>
 			</div>

@@ -736,7 +736,7 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 							$('.minicart-wrapper').addClass('displaynone');
 							$('.minicart').text(0);
 							
-							$('.checkout').empty();
+							$('.checkout_wrapper').empty();
 						}
 						
 						$('.loader_wrapper').remove();

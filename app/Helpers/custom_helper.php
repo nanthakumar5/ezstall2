@@ -366,8 +366,7 @@ function getCart($type=''){
 				$price += $singletotal;
 			}
 		}
-
-
+		
 		$barnstallcolumn = array_column($barnstall, 'barn_id');
 		array_multisort($barnstallcolumn, SORT_ASC, $barnstall);
 		$rvbarnstallcolumn = array_column($rvbarnstall, 'barn_id');
@@ -376,6 +375,7 @@ function getCart($type=''){
 		array_multisort($feedcolumn, SORT_ASC, $feed);
 		$shavingcolumn = array_column($shaving, 'product_id');
 		array_multisort($shavingcolumn, SORT_ASC, $shaving);
+		
 		return [
 			'event_id'			=> $event_id, 
 			'event_name'		=> $event_name, 

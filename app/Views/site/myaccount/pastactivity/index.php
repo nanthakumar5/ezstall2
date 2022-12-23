@@ -1,5 +1,6 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
+<?php $currentusertype = $userdetail['type']; ?>
 <div class="dFlexComBetween eventTP flex-wrap">
 	<h2 class="fw-bold mb-4">Past Reservation</h2>
 </div>
@@ -43,7 +44,7 @@
 					</div>
 					<div class="ticket_content col-md-2 mx-2">
 						<p class="ticket_title_tag">Cost</p>
-						<p class="ticket_values ticket_checkinout"><?php echo $currencysymbol.$data['amount'];?></p>
+						<p class="ticket_values ticket_checkinout"><?php echo $currencysymbol.($currentusertype=='5' ? $data['amount'] : $data['amount']-$data['transaction_fee']); ?></p>
 					</div>
 					<div class="ticket_content col-md-2 mx-2">
 						<p class="ticket_title_tag">Special Request</p>

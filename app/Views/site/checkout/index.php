@@ -143,8 +143,8 @@
 									<b>Number Of Feed (<?php echo count($feed); ?>)</b>
 									<p>
 									<?php 
-									foreach ($feed as $feed) { 
-										echo '<p>'.$feed['product_name'].'</p>';
+									foreach ($feed as $feeddata) { 
+										echo '<p>'.$feeddata['product_name'].'</p>';
 									}
 									?>
 									</p>
@@ -155,8 +155,8 @@
 									<b>Number Of Shaving (<?php echo count($shaving); ?>)</b>
 									<p>
 									<?php 
-									foreach ($shaving as $shaving) { 
-										echo '<p>'.$shaving['product_name'].'</p>';
+									foreach ($shaving as $shavingdata) { 
+										echo '<p>'.$shavingdata['product_name'].'</p>';
 									}
 									?>
 									</p>
