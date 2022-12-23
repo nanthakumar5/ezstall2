@@ -8,14 +8,24 @@ class Stripe extends BaseModel
 	{
 		$this->stripewebhook();
 		
-		$userdetails			= getSiteUserDetails();
-		$userid 				= $userdetails['id'];
-		$name 					= $userdetails['name'];
-		$email 					= $userdetails['email'];
+		if(isset($requestData['api']) && isset($requestData['userid'])){
+			$user					= $this->db->table('users')->where('id', $requestData['userid'])->get()->getRowArray();
+			$userid 				= $user['id'];
+			$name 					= $user['name'];
+			$email 					= $user['email'];
+			$stripecustomerid 		= $user['stripe_customer_id'];
+		}else{
+			$userdetails			= getSiteUserDetails();
+			$userid 				= $userdetails['id'];
+			$name 					= $userdetails['name'];
+			$email 					= $userdetails['email'];
+			$stripecustomerid 		= $userdetails['stripe_customer_id'];
+		}
+		
 		$price 					= isset($requestData['amount']) ? $requestData['amount'] * 100 : $requestData['price'] * 100;
 		$transactionfee 		= isset($requestData['transactionfee']) ? $requestData['transactionfee'] * 100 : 0;
 		
-		$customer = $this->customer();
+		$customer = $this->customer($userid, $name, $email, $stripecustomerid);
 		if($customer){
 			if(isset($requestData['eventuserid'])){
 				$user = $this->db->table('users')->where('id', $requestData['eventuserid'])->get()->getRowArray();
@@ -62,14 +72,24 @@ class Stripe extends BaseModel
 	{
 		$this->stripewebhook();
 		
-		$userdetails			= getSiteUserDetails();
-		$userid 				= $userdetails['id'];
-		$name 					= $userdetails['name'];
-		$email 					= $userdetails['email'];
+		if(isset($requestData['api']) && isset($requestData['userid'])){
+			$user					= $this->db->table('users')->where('id', $requestData['userid'])->get()->getRowArray();
+			$userid 				= $user['id'];
+			$name 					= $user['name'];
+			$email 					= $user['email'];
+			$stripecustomerid 		= $user['stripe_customer_id'];
+		}else{
+			$userdetails			= getSiteUserDetails();
+			$userid 				= $userdetails['id'];
+			$name 					= $userdetails['name'];
+			$email 					= $userdetails['email'];
+			$stripecustomerid 		= $userdetails['stripe_customer_id'];
+		}
+		
 		$planid 				= $requestData['plan_id'];
 		$stripepaymentmethodid 	= $requestData['stripe_payment_method_id'];
 		
-		$customer 			= $this->customer();
+		$customer 			= $this->customer($userid, $name, $email, $stripecustomerid);
 		$productandprice 	= $this->productandprice('1', $planid);
 		
 		if ($customer && $productandprice){
@@ -110,12 +130,21 @@ class Stripe extends BaseModel
 	
 	function stripescheduledpayment($requestData, $extras=[])
 	{
-		$userdetails			= getSiteUserDetails();
-		$userid 				= $userdetails['id'];
-		$name 					= $userdetails['name'];
-		$email 					= $userdetails['email'];
+		if(isset($requestData['api']) && isset($requestData['userid'])){
+			$user					= $this->db->table('users')->where('id', $requestData['userid'])->get()->getRowArray();
+			$userid 				= $user['id'];
+			$name 					= $user['name'];
+			$email 					= $user['email'];
+			$stripecustomerid 		= $user['stripe_customer_id'];
+		}else{
+			$userdetails			= getSiteUserDetails();
+			$userid 				= $userdetails['id'];
+			$name 					= $userdetails['name'];
+			$email 					= $userdetails['email'];
+			$stripecustomerid 		= $userdetails['stripe_customer_id'];
+		}
 		
-		$customer 				= $this->customer();
+		$customer 				= $this->customer($userid, $name, $email, $stripecustomerid);
 		$interval				= 'day';
 		$attachcard				= 1;
 		
@@ -189,15 +218,8 @@ class Stripe extends BaseModel
 		}
 	}
 	
-	function customer()
+	function customer($userid, $name, $email, $stripecustomerid)
 	{
-		$userdetails			= getSiteUserDetails();
-		
-		$userid 				= $userdetails['id'];
-		$name 					= $userdetails['name'];
-		$email 					= $userdetails['email'];
-		$stripecustomerid 		= $userdetails['stripe_customer_id'];
-		
 		if($stripecustomerid==''){
 			$customer 			= $this->createCustomer($userid, $name, $email);
 			$customerid 		= $customer->id;

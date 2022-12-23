@@ -487,16 +487,9 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			charging_flag += '<option value='+i+' '+selected+'>'+v+'</option>';
 		})
 	
-		var occupiedreserved = 0;
 		var availability = '<a href="javascript:void(0);" class="dash-stall-remove fs-7 stallremovebtn_'+barnstallname+'" data-barnIndex="'+barnIndex+'"><i class="fas fa-times text-white"></i></a>';
-		if($.inArray(stallId, occupied) !== -1){
-			availability = '<span class="red-box"></span>';
-			occupiedreserved = 1;
-		}
-		if($.inArray(stallId, reserved) !== -1){
-			availability = '<span class="yellow-box"></span>';
-			occupiedreserved = 1;
-		}
+		if($.inArray(stallId, occupied) !== -1)	availability = '<span class="red-box"></span>';
+		if($.inArray(stallId, reserved) !== -1)	availability = '<span class="yellow-box"></span>';
 		
 		var blockedunblockedtext = '';
 		var blockedunblockedstyle = '';
@@ -517,14 +510,12 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 								<input type="checkbox" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : "")+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> Reserved\
 							</div>';
 		}else{
-			if(occupiedreserved==1){
-				blockunblock =	'';
-			}else{
-				availability =	'';
-				blockunblock = 	'<div class="col-md-11 mb-2">\
-									<input type="checkbox" data-stallid="'+fstallId+'" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : (block_unblock=="2" ? "checked disabled" : ""))+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> '+(block_unblock=="2" ? "Reserved" : "Add this stall for facility event")+'\
-								</div>';
-			}
+			availability =	'';
+			if($.inArray(fstallId, occupied) !== -1)			availability = '<span class="red-box"></span>';
+			else if($.inArray(fstallId, reserved) !== -1)		availability = '<span class="yellow-box"></span>';
+			else blockunblock = 	'<div class="col-md-11 mb-2">\
+										<input type="checkbox" data-stallid="'+fstallId+'" class="block_unblock" id="stall_'+barnstallname+'_'+stallIndex+'_block_unblock" '+(block_unblock=="1" ? "checked" : (block_unblock=="2" ? "checked disabled" : ""))+' name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][block_unblock]" value="1"> '+(block_unblock=="2" ? "Reserved" : "Add this stall for facility event")+'\
+									</div>';
 		}
 		
 		var stallbox = '';
