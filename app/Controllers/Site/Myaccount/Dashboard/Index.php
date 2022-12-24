@@ -140,10 +140,10 @@ class Index extends BaseController
     		if(isset($requestData['lockunlock']) || isset($requestData['dirtyclean'])){
     			$result = $this->booking->updatedata($requestData);
 				
-    			$unlocksms = $this->booking->getBooking('row', ['users', 'event', 'booking', 'cleanbookingdetails', 'cleanstall'], ['stallid' => [$result]]);
-    			if($unlocksms['notification_flag']=='1' && $requestData['lock_dirty_status']=='1'){
-					if($unlocksms['lockunlock']=='1') send_emailsms_template('6', ['mobile' => $unlocksms['mobile'], 'userid' => $unlocksms['user_id'], 'stallsname' => $unlocksms['stallsname']]);
-					if($unlocksms['dirtyclean']=='1') send_emailsms_template('7', ['mobile' => $unlocksms['mobile'], 'userid' => $unlocksms['user_id'], 'stallsname' => $unlocksms['stallsname']]);					
+    			$booking = $this->booking->getBooking('row', ['users', 'event', 'booking', 'cleanbookingdetails', 'cleanstall'], ['stallid' => [$result]]);
+    			if($booking['notification_flag']=='1' && $requestData['lock_dirty_status']=='1'){
+					if($booking['lockunlock']=='1') send_emailsms_template('6', ['mobile' => $booking['mobile'], 'userid' => $booking['user_id'], 'stallsname' => $booking['stallsname']]);
+					if($booking['dirtyclean']=='1') send_emailsms_template('7', ['mobile' => $booking['mobile'], 'userid' => $booking['user_id'], 'stallsname' => $booking['stallsname']]);					
     			}
 	    	}
 

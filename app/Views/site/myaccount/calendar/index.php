@@ -1,10 +1,11 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
+	<h2 class="fw-bold mb-1 mt-2">Facility Calendar</h2>
 	<section>
 		<div class="row">
-			<div class="col-md-12 my-2">
+			<div class="col-md-12 mb-5 mt-2">
 				<div class="form-group">
-					<label>Facility</label>		
+					<label class="mb-1">Facility</label>		
 					<?php echo form_dropdown('facility_id', $facilitylist, '', ['class' => 'form-control facilityid']); ?>									
 				</div>
 			</div>

@@ -6,6 +6,7 @@ $checksubscriptiontype 			= $checksubscription['type'];
 $checksubscriptionproducer 		= $checksubscription['facility'];
 $currentdate 					= date("Y-m-d");
 ?>
+<h2 class="fw-bold mb-4 mt-2">Facility</h2>
 <section class="maxWidth eventPagePanel mt-2">
 	<?php if($usertype !='4'){ ?>
 		<a class="btn-custom-black" href="<?php echo base_url().'/myaccount/facility/add'; ?>">Add Facility</a>
@@ -27,30 +28,30 @@ $currentdate 					= date("Y-m-d");
 				<div class="dash-event">
 					<a href="<?php echo base_url().'/myaccount/facility/view/'.$data['id']; ?>" 
 						class="dash-view-event fs-7 mx-2">
-						View <i class="far fa-eye i-white-icon"></i>
+						View
 					</a>
 					<?php if($usertype !='4'){ ?>
 						<a href="<?php echo base_url().'/myaccount/facility/edit/'.$data['id']; ?>" 
 							class="dash-edit-event fs-7 mx-2">
-							Edit <i class="far fa-edit i-white-icon"></i>
+							Edit
 						</a>
 						
 						<?php $occupied = getOccupied($data['id']); ?>
 						<?php if(count($occupied)==0){ ?>
 							<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-2 delete">
-								Delete <i class="far fa-trash-alt i-white-icon"></i>
+								Delete
 							</a>
 						<?php } ?>
 				    <?php } ?>
 					<p class="mt-3"></p>
 				    <a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
-						Financial Report <i class="far fa-eye i-white-icon"></i>
+						Financial Report
 					</a>
 				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
-						Inventories <i class="far fa-eye i-white-icon"></i>
+						Inventories
 					</a>
 					<a href="<?php echo base_url().'/myaccount/facility/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
-						Export <i class="fas fa-file-export i-white-icon"></i>
+						Export
 					</a>
 				</div>
 			</div>

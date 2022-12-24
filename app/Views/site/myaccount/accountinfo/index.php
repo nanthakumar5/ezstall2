@@ -1,6 +1,6 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
-	<h2 class="fw-bold mb-4">Account Information</h2>
+	<h2 class="fw-bold mb-3 mt-2">Account Information</h2>
 	<form method="post" action="" id="accountinformtion" class="accountinformtion">
 		<div class="mb-3">
 			<label class="form-label" id="username-lbl" >Name</label>

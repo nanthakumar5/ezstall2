@@ -17,36 +17,36 @@
 
 			foreach($checkinstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
+				
 				foreach($availablestall['barnstall'] as $stall){
-				if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {
-
-					if($stall['lockunlock']=='0' ){
-						$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$stall['stall_id'].'">Unlocked</button></div>';
-					}
-					if($stall['dirtyclean']=='0'){
-						$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success dirtyclean" data-stallid="'.$stall['stall_id'].'">Cleaned</button></div>'; 
-					}
+					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {
+						if($stall['lockunlock']=='0' ){
+							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$stall['stall_id'].'">Unlocked</button></div>';
+						}
+						
+						if($stall['dirtyclean']=='0'){
+							$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success dirtyclean" data-stallid="'.$stall['stall_id'].'">Cleaned</button></div>'; 
+						}
+						
 						echo '
-								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
+								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list">
 									<div class="bookselect "><div class="form-check">
 	                                <input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'"></div>
 										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
 										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
 									</div>
-									<div>'.$btnlockunlock.'
-										'.$btndirtyclean.'
-									</div>	
+									<div>'.$btnlockunlock..$btndirtyclean.'</div>	
 								</div>
 							';
 					}
 				}
-				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 
-					
+				
+				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 					
 					if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='0')) {
-
 						if($rvbarnstall['lockunlock']=='0' ){
 							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$rvbarnstall['stall_id'].'">Unlocked</button></div>';
 						}
+						
 						if($rvbarnstall['dirtyclean']=='0'){
 							$btndirtyclean = '<div class="bookselectbtn"><button class="btn btn-success dirtyclean" data-stallid="'.$rvbarnstall['stall_id'].'">Cleaned</button></div>'; 
 						}
@@ -58,16 +58,17 @@
 										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
 										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
 									</div>
-									<div>'.$btnlockunlock.'
-										'.$btndirtyclean.'
-									</div>	
+									<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 								</div>
 							';
 						}
 						
 				}
 			}
-		}else{ echo "<p>No Stalls Checkin Today</p>";}
+		}else{ 
+			echo "<p>No Stalls Checkin Today</p>";
+		}
+		
 		echo "<br>";
 
 		echo '<h4><b>Today Checkout Event</b></h4>';		 
@@ -77,34 +78,32 @@
 			echo '<button class="btn_dash_lock delete_dirtyclean_checkout">Dirty</button>';
 			foreach($checkoutstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
+				
 				foreach($availablestall['barnstall'] as $stall){
-
 					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='1' && $stall['dirtyclean']=='1')){
+						$btnlockunlock ='<div class="bookselectbtn"><button class="btn btn-success ">Unlocked</button></div>';
+						$btndirtyclean ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
 
-					$btnlockunlock ='<div class="bookselectbtn"><button class="btn btn-success ">Unlocked</button></div>';
-					$btndirtyclean ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
-
-					if($stall['lockunlock']=='1'){
-						$btnlockunlock = '<div class="bookselectbtn"><button class="btn_dash_lock lockunlock_checkout"  data-stallid="'.$stall['stall_id'].'">Locked</button></div>';
-					}
-					if($stall['dirtyclean']=='1'){
-						$btndirtyclean = '<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean_checkout" data-stallid="'.$stall['stall_id'].'">Dirty</button></div>'; 
-					}
+						if($stall['lockunlock']=='1'){
+							$btnlockunlock = '<div class="bookselectbtn"><button class="btn_dash_lock lockunlock_checkout"  data-stallid="'.$stall['stall_id'].'">Locked</button></div>';
+						}
+						
+						if($stall['dirtyclean']=='1'){
+							$btndirtyclean = '<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean_checkout" data-stallid="'.$stall['stall_id'].'">Dirty</button></div>'; 
+						}
+						
 						echo '
 							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
-    							<div class="bookselect "><div class="form-check">
-	                                <input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'"></div>
-	                                <div class="bookdetails">
+								<div class="bookselect "><div class="form-check">
+									<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'"></div>
+									<div class="bookdetails">
 										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
 										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
 									</div>
 								</div>
-								<div>'.$btnlockunlock.'
-									'.$btndirtyclean.'
-								</div>	
+								<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 							</div>';
-						}
-					
+					}					
 				}
 
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 
@@ -117,24 +116,24 @@
 					if($rvbarnstall['dirtyclean']=='1'){
 						$btndirtycleans = '<div class="bookselectbtn"><button class="btn_dash_dirty dirtyclean" data-stallid="'.$rvbarnstall['stall_id'].'">Dirty</button></div>'; 
 					}
-						echo '
-							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
-    							<div class="bookselect "><div class="form-check">
-									 <input class="form-check-input" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'"></div>
-		                                <div class="bookdetails">
-											<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
-											<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
-										</div>
+					echo '
+						<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
+							<div class="bookselect "><div class="form-check">
+								<input class="form-check-input" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'"></div>
+								<div class="bookdetails">
+									<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
+									<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
 								</div>
-								<div>'.$btnlockunlocks.'
-									'.$btndirtycleans.'
-								</div>	
-							</div>';
+							</div>
+							<div>'.$btnlockunlocks.$btndirtycleans.'</div>	
+						</div>';
 					
 				}
 			}
-		}else{ echo "<p>No Stalls Checkout Today</p>";}
-		}?>
+		}else{ 
+			echo "<p>No Stalls Checkout Today</p>";
+		}
+	}?>
 	</div>
 	
 	<?php if($userdetail['type']=='2' || $userdetail['type']=='3' || $userdetail['type']=='4' ) { ?>

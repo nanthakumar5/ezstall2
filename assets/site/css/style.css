@@ -2625,8 +2625,10 @@ a.btn-custom-black {
     background-color: #000;
     color: #fff;
     text-decoration: none;
-    padding: 10px 10px;
-    border-radius: 5px;
+    padding: 8px 25px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
 }
 
 p.error_class_1 {
@@ -4013,6 +4015,8 @@ a.ui-button:active,
     border-top: 1px solid #f1f1f1;
     margin-top: 1rem;
     padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .dash-event-image{
@@ -5783,4 +5787,29 @@ nav[aria-label="Page navigation"]::after {
     clear: both;
     display: block;
     content: '';
+}
+
+div#calendar button span.fc-icon {
+    color: #FFF;
+}
+
+div#calendar .fc-button-group button {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
+    text-decoration: none;
+    color: #FFF;
+}
+
+.fc-col-header-cell .fc-scrollgrid-sync-inner {
+    background-color: #171717;
+    padding: 6px;
+}
+
+.fc-daygrid-day.fc-day .fc-daygrid-day-frame .fc-daygrid-day-top a {
+    text-decoration: none;
+    color: #171717;
+    font-weight: 600;
 }
