@@ -5379,7 +5379,6 @@ div#multi-nav-tab button.nav-link.m-0 {
 
 .operator-list:hover,.operator-list.checked {
     box-shadow: 0 0 10px 3px #84848400;
-    border: 1px solid #f0f0f0 !important;
     border-left: 4px solid #000000 !important;
     transition: all 0.5s;
     margin: 12px 0 !important;
@@ -5402,9 +5401,6 @@ div#multi-nav-tab button.nav-link.m-0 {
 .bookselect input.form-check-input {
     height: 22px;
     width: 22px;
-}
-.bookselectbtn BUTTON {
-    WIDTH: 120px;
 }
 
 
@@ -5821,6 +5817,13 @@ div#calendar .fc-button-group button {
 
 .bookselectbtn .dirtyclean, 
 .bookselectbtn .lockunlock {
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.out-btn {
     padding: 8px 16px;
     font-size: 12px;
     letter-spacing: 0.5px;

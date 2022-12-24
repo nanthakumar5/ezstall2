@@ -51,7 +51,7 @@
 						$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
 						
 						if($rvbarnstall['lockunlock']=='0' ){
-							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$rvbarnstall['stall_id'].'">Unlocked</button></div>';
+							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock mx-2" data-stallid="'.$rvbarnstall['stall_id'].'">Unlocked</button></div>';
 						}
 						
 						if($rvbarnstall['dirtyclean']=='0'){
@@ -62,7 +62,7 @@
 								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list">
 									<div class="bookselect ">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
+											<input class="form-check-input" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'">
 										</div>
 										<div class="bookdetails">
 											<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
@@ -120,8 +120,8 @@
 
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 
 					//if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='1')){
-						$btnlockunlocks ='<div class="bookselectbtn"><button class="btn btn-success">Unlocked</button></div>';
-						$btndirtycleans ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
+						$btnlockunlocks ='<div class="bookselectbtn"><button class="btn btn-success out-btn mx-2">Unlocked</button></div>';
+						$btndirtycleans ='<div class="bookselectbtn"><button class="btn btn-success out-btn">Cleaned</button></div>';
 
 						if($rvbarnstall['lockunlock']=='1'){
 							$btnlockunlocks = '<div class="bookselectbtn"><button class="btn_dash_lock lockunlock_checkout"  data-stallid="'.$rvbarnstall['stall_id'].'">Locked</button></div>';
@@ -519,7 +519,7 @@
 	    $.each($("input[name='removestallid']:checked"), function(){
 	        stallid.push($(this).val());
 	    });
-	    lockunlock(stallid.join(','),'lockunlock', '0');
+	    lockunlock(stallid.join(','), 'lockunlock', '0');
 	});	
 
 	$(document).on('click','.delete_dirtyclean_checkout',function(){
