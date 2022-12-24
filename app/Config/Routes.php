@@ -124,6 +124,7 @@ $routes->group('api', function ($routes) {
     $routes->post('checkout', 'Api\Checkout\Index::index'); 
     $routes->post('checkout/action', 'Api\Checkout\Index::action'); 
     $routes->post('stripepayment', 'Api\Stripe\Index::stripepayment'); 
+    $routes->post('secretstripekey', 'Api\Stripe\Index::secretstripekey'); 
 
 	//Homepage
 	$routes->get('faq', 'Api\Faq\Index::index');

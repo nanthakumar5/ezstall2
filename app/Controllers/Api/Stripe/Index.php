@@ -66,4 +66,25 @@ class Index extends BaseController
 	        ]);
 	        die();
     }
+
+    public function secretstripekey(){
+        $requestData = $this->request->getPost();
+
+        if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){
+            $customerid = $this->stripe->customer(2,'muthulakshmi M','muthulakshmi@itflexsolutions.com','cus_N2VaqUup09Ixa3');
+            $amount = 0.50*100;
+            $result = $this->stripe->createPaymentIntents($customerid,$amount);
+            $json = ['1', 'Secre key',$result['id']];
+        }else{
+            $json = ['0', 'Try Later',[]];
+        }
+
+        echo json_encode([
+            'status'  => $json[0],
+            'message' => $json[1],
+            'result'  => $json[2],
+        ]);
+
+        die();
+    }
 }
