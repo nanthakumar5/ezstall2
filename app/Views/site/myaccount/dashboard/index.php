@@ -9,17 +9,17 @@
 	<?php if($userdetail['type']=='6' || $userdetail['type']=='4'){
 		echo '<h4><b>Today Checkin Event</b></h4>';
 		 if(!empty($checkinstall)){
-		 	echo '<button class="btn_dash_lock delete_lockunlockbtn">Unlocked</button>';
-			echo ' ';
-			echo '<button class="btn_dash_lock delete_dirtyclean">Clean</button>';
-			$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock">Locked</button></div>';
-			$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
+		 	echo '<button class="btn_dash_lock delete_lockunlockbtn mx-0">Unlocked</button>';
+			echo '<button class="btn_dash_lock delete_dirtyclean mx-2">Clean</button>';
 
 			foreach($checkinstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
 				
 				foreach($availablestall['barnstall'] as $stall){
-					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {
+					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {						
+						$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock">Locked</button></div>';
+						$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
+						
 						if($stall['lockunlock']=='0' ){
 							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$stall['stall_id'].'">Unlocked</button></div>';
 						}
@@ -30,16 +30,16 @@
 						
 						echo '
 								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list">
-									<div class="bookselect ">
+									<div class="bookselect">
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
 										</div>
-										<div class="bookdetails mb-0 fw-bold fs-7">
-											<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
-											<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
+										<div class="bookdetails">
+											<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
+											<p class="mb-0 fs-7">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
 										</div>
-										<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 									</div>
+									<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 								</div>
 							';
 					}
@@ -47,6 +47,9 @@
 				
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 					
 					if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='0')) {
+						$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock">Locked</button></div>';
+						$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
+						
 						if($rvbarnstall['lockunlock']=='0' ){
 							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$rvbarnstall['stall_id'].'">Unlocked</button></div>';
 						}
@@ -61,12 +64,12 @@
 										<div class="form-check">
 											<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
 										</div>
-										<div class="bookdetails mb-0 fw-bold fs-7">
-											<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
-											<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
+										<div class="bookdetails">
+											<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
+											<p class="mb-0 fs-7">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
 										</div>
-										<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 									</div>
+									<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 								</div>
 							';
 						}
@@ -81,9 +84,9 @@
 
 		echo '<h4><b>Today Checkout Event</b></h4>';		 
 		if(!empty($checkoutstall)){
-			echo '<button class="btn_dash_lock delete_lockunlockbtn_checkout">Locked</button>';
-			echo ' ';
-			echo '<button class="btn_dash_lock delete_dirtyclean_checkout">Dirty</button>';
+			echo '<button class="btn_dash_lock delete_lockunlockbtn_checkout mx-0">Locked</button>';
+			echo '<button class="btn_dash_lock delete_dirtyclean_checkout mx-2">Dirty</button>';
+			
 			foreach($checkoutstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
 				
@@ -106,9 +109,9 @@
 									<div class="form-check">
 										<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
 									</div>
-									<div class="bookdetails mb-0 fw-bold fs-7">
-										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
-										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
+									<div class="bookdetails">
+										<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
+										<p class="mb-0 fs-7">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
 									</div>
 								</div>
 								<div>'.$btnlockunlock.$btndirtyclean.'</div>	
@@ -131,13 +134,13 @@
 						
 						echo '
 							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
-								<div class="bookselect ">
+								<div class="bookselect">
 									<div class="form-check">
 										<input class="form-check-input" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'">
 									</div>
-									<div class="bookdetails mb-0 fw-bold fs-7">
-										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
-										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
+									<div class="bookdetails">
+										<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
+										<p class="mb-0 fs-7">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$rvbarnstall['stallname'].'</p>
 									</div>
 								</div>
 								<div>'.$btnlockunlocks.$btndirtycleans.'</div>	
