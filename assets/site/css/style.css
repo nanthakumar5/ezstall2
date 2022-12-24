@@ -5778,3 +5778,9 @@ input[type=checkbox] {
     height: 25px;
     line-height: 1rem;
 }
+
+nav[aria-label="Page navigation"]::after {
+    clear: both;
+    display: block;
+    content: '';
+}
