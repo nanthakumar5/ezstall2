@@ -61,7 +61,7 @@
 					</div>
 					<div class="ticket_content col-md-2 mx-2 d-flex align-items-end">
 						<?php $statuscolor = ($data['status']=='2') ? "cancelcolor" : "activecolor"; ?>
-							<p class="my-2 ticket_values ticket_status <?php echo  $statuscolor;?>" ><?php echo $bookingstatus[$data['status']];?></p>
+						<p class="my-2 ticket_values ticket_status <?php echo  $statuscolor;?>" ><?php echo $bookingstatus[$data['status']];?></p>
 					</div>
 				</div>
 				<div class="top_event_border">
@@ -73,93 +73,62 @@
 							<p class="ticket_values mr-3">Event ( <?php echo $data['eventname'];?> )</p>
 						</div>
 						<div class="flex-wrap d-flex align-items-center">
-						<?php if(!empty($data['barnstall'])){?>
-						<div class="col-md-2 px-3">
-							<p class="ticket_event_tag">STALL</p>
-						</div>
-						<?php foreach ($data['barnstall'] as $stalls) {
-							if($userdetail['type'] =='4'){ 
-								$btnlockunlock = '<i data-stallid="'.$stalls['stall_id'].'" class="fas fa-lock event_lock lockunlock_checkout"></i>';
-								$btndirtyclean = '<i  data-stallid="'.$stalls['stall_id'].'" class="fas fa-virus event_virus dirtyclean_checkout"></i>';
-
-								if($stalls['lockunlock']=='0'){
-									$btnlockunlock = '<i data-stallid="'.$stalls['stall_id'].'" class="fas fa-unlock event_unlock lockunlock">'; 
-								}
-							if($stalls['dirtyclean']=='0'){
-								$btndirtyclean = '<i data-stallid="'.$stalls['stall_id'].'" class="fas fa-broom event_broom dirtyclean"></i>'; 
-							}
-						} ?>
-						<div class="d-flex flex-wrap">
-							<div class="mx-3">
-								<p class="ticket_values"><?php echo $stalls['barnname'];?></p>
-								<span class="d-flex flex-wrap">
-									<p class="ticket_sub_values"><?php echo $stalls['stallname'];?></p>
-									<?php if($userdetail['type'] =='4'){ ?>
-										<a href="#" class="ms-2"><?php echo $btnlockunlock;?></i></a>
-										<a href="#" class="mx-2"><?php echo $btndirtyclean;?></a>
-									<?php } ?>
-								</span>
-							</div>
-						</div>
-						<?php } } ?>
+							<?php if(!empty($data['barnstall'])){ ?>
+								<div class="col-md-2 px-3">
+									<p class="ticket_event_tag">STALL</p>
+								</div>
+								<?php foreach ($data['barnstall'] as $stalls) { ?>
+									<div class="d-flex flex-wrap">
+										<div class="mx-3">
+											<p class="ticket_values"><?php echo $stalls['barnname'];?></p>
+											<span class="d-flex flex-wrap">
+												<p class="ticket_sub_values"><?php echo $stalls['stallname'];?></p>
+											</span>
+										</div>
+									</div>
+							<?php } } ?>
 						</div>
 						<div class="flex-wrap d-flex align-items-center">
-						<?php if(!empty($data['rvbarnstall'])){?>
-							<div class="col-md-2 px-3">
-								<p class="ticket_event_tag">RV HOOKUP</p>
-							</div>
-							<?php foreach ($data['rvbarnstall'] as $rvstall) {
-								if($userdetail['type'] =='4'){
-
-									$btnlockunlock = '<i data-stallid="'.$rvstall['stall_id'].'" class="fas fa-lock event_lock lockunlock_checkout"></i>';
-									$btndirtyclean = '<i  data-stallid="'.$rvstall['stall_id'].'" class="fas fa-virus event_virus dirtyclean_checkout"></i>';
-
-									if($rvstall['lockunlock']=='0'){
-										$btnlockunlock = '<i class="fas fa-unlock event_unlock lockunlock" data-stallid="'.$rvstall['stall_id'].'">'; 
-									}
-									if($rvstall['dirtyclean']=='0'){
-										$btndirtyclean = '<i data-stallid="'.$rvstall['stall_id'].'" class="fas fa-broom event_broom dirtyclean"></i>'; 
-									}
-								} ?>
-								<div class="d-flex flex-wrap">
-									<div class="mx-3">
-										<p class="ticket_values"><?php echo $rvstall['barnname'];?></p>
-										<span class="d-flex flex-wrap">
-											<p class="ticket_sub_values"><?php echo $rvstall['stallname'];?></p>
-											<?php if($userdetail['type'] =='4'){ ?>
-												<a href="#" class="ms-2"><?php echo $btnlockunlock;?></i></a>
-												<a href="#" class="mx-2"><?php echo $btndirtyclean;?></a>
-											<?php } ?>
-										</span>
-									</div>
+							<?php if(!empty($data['rvbarnstall'])){ ?>
+								<div class="col-md-2 px-3">
+									<p class="ticket_event_tag">RV HOOKUP</p>
 								</div>
+								<?php foreach ($data['rvbarnstall'] as $rvstall) { ?>
+									<div class="d-flex flex-wrap">
+										<div class="mx-3">
+											<p class="ticket_values"><?php echo $rvstall['barnname'];?></p>
+											<span class="d-flex flex-wrap">
+												<p class="ticket_sub_values"><?php echo $rvstall['stallname'];?></p>
+											</span>
+										</div>
+									</div>
 							<?php } } ?>
 						</div>
 						<div class="flex-wrap d-flex align-items-center">
 							<?php if(!empty($data['feed'])){?>
-							<div class="col-md-2 px-3">
-								<p class="ticket_event_tag">FEED</p>
-							</div>
-							<?php foreach ($data['feed'] as $feed) { ?>
-							<div class="d-flex align-items-center mx-3">
-								<span class="d-flex flex-wrap">
-									<p class="ticket_sub_values e_mr_1"><?php echo $feed['productname'];?>
-								<?php echo '('.$feed['quantity'].')'.$currencysymbol.$feed['total']?></p>
-								</span>
-							</div>
+								<div class="col-md-2 px-3">
+									<p class="ticket_event_tag">FEED</p>
+								</div>
+								<?php foreach ($data['feed'] as $feed) { ?>
+									<div class="d-flex align-items-center mx-3">
+										<span class="d-flex flex-wrap">
+											<p class="ticket_sub_values e_mr_1"><?php echo $feed['productname'];?>
+										<?php echo '('.$feed['quantity'].')'.$currencysymbol.$feed['total']?></p>
+										</span>
+									</div>
 							<?php } } ?>
 						</div>
 						<div class="flex-wrap d-flex align-items-center">
 							<?php if(!empty($data['shaving'])){?>
-							<div class="col-md-2 px-3">
-								<p class="ticket_event_tag">SHAVINGS</p>
-							</div>
-							<?php foreach ($data['shaving'] as $shaving) { ?>
-							<div class="d-flex flex-wrap">
-								<div class="d-flex align-items-center mx-3">
-									<p class="ticket_sub_values e_mr_1"><?php echo $shaving['productname'];?>  <?php echo '('.$shaving['quantity'].')'.$currencysymbol.$shaving['total']?></p>
+								<div class="col-md-2 px-3">
+									<p class="ticket_event_tag">SHAVINGS</p>
 								</div>
-							</div>
+								<?php foreach ($data['shaving'] as $shaving) { ?>
+								<div class="d-flex flex-wrap">
+									<div class="d-flex align-items-center mx-3">
+										<p class="ticket_sub_values e_mr_1"><?php echo $shaving['productname'];?>  <?php echo '('.$shaving['quantity'].')'.$currencysymbol.$shaving['total']?></p>
+									</div>
+								</div>
 							<?php } } ?>
 						</div>
 					</div>
@@ -232,33 +201,6 @@
 		sweetalert2(action,data);
 	});
 
-	$(document).on('click','.lockunlock',function(){
-		lockunlock($(this).attr('data-stallid'),'lockunlock', '1');
-	});	
-
-	$(document).on('click','.dirtyclean',function(){
-		lockunlock($(this).attr('data-stallid'),'dirtyclean','1');
-	});	
-
-	$(document).on('click','.lockunlock_checkout',function(){
-		lockunlock($(this).attr('data-stallid'),'lockunlock','0');
-	});	
-
-	$(document).on('click','.dirtyclean_checkout',function(){
-		lockunlock($(this).attr('data-stallid'),'dirtyclean','0');
-	});	
-
-	function lockunlock(stallid,name,value){
-		var action 	= 	'<?php echo base_url()."/myaccount/bookings"; ?>';
-		var status = 'lock_dirty_status';
-		var data    = '\
-		<input type="hidden" value="'+stallid+'" name="stallid">\
-		<input type="hidden" value="'+value+'" name="'+name+'">\
-		<input type="hidden" value="'+value+'" name="'+status+'">\
-		';
-		sweetalert2(action,data);
-	}
-
 	$(document).ready(function(){
 		$(".ticket__up").click(function(){
 			$(this).parent().siblings(".top_event_border").slideUp();
@@ -270,10 +212,6 @@
 			$(this).prev(".ticket__up").css("display", "block");
 			$(this).css("display", "none");
 		});
-	});
-
-	party.confetti(runButton, {
-		count: party.variation.range(20, 40)
 	});
 </script>
 <?php $this->endSection(); ?>
