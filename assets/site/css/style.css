@@ -2625,10 +2625,11 @@ a.btn-custom-black {
     background-color: #000;
     color: #fff;
     text-decoration: none;
-    padding: 8px 25px;
+    padding: 8px 16px;
     border-radius: 4px;
     font-weight: 500;
     letter-spacing: 0.4px;
+    font-size: 12px;
 }
 
 p.error_class_1 {
@@ -4830,8 +4831,12 @@ div#replylist {
     border: none;
     background-color: #171717;
     color: #fff;
-    border-radius: 5px;
-    padding: 5px 15px;
+    margin-top: 1rem;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
 }
 
 .btn_dash_dirty {
@@ -4839,7 +4844,10 @@ div#replylist {
     background-color: #171717;
     color: #fff;
     border-radius: 5px;
-    padding: 5px 15px;
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
 }
 
 .dash_border_ {
@@ -5353,14 +5361,14 @@ div#multi-nav-tab button.nav-link.m-0 {
     display: inline-block;
     position: relative;
     vertical-align: middle;
-    margin-right: 40px;
+    margin-right: 15px;
 }
                                 
 .operator-list {
-    padding: 20px;
     box-shadow: 0 8px 17px 0 rgb(0 0 0 / 10%);
-    margin: 30px 0 !important;
-    border: aliceblue;
+    padding: 10px 10px;
+    margin: 12px 0 !important;
+	border: aliceblue;
     border-left: 4px solid #e00000;
     align-items: center;
     cursor: pointer;
@@ -5374,14 +5382,14 @@ div#multi-nav-tab button.nav-link.m-0 {
     border: 1px solid #f0f0f0 !important;
     border-left: 4px solid #000000 !important;
     transition: all 0.5s;
-    margin: 30px 0 !important;
+    margin: 12px 0 !important;
     background-color: #f0f0f0;
 }
 
 
 .bookselect  {
   position: relative;
-  padding: 20px 0 20px 20px;
+  padding: 0 15px 0 5px;
   text-align: left;
 }
 
@@ -5392,8 +5400,8 @@ div#multi-nav-tab button.nav-link.m-0 {
 }
 
 .bookselect input.form-check-input {
-    height: 30px;
-    width: 30px;
+    height: 22px;
+    width: 22px;
 }
 .bookselectbtn BUTTON {
     WIDTH: 120px;
@@ -5416,10 +5424,7 @@ div#multi-nav-tab button.nav-link.m-0 {
     align-items: center;
 }
 
-.operator-list .bookselectbtn BUTTON {
-    width: 120px;
-    padding: 10px;
-    height: 40px;
+.operator-list .bookselectbtn buttton {
     margin: 10px;
 }
 .event__ticket  a.striperefunds.bookingcancel {
@@ -5812,4 +5817,12 @@ div#calendar .fc-button-group button {
     text-decoration: none;
     color: #171717;
     font-weight: 600;
+}
+
+.bookselectbtn .dirtyclean, 
+.bookselectbtn .lockunlock {
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
 }

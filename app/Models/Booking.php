@@ -19,6 +19,21 @@ class Booking extends BaseModel
 			$select[] 	= 	implode(',', $data);
 		}
 
+		if(in_array('users', $querydata)){
+			$data		= 	['u.name username','u.type usertype'];							
+			$select[] 	= 	implode(',', $data);
+		}
+
+		if(in_array('payment', $querydata)){
+			$data		= 	['p.id paymentid', 'p.stripe_paymentintent_id'];							
+			$select[] 	= 	implode(',', $data);
+		}
+		
+		if(in_array('paymentmethod', $querydata)){
+			$data		= 	['pm.name paymentmethod_name'];							
+			$select[] 	= 	implode(',', $data);
+		}
+
 		if(in_array('cleanbookingdetails', $querydata)){
 			$data		= 	['bd.stall_id stallid'];							
 			$select[] 	= 	implode(',', $data);
@@ -29,28 +44,14 @@ class Booking extends BaseModel
 			$select[] 	= 	implode(',', $data);
 		}
 
-		if(in_array('users', $querydata)){
-			$data		= 	['u.name username','u.type usertype'];							
-			$select[] 	= 	implode(',', $data);
-		}
-
-		if(in_array('payment', $querydata)){
-			$data		= 	['p.id paymentid', 'p.stripe_paymentintent_id'];							
-			$select[] 	= 	implode(',', $data);
-		}
-		if(in_array('paymentmethod', $querydata)){
-			$data		= 	['pm.name paymentmethod_name'];							
-			$select[] 	= 	implode(',', $data);
-		}
-
 		$query = $this->db->table('booking b');
 
 		if(in_array('event', $querydata)) 				$query->join('event e', 'e.id=b.event_id', 'left');		
 		if(in_array('users', $querydata)) 				$query->join('users u', 'u.id=b.user_id', 'left');
-		if(in_array('cleanbookingdetails', $querydata)) $query->join('booking_details bd', 'b.id=bd.booking_id', 'left');
-		if(in_array('cleanstall', $querydata)) 			$query->join('stall s', 's.id=bd.stall_id', 'left');		
 		if(in_array('payment',$querydata))				$query->join('payment p', 'p.id=b.payment_id', 'left');
 		if(in_array('paymentmethod',$querydata))		$query->join('payment_method pm', 'pm.id=b.paymentmethod_id', 'left');
+		if(in_array('cleanbookingdetails', $querydata)) $query->join('booking_details bd', 'b.id=bd.booking_id', 'left');
+		if(in_array('cleanstall', $querydata)) 			$query->join('stall s', 's.id=bd.stall_id', 'left');		
 
 		if(isset($extras['select'])) 					$query->select($extras['select']);
 		else											$query->select(implode(',', $select));
@@ -306,18 +307,23 @@ class Booking extends BaseModel
 		$request		= [];
 		if(isset($data['lockunlock'])) $request['lock_unlock'] 	=  $data['lockunlock'];
 		if(isset($data['dirtyclean'])) $request['dirty_clean'] 	=  $data['dirtyclean'];
+		
+		if(!empty($request)){
+			$stallids = [];
+			foreach($data['stallid'] as $stallid){
+				$this->db->table('stall')->update($request , ['id' => $stallid]);
+				$stallids[] = $stallid;
+			}
 
-		foreach($data['stallid'] as $stallid){
-			if(!empty($request)) $stall = $this->db->table('stall')->update($request , ['id' => $stallid]);
-			$stallid = $stallid;
-		}
-
-		if(isset($stallid) && $this->db->transStatus() === FALSE){
-			$this->db->transRollback();
-			return false;
+			if($this->db->transStatus() === FALSE){
+				$this->db->transRollback();
+				return false;
+			}else{
+				$this->db->transCommit();
+				return $stallids;
+			}
 		}else{
-			$this->db->transCommit();
-			return $stallid;
+			return false;
 		}
 	}
 
