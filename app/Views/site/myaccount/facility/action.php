@@ -73,7 +73,7 @@ $pageaction 			= $id=='' ? 'Add' : 'Update';
 								<textarea type="text" name="description" class="form-control" id="description" placeholder="Enter Description" rows="3"><?php echo $description; ?></textarea>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-4 my-2">
 							<div class="form-group upload-image">
 								<label>Facility Image</label>			
 								<div>

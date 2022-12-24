@@ -280,7 +280,7 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 									</div>
 								</div>
 								<?php foreach($pricelist as $key => $data){ ?>
-									<div class="col-md-10 mt-3 align-item-center">	
+									<div class="col-md-10 mt-3 align-items-center">	
 										<div class="row">	
 											<div class="col-md-2">
 												<input type="checkbox" class="questionmodal_priceflag_modal" data-key="<?php echo $key; ?>" value="1">
@@ -313,7 +313,7 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 						Thank You Fill out your custom event form with your stalls,
 						and let your customers rest EZ!
 						<div align="center" class="mt-3 ques-model">
-							<button type="button" class="btn questionmodalsubmit model_btn" data-bs-dismiss="modal">Go</button>
+							<button type="button" class="btn questionmodalsubmit model_btn btn-stall" data-bs-dismiss="modal">Go</button>
 						</div>
 					</div>
 					<div class="d-flex">
