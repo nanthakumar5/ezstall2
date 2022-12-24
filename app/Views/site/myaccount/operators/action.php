@@ -5,7 +5,7 @@
 	$name         = isset($result['name']) ? $result['name'] : '';
 	$email        = isset($result['email']) ? $result['email'] : '';
 ?>
-	<h3>Operators Information</h3>
+	<h3 class="fw-bold mb-1 mt-2">Operator</h3>
 	<form method="post" action="" id="accountinformtion" class="accountinformtion">
 		<div class="mb-3">
 			<label for="username" class="form-label" id="username-lbl" >Name</label>

@@ -3951,40 +3951,48 @@ a.ui-button:active,
     text-decoration: none;
     background: #171717;
     color: #fff;
-    padding: 6px 25px;
+    padding: 6px 15px;
     border-radius: 4px;
     transition: all 1s ease;
     font-weight: 500;
+	font-size: 12px; 
+    letter-spacing: 0.5px; 
 }
 
 .dash-export-event{
     text-decoration: none;
     background: #171717;
     color: #fff;
-    padding: 6px 25px;
+    padding: 6px 15px;
     border-radius: 4px;
     transition: all 1s ease;
     font-weight: 500;
+	font-size: 12px; 
+    letter-spacing: 0.5px; 
 }
 
 .dash-view-event{
     text-decoration: none;
     background: #e54a4a;
     color: #fff;
-    padding: 6px 25px;
+    padding: 6px 15px;
     border-radius: 4px;
     transition: all 1s ease;
     font-weight: 500;
+	font-size: 12px; 
+    letter-spacing: 0.5px; 
 }
 
 .dash-delete-event{
     text-decoration: none;
     background: #e54a4a;
     color: #fff;
-    padding: 6px 25px;
+    padding: 6px 15px;
     border-radius: 4px;
     transition: all 1s ease;
     font-weight: 500;
+	font-size: 12px; 
+    letter-spacing: 0.5px; 
 }
 
 .dash-edit-event:hover{

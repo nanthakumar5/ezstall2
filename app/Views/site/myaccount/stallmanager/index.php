@@ -12,11 +12,11 @@
 						<label class="fs-7 stall-info-name">Name</label>
 						<p class="fs-7 mb-0 text-break"><?php echo $data['name']; ?></p>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<label class="fs-7 stall-info-name">Email</label>
 						<p class="fs-7 mb-0 text-break"><?php echo $data['email']; ?></p>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<a class="fs-7 dash-edit" href="<?php echo base_url().'/myaccount/stallmanager/edit/'.$data['id']; ?>">Edit <i class="far fa-edit"></i></a>
 						<a class="fs-7 dash-trash delete" data-id="<?php echo $data['id']; ?>" href="javascript:void(0);">Delete <i class="far fa-trash-alt"></i></a>
 					</div>
