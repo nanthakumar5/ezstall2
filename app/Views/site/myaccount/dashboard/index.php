@@ -462,7 +462,6 @@
 <?php $this->endSection(); ?>
 <?php $this->section('js') ?>
 <script>
-
 	$(".bookselect input.form-check-input:checkbox").on('click', function(){
         $(this).parent().parent().parent().toggleClass("checked");
    	});

@@ -39,8 +39,7 @@ class Index extends BaseController
     }
 	
 	public function view($id)
-	{
-		
+	{		
     	$userid = getSiteUserID();
 
 		$result = $this->booking->getBooking('row', ['booking', 'event', 'users','barnstall', 'rvbarnstall', 'feed', 'shaving', 'payment','paymentmethod'], ['userid' => [$userid], 'id' => $id]);

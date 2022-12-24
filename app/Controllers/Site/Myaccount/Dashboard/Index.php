@@ -39,16 +39,18 @@ class Index extends BaseController
 		$allids 			= getStallManagerIDS($userid);
 		array_push($allids, $userid);
 
-      	if($usertype=='3' || ($usertype=='4' && $parenttype == '3')){ 
-      		$currentreservation = $this->event->getEvent('all', ['event', 'barn', 'stall','rvbarn','rvstall'],['status' => ['1'], 'userids' => $allids, 'type' => '1', 'gtenddate' => $date]);
-      	}
-      	
-      	if($usertype=='2' || ($usertype=='4' && $parenttype == '2')){
-      		$currentreservation = $this->event->getEvent('all', ['event', 'barn', 'stall','rvbarn','rvstall'],['status' => ['1'], 'userids' => $allids, 'fenddate' => $date]);
-      	}
-      	
       	if($usertype=='2' || $usertype =='3' || ($usertype=='4' && $parenttype == '2') || ($usertype=='4' && $parenttype == '3')){
-	  		foreach($currentreservation as $event){  
+			if($usertype=='2' || ($usertype=='4' && $parenttype == '2')){
+				$currentreservation = $this->event->getEvent('all', ['event', 'barn', 'stall','rvbarn','rvstall'],['status' => ['1'], 'userids' => $allids, 'fenddate' => $date]);
+				$data['upcomingevents'] = $this->event->getEvent('all', ['event'],['userids' => $allids, 'fenddate'=> $date, 'status' => ['1']]);
+			}
+			
+			if($usertype=='3' || ($usertype=='4' && $parenttype == '3')){ 
+				$currentreservation = $this->event->getEvent('all', ['event', 'barn', 'stall','rvbarn','rvstall'],['status' => ['1'], 'userids' => $allids, 'type' => '1', 'gtenddate' => $date]);
+				$data['upcomingevents'] = $this->event->getEvent('all', ['event'],['userids' => $allids, 'start_date' => $date, 'status' => ['1'], 'type' => '1']);
+			}
+			
+			foreach($currentreservation as $event){  
 	  			foreach($event['barn'] as $barn){
 					$countcurrentstall += count(array_column($barn['stall'], 'id'));
 				}
@@ -80,18 +82,10 @@ class Index extends BaseController
 	  			if(count($rvbarnstall) > 0) $countpaststall += count(array_column($rvbarnstall, 'stall_id'));
 	  			$countpastamount += ($event['amount']-$event['transaction_fee']);
 	      	}
-      	}
-		
-		$data['monthlyincome'] = $this->booking->getBooking('all', ['booking', 'event', 'payment'],['userid'=> $allids, 'status' => '1'], ['groupby' => 'DATE_FORMAT(b.created_at, "%M %Y")', 'select' => '(SUM(b.amount)-SUM(b.transaction_fee)) as paymentamount, DATE_FORMAT(b.created_at, "%M %Y") AS month']);
-		
-		if($usertype=='2' || ($usertype=='4' && $parenttype == '2')){
-			$data['upcomingevents'] = $this->event->getEvent('all', ['event'],['userids' => $allids, 'fenddate'=> $date, 'status' => ['1']]);
+			
+			$data['monthlyincome'] = $this->booking->getBooking('all', ['booking', 'event', 'payment'],['userid'=> $allids, 'status' => '1'], ['groupby' => 'DATE_FORMAT(b.created_at, "%M %Y")', 'select' => '(SUM(b.amount)-SUM(b.transaction_fee)) as paymentamount, DATE_FORMAT(b.created_at, "%M %Y") AS month']);
 		}
 		
-		if($usertype=='3' || ($usertype=='4' && $parenttype == '3')){
-			$data['upcomingevents'] = $this->event->getEvent('all', ['event'],['userids' => $allids, 'start_date' => $date, 'status' => ['1'], 'type' => '1']);
-		}
-    	
     	if($usertype=='5'){
     		$horseevent = $this->booking->getBooking('all', ['booking','event','payment','barnstall','rvbarnstall'],['userid'=> $allids,'ltcheck_out' => $date, 'status' => '1']);
 
