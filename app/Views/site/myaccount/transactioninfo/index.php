@@ -1,7 +1,7 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
 
-<h2 class="fw-bold mb-4">Transaction Details</h2>
+<h2 class="fw-bold mt-2 mb-3">Transaction Details</h2>
 <section class="maxWidth eventPagePanel">
 <?php if(!empty($transactions)) {  ?>
 <?php foreach ($transactions as $data) { ?>

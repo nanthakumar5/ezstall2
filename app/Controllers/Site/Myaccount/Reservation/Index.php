@@ -77,7 +77,7 @@ class Index extends BaseController
 		$result = array();
 
     	if (isset($requestData['search'])) {
-			$result = $this->booking->getBooking('all', ['booking', 'cleanbookingdetails', 'cleanstall'], ['page' => 'reservations', 'search' => ['value' => $requestData['search']], 'lockunlock' => '0', 'dirtyclean' => '0']);
+			$result = $this->booking->getBooking('all', ['booking', 'lucdstall'], ['page' => 'reservations', 'search' => ['value' => $requestData['search']], 'lockunlock' => '0', 'dirtyclean' => '0', 'groupby' => 'b.id']);
 		}
 
 		$response['data'] = $result;

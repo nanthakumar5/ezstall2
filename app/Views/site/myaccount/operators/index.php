@@ -1,7 +1,8 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 
 <?php $this->section('content') ?>
-<section class="maxWidth eventPagePanel mt-2">
+<h2 class="fw-bold mb-1 mt-2">Operators</h2>
+<section class="maxWidth eventPagePanel mt-3">
 	<a class="btn-custom-black" href="<?php echo base_url().'/myaccount/operators/add'; ?>">Add Operators</a>
 	<?php if(count($list) > 0){ ?>
 		<?php foreach ($list as $data) {  ?>

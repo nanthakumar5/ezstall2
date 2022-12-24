@@ -11,6 +11,7 @@
 		 if(!empty($checkinstall)){
 		 	echo '<button class="btn_dash_lock delete_lockunlockbtn mx-0">Unlocked</button>';
 			echo '<button class="btn_dash_lock delete_dirtyclean mx-2">Clean</button>';
+			echo '<button class="btn-select-all checkinstallbtn">Select All</button>';
 
 			foreach($checkinstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
@@ -32,7 +33,7 @@
 								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list">
 									<div class="bookselect">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
+											<input class="form-check-input checkinstall" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
 										</div>
 										<div class="bookdetails">
 											<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
@@ -62,7 +63,7 @@
 								<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list">
 									<div class="bookselect ">
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'">
+											<input class="form-check-input checkinstall" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'">
 										</div>
 										<div class="bookdetails">
 											<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
@@ -85,6 +86,7 @@
 		if(!empty($checkoutstall)){
 			echo '<button class="btn_dash_lock delete_lockunlockbtn_checkout mx-0">Locked</button>';
 			echo '<button class="btn_dash_lock delete_dirtyclean_checkout mx-2">Dirty</button>';
+			echo '<button class="btn-select-all checkoutstallbtn">Select All</button>';
 			
 			foreach($checkoutstall as $availablestall){   
 				$eventname =  $availablestall['eventname'];
@@ -106,7 +108,7 @@
 							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
 								<div class="bookselect">
 									<div class="form-check">
-										<input class="form-check-input" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
+										<input class="form-check-input checkoutstall" type="checkbox" name="removestallid" value="'.$stall['stall_id'].'">
 									</div>
 									<div class="bookdetails">
 										<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
@@ -135,7 +137,7 @@
 							<div class="d-flex col-md-12 justify-content-between my-2 dash_border_ operator-list ">
 								<div class="bookselect">
 									<div class="form-check">
-										<input class="form-check-input" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'">
+										<input class="form-check-input checkoutstall" type="checkbox" name="removestallid" value="'.$rvbarnstall['stall_id'].'">
 									</div>
 									<div class="bookdetails">
 										<p class="mb-0 fw-bold fs-7">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
@@ -482,6 +484,18 @@
         $(this).parent().parent().parent().toggleClass("checked");
    	});
 
+	$(document).on('click','.checkinstallbtn',function(){
+		$('.checkinstall').prop('checked', true);
+	});	
+	
+	$(document).on('click','.checkoutstallbtn',function(){
+		$('.checkoutstall').prop('checked', true);
+	});	
+	
+	$(document).on('click','.lockunlock',function(){
+		lockunlock($(this).attr('data-stallid'), 'lockunlock', '1');
+	});	
+	
 	$(document).on('click','.lockunlock',function(){
 		lockunlock($(this).attr('data-stallid'), 'lockunlock', '1');
 	});	

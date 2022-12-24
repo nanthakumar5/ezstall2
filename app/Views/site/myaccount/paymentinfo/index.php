@@ -1,7 +1,7 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
 <?php $currentusertype = $userdetail['type']; ?>
-<h2 class="fw-bold mb-4">Payment Details</h2>
+<h2 class="fw-bold mt-2 mb-3">Payment Details</h2>
 <section class="maxWidth eventPagePanel">
 <?php if(!empty($payments)) {  ?>
 <?php foreach ($payments as $data) { ?>

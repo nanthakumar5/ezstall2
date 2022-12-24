@@ -34,13 +34,8 @@ class Booking extends BaseModel
 			$select[] 	= 	implode(',', $data);
 		}
 
-		if(in_array('cleanbookingdetails', $querydata)){
-			$data		= 	['bd.stall_id stallid'];							
-			$select[] 	= 	implode(',', $data);
-		}
-
-		if(in_array('cleanstall', $querydata)){
-			$data		= 	['s.lock_unlock lockunlock, s.dirty_clean dirtyclean, s.id stallsid, s.name stallsname'];						
+		if(in_array('lucdstall', $querydata)){
+			$data		= 	['GROUP_CONCAT(s.lock_unlock SEPARATOR ",") lockunlock, GROUP_CONCAT(s.dirty_clean SEPARATOR ",") dirtyclean, GROUP_CONCAT(s.id SEPARATOR ",") stallsid, GROUP_CONCAT(s.name SEPARATOR ",") stallsname'];						
 			$select[] 	= 	implode(',', $data);
 		}
 
@@ -50,8 +45,7 @@ class Booking extends BaseModel
 		if(in_array('users', $querydata)) 				$query->join('users u', 'u.id=b.user_id', 'left');
 		if(in_array('payment',$querydata))				$query->join('payment p', 'p.id=b.payment_id', 'left');
 		if(in_array('paymentmethod',$querydata))		$query->join('payment_method pm', 'pm.id=b.paymentmethod_id', 'left');
-		if(in_array('cleanbookingdetails', $querydata)) $query->join('booking_details bd', 'b.id=bd.booking_id', 'left');
-		if(in_array('cleanstall', $querydata)) 			$query->join('stall s', 's.id=bd.stall_id', 'left');		
+		if(in_array('lucdstall', $querydata)) 			$query->join('booking_details bd', 'b.id=bd.booking_id', 'left')->join('stall s', 's.id=bd.stall_id', 'left');		
 
 		if(isset($extras['select'])) 					$query->select($extras['select']);
 		else											$query->select(implode(',', $select));
@@ -67,8 +61,8 @@ class Booking extends BaseModel
 		if(isset($requestdata['stallcheck_out'])) 		$query->whereIn('b.check_out', $requestdata['stallcheck_out']);		
 		if(isset($requestdata['status'])) 				$query->where('b.status', $requestdata['status']);	
 
-		if(isset($requestdata['lockunlock'])) 			$query->where('s.lock_unlock', $requestdata['lockunlock']);
-		if(isset($requestdata['dirtyclean'])) 			$query->where('s.dirty_clean', $requestdata['dirtyclean']);
+		if(isset($requestdata['lockunlock'])) 			$query->having('find_in_set("'.$requestdata['lockunlock'].'", lockunlock) <> 0');
+		if(isset($requestdata['dirtyclean'])) 			$query->having('find_in_set("'.$requestdata['dirtyclean'].'", dirtyclean) <> 0');
 		if(isset($requestdata['stallid'])) 			    $query->whereIn('s.id', $requestdata['stallid']);
 
 		if(isset($requestdata['userid'])) 				

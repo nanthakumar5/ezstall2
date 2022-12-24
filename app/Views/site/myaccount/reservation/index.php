@@ -1,8 +1,8 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
 <?php $currentusertype = $userdetail['type']; ?>
-<div class="dFlexComBetween eventTP flex-wrap">
-	<h2 class="fw-bold mb-4">Current Reservation</h2>
+<div class="dFlexComBetween eventTP flex-wrap py-2">
+	<h2 class="fw-bold">Current Reservation</h2>
 	<?php if(!empty($bookings)) { ?>
 		<div class="flex-row-reverse bd-highlight"> 
 			<input type="text" placeholder="Search By Name" class="searchEvent bookedby" id="bookedby" value="" />
@@ -16,7 +16,7 @@
 	<div class="d-none button" onmousedown="party.confetti(this)">Click me!</div>
 	<?php if(!empty($bookings)) {  ?>
 	<?php foreach ($bookings as $data) { ?>
-		<div class="event__ticket mt-5 mb-5 p-3">
+		<div class="event__ticket mb-4 p-3">
 			<div class="row position-relative">
 				<div class="row col-md-12 ticket_row mt-3">
 					<div class="ticket_content res_mx_3 col-md-2 mx-3">

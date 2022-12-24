@@ -1,7 +1,7 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 <?php $this->section('content') ?>
 <?php $currentusertype = $userdetail['type']; ?>
-<div class="dFlexComBetween eventTP flex-wrap">
+<div class="dFlexComBetween eventTP flex-wrap py-2">
 	<h2 class="fw-bold mb-4">Past Reservation</h2>
 </div>
 <section class="maxWidth eventPagePanel">

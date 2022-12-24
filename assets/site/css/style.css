@@ -2734,7 +2734,7 @@ img.eventflyer_source,
 .dashboard-box {
     background-color: #fff;
     margin-bottom: 2%;
-    padding: 2.6% 2.6%;
+    padding: 10px;
     border: 1px solid #e4e4e4;
     border-radius: 7px;
     transition: all 1s ease;
@@ -2885,7 +2885,7 @@ a.dash-edit {
     text-decoration: none;
     background: #171717;
     color: #fff;
-    padding: 6px 25px;
+    padding: 6px 15px;
     border-radius: 4px;
     transition: all 1s ease;
     font-weight: 500;
@@ -2896,7 +2896,7 @@ a.dash-trash {
     text-decoration: none;
     background: #e54a4a;
     color: #fff;
-    padding: 6px 25px;
+    padding: 6px 15px;
     border-radius: 4px;
     transition: all 1s ease;
     font-weight: 500;
@@ -5827,4 +5827,17 @@ div#calendar .fc-button-group button {
     font-size: 12px;
     letter-spacing: 0.5px;
     font-weight: 500;
+}
+
+.btn-select-all {
+    border: none;
+    background-color: #e00000;
+    color: #fff;
+    margin: 0 10px;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    float: right;
 }

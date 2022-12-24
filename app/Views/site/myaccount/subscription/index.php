@@ -1,6 +1,7 @@
 <?php $this->extend('site/common/layout/layout1') ?>
 
 <?php $this->section('content') ?>
+	<h2 class="fw-bold mb-3 mt-2">Subscription</h2>
 	<style type="text/css">
 	input[type="radio"] {
 		display: inline-block;
