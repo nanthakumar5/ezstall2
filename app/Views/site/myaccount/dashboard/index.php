@@ -91,8 +91,8 @@
 				
 				foreach($availablestall['barnstall'] as $stall){
 					//if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='1' && $stall['dirtyclean']=='1')){
-						$btnlockunlock ='<div class="bookselectbtn"><button class="btn btn-success ">Unlocked</button></div>';
-						$btndirtyclean ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
+						$btnlockunlock ='<div class="bookselectbtn"><button class="btn btn-success out-btn mx-2">Unlocked</button></div>';
+						$btndirtyclean ='<div class="bookselectbtn"><button class="btn btn-success out-btn">Cleaned</button></div>';
 
 						if($stall['lockunlock']=='1'){
 							$btnlockunlock = '<div class="bookselectbtn"><button class="btn_dash_lock lockunlock_checkout"  data-stallid="'.$stall['stall_id'].'">Locked</button></div>';
