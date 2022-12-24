@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-12">
 			<div class="border rounded pt-3 ps-3 pe-3">
-				<div class="row">
+				<div class="row mb-3">
 					<table class="table-hover table-striped table-light table">
 						<h5 class="fw-bold text-muted">Feed</h5>
 						<thead>
@@ -19,17 +19,18 @@
 							</tr>
 						</thead>
 						<tbody>
-
-						<?php if(!empty($product)){
-							foreach ($product as $products) { 
-								if($products['type']=='1'){ ?>
-									<tr>
-										<td><?php echo $products['name']?></td>
-										<td><?php echo $products['quantity']?></td>
-										<td><?php echo $products['price']?></td>
-									</tr>
-							<?php } } ?>
-						<?php } else { echo "No Feed Inventories."; } ?>
+							<?php if(!empty($product)){
+								foreach ($product as $products) { 
+									if($products['type']=='1'){ ?>
+										<tr>
+											<td><?php echo $products['name']?></td>
+											<td><?php echo $products['quantity']?></td>
+											<td><?php echo $products['price']?></td>
+										</tr>
+								<?php } } ?>
+							<?php } else { ?>
+								<tr><td colspan="3">No Feed Inventories</td></tr>
+							<?php } ?>
 						</tbody>
 					</table>
 				</div>
@@ -50,17 +51,18 @@
 							</tr>
 						</thead>
 						<tbody>
-
-						<?php if(!empty($product)){
-							foreach ($product as $products) { 
-								if($products['type']=='2'){ ?>
-									<tr>
-										<td><?php echo $products['name']?></td>
-										<td><?php echo $products['quantity']?></td>
-										<td><?php echo $products['price']?></td>
-									</tr>
-							<?php } } ?>
-						<?php } else { echo "No Shavings Inventories."; } ?>
+							<?php if(!empty($product)){
+								foreach ($product as $products) { 
+									if($products['type']=='2'){ ?>
+										<tr>
+											<td><?php echo $products['name']?></td>
+											<td><?php echo $products['quantity']?></td>
+											<td><?php echo $products['price']?></td>
+										</tr>
+								<?php } } ?>
+							<?php } else { ?>
+									<tr><td colspan="3">No Shavings Inventories</td></tr>
+							<?php } ?>
 						</tbody>
 					</table>
 				</div>

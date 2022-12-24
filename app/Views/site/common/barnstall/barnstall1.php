@@ -132,7 +132,7 @@ $nobtn					= isset($nobtn) ? $nobtn : '';
 	<div class="container row mt-5 dash-barn-style mx-auto">
 		<div class="row align-items-center mb-4 p-0 addbarn">
 			<div class="col-md-3">
-				<p class="fs-2 fw-bold mb-0 barntfont">Barn</p>
+				<h4 class="fw-bold mb-3 barntfont">Barn</h4>
 			</div>
 			<div class="col-md-9 t-right p-0 respsm">
 				<input type="hidden" value="" name="barnvalidation" id="barnvalidation">

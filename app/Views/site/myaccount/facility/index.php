@@ -34,8 +34,7 @@ $currentdate 					= date("Y-m-d");
 						<a href="<?php echo base_url().'/myaccount/facility/edit/'.$data['id']; ?>" 
 							class="dash-edit-event fs-7 mx-1">
 							Edit
-						</a>
-						
+						</a>						
 						<?php $occupied = getOccupied($data['id']); ?>
 						<?php if(count($occupied)==0){ ?>
 							<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-1 delete">

@@ -21,92 +21,94 @@
     <a href="<?php echo base_url().'/myaccount/payments';?>" class="btn back-btn">Back</a>
   </div>
 </div>
-<section class="maxWidth eventPagePanel">
-    <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Transaction ID</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $transactionid;?></p>
-    </div> 
-  </div> 
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Name</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php if($firstname!='') echo $firstname.$lastname; else echo $name;?></p>
-    </div>
-  </div>
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Name On Card</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $name;?></p>
-    </div>
-  </div>
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Email</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $email;?></p>
-    </div>
-  </div>
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Payment Type</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $type;?></p>
-    </div>
-  </div>  
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Amount</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $currencysymbol.$amount;?></p>
-    </div>
-  </div>  
-  <?php if($type == 2 ){?>
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Plan Date</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $plan_start;?></p>
-    </div>
-  </div>
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Plan End</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $plan_end;?></p>
-    </div>
-  </div>
-<?php }else{ ?>
-  <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Payed Date</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $created; ?></p>
-       <div class="col" align="left">
-      <p class="my-2"></p>
-    </div>
-    </div>
-  </div>
-<?php } ?>
-   <div class="row col-md-12 base-style">
-    <div class="col fw-600 paymentflex">
-      <p class="my-2">Paid By</p>
-    </div>
-    <div class="col" align="left">
-      <p class="my-2"><?php echo $usertype[$result['usertype']]; ?></p>
-    </div>
-  </div>
-</section>
+<div class="card p-3">
+	<section class="maxWidth eventPagePanel">
+		<div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Transaction ID</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $transactionid;?></p>
+		</div> 
+	  </div> 
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Name</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php if($firstname!='') echo $firstname.$lastname; else echo $name;?></p>
+		</div>
+	  </div>
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Name On Card</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $name;?></p>
+		</div>
+	  </div>
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Email</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $email;?></p>
+		</div>
+	  </div>
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Payment Type</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $type;?></p>
+		</div>
+	  </div>  
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Amount</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $currencysymbol.$amount;?></p>
+		</div>
+	  </div>  
+	  <?php if($type == 2 ){?>
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Plan Date</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $plan_start;?></p>
+		</div>
+	  </div>
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Plan End</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $plan_end;?></p>
+		</div>
+	  </div>
+	<?php }else{ ?>
+	  <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Payed Date</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $created; ?></p>
+		   <div class="col" align="left">
+		  <p class="my-2"></p>
+		</div>
+		</div>
+	  </div>
+	<?php } ?>
+	   <div class="row col-md-12 base-style mx-0">
+		<div class="col fw-600 paymentflex">
+		  <p class="my-2">Paid By</p>
+		</div>
+		<div class="col" align="left">
+		  <p class="my-2"><?php echo $usertype[$result['usertype']]; ?></p>
+		</div>
+	  </div>
+	</section>
+</div>
 <?php $this->endSection(); ?>
