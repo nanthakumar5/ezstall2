@@ -21,7 +21,7 @@
 						$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
 						
 						if($stall['lockunlock']=='0' ){
-							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock" data-stallid="'.$stall['stall_id'].'">Unlocked</button></div>';
+							$btnlockunlock = '<div class="bookselectbtn"><button class="btn btn-success lockunlock mx-2" data-stallid="'.$stall['stall_id'].'">Unlocked</button></div>';
 						}
 						
 						if($stall['dirtyclean']=='0'){
