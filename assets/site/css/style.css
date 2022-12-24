@@ -5849,3 +5849,25 @@ div#calendar .fc-button-group button {
     font-weight: 500;
     float: right;
 }
+
+.event-card-header {
+    background-color: #171717;
+}
+
+.event-card-header .card-title {
+    color: #fff;
+    font-size: 20px;
+    padding: 10px;
+    margin-bottom: 0;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.upload-image {
+    border: 1px solid #dee2e6;
+    text-align: center;
+    border-radius: 4px;
+    padding: 14px;
+}

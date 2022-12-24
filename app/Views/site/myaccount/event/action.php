@@ -31,13 +31,13 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 
 <section class="content">
 	<div class="d-flex justify-content-between align-items-center flex-wrap">
-		<div align="left" class="m-0"><h3>Events</h3></div>
+		<div align="left" class="m-0"><h2 class="fw-bold mb-3 mt-2">Events</h2></div>
 		<div class="page-action mb-4 m-0" align="right">
 			<a href="<?php echo base_url(); ?>/myaccount/events" class="btn btn-dark">Back</a>
 		</div>
 	</div>
 	<div class="card">
-		<div class="card-header w-100">
+		<div class="card-header event-card-header w-100">
 			<h3 class="card-title"><?php echo $pageaction; ?> Event</h3>
 		</div>
 		<div class="card-body">
@@ -124,40 +124,40 @@ $facilitylist			= isset($facilitylist) ? $facilitylist : '';
 									</div>
 								</div>
 								<div class="col-md-4 my-2">
-									<div class="form-group">
+									<div class="form-group upload-image">
 										<label>Event Image</label>			
 										<div>
 											<a href="<?php echo $image[1];?>" target="_blank">
 												<img src="<?php echo $image[1];?>" class="image_source" width="100">
 											</a>
 										</div>
-										<input type="file" id="file" name="file" class="image_file">
+										<input type="file" id="file" name="file" class="image_file form-control">
 										<span class="image_msg messagenotify"></span>
 										<input type="hidden" id="image" name="image" class="image_input" value="<?php echo $image[0];?>">
 									</div>
 								</div>							
 								<div class="col-md-4 my-2">
-									<div class="form-group">
+									<div class="form-group upload-image">
 										<label>Event Flyer</label>			
 										<div>
 											<a href="<?php echo $eventflyer[1];?>" target="_blank">
 												<img src="<?php echo $eventflyer[1];?>" class="eventflyer_source" width="100">
 											</a>
 										</div>
-										<input type="file" id="" name="" class="eventflyer_file">
+										<input type="file" id="" name="" class="eventflyer_file form-control">
 										<span class="eventflyer_msg messagenotify"></span>
 										<input type="hidden" id="eventflyer" name="eventflyer" class="eventflyer_input" value="<?php echo $eventflyer[0];?>">
 									</div>
 								</div>
 								<div class="col-md-4 my-2">
-									<div class="form-group">
+									<div class="form-group upload-image">
 										<label>Stall Map (optional)</label>			
 										<div>
 											<a href="<?php echo $stallmap[1];?>" target="_blank">
 												<img src="<?php echo $stallmap[1];?>" class="stallmap_source" width="100">
 											</a>
 										</div>
-										<input type="file" class="stallmap_file">
+										<input type="file" class="stallmap_file form-control">
 										<span class="stallmap_msg messagenotify"></span>
 										<input type="hidden" id="stallmap" name="stallmap" class="stallmap_input" value="<?php echo $stallmap[0];?>">
 									</div>
