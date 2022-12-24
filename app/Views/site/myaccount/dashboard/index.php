@@ -35,7 +35,7 @@
 										<p class="mb-0 fw-bold">'.$availablestall['eventname'].'-'.$availablestall['username'].'</p>
 										<p class="mb-0">'.dateformat($availablestall['check_in']).' / '.dateformat($availablestall['check_out']).' - '.$stall['stallname'].'</p>
 									</div>
-									<div>'.$btnlockunlock..$btndirtyclean.'</div>	
+									<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 								</div>
 							';
 					}
