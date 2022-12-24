@@ -16,7 +16,7 @@
 				$eventname =  $availablestall['eventname'];
 				
 				foreach($availablestall['barnstall'] as $stall){
-					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {						
+					//if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='0')) {						
 						$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock">Locked</button></div>';
 						$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
 						
@@ -42,11 +42,11 @@
 									<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 								</div>
 							';
-					}
+					//}
 				}
 				
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 					
-					if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='0')) {
+					//if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='0')) {
 						$btnlockunlock ='<div class="bookselectbtn"><button class="btn_dash_lock">Locked</button></div>';
 						$btndirtyclean ='<div class="bookselectbtn"><button class="btn_dash_dirty">Dirty</button></div>';
 						
@@ -72,8 +72,7 @@
 									<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 								</div>
 							';
-						}
-						
+					//}						
 				}
 			}
 		}else{ 
@@ -91,7 +90,7 @@
 				$eventname =  $availablestall['eventname'];
 				
 				foreach($availablestall['barnstall'] as $stall){
-					if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='1' && $stall['dirtyclean']=='1')){
+					//if(($stall['lockunlock']=='1' && $stall['dirtyclean']=='0') || ($stall['lockunlock']=='0' && $stall['dirtyclean']=='1') || ($stall['lockunlock']=='1' && $stall['dirtyclean']=='1')){
 						$btnlockunlock ='<div class="bookselectbtn"><button class="btn btn-success ">Unlocked</button></div>';
 						$btndirtyclean ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
 
@@ -116,11 +115,11 @@
 								</div>
 								<div>'.$btnlockunlock.$btndirtyclean.'</div>	
 							</div>';
-					}					
+					//}					
 				}
 
 				foreach($availablestall['rvbarnstall'] as $rvbarnstall){ 
-					if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='1')){
+					//if(($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='0') || ($rvbarnstall['lockunlock']=='0' && $rvbarnstall['dirtyclean']=='1') || ($rvbarnstall['lockunlock']=='1' && $rvbarnstall['dirtyclean']=='1')){
 						$btnlockunlocks ='<div class="bookselectbtn"><button class="btn btn-success">Unlocked</button></div>';
 						$btndirtycleans ='<div class="bookselectbtn"><button class="btn btn-success">Cleaned</button></div>';
 
@@ -145,7 +144,7 @@
 								</div>
 								<div>'.$btnlockunlocks.$btndirtycleans.'</div>	
 							</div>';
-					}
+					//}
 				}
 			}
 		}else{ 
