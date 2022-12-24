@@ -4831,7 +4831,7 @@ div#replylist {
     border: none;
     background-color: #171717;
     color: #fff;
-    margin-top: 1rem;
+    margin: 0 10px;
     border-radius: 4px;
     padding: 8px 16px;
     font-size: 12px;
