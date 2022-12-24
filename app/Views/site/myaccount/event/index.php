@@ -40,37 +40,37 @@ $currentdate 	= date("Y-m-d");
 				</div>
 				<div class="dash-event">
 					<a href="<?php echo base_url().'/myaccount/events/view/'.$data['id']; ?>" 
-						class="dash-view-event fs-7 mx-2">
+						class="dash-view-event fs-7 mx-1">
 						View
 					</a>
 					<?php if($currentdate <= $data['end_date']){ ?>
 					    <?php if($usertype !='4'){ ?>
 							<a href="<?php echo base_url().'/myaccount/'.($data['facility_id']!=0 ? 'facilityevents' : 'events').'/edit/'.$data['id']; ?>" 
-								class="dash-edit-event fs-7 mx-2">
+								class="dash-edit-event fs-7 mx-1">
 								Edit
 							</a>
 							
 							<?php $occupied = getOccupied($data['id']); ?>
 							<?php if(count($occupied)==0){ ?>
-								<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-2 delete">
+								<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-1 delete">
 									Delete
 								</a>
 							<?php }?>
 					    <?php }?>
 					 <?php }?>
 					<a href="<?php echo base_url().'/myaccount/events/inventories/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-2">
+						class="dash-export-event fs-7 mx-1">
 						Inventories
 					</a>
 					<p class="mt-3"></p>
-					<a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
+					<a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-1" data-id="<?php echo $data['id']; ?>">
 						Financial Report
 					</a>
-					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
+					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" class="dash-export-event fs-7 mx-1">
 						Report
 					</a>
 					<?php if($usertype !='4'){ ?>
-						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
+						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-1">
 							Export
 						</a>
 					<?php } ?>
