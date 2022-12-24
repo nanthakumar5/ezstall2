@@ -27,30 +27,30 @@ $currentdate 					= date("Y-m-d");
 				</div>
 				<div class="dash-event">
 					<a href="<?php echo base_url().'/myaccount/facility/view/'.$data['id']; ?>" 
-						class="dash-view-event fs-7 mx-2">
+						class="dash-view-event fs-7 mx-1">
 						View
 					</a>
 					<?php if($usertype !='4'){ ?>
 						<a href="<?php echo base_url().'/myaccount/facility/edit/'.$data['id']; ?>" 
-							class="dash-edit-event fs-7 mx-2">
+							class="dash-edit-event fs-7 mx-1">
 							Edit
 						</a>
 						
 						<?php $occupied = getOccupied($data['id']); ?>
 						<?php if(count($occupied)==0){ ?>
-							<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-2 delete">
+							<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-1 delete">
 								Delete
 							</a>
 						<?php } ?>
 				    <?php } ?>
 					<p class="mt-3"></p>
-				    <a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-2" data-id="<?php echo $data['id']; ?>">
+				    <a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-1" data-id="<?php echo $data['id']; ?>">
 						Financial Report
 					</a>
-				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
+				    <a href="<?php echo base_url().'/myaccount/facility/inventories/'.$data['id']; ?>" class="dash-export-event fs-7 mx-1">
 						Inventories
 					</a>
-					<a href="<?php echo base_url().'/myaccount/facility/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-2">
+					<a href="<?php echo base_url().'/myaccount/facility/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-1">
 						Export
 					</a>
 				</div>

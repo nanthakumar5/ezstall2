@@ -5,7 +5,7 @@
   $name         = isset($result['name']) ? $result['name'] : '';
   $email        = isset($result['email']) ? $result['email'] : '';
 ?>
-  <h3 class="fw-bold mb-1 mt-2">Stall Manager</h3>
+  <h3 class="fw-bold mb-4 mt-2">Stall Manager</h3>
   <div class="card p-3">
 	<form method="post" action="" id="accountinformtion" class="accountinformtion">
 		<div class="mb-3">

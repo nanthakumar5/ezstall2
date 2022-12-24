@@ -5871,3 +5871,7 @@ div#calendar .fc-button-group button {
     border-radius: 4px;
     padding: 14px;
 }
+
+.ques-model button {
+    border: none;
+}
