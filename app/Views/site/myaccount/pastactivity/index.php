@@ -2,12 +2,12 @@
 <?php $this->section('content') ?>
 <?php $currentusertype = $userdetail['type']; ?>
 <div class="dFlexComBetween eventTP flex-wrap py-2">
-	<h2 class="fw-bold mb-4">Past Reservation</h2>
+	<h2 class="fw-bold mb-2">Past Reservation</h2>
 </div>
 <section class="maxWidth eventPagePanel">
 	<?php if(!empty($bookings)) {  ?>
 	<?php foreach ($bookings as $data) { ?>
-		<div class="event__ticket mt-5 mb-5 p-3">
+		<div class="event__ticket mb-5 p-3">
 			<div class="row position-relative">
 				<div class="row col-md-12 ticket_row mt-3">
 					<div class="ticket_content res_mx_3 col-md-2 mx-3">
