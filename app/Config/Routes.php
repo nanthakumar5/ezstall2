@@ -104,6 +104,10 @@ $routes->group('api', function ($routes) {
     //Transaction
     $routes->post('transaction', 'Api\Myaccount\TransactionInfo\Index::index');
 
+    //Subscription
+    $routes->post('subscription', 'Api\Myaccount\Subscription\Index::index');
+    $routes->post('subscription/list', 'Api\Myaccount\Subscription\Index::subscription');
+
 	//Stallmanager
 	$routes->post('stallmanager', 'Api\Myaccount\Stallmanager\Index::index');
 	$routes->post('addstallmanager', 'Api\Myaccount\Stallmanager\Index::add');
