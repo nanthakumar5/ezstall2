@@ -40,7 +40,7 @@ class Index extends BaseController
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
             if($result){
 				
-				$countcurrentstall 			= 0;
+		$countcurrentstall 			= 0;
       	$countcurrentbookingstalls 	= 0;
       	$countcurrentbookingrvlots 	= 0;
       	$countpastevent 			= [];
@@ -175,13 +175,53 @@ class Index extends BaseController
             $json = ['0', $validation->getErrors(), [],[]];
         } 
 		echo json_encode([
-            'status'         => $json[0],
-            'message'       => $json[1],
-            'usertype'         => $json[2],
-			'result'         => $json[3],
+            'status'         	=> $json[0],
+            'message'       	=> $json[1],
+            'usertype'      	=> $json[2],
+			'result'         	=> $json[3],
 			
         ]);
 
         die;		
+    }
+
+    public function lockunlock(){
+    	$post 		= $this->request->getPost();
+    	$validation = \Config\Services::validation();
+    	$validation->setRules(
+	            [
+	                'stallid'   => 'required',
+	            ],
+
+	            [
+	                'stallid
+	                ' => [
+	                    'required' => 'User ID is required.',
+	                ],
+	            ]
+	        );
+
+    	if ($validation->withRequest($this->request)->run()) {
+    		$post['stallid'] 		= explode(',', $post['stallid']);
+
+    		if(isset($post['lockunlock']) || isset($post['dirtyclean'])){
+    			$result = $this->booking->updatedata($post);
+    			if($result){
+    				$json = ['1', 'Stall Updated successfully', $result];
+    			}
+	    	}else {
+                $json = ['0', 'Try Later.', []];
+            }
+        }else{
+            $json = ['0', $validation->getErrors(), []];
+		}
+		
+		echo json_encode([
+            'status'      => $json[0],
+            'message'     => $json[1],
+            'result'      => $json[2],
+        ]);
+
+        die;
     }
 }

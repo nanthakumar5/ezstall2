@@ -17,20 +17,47 @@ class Index extends BaseController
 
     public function stripepayment(){ 
     	$requestData = $this->request->getPost(); 
-    	if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){ 
-			$result = $this->stripe->stripepayment($requestData);
-			$json = ['1', 'Payment Success',$result['paymentintents']['id']];
-		}elseif($requestData['type']=='2'){  
-			$result = $this->stripe->striperecurringpayment($requestData);
-			if($result['stripepay']){
-				$this->cart->delete(['user_id' => $requestData['userid'], 'type' => $requestData['type']]);
-				$json = ['1', 'Payment Success',[]];
+    	$validation = \Config\Services::validation();
+
+        $validation->setRules(
+            [
+                'page'    			=> 'required',
+                'api'    			=> 'required',
+                'userid'    		=> 'required',
+                'type'    			=> 'required',
+            ],
+
+            [
+               
+                'userid' => [
+                    'required' => 'userid is required.',
+                ],
+
+                'type' => [
+                    'required' => 'type is required.',
+                ],
+                'page' => [
+                    'required' => 'page is required.',
+                ],
+                'api' => [
+                    'required' => 'api is required.',
+                ],
+            ]
+        );
+
+        if ($validation->withRequest($this->request)->run()) {
+	    	if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){
+				$result = $this->stripe->stripepayment($requestData);
+				$json = ['1', 'Payment Success',$result['paymentintents']['id']];
+			}elseif($requestData['type']=='2'){  
+				$result = $this->stripe->striperecurringpayment($requestData);
+				$json = ['1', 'Subscription is successfully',$result['paymentintents']['id']];
 			}else{
-				$json = ['0', 'Your payment is not processed successfully',[]];
+				$json = ['0', 'Try Later',[]];
 			}
-		}else{
-			$json = ['0', 'Try Later',[]];
-		}
+		}else {
+            $json = ['0', $validation->getErrors(), []];
+        }
 
 		 echo json_encode([
 	            'status'  => $json[0],
@@ -38,9 +65,5 @@ class Index extends BaseController
 	            'result'  => $json[2],
 	        ]);
 	        die();
-    }
-
-    public function stripekey(){
-
     }
 }
