@@ -98,7 +98,7 @@ class Index extends BaseController
 		
 		$payment = $this->payments->getPayments('row', ['payment'], ['id' => $requestdata['paymentid']]);
 		if($payment){
-			$this->stripe->cancelSchedule($payment['stripe_subscription_id']);
+			$this->stripe->cancelSchedule($payment['stripe_scheduled_id']);
 			$this->bookingdetails->cancelsubscription(['booking_details_id' => $payment['booking_details_id']]);
 		}
 		
