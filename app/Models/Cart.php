@@ -102,7 +102,8 @@ class Cart extends BaseModel
 		if(isset($data['barn_id'])&& $data['barn_id']!='')           			$request['barn_id'] 	    		= $data['barn_id'];
 		if(isset($data['stall_id'])&& $data['stall_id']!='')           			$request['stall_id'] 	    		= $data['stall_id'];
 		if(isset($data['product_id'])&& $data['product_id']!='')        		$request['product_id'] 	    		= $data['product_id'];
-		if(isset($data['price'])&& $data['price']!='')     						$request['price'] 	        		= $data['price'];
+		if(isset($data['mwn_price'])&& $data['mwn_price']!='')     				$request['mwn_price'] 	        	= (isset($data['mwn_price']) ? implode(',', $data['mwn_price']) : '');
+		if(isset($data['price'])&& $data['price']!='')     						$request['price'] 	        		= (isset($data['pricetype']) && in_array($data['pricetype'], ['1', '2','3'])) ? '0' : $data['price'];
 		if(isset($data['subscriptionprice'])&& $data['subscriptionprice']!='')	$request['subscription_price'] 	    = $data['subscriptionprice'];
 		if(isset($data['pricetype'])&& $data['pricetype']!='')     				$request['price_type'] 	    		= $data['pricetype'];
 		if(isset($data['quantity'])&& $data['quantity']!='')           			$request['quantity'] 	    		= $data['quantity'];

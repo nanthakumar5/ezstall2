@@ -322,17 +322,44 @@ function getCart($type=''){
 						
 					$singletotal = $singlechargingid=='4' ?  $singleprice : $singleprice * $intervalday;
 				}else{
-					$intervalday = $interval;
-					if($singlepricetype=='2') 		$intervalday = ceil($intervalday/7);
-					elseif($singlepricetype=='3') 	$intervalday = ceil($intervalday/30);
-					elseif($singlepricetype=='4') 	$intervalday = 1;
-					elseif($singlepricetype=='5') 	$intervalday = 1;
+					$intervalday 	= $interval;					
+					$intervalcalc 	= $interval;	
 					
-					if($singlepricetype=='1') 		$singletotal = $singleprice * $intervalday;
-					elseif($singlepricetype=='2') 	$singletotal = $singleprice * $intervalday;
-					elseif($singlepricetype=='3') 	$singletotal = $singleprice * $intervalday;
-					elseif($singlepricetype=='4') 	$singletotal = $singleprice;
-					elseif($singlepricetype=='5') 	$singletotal = $singleprice;
+					if(in_array($singlepricetype, ['1', '2', '3'])){
+						$singleprice 	= 0;
+						$singletotal 	= 0;
+						$mwnpricelist	= explode(',', $res['mwn_price']);
+						
+						$mwnprice = $mwninterval = $mwntotal = [0, 0, 0];
+						
+						$monthcalc = intdiv($intervalcalc, 30);						
+						if($monthcalc > 0){
+							$mwnprice[0] = $mwnpricelist[0];
+							$mwninterval[0] = $monthcalc;
+							$mwntotal[0] = $mwnprice[0] * $mwninterval[0];
+							$singletotal += $mwntotal[0];
+							$intervalcalc = $intervalcalc - (30 * $monthcalc);
+						}
+							
+						$weekcalc = intdiv($intervalcalc, 7);
+						if($weekcalc > 0){
+							$mwnprice[1] = $mwnpricelist[1];
+							$mwninterval[1] = $weekcalc;
+							$mwntotal[1] = $mwnprice[1] * $mwninterval[1];
+							$singletotal += $mwntotal[1];
+							$intervalcalc = $intervalcalc - (7 * $weekcalc);
+						}
+						
+						if($intervalcalc > 0){
+							$mwnprice[2] = $mwnpricelist[2];
+							$mwninterval[2] = $intervalcalc;
+							$mwntotal[2] = $mwnprice[2] * $mwninterval[2];
+							$singletotal += $mwntotal[2];
+						}
+					}else{
+						$intervalday = 1;
+						$singletotal = $singleprice;
+					}
 				}
 				
 				$barnrvdata = [
@@ -346,7 +373,10 @@ function getCart($type=''){
 					'chargingid' 			=> $singlechargingid,
 					'interval' 				=> $interval,
 					'intervalday' 			=> $intervalday,
-					'total' 				=> $singletotal
+					'total' 				=> $singletotal,
+					'mwn_price' 			=> isset($mwnprice) ? $mwnprice : '',
+					'mwn_interval' 			=> isset($mwninterval) ? $mwninterval : '0',
+					'mwn_total' 			=> isset($mwntotal) ? $mwntotal : '0',
 				];
 				
 				if($res['flag']=='1') 		$barnstall[] = $barnrvdata;

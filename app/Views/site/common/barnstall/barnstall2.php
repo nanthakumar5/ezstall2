@@ -444,8 +444,22 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 			if(stallbox.is(':checked')){
 				stallbox.click();
 			}else{
-				$(this).addClass('priceactive');
-				stallbox.attr('data-price', $(this).attr('data-pricebutton'));
+				if($.inArray($(this).attr('data-pricetype'), ['1', '2', '3']) !== -1){
+					var pricelist = $(this).closest('.pricelist');
+					pricelist.find('.night_button').addClass('priceactive');
+					pricelist.find('.week_button').addClass('priceactive');
+					pricelist.find('.month_button').addClass('priceactive');
+					
+					stallbox.attr('data-nightprice', pricelist.find('.night_button').attr('data-pricebutton'));
+					stallbox.attr('data-weekprice', pricelist.find('.week_button').attr('data-pricebutton'));
+					stallbox.attr('data-monthprice', pricelist.find('.month_button').attr('data-pricebutton'));
+					
+					stallbox.attr('data-price', $(this).attr('data-pricebutton'));
+				}else{
+					$(this).addClass('priceactive');
+					stallbox.attr('data-price', $(this).attr('data-pricebutton'));
+				}
+				
 				stallbox.click();
 			}
 		})
@@ -618,19 +632,27 @@ function pricinglist($night, $week, $month, $flat, $sinitial, $smonth){
 				var startdate 	= $("#startdate").val(); 
 				var enddate   	= $("#enddate").val(); 
 
-				if(flag==1 || flag==2){			
+				if(flag==1 || flag==2){
 					var barnid    			= _this.attr('data-barnid');
 					var stallid				= _this.val(); 
 					var price 				= _this.attr('data-price');
 					var pricetype   		= _this.closest('li').find('.priceactive').attr('data-pricetype'); 
 					var subscriptionprice  	= _this.closest('li').find('.priceactive').attr('data-sprice'); 
-
+				
+					var mwnprice			= [];
+					if($.inArray(pricetype, ['1', '2', '3']) !== -1){
+						mwnprice.push(_this.attr('data-monthprice')!=undefined ? _this.attr('data-monthprice') : '0');
+						mwnprice.push(_this.attr('data-weekprice')!=undefined ? _this.attr('data-weekprice') : '0');
+						mwnprice.push(_this.attr('data-nightprice')!=undefined ? _this.attr('data-nightprice') : '0');
+					}
+					mwnprice.join(',');
+					
 					if($(_this).is(':checked')){  
 						var pricevalidation = checkprice(_this);
 						if(!pricevalidation) return false;
 					
 						var checkoccupiedreserved = occupiedreserved(startdate, enddate, stallid);
-						if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, price : price, subscriptionprice : subscriptionprice, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
+						if(checkoccupiedreserved==1) cart({event_id : eventid, barn_id : barnid, stall_id : stallid, mwn_price : mwnprice, price : price, subscriptionprice : subscriptionprice, pricetype : pricetype, quantity : 1, startdate : startdate, enddate : enddate, type : eventtype, checked : 1, flag : flag, actionid : ''});
 					}else{ 
 						$('.stallavailability[data-stallid='+stallid+']').removeClass("yellow-box").addClass("green-box");
 						$('.stallavailability[data-stallid='+stallid+']').closest("li").find('.price_button').removeClass('priceactive');

@@ -1033,14 +1033,32 @@ function cartsummary(pagetype, type, title, result){
 				if(name!=v.barn_name){
 					data += '<div><span class="col-12 fw-bold">'+v.barn_name+'</span></div>';
 				}
-
+				
+				if($.inArray(v.pricetype, ['1', '2', '3']) !== -1){
+					var pricetagline = '';
+					
+					var priceitem = [];
+					var mwnlist = ['M', 'W', 'N'];
+					for(i=0; i<3; i++){
+						var mwnprice = v.mwn_price;
+						var mwninterval = v.mwn_interval;
+						var mwntotal = v.mwn_total;
+						
+						if(mwnprice[i] > 0) priceitem.push(mwnlist[i]+'('+currencysymbol+mwnprice[i]+'x'+mwninterval[i]+') '+currencysymbol+mwntotal[i]);
+					}					
+					priceitem = priceitem.join('<br />');
+				}else{
+					var pricetagline = v.pricetype!=0 ? '<span class="pricelist_tagline">('+pricelists[v.pricetype]+')</span>' : "";
+					var priceitem = '('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total;
+				}
+				
 				data += '<div class="row">\
 							<span class="col-7 event_c_text">\
 								'+v.stall_name+'\
-								'+(v.pricetype!=0 ? '<span class="pricelist_tagline">('+pricelists[v.pricetype]+')</span>' : "")+'\
+								'+pricetagline+'\
 							</span>\
 							<span class="col-5 text-end event_c_text">\
-								('+currencysymbol+v.price+'x'+v.intervalday+') '+currencysymbol+v.total+'\
+								'+priceitem+'\
 								'+(v.pricetype==5 ? currencysymbol+v.subscriptionprice : "")+'\
 							</span>\
 						</div>';
@@ -1048,10 +1066,23 @@ function cartsummary(pagetype, type, title, result){
 				if(pagetype==1){
 					$('.stallid[value='+v.stall_id+']').removeAttr('disabled');				
 					if(v.pricetype!=0){
-						$('.stallid[value='+v.stall_id+']').closest('li').find('.price_button').removeAttr('disabled');
+						$('.stallid[value='+v.stall_id+']').closest('li').find('.price_button').removeAttr('disabled');						
 						var pricebox = $('.stallid[value='+v.stall_id+']').closest('li').find('.price_button[data-pricetype="'+v.pricetype+'"]');
 						pricebox.addClass('priceactive');
 						$('.stallid[value='+v.stall_id+']').attr('data-price', pricebox.attr('data-pricebutton'));
+						
+						if($.inArray(v.pricetype, ['1', '2', '3']) !== -1){
+							var priceboxes1 = $('.stallid[value='+v.stall_id+']');
+							var priceboxes2 = priceboxes1.closest('li').find('.pricelist');
+							
+							priceboxes2.find('.night_button').addClass('priceactive');
+							priceboxes2.find('.week_button').addClass('priceactive');
+							priceboxes2.find('.month_button').addClass('priceactive');
+							
+							priceboxes1.attr('data-nightprice', priceboxes2.find('.night_button').attr('data-pricebutton'));
+							priceboxes1.attr('data-weekprice', priceboxes2.find('.week_button').attr('data-pricebutton'));
+							priceboxes1.attr('data-monthprice', priceboxes2.find('.month_button').attr('data-pricebutton'));
+						}
 					}
 				}
 				
