@@ -49,7 +49,7 @@ class Index extends BaseController
 	    	if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){
 				$result = $this->stripe->stripepayment($requestData);
                 if(isset($requestData['stripepay'])){
-                    $this->cart->delete(['user_id' => $requestData['user_id'], 'type' => $requestData['type']]);
+                    $this->cart->delete(['user_id' => $requestData['userid'], 'type' => $requestData['type']]);
                 }
 				$json = ['1', 'Payment Success',$result['paymentintents']['client_secret']];
 			}elseif($requestData['type']=='2'){  
