@@ -559,6 +559,7 @@ function send_emailsms_template($id, $extras=[]){
             '#productname', 
 			'#eventname',
 			'#stallname',
+			'#datetime',
 			'#link'
         ],
         [
@@ -566,6 +567,7 @@ function send_emailsms_template($id, $extras=[]){
             isset($productname) ? $productname : '',
             isset($eventname) ? $eventname : '',
             isset($extras['stallsname']) ? $extras['stallsname'] : '',
+            isset($extras['datetime']) ? $extras['datetime'] : '',
             isset($link) ? $link : ''
         ],
         $emailsmstemplate['message']

@@ -153,17 +153,20 @@ class Stripe extends BaseController
                 $this->db->table('payment')->where(['id' => $scheduledsubscription['id']])->update(['stripe_subscription_id' => $result->id]);
             }
 	    }elseif($type=='4'){
-	        $payment = $this->db->table('payment p')
-			->join('booking b', 'b.payment_id=p.id', 'left')
-			->join('stall s', 's.id=p.plan_id', 'left')
-			->select('p.user_id, b.event_id, s.name')
-			->where(['stripe_subscription_id' => $result->subscription])
-			->get()
-			->getRowArray();
-			
-			if($payment){
-				send_emailsms_template('8', ['userid' => $payment['user_id'], 'eventid' => $payment['event_id'], 'stallsname' => $payment['name']]);
-				send_emailsms_template('9', ['email' => getAdminMail(), 'userid' => $payment['user_id'], 'eventid' => $payment['event_id'], 'stallsname' => $payment['name']]);
+			if($result!=''){
+				$payment = $this->db->table('payment p')
+				->join('booking b', 'b.payment_id=p.id', 'left')
+				->join('stall s', 's.id=p.plan_id', 'left')
+				->select('p.user_id, b.event_id, s.name')
+				->where(['stripe_subscription_id' => $result->subscription])
+				->get()
+				->getRowArray();
+				
+				if($payment){
+					$datetime = $result->next_payment_attempt!=null ? formatdate($result->next_payment_attempt, 2) : 'recurring ended';
+					send_emailsms_template('8', ['userid' => $payment['user_id'], 'eventid' => $payment['event_id'], 'stallsname' => $payment['name'], 'datetime' => $datetime]);
+					send_emailsms_template('9', ['email' => getAdminMail(), 'userid' => $payment['user_id'], 'eventid' => $payment['event_id'], 'stallsname' => $payment['name'], 'datetime' => $datetime]);
+				}
 			}
 	    }
 	}
