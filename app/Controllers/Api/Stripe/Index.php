@@ -48,10 +48,10 @@ class Index extends BaseController
         if ($validation->withRequest($this->request)->run()) {
 	    	if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){
 				$result = $this->stripe->stripepayment($requestData);
-				$json = ['1', 'Payment Success',$result['paymentintents']['id']];
+				$json = ['1', 'Payment Success',$result['paymentintents']['client_secret']];
 			}elseif($requestData['type']=='2'){  
 				$result = $this->stripe->striperecurringpayment($requestData);
-				$json = ['1', 'Subscription is successfully',$result['paymentintents']['id']];
+				$json = ['1', 'Subscription is successfully',$result['paymentintents']['client_secret']];
 			}else{
 				$json = ['0', 'Try Later',[]];
 			}
