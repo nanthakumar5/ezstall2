@@ -49,7 +49,7 @@ class Index extends BaseController
 	    	if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){
 				$result = $this->stripe->stripepayment($requestData);
                 if(isset($requestData['stripepay'])){
-                    $this->cart->delete(['user_id' => $userid, 'type' => $requestData['type']]);
+                    $this->cart->delete(['user_id' => $requestData['user_id'], 'type' => $requestData['type']]);
                 }
 				$json = ['1', 'Payment Success',$result['paymentintents']['client_secret']];
 			}elseif($requestData['type']=='2'){  
@@ -68,26 +68,5 @@ class Index extends BaseController
 	            'result'  => $json[2],
 	        ]);
 	        die();
-    }
-
-    public function secretstripekey(){
-        $requestData = $this->request->getPost();
-
-        if($requestData['type']=='1' || (isset($requestData['page']) && $requestData['page']=='checkout')){
-            $customerid = $this->stripe->customer(2,'muthulakshmi M','muthulakshmi@itflexsolutions.com','cus_N2VaqUup09Ixa3');
-            $amount = 0.50*100;
-            $result = $this->stripe->createPaymentIntents($customerid,$amount);
-            $json = ['1', 'Secre key',$result['id']];
-        }else{
-            $json = ['0', 'Try Later',[]];
-        }
-
-        echo json_encode([
-            'status'  => $json[0],
-            'message' => $json[1],
-            'result'  => $json[2],
-        ]);
-
-        die();
     }
 }
