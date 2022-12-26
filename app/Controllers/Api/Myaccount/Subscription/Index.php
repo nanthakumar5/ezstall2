@@ -54,42 +54,4 @@ class Index extends BaseController
 
         die;
     }
-
-    public function subscription(){
-    	$requestData  	= $this->request->getPost();
-        $validation 	= \Config\Services::validation();
-        $validation->setRules(
-            [
-                'stripepay'       => 'required',
-                'type'       => 'required',
-            ],
-
-            [
-                'stripepay' => [
-                    'required' => 'stripepay is required.',
-                ],
-                'type' => [
-                    'required' => 'type is required.',
-                ],
-            ]
-        );
-
-        if ($validation->withRequest($this->request)->run()) {
-			if(isset($requestData['stripepay'])){
-				$json = ['1', 'Your payment is processed successfully',[]];
-			}else{
-				$json = ['0', 'Your payment is not processed successfully.',[]];
-			}
-        } else {
-            $json = ['0', $validation->getErrors(), []];
-        }
-
-        echo json_encode([
-            'status'         => $json[0],
-            'message'        => $json[1],
-            'result'         => $json[2],
-        ]);
-
-        die;
-    } 
 }

@@ -52,9 +52,14 @@ class Index extends BaseController
                     $this->cart->delete(['user_id' => $requestData['userid'], 'type' => $requestData['type']]);
                 }
 				$json = ['1', 'Payment Success',$result['paymentintents']['client_secret']];
-			}elseif($requestData['type']=='2'){  
+			}elseif($requestData['type']=='2'){ 
 				$result = $this->stripe->striperecurringpayment($requestData);
-				$json = ['1', 'Subscription is successfully',$result['paymentintents']['client_secret']];
+                if($result){
+                    if(isset($requestData['stripepay'])){
+                        $json = ['1', 'Your payment is processed successfully.',$result['paymentintents']['client_secret']];
+                    }
+                }
+                $json = ['0', 'Try Later',[]];
 			}else{
 				$json = ['0', 'Try Later',[]];
 			}
