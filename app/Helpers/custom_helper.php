@@ -191,6 +191,11 @@ function getStripeCurrency()
 	return 'inr';
 }
 
+function getAdminMail()
+{
+	return 'support@ezstall.com';
+}
+
 function send_mail($to,$subject,$message,$attachment='')
 {
 	$email = \Config\Services::email();
@@ -527,10 +532,12 @@ function send_emailsms_template($id, $extras=[]){
 		}elseif($id=='2'){
 			$link  		= base_url().'/changepassword/'.base64_encode($users['id']).'/'.base64_encode(date('Y-m-d H:i:s', strtotime('+1 day')));
 		}
-    }else{
-		$email  	= isset($extras['email']) ? $extras['email'] : '';
+    }
+	
+	if(isset($extras['email'])){
+		$email  = $extras['email'];
 	}
-    
+	
     if(isset($extras['productid'])){ 
         $products 		= $products->getProduct('row', ['product'], ['id' => $extras['productid']]);
         $productname 	= $products['name'];
