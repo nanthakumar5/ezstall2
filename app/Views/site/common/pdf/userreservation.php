@@ -266,6 +266,7 @@
     $type               = pathinfo($path, PATHINFO_EXTENSION);
     $data               = file_get_contents($path);
     $logo               = 'data:image/' . $type . ';base64,' . base64_encode($data);
+	$mwnlist 			= ['M', 'W', 'N'];
 	?>
 	<div class="container event__ticket">
 		<div class="pdf-logo text-center" style="text-align:ceter;width:100%;padding:10px;float:none;display:flex;align-item:center;">
@@ -332,86 +333,154 @@
                    <td style="padding:20px;">
                         <div class="col-md-7">
                             <div class="stall-summary-list">
-                                <h5 style="padding:15px;" class="fw-bold text-muted">Barn&amp;Stall</h5>
-                                <br>
-                                <?php if(!empty($barnstalls)) {  
-                                        foreach ($barnstalls as $barnstall) {?> 
-                                <table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
-                                                <thead>
-                                                        <tr>
-                                                        <th style="width:200px;padding:10px;"> <?php echo $barnstall["barnname"];?></th>
-                                                        <th style="padding:10px;"> <p class="totalbg"> Total</p></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="width:200px;padding:10px;"><?php echo $barnstall["stallname"];?></td>
-                                                        <td style="padding:10px;"><?php echo ($currencysymbol.$barnstall['price'].'x'.$barnstall['quantity']); ?><?php echo $currencysymbol.$barnstall['total']; ?></td>
-                                                    </tr>
-                                                </tbody>
-                                </table>
-                                <?php } } else{ echo '<p style="width: 100%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;font-weight:600;">No Data</p>'; } ?>
-                                <h5 style="padding:15px;" class="fw-bold text-muted">RV&amp;Stall</h5>
-                                <br>
-                                <?php if(!empty($rvbarnstalls)) {
-                                    foreach ($rvbarnstalls as $rvbarnstall) { ?>
-                                <table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:200px;padding:10px;"> <?php echo $rvbarnstall["barnname"];?></th>
-                                                    <th style="padding:10px;"> <p class="totalbg"> Total</p></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td style="width:200px;padding:10px;"><?php echo $rvbarnstall["stallname"];?></td>
-                                                    <td style="padding:10px;"><?php echo ($currencysymbol.$rvbarnstall['price'].'x'.$rvbarnstall['quantity']);?><?php echo $currencysymbol.$rvbarnstall['total']; ?></td>
-                                                </tr>
-                                            </tbody>
-                                </table>
-                                <?php } } else{ echo '<p style="width: 100%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;font-weight:600;">No Data</p>'; } ?>
+								<?php if(!empty($barnstalls)){  ?>
+									<h5 style="padding:15px;" class="fw-bold text-muted">Barn&amp;Stall</h5><br>
+									<table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
+										<?php 
+											$barnname = '';
+											foreach($barnstalls as $barnstall){ 
+												if($barnname!=$barnstall['barnname']){
+												$barnname = $barnstall['barnname']; 
+										?> 
+											<thead>
+												<tr>
+													<th style="width:200px;padding:10px;"> <?php echo $barnstall["barnname"];?></th>
+													<th style="padding:10px;"> <p class="totalbg"> Total</p></th>
+												</tr>
+											</thead>
+											<?php 
+												} 										
+												$pricetype = '';
+												if($barnstall['price_type']!=0 && !in_array($barnstall['price_type'], ['1','2','3'])){ 
+													$pricetype = '<span class="pricelist_tagline">('.$pricelists[$barnstall['price_type']].')</span>'; 
+												}	
+											?>
+											<tbody>
+												<tr>
+													<td style="width:200px;padding:10px;"><?php echo $barnstall["stallname"].$pricetype; ?></td>
+													<?php if(in_array($barnstall['price_type'], ['1','2','3'])){ ?>
+														<?php 
+															$mwnprice 		= explode(',', $barnstall['mwn_price']);
+															$mwninterval 	= explode(',', $barnstall['mwn_interval']);
+															$mwntotal 		= explode(',', $barnstall['mwn_total']);
+														?>
+														<td style="padding:10px;">
+															<?php
+																for($i=0; $i<count($mwnprice); $i++){
+																	if($mwnprice[$i]!=0){
+																		echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>';  
+																	}
+																}
+															?>
+														</td>
+													<?php }else{ ?>
+														<td style="padding:10px;"><?php echo ($currencysymbol.$barnstall['price'].'x'.$barnstall['quantity']); ?><?php echo $currencysymbol.$barnstall['total']; ?></td>
+													<?php } ?>
+												</tr>
+												<?php if($barnstall['price_type']==5){ ?>
+													<tr>
+														<td style="padding:10px;"><span><?php echo 'Date : ('.formatdate($barnstall['subscriptionstartdate'], 1).')'; ?></span></td>
+														<td style="padding:10px;"><span><?php echo $currencysymbol.$barnstall['subscription_price']; ?></span></td>
+													</tr>
+												<?php } ?>
+											</tbody>
+										<?php } ?>
+									</table>
+                                <?php } ?>
+								<?php if(!empty($rvbarnstalls)) { ?>
+									<h5 style="padding:15px;" class="fw-bold text-muted">RV&amp;Stall</h5><br>
+									<table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
+										<?php 
+											$rvbarnstallname = '';
+											foreach ($rvbarnstalls as $rvbarnstall) {
+												if($rvbarnstallname!=$rvbarnstall['barnname']){
+													$rvbarnstallname = $rvbarnstall['barnname']; 
+										?>
+											<thead>
+												<tr>
+													<th style="width:200px;padding:10px;"> <?php echo $rvbarnstall["barnname"];?></th>
+													<th style="padding:10px;"> <p class="totalbg"> Total</p></th>
+												</tr>
+											</thead>
+											<?php 
+											}
+											$pricetype = '';
+											if($rvbarnstall['price_type']!=0 && !in_array($rvbarnstall['price_type'], ['1','2','3'])){ 
+												$pricetype = '<span class="pricelist_tagline">('.$pricelists[$rvbarnstall['price_type']].')</span>'; 
+											}
+											?>
+											<tbody>
+												<tr>
+													<td style="width:200px;padding:10px;"><?php echo $rvbarnstall["stallname"].$pricetype;?></td>
+													<?php if(in_array($rvbarnstall['price_type'], ['1','2','3'])){ ?>
+														<?php 
+															$mwnprice 		= explode(',', $rvbarnstall['mwn_price']);
+															$mwninterval 	= explode(',', $rvbarnstall['mwn_interval']);
+															$mwntotal 		= explode(',', $rvbarnstall['mwn_total']);
+														?>
+														<td style="padding:10px;">
+															<?php
+																for($i=0; $i<count($mwnprice); $i++){
+																	if($mwnprice[$i]!=0){
+																		echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																	}
+																}
+															?>
+														</td>
+													<?php }else{ ?>
+														<td style="padding:10px;"><?php echo ($currencysymbol.$rvbarnstall['price'].'x'.$rvbarnstall['quantity']);?><?php echo $currencysymbol.$rvbarnstall['total']; ?></td>
+													<?php } ?>
+												</tr>
+												<?php if($rvbarnstall['price_type']==5){ ?>
+													<tr>
+														<td><span><?php echo 'Date : ('.formatdate($rvbarnstall['subscriptionstartdate'], 1).')'; ?></span></td>
+														<td><span><?php echo $currencysymbol.$rvbarnstall['subscription_price']; ?></span></td>
+													</tr>
+												<?php } ?>
+											</tbody>
+										<?php } ?>
+									</table>
+                                <?php } ?>
                                 
-                                <h5 style="padding:15px;" class="fw-bold text-muted">Feed</h5>
-                                <br>
-                                <table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
-                                    <thead>
-                                        <tr>
-                                            <th  style="width:200px;padding:10px;"> Feed Name</th>
-                                            <th style="padding:10px;"> <p class="totalbg"> Total</p></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php 
-                                        if(!empty($feeds)) {  
-                                            foreach ($feeds as $feed) { ?>
-                                        <tr>
-                                            <td style="width:200px;padding:10px;"><?php echo $feed['productname']; ?></td>
-                                            <td style="padding:10px;"><?php echo ($currencysymbol.$feed['price'].'x'.$feed['quantity']);?> <?php echo $currencysymbol.$feed['total']; ?></td>
-                                        </tr>
-                                            <?php } } else{ echo '<p style="width: 100%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;font-weight:600;">No Data</p>'; } ?>
-                                    </tbody>
-                                </table>    
-                                
-                                <h5 style="padding:15px;" class="fw-bold text-muted">Shavings</h5>
-                                <br>
-                                <table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:200px;padding:10px;"> Feed Name</th>
-                                            <th style="padding:10px;"> <p class="totalbg"> Total</p></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php 
-                                        if(!empty($shavings)) {  
-                                            foreach ($shavings as $shaving) { ?>
-                                        <tr>
-                                            <td  style="width:200px;padding:10px;"><?php echo $shaving['productname'];?></td>
-                                            <td style="padding:10px;"><?php echo ($currencysymbol.$shaving['price'].'x'.$shaving['quantity'])?><?php echo $currencysymbol.$shaving['total']; ?></td>
-                                        </tr>
-                                        <?php }  } else{ echo '<p style="width: 100%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;font-weight:600;">No Data</p>'; } ?>
-                                    </tbody>
-                                </table> 
+								<?php  if(!empty($feeds)) { ?> 
+									<h5 style="padding:15px;" class="fw-bold text-muted">Feed</h5><br>
+									<table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
+										<thead>
+											<tr>
+												<th  style="width:200px;padding:10px;"> Feed Name</th>
+												<th style="padding:10px;"> <p class="totalbg"> Total</p></th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($feeds as $feed) { ?>
+												<tr>
+													<td style="width:200px;padding:10px;"><?php echo $feed['productname']; ?></td>
+													<td style="padding:10px;"><?php echo ($currencysymbol.$feed['price'].'x'.$feed['quantity']);?> <?php echo $currencysymbol.$feed['total']; ?></td>
+												</tr>
+											<?php } ?>
+										</tbody>
+									</table>    
+                                <?php } ?>
+								
+								<?php if(!empty($shavings)) { ?>
+									<h5 style="padding:15px;" class="fw-bold text-muted">Shavings</h5><br>
+									<table class="table-hover table-striped table-light table" style="width: 80%;border: 1px solid #f0f0f0;padding: 20px;border-left: 3px solid #e00000;">
+										<thead>
+											<tr>
+												<th style="width:200px;padding:10px;"> Feed Name</th>
+												<th style="padding:10px;"> <p class="totalbg"> Total</p></th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($shavings as $shaving){ ?>
+												<tr>
+													<td  style="width:200px;padding:10px;"><?php echo $shaving['productname'];?></td>
+													<td style="padding:10px;"><?php echo ($currencysymbol.$shaving['price'].'x'.$shaving['quantity'])?><?php echo $currencysymbol.$shaving['total']; ?></td>
+												</tr>
+											<?php } ?>
+										</tbody>
+									</table> 
+                                <?php } ?>
                             </div>
                         </div>
                     </td>
