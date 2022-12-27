@@ -532,7 +532,7 @@ function checkoutEmailSms($bookingid)
 	$data['usertype'] 		= $config->usertype;
 	$data['settings'] 		= getSettings();
 	$data['currencysymbol'] = $config->currencysymbol;
-	$data['pricelists'] 	= $this->config->pricelist; 
+	$data['pricelists'] 	= $config->pricelist; 
 	$html 					=  view('site/common/pdf/userreservation', $data);
 	
 	$mpdf = new \Mpdf\Mpdf();
