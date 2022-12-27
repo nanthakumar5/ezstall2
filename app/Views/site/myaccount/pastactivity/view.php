@@ -123,7 +123,7 @@
 										<?php 
 										} 										
 										$pricetype = '';
-										if($barnstalldata['price_type']!=0){ 
+										if($barnstalldata['price_type']!=0 && !in_array($barnstalldata['price_type'], ['1','2','3'])){ 
 											$pricetype = '<span class="pricelist_tagline">('.$pricelists[$barnstalldata['price_type']].')</span>'; 
 										}	
 										?>
@@ -184,7 +184,7 @@
 										<?php 
 										}
 										$pricetype = '';
-										if($rvbarnstalldata['price_type']!=0){ 
+										if($rvbarnstalldata['price_type']!=0 && !in_array($rvbarnstalldata['price_type'], ['1','2','3'])){ 
 											$pricetype = '<span class="pricelist_tagline">('.$pricelists[$rvbarnstalldata['price_type']].')</span>'; 
 										}
 										?>
