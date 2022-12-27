@@ -18,6 +18,7 @@
 	$paymentmethod      = isset($result['paymentmethod_name']) ? $result['paymentmethod_name'] : '';
 	$paidunpaid         = isset($result['paid_unpaid']) ? $result['paid_unpaid'] : '';
 	$specialnotice      = isset($result['special_notice']) ? $result['special_notice'] : '';
+	$mwnlist 			= ['M', 'W', 'N'];
 
 ?>
 <div class="row">
@@ -140,7 +141,7 @@
 															<?php
 																for($i=0; $i<count($mwnprice); $i++){
 																	if($mwnprice[$i]!=0){
-																		echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																		echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
 																	}
 																}
 															?>
@@ -201,7 +202,7 @@
 														<?php
 															for($i=0; $i<count($mwnprice); $i++){
 																if($mwnprice[$i]!=0){
-																	echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																	echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
 																}
 															}
 														?>
@@ -210,6 +211,14 @@
 													<td><?php echo '('.$currencysymbol.$rvprice.'x'.$rvquantity.')'.$currencysymbol.$rvtotal ?></td>
 												<?php } ?>
 											</tr>
+											<?php if($rvbarnstalldata['price_type']==5){ ?>
+												<tr>
+													<td><span class="subscriptionprice_date"><?php echo 'Date : ('.formatdate($rvbarnstalldata['subscriptionstartdate'], 1).')'; ?></span></td>
+													<td>
+														<span class="subscriptionprice_amount"><?php echo $currencysymbol.$rvbarnstalldata['subscription_price']; ?></span>
+													</td>
+												</tr>
+											<?php } ?>
 										</tbody>
 									<?php } ?>
 							</table>

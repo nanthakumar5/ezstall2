@@ -19,6 +19,7 @@
 	$paymentmethod      = isset($result['paymentmethod_name']) ? $result['paymentmethod_name'] : '';
 	$paidunpaid         = isset($result['paid_unpaid']) ? $result['paid_unpaid'] : '';
 	$specialnotice      = isset($result['special_notice']) ? $result['special_notice'] : '';
+	$mwnlist 			= ['M', 'W', 'N'];
 ?>
 
 <div class="row">
@@ -151,7 +152,7 @@
 															<?php
 																for($i=0; $i<count($mwnprice); $i++){
 																	if($mwnprice[$i]!=0){
-																		echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>';  
+																		echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>';  
 																	}
 																}
 															?>
@@ -217,7 +218,7 @@
 														<?php
 															for($i=0; $i<count($mwnprice); $i++){
 																if($mwnprice[$i]!=0){
-																	echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																	echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
 																}
 															}
 														?>

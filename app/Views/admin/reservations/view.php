@@ -14,6 +14,7 @@
 		$checkout 					= isset($result['check_out']) ? $result['check_out'] : '';
 		$checkout                   = formatdate($checkout, 1);
 		$createdat       	  		= isset($result['created_at']) ? formatdate($result['created_at'], 2) : '';
+		$mwnlist 					= ['M', 'W', 'N'];
 	?>
 	<section class="content-header">
 		<div class="container-fluid">
@@ -125,25 +126,37 @@
 													<?php 
 													} 										
 													$pricetype = '';
-													if($barnstall['price_type']!=0){ 
+													if($barnstall['price_type']!=0 && !in_array($barnstall['price_type'], ['1','2','3'])){ 
 														$pricetype = '<span class="pricelist_tagline">('.$pricelists[$barnstall['price_type']].')</span>'; 
 													}	
 													?>
 														<tbody>
 															<tr>
 																<td><?php echo $barnstall['stallname'].$pricetype; ?></td>
-																<td><?php echo '('.$currencysymbol.$barnstall['price'].'x'.$barnstall['quantity'].')'.$currencysymbol.$barnstall['total']; ?></td>
+																<?php if(in_array($barnstall['price_type'], ['1','2','3'])){ ?>
+																	<?php 
+																		$mwnprice 		= explode(',', $barnstall['mwn_price']);
+																		$mwninterval 	= explode(',', $barnstall['mwn_interval']);
+																		$mwntotal 		= explode(',', $barnstall['mwn_total']);
+																	?>
+																	<td>
+																		<?php
+																			for($i=0; $i<count($mwnprice); $i++){
+																				if($mwnprice[$i]!=0){
+																					echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>';  
+																				}
+																			}
+																		?>
+																	</td>
+																<?php }else{ ?>
+																	<td><?php echo '('.$currencysymbol.$barnstall['price'].'x'.$barnstall['quantity'].')'.$currencysymbol.$barnstall['total']; ?></td>
+																<?php } ?>
 															</tr>
 															<?php if($barnstall['price_type']==5){ ?>
 																<tr>
 																	<td><span class="subscriptionprice_date"><?php echo 'Date : ('.formatdate($barnstall['subscriptionstartdate'], 1).')'; ?></span></td>
 																	<td>
 																		<span class="subscriptionprice_amount"><?php echo $currencysymbol.$barnstall['subscription_price']; ?></span>
-																		<?php if($barnstall['subscription_status']=='1'){ ?>
-																			<a href="javascript:void(0);" class="btn btn-primary cancelsubscription" data-bookingid="<?php echo $bookingid; ?>" data-paymentid="<?php echo $barnstall['payment_id']; ?>">Cancel</a>
-																		<?php }else{ ?>
-																			<a href="javascript:void(0);" class="btn btn-danger">Cancelled</a>
-																		<?php } ?>
 																	</td>
 																</tr>
 															<?php } ?>
@@ -174,15 +187,40 @@
 													<?php 
 													}
 													$pricetype = '';
-													if($rvbarnstall['price_type']!=0){ 
+													if($rvbarnstall['price_type']!=0 && !in_array($rvbarnstall['price_type'], ['1','2','3'])){ 
 														$pricetype = '<span class="pricelist_tagline">('.$pricelists[$rvbarnstall['price_type']].')</span>'; 
 													}
 													?>
 													<tbody>
 														<tr>
 															<td><?php echo $rvstallname.$pricetype; ?></td>
-															<td><?php echo '('.$currencysymbol.$rvprice.'x'.$rvquantity.')'.$currencysymbol.$rvtotal ?></td>
+															<?php if(in_array($rvbarnstall['price_type'], ['1','2','3'])){ ?>
+																<?php 
+																	$mwnprice 		= explode(',', $rvbarnstall['mwn_price']);
+																	$mwninterval 	= explode(',', $rvbarnstall['mwn_interval']);
+																	$mwntotal 		= explode(',', $rvbarnstall['mwn_total']);
+																?>
+																<td>
+																	<?php
+																		for($i=0; $i<count($mwnprice); $i++){
+																			if($mwnprice[$i]!=0){
+																				echo $mwnlist[$i].'('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																			}
+																		}
+																	?>
+																</td>
+															<?php }else{ ?>
+																<td><?php echo '('.$currencysymbol.$rvprice.'x'.$rvquantity.')'.$currencysymbol.$rvtotal ?></td>
+															<?php } ?>
 														</tr>
+														<?php if($rvbarnstall['price_type']==5){ ?>
+															<tr>
+																<td><span class="subscriptionprice_date"><?php echo 'Date : ('.formatdate($rvbarnstall['subscriptionstartdate'], 1).')'; ?></span></td>
+																<td>
+																	<span class="subscriptionprice_amount"><?php echo $currencysymbol.$rvbarnstall['subscription_price']; ?></span>
+																</td>
+															</tr>
+														<?php } ?>
 													</tbody>
 												<?php } ?>
 										</table>
