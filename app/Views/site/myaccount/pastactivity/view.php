@@ -130,7 +130,24 @@
 											<tbody>
 												<tr>
 													<td><?php echo $barnstalldata['stallname'].$pricetype; ?></td>
-													<td><?php echo '('.$currencysymbol.$barnstalldata['price'].'x'.$barnstalldata['quantity'].')'.$currencysymbol.$barnstalldata['total']; ?></td>
+													<?php if(in_array($barnstalldata['price_type'], ['1','2','3'])){ ?>
+														<?php 
+															$mwnprice 		= explode(',', $barnstalldata['mwn_price']);
+															$mwninterval 	= explode(',', $barnstalldata['mwn_interval']);
+															$mwntotal 		= explode(',', $barnstalldata['mwn_total']);
+														?>
+														<td>
+															<?php
+																for($i=0; $i<count($mwnprice); $i++){
+																	if($mwnprice[$i]!=0){
+																		echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																	}
+																}
+															?>
+														</td>
+													<?php }else{ ?>
+														<td><?php echo '('.$currencysymbol.$barnstalldata['price'].'x'.$barnstalldata['quantity'].')'.$currencysymbol.$barnstalldata['total']; ?></td>
+													<?php } ?>
 												</tr>
 												<?php if($barnstalldata['price_type']==5){ ?>
 													<tr>
@@ -174,7 +191,24 @@
 										<tbody>
 											<tr>
 												<td><?php echo $rvstallname.$pricetype; ?></td>
-												<td><?php echo '('.$currencysymbol.$rvprice.'x'.$rvquantity.')'.$currencysymbol.$rvtotal ?></td>
+												<?php if(in_array($rvbarnstalldata['price_type'], ['1','2','3'])){ ?>
+													<?php 
+														$mwnprice 		= explode(',', $rvbarnstalldata['mwn_price']);
+														$mwninterval 	= explode(',', $rvbarnstalldata['mwn_interval']);
+														$mwntotal 		= explode(',', $rvbarnstalldata['mwn_total']);
+													?>
+													<td>
+														<?php
+															for($i=0; $i<count($mwnprice); $i++){
+																if($mwnprice[$i]!=0){
+																	echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
+																}
+															}
+														?>
+													</td>
+												<?php }else{ ?>
+													<td><?php echo '('.$currencysymbol.$rvprice.'x'.$rvquantity.')'.$currencysymbol.$rvtotal ?></td>
+												<?php } ?>
 											</tr>
 										</tbody>
 									<?php } ?>

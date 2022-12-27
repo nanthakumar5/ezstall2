@@ -151,7 +151,7 @@
 															<?php
 																for($i=0; $i<count($mwnprice); $i++){
 																	if($mwnprice[$i]!=0){
-																		echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i]; 
+																		echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>';  
 																	}
 																}
 															?>
@@ -217,7 +217,7 @@
 														<?php
 															for($i=0; $i<count($mwnprice); $i++){
 																if($mwnprice[$i]!=0){
-																	echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i]; 
+																	echo '('.$currencysymbol.$mwnprice[$i].'x'.$mwninterval[$i].')'.$currencysymbol.$mwntotal[$i].'<br>'; 
 																}
 															}
 														?>
