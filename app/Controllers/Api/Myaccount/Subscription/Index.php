@@ -38,7 +38,7 @@ class Index extends BaseController
 			$data['subscriptions']  = $this->payments->getPayments('row', ['payment', 'plan'], ['ninstatus' => ['0'], 'id' => $users['subscription_id']]);
 			$data['userdetail']     = $users;
 			if($data){
-				$json = ['0', count($data), $data];
+				$json = ['1', count($data), $data];
 			}else{
 				$json = ['0', 'No Record Fount', $data];
 			}
