@@ -329,10 +329,31 @@ class Event extends BaseModel
 		}
 		
 		if($facilityid==''){
-			if(isset($data['barn']) && count($data['barn']) > '0') 				$this->barnstallaction($data['barn'], [$eventinsertid, $data['type'], '1']);
-			if(isset($data['rvhookups']) && count($data['rvhookups']) > '0')	$this->barnstallaction($data['rvhookups'], [$eventinsertid, $data['type'], '2']);
-			if(isset($data['feed']) && count($data['feed']) > '0') 				$this->productsaction($data['feed'], [$eventinsertid, '1']);
-			if(isset($data['shavings']) && count($data['shavings']) > '0') 		$this->productsaction($data['shavings'], [$eventinsertid, '2']);
+			if(isset($data['barn']) && count($data['barn']) > '0'){
+ 				$this->barnstallaction($data['barn'], [$eventinsertid, $data['type'], '1']);
+			}else{
+				$this->db->table('barn')->update(['status' => '0'], ['event_id' => $eventinsertid, 'type' => '1']);
+				$this->db->table('stall')->update(['status' => '0'], ['event_id' => $eventinsertid, 'type' => '1']);
+			}
+			
+			if(isset($data['rvhookups']) && count($data['rvhookups']) > '0'){
+				$this->barnstallaction($data['rvhookups'], [$eventinsertid, $data['type'], '2']);
+			}else{
+				$this->db->table('barn')->update(['status' => '0'], ['event_id' => $eventinsertid, 'type' => '2']);
+				$this->db->table('stall')->update(['status' => '0'], ['event_id' => $eventinsertid, 'type' => '2']);
+			}
+			
+			if(isset($data['feed']) && count($data['feed']) > '0'){
+ 				$this->productsaction($data['feed'], [$eventinsertid, '1']);
+			}else{
+				$this->db->table('products')->update(['status' => '0'], ['event_id' => $eventinsertid, 'type' => '1']);
+			}
+			
+			if(isset($data['shavings']) && count($data['shavings']) > '0'){
+				$this->productsaction($data['shavings'], [$eventinsertid, '2']);
+			}else{
+				$this->db->table('products')->update(['status' => '0'], ['event_id' => $eventinsertid, 'type' => '2']);
+			}
 		}else{
 			if(isset($data['barn']) && count($data['barn']) > '0') 				$this->facilitybarnstallaction($data['barn'], [$eventinsertid, $data['type'], '1']);
 			if(isset($data['rvhookups']) && count($data['rvhookups']) > '0')	$this->facilitybarnstallaction($data['rvhookups'], [$eventinsertid, $data['type'], '2']);
@@ -373,15 +394,8 @@ class Event extends BaseModel
 	public function barnstallaction($data, $extras)
 	{
 		$barnidcolumn = array_filter(array_column($data, 'id'));
-		
-		if(count($data)==0 && $extras[2]=='2'){
-			$this->db->table('barn')->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
-			$this->db->table('stall')->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
-		}
-		
 		if(count($barnidcolumn)){
 			$this->db->table('barn')->whereNotIn('id', $barnidcolumn)->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
-			$this->db->table('stall')->whereNotIn('barn_id', $barnidcolumn)->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
 		}
 		
 		foreach($data as $barndata){
