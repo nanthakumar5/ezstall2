@@ -373,8 +373,15 @@ class Event extends BaseModel
 	public function barnstallaction($data, $extras)
 	{
 		$barnidcolumn = array_filter(array_column($data, 'id'));
+		
+		if(count($data)==0 && $extras[2]=='2'){
+			$this->db->table('barn')->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
+			$this->db->table('stall')->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
+		}
+		
 		if(count($barnidcolumn)){
 			$this->db->table('barn')->whereNotIn('id', $barnidcolumn)->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
+			$this->db->table('stall')->whereNotIn('barn_id', $barnidcolumn)->update(['status' => '0'], ['event_id' => $extras[0], 'type' => $extras[2]]);
 		}
 		
 		foreach($data as $barndata){
