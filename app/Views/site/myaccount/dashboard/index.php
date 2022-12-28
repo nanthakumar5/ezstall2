@@ -7,7 +7,7 @@
 	</p> 
 	<div>
 	<?php if($userdetail['type']=='6' || $userdetail['type']=='4'){
-		echo '<h4><b>Today Checkin Event</b></h4>';
+		echo '<h4><b>Today Check In Event</b></h4>';
 		 if(!empty($checkinstall)){
 		 	echo '<button class="btn_dash_lock delete_lockunlockbtn mx-0">Unlocked</button>';
 			echo '<button class="btn_dash_lock delete_dirtyclean mx-2">Clean</button>';
@@ -77,12 +77,12 @@
 				}
 			}
 		}else{ 
-			echo "<p>No Stalls Checkin Today</p>";
+			echo "<p>No Stalls Check In Today</p>";
 		}
 		
 		echo "<br>";
 
-		echo '<h4><b>Today Checkout Event</b></h4>';		 
+		echo '<h4><b>Today Check Out Event</b></h4>';		 
 		if(!empty($checkoutstall)){
 			echo '<button class="btn_dash_lock delete_lockunlockbtn_checkout mx-0">Locked</button>';
 			echo '<button class="btn_dash_lock delete_dirtyclean_checkout mx-2">Dirty</button>';
@@ -150,7 +150,7 @@
 				}
 			}
 		}else{ 
-			echo "<p>No Stalls Checkout Today</p>";
+			echo "<p>No Stalls Check Out Today</p>";
 		}
 	}?>
 	</div>

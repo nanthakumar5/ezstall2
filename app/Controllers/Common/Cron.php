@@ -38,20 +38,32 @@ class Cron extends BaseController
 
 	public function bookingenddate()
 	{	
-		$date			= date('Y-m-d');
-
-		$booking = $this->db->table('booking_details bd')
+		$date		= 	date('Y-m-d');
+		$booking 	= 	$this->db->table('booking_details bd')
 						->join('booking b', 'b.id = bd.booking_id', 'left')
+						->join('stall s', 's.id = bd.stall_id', 'left')
 						->select('bd.stall_id, b.check_out checkout')
-						->where(['b.check_out'=> $date])
+						->where(['b.check_out' => $date])
+						->groupStart()->where('s.lock_unlock', '0')->orWhere('s.dirty_clean', '0')->groupEnd()
 						->get()
 						->getResultArray();
 						
 		if(count($booking) > 0){		
+			createDirectory('./assets/uploads/cron');
+			$fp = fopen('./assets/uploads/cron/cron.txt', 'a');
+			
 			foreach($booking as $booking){  
-				$result  = $this->booking->updatedata(['stallid' => $booking['stall_id'], 'lockunlock' => '0', 'dirtyclean' => '0' ]);
+				if($date > $booking['checkout']){
+					fwrite($fp, date('d-m-Y H:i:s').' --- Cron Lock & Dirty'.PHP_EOL);
+					fwrite($fp, json_encode($booking).PHP_EOL);
+					
+					$this->db->table('booking_details bd')->update(['lock_unlock' => '0', 'dirty_clean' => '0'], ['id' => $booking['stall_id']]);
+				}
 			}
+			
+			fclose($fp);
 		}
+		
 		die;
 	}
 	
@@ -68,10 +80,20 @@ class Cron extends BaseController
 						->get()
 						->getResultArray();
 		
-		foreach($payments as $payment){
-			if($payment['plan_period_end'] < $fdatetime && $payment['booking_details_id']!=''){
-				$this->db->table('booking_details')->where(['id' => $payment['booking_details_id']])->update(['subscription_status' => '0']);
+		if(count($payments) > 0){		
+			createDirectory('./assets/uploads/cron');
+			$fp = fopen('./assets/uploads/cron/cron.txt', 'a');
+			
+			foreach($payments as $payment){
+				if($payment['plan_period_end'] < $fdatetime && $payment['booking_details_id']!=''){
+					fwrite($fp, date('d-m-Y H:i:s').' --- Cron Payment'.PHP_EOL);
+					fwrite($fp, json_encode($payment).PHP_EOL);
+					
+					$this->db->table('booking_details')->where(['id' => $payment['booking_details_id']])->update(['subscription_status' => '0']);
+				}
 			}
+			
+			fclose($fp);
 		}
 		
 		die;

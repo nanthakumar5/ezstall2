@@ -329,29 +329,42 @@ function getCart($type=''){
 						$singleprice 	= 0;
 						$singletotal 	= 0;
 						$mwnpricelist	= explode(',', $res['mwn_price']);
+						$mpl			= $mwnpricelist[0];
+						$wpl			= $mwnpricelist[1];
+						$npl			= $mwnpricelist[2];
 						
 						$mwnprice = $mwninterval = $mwntotal = [0, 0, 0];
-						
-						$monthcalc = intdiv($intervalcalc, 30);						
-						if($monthcalc > 0){
-							$mwnprice[0] = $mwnpricelist[0];
+								
+						if($mpl!=0 && (($wpl!=0 && $npl!=0) || ($wpl!=0 && $npl==0) || ($wpl==0 && $npl!=0) || ($wpl==0 && $npl==0))){
+							if(($wpl!=0 && $npl!=0) || ($wpl!=0 && $npl==0) || ($wpl==0 && $npl!=0)){
+								$monthcalc = intdiv($intervalcalc, 30);
+							}elseif($wpl==0 && $npl==0){
+								$monthcalc = ceil($intervalcalc/30);
+							}
+							
+							$mwnprice[0] = $mpl;
 							$mwninterval[0] = $monthcalc;
 							$mwntotal[0] = $mwnprice[0] * $mwninterval[0];
 							$singletotal += $mwntotal[0];
 							$intervalcalc = $intervalcalc - (30 * $monthcalc);
 						}
+						
+						if($wpl!=0 && (($mpl!=0 && $npl!=0) || ($mpl!=0 && $npl==0) || ($mpl==0 && $npl!=0) || ($mpl==0 && $npl==0))){
+							if(($mpl!=0 && $npl!=0) || ($mpl==0 && $npl!=0)){
+								$weekcalc = intdiv($intervalcalc, 7);
+							}elseif(($mpl==0 && $npl==0) || ($mpl!=0 && $npl==0)){
+								$weekcalc = ceil($intervalcalc/7);
+							}
 							
-						$weekcalc = intdiv($intervalcalc, 7);
-						if($weekcalc > 0){
-							$mwnprice[1] = $mwnpricelist[1];
+							$mwnprice[1] = $wpl;
 							$mwninterval[1] = $weekcalc;
 							$mwntotal[1] = $mwnprice[1] * $mwninterval[1];
 							$singletotal += $mwntotal[1];
 							$intervalcalc = $intervalcalc - (7 * $weekcalc);
 						}
 						
-						if($intervalcalc > 0){
-							$mwnprice[2] = $mwnpricelist[2];
+						if($npl!=0 && $intervalcalc > 0){
+							$mwnprice[2] = $npl;
 							$mwninterval[2] = $intervalcalc;
 							$mwntotal[2] = $mwnprice[2] * $mwninterval[2];
 							$singletotal += $mwntotal[2];
