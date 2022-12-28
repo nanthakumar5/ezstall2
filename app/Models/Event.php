@@ -455,7 +455,7 @@ class Event extends BaseModel
 			$products['name']       	= $productsdata['name'];
 			$products['quantity']       = $productsdata['quantity'];
 			$products['price']      	= $productsdata['price'];
-			$products['status']     	= $productsdata['status'];
+			$products['status']     	= '1';
 			$products['type']     		= $extras[1];
 			
 			
@@ -500,7 +500,7 @@ class Event extends BaseModel
 							$stall['week_price']    = isset($stalldata['week_price']) ? $stalldata['week_price'] : 0;
 							$stall['month_price']   = isset($stalldata['month_price']) ? $stalldata['month_price'] : 0;
 							$stall['flat_price']    = isset($stalldata['flat_price']) ? $stalldata['flat_price'] : 0;
-							$stall['status']     	= $stalldata['status'];
+							$stall['status']     	= '1';
 							$stall['type']		 	= $extras[2];
 							
 							if(isset($stalldata['image']) && $stalldata['image']!=''){
@@ -535,7 +535,7 @@ class Event extends BaseModel
 				$products['name']       	= $productsdata['name'];
 				$products['quantity']       = $productsdata['quantity'];
 				$products['price']      	= $productsdata['price'];
-				$products['status']     	= $productsdata['status'];
+				$products['status']     	= '1';
 				$products['type']     		= $extras[1];
 				
 				if($productsid==''){
