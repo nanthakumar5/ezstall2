@@ -412,7 +412,7 @@ class Event extends BaseModel
 					$stall['subscription_initial_price']    = isset($stalldata['subscription_initial_price']) ? $stalldata['subscription_initial_price'] : 0;
 					$stall['subscription_month_price']    	= isset($stalldata['subscription_month_price']) ? $stalldata['subscription_month_price'] : 0;
 					$stall['block_unblock'] 				= isset($stalldata['block_unblock']) ? $stalldata['block_unblock'] : 0;
-					$stall['status']     					= $stalldata['status'];
+					$stall['status']     					= '1';
 					$stall['type']		 					= $extras[2];
 					
 					if(isset($stalldata['image']) && $stalldata['image']!=''){

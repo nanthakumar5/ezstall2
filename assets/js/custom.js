@@ -574,7 +574,6 @@ function barnstall(barnstallname, barnstallitem=[], barnstallresult=[]){
 			<div class="col-md-1 mb-2 delete">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][id]" value="'+stallId+'" class="stall_id">\
 				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][stall_id]" value="'+fstallId+'">\
-				<input type="hidden" name="'+barnstallname+'['+barnIndex+'][stall]['+stallIndex+'][status]" value="1">\
 				'+availability+'\
 			</div>\
 			'+blockedunblockedtext+'\
@@ -922,7 +921,6 @@ function products(productsname, productsitem=[], productsresult=[]){
 				'+deletebtn+'\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][id]" value="'+productId+'">\
 				<input type="hidden" name="'+productsname+'['+productIndex+'][product_id]" value="'+fproductId+'">\
-				<input type="hidden" name="'+productsname+'['+productIndex+'][status]" value="1">\
 			</div>\
 		</div>\
 		';
