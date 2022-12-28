@@ -45,7 +45,7 @@ class Index extends BaseController
 
 		if($result){
 		$setting 				= getSettings();
-		$cartreservedtime		= $cart->getReserved($setting['cartreservedtime']);
+		$cartreservedtime		= $this->cart->getReserved($setting['cartreservedtime']);
 		$timer					= $cartreservedtime ? strtotime($cartreservedtime) : '';
 		$count					= count($result);
 		
@@ -160,8 +160,9 @@ class Index extends BaseController
 				$price += $singletotal;
 			}
 		}
-		 
-		$transactionfee     => number_format((($setting['transactionfee'] / 100) * $price), 2);
+
+		
+		$transactionfee  = number_format((($setting['transactionfee'] / 100) * $price), 2);
 		$barnstallcolumn = array_column($barnstall, 'barn_id');
 		array_multisort($barnstallcolumn, SORT_ASC, $barnstall);
 		$rvbarnstallcolumn = array_column($rvbarnstall, 'barn_id');
@@ -171,13 +172,16 @@ class Index extends BaseController
 		$shavingcolumn = array_column($shaving, 'product_id');
 		array_multisort($shavingcolumn, SORT_ASC, $shaving);
 
+		$total ='';
+		$totaldue = (number_format($price,2)+ number_format($transactionfee,2)+ number_format($cleaning_fee,2)+ number_format(($tax*100),2));
 			$resultdata = [
 				'event_id'			=> $event_id, 
 				'event_name'		=> $event_name, 
-				'event_tax'			=> $tax, 
+				'event_tax'			=> number_format(($tax*100),2), 
 				'event_location' 	=> $event_location, 
 				'event_description' => $event_description, 
-				'cleaning_fee' 		=> $cleaning_fee,
+				'cleaning_fee' 		=> number_format($cleaning_fee,2),
+				'totaldue' 			=> number_format($totaldue,2),
 				'transactionfee' 	=> $transactionfee,
 				'barnstall'			=> $barnstall,
 				'rvbarnstall'		=> $rvbarnstall, 
@@ -189,7 +193,7 @@ class Index extends BaseController
 				'price' 			=> $price,
 				'type' 				=> $type,
 				'timer' 			=> $timer,
-				'count' 			=> $count
+				'count' 			=> $count,
 				'paymentmethod' 	=> $paymentmethod,
 				'stripepublickey' 	=> $setting['stripepublickey'],
 			];
@@ -245,7 +249,6 @@ class Index extends BaseController
                 'shaving'    		=> 'required',
                 'page'    			=> 'required',
             ],
-
             [
                 'firstname' => [
                     'required' => 'First Name is required.',
