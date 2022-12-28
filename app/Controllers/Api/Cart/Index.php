@@ -47,12 +47,11 @@ class Index extends BaseController
 
 			if($post['type']) $condition['type'] = $post['type'];
 
-			$cart 		    = new \App\Models\Cart;
 			$result         = $this->cart->getCart('all', ['cart', 'event', 'barn', 'stall', 'product', 'tax'], $condition);
 
 			if($result){
 			$setting 				= getSettings();
-			$cartreservedtime		= $cart->getReserved($setting['cartreservedtime']);
+			$cartreservedtime		= $this->cart->getReserved($setting['cartreservedtime']);
 			$timer					= $cartreservedtime ? strtotime($cartreservedtime) : '';
 			$count					= count($result);
 			
@@ -168,7 +167,7 @@ class Index extends BaseController
 				}
 			}
 
-				$transactionfee = number_format((($setting['transactionfee'] / 100) * $price), 2);
+				$transactionfee  = number_format((($setting['transactionfee'] / 100) * $price), 2);
 				$barnstallcolumn = array_column($barnstall, 'barn_id');
 				array_multisort($barnstallcolumn, SORT_ASC, $barnstall);
 				$rvbarnstallcolumn = array_column($rvbarnstall, 'barn_id');
@@ -178,14 +177,18 @@ class Index extends BaseController
 				$shavingcolumn = array_column($shaving, 'product_id');
 				array_multisort($shavingcolumn, SORT_ASC, $shaving);
 
+				$total ='';
+				$totaldue = (number_format($price,2)+ number_format($transactionfee,2)+ number_format($cleaning_fee,2));
+
 				$resultdata = [
 					'event_id'			=> $event_id, 
 					'event_name'		=> $event_name, 
 					'event_tax'			=> $tax, 
 					'event_location' 	=> $event_location, 
 					'event_description' => $event_description, 
-					'cleaning_fee' 		=> $cleaning_fee, 
-					'transactionfee' 	=> $transactionfee, 
+					'cleaning_fee' 		=> number_format($cleaning_fee,2), 
+					'totaldue' 			=> number_format($totaldue,2), 
+					'transactionfee' 	=> number_format($transactionfee,2), 
 					'barnstall'			=> $barnstall,
 					'rvbarnstall'		=> $rvbarnstall, 
 					'feed'				=> $feed, 
@@ -200,7 +203,7 @@ class Index extends BaseController
 				];
 
 				if(count($result)>0){
-					$json = ['1', count($resultdata) . ' Record(s) Found', $resultdata];
+					$json = ['1', count($result) . ' Record(s) Found', $resultdata];
 				} else {
 		            $json = ['0', 'No Record(s) Found', []];
 		        }
@@ -236,6 +239,7 @@ class Index extends BaseController
 				'type'       		=> 'required',
 				'checked'       	=> 'required',
 				'flag'       		=> 'required',
+				//'mwn_price'       	=> 'required',
             ],
 
             [
@@ -271,10 +275,16 @@ class Index extends BaseController
                 ],
 				'type' => [
                     'required' => 'Type is required.',
-                ],
+                ], 
 				'flag' => [
                     'required' => 'Flag is required.',
                 ],
+                'flag' => [
+                    'required' => 'Flag is required.',
+                ],
+                /*'mwn_price' => [
+                    'required' => 'mwn_price is required.',
+                ],*/
             ]
         );
 
