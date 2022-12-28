@@ -342,11 +342,13 @@ function getCart($type=''){
 								$monthcalc = ceil($intervalcalc/30);
 							}
 							
-							$mwnprice[0] = $mpl;
-							$mwninterval[0] = $monthcalc;
-							$mwntotal[0] = $mwnprice[0] * $mwninterval[0];
-							$singletotal += $mwntotal[0];
-							$intervalcalc = $intervalcalc - (30 * $monthcalc);
+							if($monthcalc > 0){
+								$mwnprice[0] = $mpl;
+								$mwninterval[0] = $monthcalc;
+								$mwntotal[0] = $mwnprice[0] * $mwninterval[0];
+								$singletotal += $mwntotal[0];
+								$intervalcalc = $intervalcalc - (30 * $monthcalc);
+							}
 						}
 						
 						if($wpl!=0 && (($mpl!=0 && $npl!=0) || ($mpl!=0 && $npl==0) || ($mpl==0 && $npl!=0) || ($mpl==0 && $npl==0))){
@@ -356,11 +358,13 @@ function getCart($type=''){
 								$weekcalc = ceil($intervalcalc/7);
 							}
 							
-							$mwnprice[1] = $wpl;
-							$mwninterval[1] = $weekcalc;
-							$mwntotal[1] = $mwnprice[1] * $mwninterval[1];
-							$singletotal += $mwntotal[1];
-							$intervalcalc = $intervalcalc - (7 * $weekcalc);
+							if($weekcalc > 0){
+								$mwnprice[1] = $wpl;
+								$mwninterval[1] = $weekcalc;
+								$mwntotal[1] = $mwnprice[1] * $mwninterval[1];
+								$singletotal += $mwntotal[1];
+								$intervalcalc = $intervalcalc - (7 * $weekcalc);
+							}
 						}
 						
 						if($npl!=0 && $intervalcalc > 0){
