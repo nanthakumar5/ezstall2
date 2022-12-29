@@ -20,8 +20,8 @@
 		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/plugins/toastr/toastr.min.css?v=1.0">
 		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/site/css/style.css?v=1.0">
 		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/plugins/fontawesome-free/css/all.css?v=1.0">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/site/css/bootstrap-datepicker.css" type="text/css" />
+		<link rel="stylesheet" href="<?php echo base_url() ?>/assets/site/css/all.min.css" />
 		<?php echo $settings['googleanalytics']; ?>
 	</head>
 	<body>
