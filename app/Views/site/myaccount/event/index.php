@@ -25,7 +25,7 @@ $currentdate 	= date("Y-m-d");
 			<div class="dashboard-box mt-4">
 				<div class="row align-items-center px-2">
 					<div class="col-md-2 myaccevent1">
-						<img src="<?php echo base_url() ?>/assets/uploads/event/<?php echo $data['image']?>" class="dash-event-image">
+						<img src="<?php echo filesource('assets/uploads/event/'.$data['image']); ?>" class="dash-event-image">
 					</div>
 					<div class="col-md-5 myaccevent2">
 						<p class="topdate fs-7 mb-2"> <?php echo date('m-d-Y', strtotime($data['start_date'])); ?> - <?php echo date('m-d-Y', strtotime($data['end_date'])); ?> -  <?php echo $data['location']; ?></p>
@@ -40,37 +40,36 @@ $currentdate 	= date("Y-m-d");
 				</div>
 				<div class="dash-event">
 					<a href="<?php echo base_url().'/myaccount/events/view/'.$data['id']; ?>" 
-						class="dash-view-event fs-7 mx-1">
+						class="dash-event-1 fs-7 mx-1">
 						View
 					</a>
 					<?php if($currentdate <= $data['end_date']){ ?>
 					    <?php if($usertype !='4'){ ?>
 							<a href="<?php echo base_url().'/myaccount/'.($data['facility_id']!=0 ? 'facilityevents' : 'events').'/edit/'.$data['id']; ?>" 
-								class="dash-edit-event fs-7 mx-1">
+								class="dash-event-2 fs-7 mx-1">
 								Edit
 							</a>
 							
 							<?php $occupied = getOccupied($data['id']); ?>
 							<?php if(count($occupied)==0){ ?>
-								<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-delete-event fs-7 mx-1 delete">
+								<a data-id="<?php echo $data['id']; ?>" href="javascript:void(0);" class="dash-event-1 fs-7 mx-1 delete">
 									Delete
 								</a>
 							<?php }?>
 					    <?php }?>
 					 <?php }?>
-					<a href="<?php echo base_url().'/myaccount/events/inventories/'.$data['id']; ?>" 
-						class="dash-export-event fs-7 mx-1">
+					<a href="<?php echo base_url().'/myaccount/events/inventories/'.$data['id']; ?>" class="dash-event-2 fs-7 mx-1">
 						Inventories
 					</a>
 					<p class="mt-3"></p>
-					<a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-export-event fs-7 mx-1" data-id="<?php echo $data['id']; ?>">
+					<a href="javascript:void(0);" data-toggle="modal" data-target="#financialmodal" class="financialreport dash-event-1 fs-7 mx-1" data-id="<?php echo $data['id']; ?>">
 						Financial Report
 					</a>
-					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" class="dash-export-event fs-7 mx-1">
+					<a href="<?php echo base_url().'/myaccount/events/eventreport/'.$data['id']; ?>" class="dash-event-2 fs-7 mx-1">
 						Report
 					</a>
 					<?php if($usertype !='4'){ ?>
-						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" class="dash-export-event fs-7 mx-1">
+						<a href="<?php echo base_url().'/myaccount/events/export/'.$data['id']; ?>" class="dash-event-1 fs-7 mx-1">
 							Export
 						</a>
 					<?php } ?>

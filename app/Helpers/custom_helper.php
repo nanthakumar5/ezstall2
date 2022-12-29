@@ -169,6 +169,12 @@ function filemove($file, $destination)
 	if(file_exists($source)) rename($source, $destination);
 }
 
+function filesource($file)
+{
+	$source 			= base_url().'/'.$file;		
+	return (file_exists($source)) ? $source : base_url().'/assets/images/noimage.jpg';
+}
+
 function createDirectory($path)
 {
 	$location = explode('/', $path);
@@ -514,7 +520,7 @@ function getProductQuantity($eventid, $extras=[]){
 function upcomingEvents()
 {
 	$event	= new \App\Models\Event;
-	return $event->getEvent('all', ['event'],['status' => ['1'], 'start_date' => date('Y-m-d')], ['orderby' => 'e.id desc', 'limit' => '3', 'type' => '1']);
+	return $event->getEvent('all', ['event'],['status' => ['1'], 'start_date' => date('Y-m-d'), 'type' => '1'], ['orderby' => 'e.id desc', 'limit' => '3']);
 }
 
 function removeCartReserved()

@@ -98,8 +98,13 @@
 							<?php foreach($banners as $key => $banner){?>
 								<div class="carousel-item <?php echo $key=='0' ? 'active' : ''; ?>" data-bs-interval="10000">
 									<img src="<?php echo base_url()?>/assets/uploads/banner/<?php echo '1200x800_'.$banner['image'];?>" class="d-block w-100" alt="...">
-									<div class="carousel-caption"><p class="sliderCaption">Welcome to EZStall</p><h1 class="sliderTitle">Find a stall for your horses</h1>
-										<a class="text-decoration-none" href="<?php echo base_url();?>/login"><button type="button" class="sliderButton btn btn-primary">Reserve your stall</button></a></div>
+									<div class="carousel-caption">
+										<p class="sliderCaption">Welcome to EZStall</p>
+										<h1 class="sliderTitle">Find a stall for your horses</h1>
+										<a class="text-decoration-none" href="<?php echo base_url();?>/login">
+											<button type="button" class="sliderButton btn btn-primary">Reserve your stall</button>
+										</a>
+									</div>
 								</div>
 							<?php } ?>
 						</div>
@@ -132,10 +137,9 @@
 			<div class="footerBottom">
 				<div class="panel1">
 					<a href="<?php echo base_url(); ?>" class="navbar-brand"><img src="<?php echo base_url().'/assets/uploads/settings/'.$settings['logo'] ?>"></a>
-					<p class="footmainContent"><?php echo $settings['description'];?>			
+					<p class="footmainContent"><?php echo nl2br(htmlentities($settings['description'], ENT_QUOTES, 'UTF-8')); ?>			
 					</p>
 				</div>
-
 				<div class="panel2">
 					<h5>Quick Menu</h5>
 					<ul>
@@ -161,11 +165,15 @@
 				</div>
 				<div class="panel3">
 					<h5 class="mar-b-3vh">Upcoming Events</h5>
-					<?php foreach($upcoming as $event){ ?>
-                        <span class="footerucEvents">
-                            <a style="text-decoration:none; color:white;" href="<?php echo base_url().'/events/detail/'.$event['id'];?>"><h5><?php echo $event['name']; ?></h5>
-                            <p><?php echo date('M d Y', strtotime($event['start_date'])); ?></p></a>
-                        </span>
+					<?php if(!empty($upcoming)){ ?>
+						<?php foreach($upcoming as $event){ ?>
+							<span class="footerucEvents">
+								<a style="text-decoration:none; color:white;" href="<?php echo base_url().'/events/detail/'.$event['id'];?>"><h5><?php echo $event['name']; ?></h5>
+								<p><?php echo date('M d Y', strtotime($event['start_date'])); ?></p></a>
+							</span>
+						<?php } ?>
+                    <?php }else{ ?>
+						<span>No Upcoming Events</span>
                     <?php } ?>
 				</div>
 				<div class="panel4">
@@ -176,10 +184,6 @@
 					<p>
 						<a href="<?php echo $settings['phone'];?>"><?php echo $settings['phone'];?></a>
 					</p>
-						<!-- <p class="pt-top-1vh">
-							<b class="colorWhite">Opening Hours</b>
-						</p> 
-					<p class="colorWhite">9AM - 5PM, Mon to Fri</p>-->
 					<span class="socialIcons"><?php if($settings['facebook']!=""){?><a target="_blank" href="<?php echo $settings['facebook'];?>"><svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.2" baseProfile="tiny" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M13 10h3v3h-3v7h-3v-7h-3v-3h3v-1.255c0-1.189.374-2.691 1.118-3.512.744-.823 1.673-1.233 2.786-1.233h2.096v3h-2.1c-.498 0-.9.402-.9.899v2.101z"></path></svg></a><?php } ?>
 					<?php if($settings['twitter']!=""){?><a href="<?php echo $settings['twitter'];?>"><svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.2" baseProfile="tiny" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M18.89 7.012c.808-.496 1.343-1.173 1.605-2.034-.786.417-1.569.703-2.351.861-.703-.756-1.593-1.14-2.66-1.14-1.043 0-1.924.366-2.643 1.078-.715.717-1.076 1.588-1.076 2.605 0 .309.039.585.117.819-3.076-.105-5.622-1.381-7.628-3.837-.34.601-.51 1.213-.51 1.846 0 1.301.549 2.332 1.645 3.089-.625-.053-1.176-.211-1.645-.47 0 .929.273 1.705.82 2.388.549.676 1.254 1.107 2.115 1.291-.312.08-.641.118-.979.118-.312 0-.533-.026-.664-.083.23.757.664 1.371 1.291 1.841.625.472 1.344.721 2.152.743-1.332 1.045-2.855 1.562-4.578 1.562-.422 0-.721-.006-.902-.038 1.697 1.102 3.586 1.649 5.676 1.649 2.139 0 4.029-.542 5.674-1.626 1.645-1.078 2.859-2.408 3.639-3.974.784-1.564 1.172-3.192 1.172-4.892v-.468c.758-.57 1.371-1.212 1.84-1.921-.68.293-1.383.492-2.11.593z"></path></svg></a><?php } ?>
 					<?php if($settings['google']!=""){?><a target="_blank" href="<?php echo $settings['google'];?>"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M879.5 470.4c-.3-27-.4-54.2-.5-81.3h-80.8c-.3 27-.5 54.1-.7 81.3-27.2.1-54.2.3-81.2.6v80.9c27 .3 54.2.5 81.2.8.3 27 .3 54.1.5 81.1h80.9c.1-27 .3-54.1.5-81.3 27.2-.3 54.2-.4 81.2-.7v-80.9c-26.9-.2-54.1-.2-81.1-.5zm-530 .4c-.1 32.3 0 64.7.1 97 54.2 1.8 108.5 1 162.7 1.8-23.9 120.3-187.4 159.3-273.9 80.7-89-68.9-84.8-220 7.7-284 64.7-51.6 156.6-38.9 221.3 5.8 25.4-23.5 49.2-48.7 72.1-74.7-53.8-42.9-119.8-73.5-190-70.3-146.6-4.9-281.3 123.5-283.7 270.2-9.4 119.9 69.4 237.4 180.6 279.8 110.8 42.7 252.9 13.6 323.7-86 46.7-62.9 56.8-143.9 51.3-220-90.7-.7-181.3-.6-271.9-.3z"></path></svg></a><?php } ?>
@@ -189,8 +193,9 @@
 			<div class="copyRight">
 				<p>
 					<span>
-						© Copyright 2022 - EZ Stall. All Rights Reserved. <a style="text-decoration:none;color:white" href="<?php echo base_url();?>/privacypolicy">Privacy Policy</a> | <a style="text-decoration:none;color:white" href="<?php echo base_url();?>/termsandconditions">
-						Terms and Conditions</a>
+						© Copyright 2023 - EZ Stall. All Rights Reserved. 
+						<a style="text-decoration:none;color:white" href="<?php echo base_url();?>/privacypolicy">Privacy Policy</a> | 
+						<a style="text-decoration:none;color:white" href="<?php echo base_url();?>/termsandconditions">Terms and Conditions</a>
 					</span>
 				</p>
 			</div>

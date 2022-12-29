@@ -7,16 +7,15 @@ $getcart 	 	= getCart('2');
 $cartevent 	 	= ($getcart && $getcart['event_id'] != $detail['id']) ? 1 : 0;
 $name 		 	= $detail['name'];
 $description 	= $detail['description'];
-$image 		 	= base_url().'/assets/uploads/event/'.'1200x600_'.$detail['image'];
+$image 		 	= filesource('assets/uploads/event/1200x600_'.$detail['image']);
 $profileimage 	= isset($detail['profile_image']) ? $detail['profile_image'] : '';
-$profileimage 	= ($profileimage!="") ? base_url().'/assets/uploads/profile/'.$detail['profile_image'] : base_url().'/assets/images/profile.jpg';
+$profileimage 	= ($profileimage!="") ? filesource('assets/uploads/profile/'.$detail['profile_image']) : base_url().'/assets/images/profile.jpg';
 ?>
 <!--1200x600_-->
 
 <?php if($cartevent==1){?>
 	<div class="alert alert-success alert-dismissible fade show m-2" role="alert">
 		For booking this stall remove other stalls from the cart <a href="<?php echo base_url().'/facility/detail/'.$getcart['event_id']; ?>">Go To Facility</a>
-		<!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>-->
 	</div>
 <?php } ?>
 

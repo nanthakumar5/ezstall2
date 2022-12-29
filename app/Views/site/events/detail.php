@@ -20,7 +20,6 @@ $comments        	= (isset($comments)) ? $comments : [];
 		<?php if($cartevent==1){?>
 			<div class="alert alert-success alert-dismissible fade show m-2" role="alert">
 				For booking this event remove other event from the cart <a href="<?php echo base_url().'/events/detail/'.$getcart['event_id']; ?>">Go To Event</a>
-				<!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>-->
 			</div>
 		<?php } ?>
 		<div class="marFive dFlexComBetween eventTP pb-3 pt-4">
@@ -40,7 +39,7 @@ $comments        	= (isset($comments)) ? $comments : [];
 					<div class="row myaccupevent1">
 						<div class="col-6">
 							<span class="edimg">
-								<img src="<?php echo base_url() ?>/assets/uploads/event/<?php echo '559x371_'.$detail['image']?>"> <!--559x371_-->
+								<img src="<?php echo filesource('assets/uploads/event/559x371_'.$detail['image']); ?>"> <!--559x371_-->
 							</span>
 						</div>
 						<div class="col-6">
@@ -52,44 +51,37 @@ $comments        	= (isset($comments)) ? $comments : [];
 									</svg> 
 									<?php echo $detail['location'] ?>
 								</li>
-							<!-- <li class="mb-3">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar4" viewBox="0 0 16 16">
-									<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
-								</svg> 
-								<?php //echo date('m-d-Y', strtotime($detail['start_date'])); ?>
-							</li> -->
-							<li class="mb-3">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
-									<path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
-								</svg> 
-								<?php echo $detail['mobile'] ?>
-							</li>
-							<div class="row">
-								<span class="col-6">
-									<p class="mb-1 fw-bold"><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/stall.jpg">Stalls</p>
-									<h6 class="ucprice"> starting from $<?php echo $detail['startingstallprice'] ?></h6>
-								</span>
-							</div>
-							<?php echo $detail['description'] ?>
-						</ul>
+								<li class="mb-3">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+										<path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+									</svg> 
+									<?php echo $detail['mobile'] ?>
+								</li>
+								<div class="row">
+									<span class="col-6">
+										<p class="mb-1 fw-bold"><img class="eventFirstIcon" src="<?php echo base_url()?>/assets/site/img/stall.jpg">Stalls</p>
+										<h6 class="ucprice"> starting from $<?php echo $detail['startingstallprice'] ?></h6>
+									</span>
+								</div>
+								<?php echo $detail['description'] ?>
+							</ul>
+						</div>
+						<div class="col-12 mb-5 mt-2">
+							<p>Contact the stall manager at <?php echo $detail['mobile'] ?> for more information and stall maps.</p>
+							<?php if($detail['eventflyer']!=""){ ?>
+								<button type="button" class="btn btn-outline-success btn-lg float-right ucEventdetBtn" data-toggle="modal" data-target="#exampleModal">
+								 <img src="<?php echo base_url() ?>/assets/site/img/flyer.png">Download Event Flyer
+								</button>
+							<?php } ?>
+							<?php if($detail['stallmap']!=""){ ?>
+								<button class="ucEventdetBtn"><a href="<?php echo base_url();?>/event/downloadstallmap/<?php echo $detail['stallmap'] ?>" class="text-decoration-none text-white"><img src="<?php echo base_url() ?>/assets/site/img/flyer.png"> Download Stall Map</a></button>
+							<?php } ?>
+						</div>
 					</div>
-					<div class="col-12 mb-5 mt-2">
-						<p>Contact the stall manager at <?php echo $detail['mobile'] ?> for more information and stall maps.</p>
-						<?php if($detail['eventflyer']!=""){ ?>
-							<button type="button" class="btn btn-outline-success btn-lg float-right ucEventdetBtn" data-toggle="modal" data-target="#exampleModal">
-    						 <img src="<?php echo base_url() ?>/assets/site/img/flyer.png">Download Event Flyer
-  							</button>
-						<?php } ?>
-						<?php if($detail['stallmap']!=""){ ?>
-							<button class="ucEventdetBtn"><a href="<?php echo base_url();?>/event/downloadstallmap/<?php echo $detail['stallmap'] ?>" class="text-decoration-none text-white"><img src="<?php echo base_url() ?>/assets/site/img/flyer.png"> Download Stall Map</a></button>
-						<?php } ?>
-					</div>
-				</div>
-				<div class="row row border-top pt-4 pb-4 eventdate">
-					<span class="col-3">
-						<p class="mb-1 fw-bold"><img class="eventDIcon" src="<?php echo base_url() ?>/assets/site/img/date.png"> Start Date: </p>
-						<p class="ucDAte mb-0">
-							<?php echo formatdate($detail['start_date'], 1);?></p>
+					<div class="row row border-top pt-4 pb-4 eventdate">
+						<span class="col-3">
+							<p class="mb-1 fw-bold"><img class="eventDIcon" src="<?php echo base_url() ?>/assets/site/img/date.png"> Start Date: </p>
+							<p class="ucDAte mb-0"><?php echo formatdate($detail['start_date'], 1);?></p>
 						</span>
 						<span class="col-3 border-end">
 							<p class="mb-1 fw-bold"><img class="eventDIcon" src="<?php echo base_url() ?>/assets/site/img/date.png"> End Date: </p>

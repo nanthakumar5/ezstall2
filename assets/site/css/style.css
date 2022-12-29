@@ -3949,6 +3949,37 @@ a.ui-button:active,
 
 /*04-04-2022 style starts from here*/
 
+.dash-event-1{
+    text-decoration: none;
+    background: #e54a4a;
+    color: #fff;
+    padding: 6px 15px;
+    border-radius: 4px;
+    transition: all 1s ease;
+    font-weight: 500;
+	font-size: 12px; 
+    letter-spacing: 0.5px; 
+}
+
+.dash-event-2{
+    text-decoration: none;
+    background: #171717;
+    color: #fff;
+    padding: 6px 15px;
+    border-radius: 4px;
+    transition: all 1s ease;
+    font-weight: 500;
+	font-size: 12px; 
+    letter-spacing: 0.5px; 
+}
+
+.dash-event-1:hover,
+.dash-event-2:hover{
+    border-radius: 50px;
+    transition: all 1s ease;
+    color: #fff;
+}
+
 .dash-edit-event{
     text-decoration: none;
     background: #171717;
