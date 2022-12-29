@@ -722,31 +722,6 @@ p.commonContent {
     align-items: center;
     column-gap: 7.5%;
 }
-
-.afterHorse::after {
-    content: url("../img/horse_light_image.png");
-    top: 55rem;
-    position: absolute;
-    z-index: -1;
-}
-
-.beforeRound::before {
-    content: url("../img/Round_Shape_Base.png");
-    top: 70rem;
-    margin-left: -11rem;
-    position: absolute;
-    z-index: -1;
-}
-
-.afterRound::after {
-    content: url("../img/Round_Shape_Base.png");
-    top: 85rem;
-    position: absolute;
-    margin-left: -10rem;
-    z-index: -1;
-}
-
-
 /*First Flex section style end*/
 
 
