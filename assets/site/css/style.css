@@ -739,7 +739,7 @@ p.commonContent {
 }
 
 .afterRound::after {
-    content: url("../src/images/Round_Shape_Base.png");
+    content: url("../img/Round_Shape_Base.png");
     top: 85rem;
     position: absolute;
     margin-left: -10rem;
