@@ -171,8 +171,7 @@ function filemove($file, $destination)
 
 function filesource($file)
 {
-	$source 			= base_url().'/'.$file;		
-	return (file_exists($source)) ? $source : base_url().'/assets/images/noimage.jpg';
+	return (file_exists('./'.$file)) ? base_url().'/'.$file : base_url().'/assets/images/noimage.jpg';
 }
 
 function createDirectory($path)
