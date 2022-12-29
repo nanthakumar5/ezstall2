@@ -724,14 +724,14 @@ p.commonContent {
 }
 
 .afterHorse::after {
-    content: url("../src/images/horse_light_image.png");
+    content: url("../img/horse_light_image.png");
     top: 55rem;
     position: absolute;
     z-index: -1;
 }
 
 .beforeRound::before {
-    content: url("../src/images/Round_Shape_Base.png");
+    content: url("../img/Round_Shape_Base.png");
     top: 70rem;
     margin-left: -11rem;
     position: absolute;
