@@ -7,6 +7,8 @@ use App\Models\Paymentmethod;
 use App\Models\Event;
 use App\Models\Cart;
 use App\Models\Booking;
+use App\Models\Users;
+use App\Models\Stripe;
 
 class Index extends BaseController
 {
@@ -16,6 +18,8 @@ class Index extends BaseController
 		$this->event        	= new Event();
 		$this->cart        		= new Cart();
 		$this->booking        	= new Booking();
+		$this->users        	= new Users();
+		$this->stripe        	= new Stripe();
 	}
 	
 	public function index()
@@ -174,6 +178,18 @@ class Index extends BaseController
 
 		$total ='';
 		$totaldue = (number_format($price,2)+ number_format($transactionfee,2)+ number_format($cleaning_fee,2)+ number_format(($tax*100),2));
+
+		//if(isset($post['paymentmethodid'])){ 
+			$users					= $this->users->getUsers('row', ['users'],['id' => $post['user_id']]);
+			$userid 				= $users['id'];
+			$name 					= $users['name'];
+			$email 					= $users['email'];
+			$stripecustomerid 		= $users['stripe_customer_id'];
+
+			$customerid = $this->stripe->customer($userid, $name, $email, $stripecustomerid);
+
+			$piid = $this->stripe->createPaymentIntents($customerid, $totaldue, $transactionfee=0, $accountid=''); 
+		//}
 			$resultdata = [
 				'event_id'			=> $event_id, 
 				'event_name'		=> $event_name, 
@@ -195,6 +211,7 @@ class Index extends BaseController
 				'timer' 			=> $timer,
 				'count' 			=> $count,
 				'paymentmethod' 	=> $paymentmethod,
+				'piid' 				=> $piid['id'],
 				'stripepublickey' 	=> $setting['stripepublickey'],
 			];
 
@@ -349,5 +366,27 @@ class Index extends BaseController
         ]);
 
         die();
+	}
+
+	public function stripesecretkey()
+	{ 
+		$requestData = $this->request->getPost(); 
+		if(isset($requestData['paymentmethodid'])){ 
+			$users					= $this->users->getUsers('row', ['users'],['id' => $requestData['user_id']]);
+			$userid 				= $users['id'];
+			$name 					= $users['name'];
+			$email 					= $users['email'];
+			$stripecustomerid 		= $users['stripe_customer_id'];
+
+			$customerid = $this->stripe->customer($userid, $name, $email, $stripecustomerid);
+
+			$resturnresult = $this->stripe->createPaymentIntents($customerid, $requestData['price'], $transactionfee=0, $accountid='');
+
+
+				$json = ['1', 'Booking Successfully', $resturnresult['id']];
+		}else{
+			$json = ['0', 'Try Later', []];
+		}
+
 	}
 }

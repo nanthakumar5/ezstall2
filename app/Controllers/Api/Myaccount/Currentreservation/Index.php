@@ -194,8 +194,56 @@ class Index extends BaseController
 		die;
     }
 
-    public function cancelsubscription(){
-    	$post = $this->request->getPost();
+    public function striperefunds(){  
+    	$post = $this->request->getPost(); 
+    	$validation = \Config\Services::validation();
+
+    	$validation->setRules(
+    		[
+                'paymentintentid'   => 'required',
+                'paymentid'   		=> 'required',
+                'id'   				=> 'required',
+                'amount'   			=> 'required',
+            ],
+
+            [
+                'paymentintentid' => [
+                    'required' => 'paymentintentid Id is required.',
+                ],
+                'paymentid' => [
+                    'required' => 'Payment Id status is required.',
+                ],
+                'id' => [
+                    'required' => 'Id status is required.',
+                ],
+                'amount' => [
+                    'required' => 'amount status is required.',
+                ],
+            ]
+	    );
+
+	    if ($validation->withRequest($this->request)->run()) {
+			$data = $this->stripe->striperefunds($post);
+			if($data){
+				$json = ['1', ' Reservation Cancelled.', $data];
+			}else{ 
+				$json = ['0', ' Try Later.', []];
+			}
+	    }else{ 
+            $json = ['0', $validation->getErrors(), []];
+		}
+
+		echo json_encode([
+			'status' => $json[0],
+			'message' => $json[1],
+			'result' => $json[2],
+		]);
+
+		die;
+    }
+
+     public function cancelsubscription(){  
+    	$requestdata = $this->request->getPost(); 
     	$validation = \Config\Services::validation();
 
     	$validation->setRules(
@@ -206,7 +254,7 @@ class Index extends BaseController
 
             [
                 'bookingid' => [
-                    'required' => 'Booking Id is required.',
+                    'required' => 'paymentintentid Id is required.',
                 ],
                 'paymentid' => [
                     'required' => 'Payment Id status is required.',
@@ -215,13 +263,15 @@ class Index extends BaseController
 	    );
 
 	    if ($validation->withRequest($this->request)->run()) {
-
-	    	$payment = $this->payments->getPayments('row', ['payment'], ['id' => $post['paymentid']]);
+	    	$payment = $this->payments->getPayments('row', ['payment'], ['id' => $requestdata['paymentid']]);
 			if($payment){
-				$this->stripe->cancelSchedule($payment['stripe_subscription_id']);
-				$this->bookingdetails->cancelsubscription(['booking_details_id' => $payment['booking_details_id']]);
-				echo "fasd";die;
-				$json = ['1', ' Subscription Cancelled.'];
+				$data = $this->stripe->cancelSchedule($payment['stripe_scheduled_id']);
+				$data = $this->bookingdetails->cancelsubscription(['booking_details_id' => $payment['booking_details_id']]);
+				if($data){
+					$json = ['1', ' Subscription Cancelled.', $data];
+				}else{ 
+					$json = ['0', ' Try Later.', []];
+				}
 			}else{ 
 				$json = ['0', ' Try Later.', []];
 			}
