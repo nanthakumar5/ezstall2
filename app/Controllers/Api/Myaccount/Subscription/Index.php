@@ -6,14 +6,16 @@ use App\Controllers\BaseController;
 use App\Models\Users;
 use App\Models\Plan;
 use App\Models\Payments;
+use App\Models\Stripe;
 
 class Index extends BaseController
 {
     public function __construct()
     {
-        $this->users = new Users();
-        $this->plan 	= new Plan();
-		$this->payments = new Payments();
+        $this->users        = new Users();
+        $this->plan 	    = new Plan();
+        $this->payments     = new Payments();
+		$this->stripe       = new Stripe();
     }
 
     public function index()
@@ -36,7 +38,12 @@ class Index extends BaseController
         	$users 					= getUserDetails($post['user_id']);
 			$data['plans']          = $this->plan->getPlan('all', ['plan'], ['type' => [$users['type']]]);
 			$data['subscriptions']  = $this->payments->getPayments('row', ['payment', 'plan'], ['ninstatus' => ['0'], 'id' => $users['subscription_id']]);
-			$data['userdetail']     = $users;
+
+            $customerid = $this->stripe->customer($users['id'], $users['name'], $users['email'], $users['stripe_customer_id']);
+
+            $tot = ($data['subscriptions']['amount'] * 100);
+            $piid = $this->stripe->createPaymentIntents($customerid, $tot , $transactionfee=0, $accountid=''); 
+            $data['client_secret'] = $piid['client_secret'];
 			if($data){
 				$json = ['1', count($data), $data];
 			}else{

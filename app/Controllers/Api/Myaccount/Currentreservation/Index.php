@@ -51,23 +51,25 @@ class Index extends BaseController
 				$result = [];
 				foreach ($bookings as $data) {
 					$result[] =[
-						'id' 					=> $data['id'],
-						'firstname' 			=> $data['firstname'],
-						'lastname' 				=> $data['lastname'],
-						'mobile' 				=> $data['mobile'],
-						'check_in' 				=> $data['check_in'],
-						'check_out' 			=> $data['check_out'],
-						'amount' 				=> $data['amount'],
-						'special_notice'		=> $data['special_notice'],
-						'usertype' 				=> $data['usertype'],
-						'paymentmethod_name' 	=> $data['paymentmethod_name'],
-						'created_at' 			=> $data['created_at'],
-						'status' 				=> $data['status'],
-						'eventname' 			=> $data['eventname'],
-						'barn'   				=> $data['barnstall'],
-						'rvstall' 				=> ($data['rvbarnstall']!='') ? $data['rvbarnstall']: [],
-						'feed' 					=> ($data['feed']!='') ? $data['feed']: [],
-						'shaving' 				=> ($data['shaving']!='') ? $data['shaving']: [],
+						'id' 						=> $data['id'],
+						'firstname' 				=> $data['firstname'],
+						'lastname' 					=> $data['lastname'],
+						'mobile' 					=> $data['mobile'],
+						'check_in' 					=> $data['check_in'],
+						'check_out' 				=> $data['check_out'],
+						'amount' 					=> $data['amount'],
+						'special_notice'			=> $data['special_notice'], 
+						'usertype' 					=> $data['usertype'],
+						'paymentmethod_name' 		=> $data['paymentmethod_name'],
+						'stripe_paymentintent_id' 	=> $data['stripe_paymentintent_id'],
+						'paymentid' 				=> $data['paymentid'],
+						'created_at' 				=> $data['created_at'],
+						'status' 					=> $data['status'],
+						'eventname' 				=> $data['eventname'],
+						'barn'   					=> $data['barnstall'],
+						'rvstall' 					=> ($data['rvbarnstall']!='') ? $data['rvbarnstall']: [],
+						'feed' 						=> ($data['feed']!='') ? $data['feed']: [],
+						'shaving' 					=> ($data['shaving']!='') ? $data['shaving']: [],
 					];
 				}
 				$json = ['1', count($result).' Record Found.', $result];		 
@@ -286,5 +288,9 @@ class Index extends BaseController
 		]);
 
 		die;
+    }
+
+    public function updatedstall(){
+
     }
 }
