@@ -145,7 +145,7 @@ class Stripe extends BaseModel
 		}
 		
 		$customer 				= $this->customer($userid, $name, $email, $stripecustomerid);
-		$interval				= 'day';
+		$interval				= 'month';
 		$attachcard				= 1;
 		
 		for($i=0; $i<2; $i++){
@@ -501,8 +501,7 @@ class Stripe extends BaseModel
 			$data = $stripe->prices->create([
 				'unit_amount' => $amount,
 				'currency' => getStripeCurrency(),
-				//'recurring' => ['interval' => $planinterval],
-				'recurring' => ['interval' => 'day'],
+				'recurring' => ['interval' => $planinterval],
 				'product' => $productid
 			]);
 			
