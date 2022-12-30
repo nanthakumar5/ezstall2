@@ -90,7 +90,8 @@ $routes->group('api', function ($routes) {
     //Current Reservation
     $routes->post('list', 'Api\Myaccount\Currentreservation\Index::index');
     $routes->post('view', 'Api\Myaccount\Currentreservation\Index::view');
-    $routes->post('paidunpaid', 'Api\Myaccount\Currentreservation\Index::paidunpaid');
+    $routes->post('paidunpaid', 'Api\Myaccount\Currentreservation\Index::paidunpaid'); 
+    $routes->post('striperefunds', 'Api\Myaccount\Currentreservation\Index::striperefunds');
     $routes->post('cancelsubscription', 'Api\Myaccount\Currentreservation\Index::cancelsubscription');
 
     //Past Reservation
@@ -122,7 +123,8 @@ $routes->group('api', function ($routes) {
     //Checkout
     $routes->post('checkout', 'Api\Checkout\Index::index'); 
     $routes->post('checkout/action', 'Api\Checkout\Index::action'); 
-    $routes->post('stripepayment', 'Api\Stripe\Index::stripepayment'); 
+    $routes->post('stripepayment', 'Api\Stripe\Index::stripepayment');
+    $routes->post('stripesecretkey', 'Api\Checkout\Index::stripesecretkey'); 
 
 	//Homepage
 	$routes->get('faq', 'Api\Faq\Index::index');
