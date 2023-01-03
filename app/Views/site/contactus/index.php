@@ -21,20 +21,20 @@
 					<form method="post" action="" id="form" autocomplete="off">
 						<div class="mb-4 col-md-8">
 							<label class="form-label">Enter Name</label>
-							<input type="text" name="name" class="form-control col-md-12 contact-input" placeholder="Enter name"/>
+							<input type="text" name="name" class="form-control col-md-12 contact-input contact_frm" placeholder="Enter name"/>
 						</div>
 						<div class="mb-4 col-md-8">
 							<label class="form-label">Enter Email</label>
-							<input type="email" name="email" class="form-control col-md-4 contact-input" placeholder="Enter Email"/>
+							<input type="email" name="email" class="form-control col-md-4 contact-input contact_frm" placeholder="Enter Email"/>
 						</div>
 						<div class="mb-4 col-md-8">
 							<label class="form-label">Enter Subject</label>
-							<input	type="text" name="subject" class="form-control col-md-4 contact-input" placeholder="Enter Subject"
+							<input	type="text" name="subject" class="form-control col-md-4 contact-input contact_frm" placeholder="Enter Subject"
 							/>
 						</div>
 						<div class="mb-4 col-md-8">
 							<label class="form-label">Your Message</label>
-							<textarea name="message" class="form-control col-md-4 contact-input" placeholder="Enter message here"></textarea>
+							<textarea name="message" class="form-control col-md-4 contact-input contact_frm" placeholder="Enter message here"></textarea>
 						</div>
 						<div class="mb-4 col-md-8">
 							<button type="submit" class="contact-submit form-control">Send</button>
