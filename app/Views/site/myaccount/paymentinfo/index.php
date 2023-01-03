@@ -28,7 +28,7 @@
 	</div>
 	<div class="col-md-2">
 	<div>
-	<p class="mb-0 text-sm fs-7 fw-600">Amout:</p>
+	<p class="mb-0 text-sm fs-7 fw-600">Amount:</p>
 	<p class="mb-0 fs-7"><?php echo $currencysymbol.($data['status']=='1' ? ($currentusertype=='5' ? $data['amount'] : $data['amount']-$data['transaction_fee']) : $data['refund_amount']);?></p>
 	</div>
 	</div>

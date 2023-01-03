@@ -8,7 +8,7 @@
 				<input type="text" name="name"class="form-control"  id="username" value="<?php echo $userdetail['name']; ?>">
 			</div>
 			<div class="mb-3">
-				<label class="form-label fw-bold form-label mb-1" id="useremail_lbl" >Email address</label>
+				<label class="form-label fw-bold form-label mb-1" id="useremail_lbl" >Email Address</label>
 				<input type="email" name="email" class="form-control"  id="useremail" value="<?php echo $userdetail['email']; ?>">
 			</div>
 			<div class="mb-3">

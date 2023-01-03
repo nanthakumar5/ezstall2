@@ -217,7 +217,7 @@
 							</div>
 							<div class="col-md-9">
 								<h2><?php echo $countcurrentrvlots;?></h2>
-								<p>Total no of. Rv Lots</p>
+								<p>Total no of. RV Lots</p>
 							</div>
 						</div>
 					</div>
@@ -383,7 +383,7 @@
 							</div>
 							<div class="col-md-9">
 								<h2>$<?php echo $countpastamount ?></h2>
-								<p>Total Payed</p>
+								<p>Total Paid</p>
 							</div>
 						</div>
 					</div>

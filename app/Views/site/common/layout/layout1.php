@@ -158,9 +158,6 @@
 						<li>
 							<a href="<?php echo base_url() ?>/aboutus">About</a>
 						</li>
-						<li>
-							<a href="<?php echo base_url() ?>/contactus">Contact Us</a>
-						</li>
 					</ul>
 				</div>
 				<div class="panel3">

@@ -40,7 +40,7 @@ table tr td {
 	        	$outgoing = getBooking(['eventid' => $result['id'],'check_out'=> $startdate]);
      		?>
 		        <div>       	
-					<h4 class="sub_heading">Arriving (<?php echo date("m-d-y", strtotime($startdate));?>)</h4>
+					<h4 class="sub_heading">Arrival Report (<?php echo date("m-d-y", strtotime($startdate));?>)</h4>
 					<table>
 					  <thead>
 							<tr>
@@ -87,7 +87,7 @@ table tr td {
 									</tr>
 								<?php } ?>
 							<?php }else{ ?>
-								<tr><td colspan="3">No Arriving on <?php echo date("m-d-y", strtotime($startdate));?></td></tr>
+								<tr><td colspan="3">No Arrival Report on <?php echo date("m-d-y", strtotime($startdate));?></td></tr>
 							<?php } ?>
 					  </tbody>
 					</table>

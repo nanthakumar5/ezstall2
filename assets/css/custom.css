@@ -563,6 +563,8 @@ div#usercommentlist::before {
     font-size: 10px;
     display: block;
 }
+
+
 .pricelist .btn-success.price_button {
     background-color: #3c3c3c;
     border: none;

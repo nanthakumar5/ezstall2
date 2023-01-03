@@ -125,21 +125,21 @@
 
 	<section class="howItWorks">
 		<div class="contentPanel">
-			<h1 class="howitworkTitle">How it works</h1>
+			<h1 class="howitworkTitle">How It Works</h1>
 			<p class="hiwmainContent colorGrey">
 				We are developing a community of facilities and horse owners to build a network to house equine athletes on the road.
 			</p>
 			<span class="hiwContent colorGrey">
 				<img src="<?php echo base_url();?>/assets/site/img/download1.png" />
-				Sign Up. Join in as either a horse owner or a facility. With us, if you need a stall you are a horse owner, if you have a stall that needs a horse in it you are a facility.
+				<b class="sgn_up">Sign Up.</b> Join in as either a horse owner or a facility. With us, if you need a stall you are a horse owner, if you have a stall that needs a horse in it you are a facility.
 			</span>
 			<span class="hiwContent colorGrey">
 				<img src="<?php echo base_url();?>/assets/site/img/download2.png" />
-				Search. Find where you are headed next, if this is an EZ Stall facility or event find the stall you want and reserve it. If not we’ll find the closest EZ Stall facility near you.
+				<b class="sig_up">Search.</b> Find where you are headed next, if this is an EZ Stall facility or event find the stall you want and reserve it. If not we’ll find the closest EZ Stall facility near you.
 			</span>
 			<span class="hiwContent colorGrey">
 				<img src="<?php echo base_url();?>/assets/site/img/download3.png" />
-				Rest and Relax. Enjoy the drive to your destination. Your stall will be waiting for you and your horse to arrive.
+				<b class="rest_rel">Rest and Relax.</b> Enjoy the drive to your destination. Your stall will be waiting for you and your horse to arrive.
 			</span>
 		</div>
 		<div class="imagePanel colorGrey">

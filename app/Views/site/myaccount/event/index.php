@@ -9,7 +9,9 @@ $currentdate 	= date("Y-m-d");
 <h2 class="fw-bold mb-4 mt-2">Events</h2>
 <section class="maxWidth eventPagePanel mt-2">
 	<?php if($usertype !='4'){ ?>
-		<a class="btn-custom-black addevent" href="<?php echo base_url().'/myaccount/events/add'; ?>">Add Event</a>
+		<?php if($usertype !='2'){ ?>
+			<a class="btn-custom-black addevent" href="<?php echo base_url().'/myaccount/events/add'; ?>">Add Event</a>
+		<?php } ?>
 		<?php if($usertype =='2'){ ?>
 			<a class="btn-custom-black addevent" href="<?php echo base_url().'/myaccount/facilityevents/add'; ?>">Add Facility Event</a>
 		<?php } ?>
