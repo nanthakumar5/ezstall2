@@ -26,7 +26,7 @@
 			<?php if(isset($stripeaccountid) && $stripeaccountid!=''){ ?>
 				<a href="javascript:void(0);" class="btn btn-primary mt-1">Connected</a>
 			<?php }else{ ?>
-				<a href="<?php echo base_url('myaccount/stripeconnect'); ?>" class="btn btn-primary mt-1">Connect with stripe</a>
+				<a href="<?php echo base_url('myaccount/stripeconnect'); ?>" class="btn btn-primary mt-1">Connect with Stripe</a>
 			<?php } ?>
 		</div>
 	<?php } ?>
