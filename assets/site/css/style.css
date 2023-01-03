@@ -5885,3 +5885,50 @@ div#calendar .fc-button-group button {
 .ques-model button {
     border: none;
 }
+
+/*02.01.2023*/
+.maxWidth .row.mx-auto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+}
+.maxWidth .row .form-control {
+    width: 507px;
+}
+
+.maxWidth .row .p-0.col-md-4 {
+    border: 2px solid #ced4da;
+    padding: 24px 16px !important;
+    border-radius: 20px;
+    width: 543px;
+}
+.maxWidth .row p.h2.fw-bold.mb-4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.maxWidth .form-label {
+    font-size: 17px;
+    font-weight: 600;
+}
+.maxWidt.row .form-control ::placeholder {
+    font-size: 14px;
+    font-weight: 400;
+}
+.howItWorks .hiwContent  b.rest_rel {
+    width: 31%;
+    word-break: break-word;
+}
+.howItWorks .hiwContent  b.sig_up {
+    width: 54%;
+    display: flex;
+    justify-content: unset;
+    align-items: center;
+    margin-top: 9px;
+}
+.howItWorks .contentPanel b.sgn_up {
+    width: 52%;
+}
+
+/*02.01.2023*/
