@@ -186,4 +186,28 @@ class Index extends BaseController
         ]);
         die();
 	}
+
+	public function commentsaction()
+    {  	
+		if ($this->request->getMethod()=='post'){
+
+			$requestData 	= $this->request->getPost();
+        	$result 		= $this->comments->action($requestData);
+
+        	if($result){
+        	    $json = ['1','Your Comment Submitted Successfully', []];
+        	}else {
+        	    $json = ['0','Try Again', []];; 
+			}
+		} else {
+    	    $json = ['0','Try Again', []];; 
+		}
+		echo json_encode([
+            'status'      => $json[0],
+            'message'     => $json[1],
+            'result'     => $json[2],
+        ]);
+
+        die;
+    }
 }

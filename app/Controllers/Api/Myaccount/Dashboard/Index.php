@@ -39,16 +39,15 @@ class Index extends BaseController
 
             $result = $this->users->getUsers('row', ['users'], ['id' => $post['user_id'],'status' => ['1']]);
             if($result){
-				
-		$countcurrentstall 			= 0;
-      	$countcurrentbookingstalls 	= 0;
-      	$countcurrentbookingrvlots 	= 0;
-      	$countpastevent 			= [];
-      	$countpaststall 			= 0;
-      	$countpastamount 			= 0;
-      	$countpayedamount			= 0;
-      	$countcurrentrvlots 		= 0;
-      	$countcurrentevent  		= [];
+				$countcurrentstall 			= 0;
+		      	$countcurrentbookingstalls 	= 0;
+		      	$countcurrentbookingrvlots 	= 0;
+		      	$countpastevent 			= [];
+		      	$countpaststall 			= 0;
+		      	$countpastamount 			= 0;
+		      	$countpayedamount			= 0;
+		      	$countcurrentrvlots 		= 0;
+		      	$countcurrentevent  		= [];
 		
 		$yesterday 	=  date("Y-m-d", strtotime("yesterday")); 
 		$tday 		=  date("Y-m-d", strtotime("today"));

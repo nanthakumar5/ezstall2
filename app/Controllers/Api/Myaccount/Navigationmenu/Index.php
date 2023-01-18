@@ -61,7 +61,7 @@ class Index extends BaseController
 							array('id' => '4','screen' => 'Stall Manager'),
 							array('id' => '5','screen' => 'Operators'),
 					        array('id' => '6','screen' => 'Current Reservation'),
-							array('id' => '7','screen' => 'Past Reservation'),
+							array('id' => '8','screen' => 'Past Reservation'),
 							array('id' => '9','screen' => 'Payments'),
 							array('id' => '10','screen' => 'Transactions'),
 					      );
@@ -72,8 +72,8 @@ class Index extends BaseController
 					        array('id' => '1','screen' => 'Account Information'),
 							array('id' => '2','screen' => 'Event'),
 							array('id' => '3','screen' => 'Facility'),
-					        array('id' => '6','screen' => 'Current Reservation'),
-							array('id' => '7','screen' => 'Past Reservation'),
+					        array('id' => '7','screen' => 'Current Reservation'),
+							array('id' => '8','screen' => 'Past Reservation'),
 							array('id' => '9','screen' => 'Payments'),
 					      );
 					
@@ -81,8 +81,8 @@ class Index extends BaseController
 					
 					$data = array(
 					        array('id' => '1','screen' => 'Account Information'),
-					        array('id' => '6','screen' => 'Current Reservation'),
-							array('id' => '7','screen' => 'Past Reservation'),
+					        array('id' => '7','screen' => 'Current Reservation'),
+							array('id' => '8','screen' => 'Past Reservation'),
 							array('id' => '9','screen' => 'Payments'),
 					      );
 
@@ -90,7 +90,7 @@ class Index extends BaseController
 					
 					$data = array(
 					        array('id' => '1','screen' => 'Account Information'),
-					        array('id' => '6','screen' => 'Current Reservation'),
+					        array('id' => '7','screen' => 'Current Reservation'),
 					      );
 				} 
 				 $type = isset($result['type']) ? $result['type'] : []; 

@@ -15,7 +15,7 @@ class Index extends BaseController
 
     public function index()
     {
-        $post       = $this->request->getPost();  //print_r($post);die;
+        $post       = $this->request->getPost();
         $validation = \Config\Services::validation();
 
         $validation->setRules(
