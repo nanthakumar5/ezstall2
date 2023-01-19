@@ -54,10 +54,10 @@ class Index extends BaseController
 
 
      	$date				= date('Y-m-d');
-    	$userdetail 		= getSiteUserDetails($post['user_id']);
+    	$userdetail 		= getUserDetails($post['user_id']);
     	$usertype 			= $userdetail['type'];
     	$parentid 			= $userdetail['parent_id'];
-		$parentdetails 		= getSiteUserDetails($parentid);
+		$parentdetails 		= getUserDetails($parentid);
 		$parenttype   		= $parentdetails ? $parentdetails['type'] : '';
     	$userid 			= ($usertype=='4' || $usertype=='6') ? $parentdetails['id'] : $userdetail['id'];
 		$allids 			= getStallManagerIDS($userid);

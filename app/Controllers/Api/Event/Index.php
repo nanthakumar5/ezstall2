@@ -20,23 +20,16 @@ class Index extends BaseController
     }
     
     public function listandsearch()
-    { 
-    	$todaydate = date('Y_m_d');
-
-        $searchdata = [];
-        if($this->request->getGet()!=""){
-            if($this->request->getGet('location')!="")   		$searchdata['llocation']    		= $this->request->getGet('location');
-    		if($this->request->getGet('start_date')!="")   	 	$searchdata['btw_start_date']    	= formatdate($this->request->getGet('start_date'));
-    		if($this->request->getGet('end_date')!="")   	 	$searchdata['btw_end_date']    		= formatdate($this->request->getGet('end_date'));
-    		if($this->request->getGet('no_of_stalls')!="")   	$searchdata['no_of_stalls']    		= $this->request->getGet('no_of_stalls');
-        }
+    {
+		$post = $this->request->getPost();
+		$eventcount = $this->event->getEvent('count', ['event'], ['status'=> ['1'], 'type' => '1']);
+		$event = $this->event->getEvent('all', ['event', 'users', 'startingstallprice'], ['status'=> ['1'], 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
 		
-		$eventcount = count($this->event->getEvent('all', ['event', 'users', 'startingstallprice'], $searchdata+['status'=> ['1'], 'type' => '1']));
-		$data = $this->event->getEvent('all', ['event', 'users', 'startingstallprice'], $searchdata+['status'=> ['1'], 'type' => '1'], ['orderby' =>'e.id desc', 'groupby' => 'e.id']);
-		
-		if ($data && count($data) > 0){
+		if ($event && count($event) > 0){
 			$result=[];
-			foreach($data as $datas){  
+			foreach($event as $datas){ 
+				$datas['api'] 		= 'api'; 
+				$datas['userid'] 	= $post['userid']; 
 				$status = checkEvent($datas); 
 				$image = ($datas['image']!='') ? base_url().'/assets/uploads/event/'.$datas['image'] : '';
 				
@@ -61,7 +54,7 @@ class Index extends BaseController
 				];
 			}
 			
-			$json = ['1', count($data).' Record(s) Found', $result];		
+			$json = ['1', count($event).' Record(s) Found', $result];		
 		} else {
 			$json = ['0', 'No Records Found.', []];	
 		}

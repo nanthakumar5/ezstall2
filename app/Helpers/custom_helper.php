@@ -63,11 +63,21 @@ function imagetobase64($url){
 
 function checkEvent($data)
 {
-	$userdetail 	= getSiteUserDetails();
-	$currentdate 	= date("Y-m-d");
-	$userid 		= isset($userdetail['id']) ? $userdetail['id'] : '';
-	$parentid 		= isset($userdetail['parent_id']) ? $userdetail['parent_id'] : '';
-	$usertype 		= isset($userdetail['type']) ? $userdetail['type'] : '';
+	
+	if(isset($data['api'])){
+		$userdetail 	= getUserDetails($data['userid']);
+		$currentdate 	= date("Y-m-d");
+		$userid 		= isset($userdetail['id']) ? $userdetail['id'] : '';
+		$parentid 		= isset($userdetail['parent_id']) ? $userdetail['parent_id'] : '';
+		$usertype 		= isset($userdetail['type']) ? $userdetail['type'] : '';
+	}else{
+		$userdetail 	= getSiteUserDetails();
+		$currentdate 	= date("Y-m-d");
+		$userid 		= isset($userdetail['id']) ? $userdetail['id'] : '';
+		$parentid 		= isset($userdetail['parent_id']) ? $userdetail['parent_id'] : '';
+		$usertype 		= isset($userdetail['type']) ? $userdetail['type'] : '';
+	}
+
 	//$userplanend 	= isset($userdetail['subscriptionenddate']) ? date('Y-m-d', strtotime($userdetail['subscriptionenddate'])) : '';
 	$strstartdate 	= date("Y-m-d", strtotime($data['start_date']));
 	$strenddate 	= date("Y-m-d", strtotime($data['end_date']));
