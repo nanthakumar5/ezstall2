@@ -70,14 +70,15 @@ class Index extends BaseController
 		
     }
     
-    public function detail($id){
-        
-        $userdetail 		= getSiteUserDetails() ? getSiteUserDetails() : [];
-		$userid 			= (isset($userdetail['id'])) ? $userdetail['id'] : 0;
-        $event 				= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users', 'startingstallprice'],['id' => $id, 'type' =>'1']);
+    public function detail(){
+        $requestData = $this->request->getPost();
+		$userid 			= (isset($requestData['userid'])) ? $requestData['userid'] : 0;
 
-		$data['bookings'] 	= $this->booking->getBooking('row', ['booking', 'event'],['user_id' => $userid, 'eventid' => $id,'status'=> ['1']]);
-		$data['comments'] 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $id,'status'=> ['1']]);
+        $event 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users', 'startingstallprice'],['id' => $requestData['id'], 'type' =>'1']);
+
+		$data['bookings'] 	= $this->booking->getBooking('row', ['booking', 'event'],['user_id' => $userid, 'eventid' => $requestData['id'],'status'=> ['1']]);
+		
+		$data['comments'] 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $requestData['id'],'status'=> ['1']]);
 		
 		if ($data && count($data) > 0){
 			$data['event'] =[
@@ -163,8 +164,10 @@ class Index extends BaseController
 		$eventid 	= $post['eventid'];
 		$checkin 	= formatdate($post['checkin']);
 		$checkout   = formatdate($post['checkout']); 
-		$result['occupied']  	= getOccupied($eventid, ['checkin' => $checkin, 'checkout' => $checkout]);
-		$result['reserved'] 	= getReserved($eventid,['checkin' => $checkin, 'checkout' => $checkout]);
+		$result['occupied']  		= getOccupied($eventid, ['checkin' => $checkin, 'checkout' => $checkout]);
+		$result['reserved'] 		= getReserved($eventid,['checkin' => $checkin, 'checkout' => $checkout]);
+		$result['blockunblock1'] 	= getBlockunblock($eventid);
+		$result['blockunblock2']	= getBlockunblock($eventid, ['checkin' => $checkin, 'checkout' => $checkout, 'type' => 2]);
 
 		if(count($result)>0){
 			$json = ['1', count($result) . ' Record(s) Found', $result];
