@@ -4,6 +4,7 @@ namespace App\Controllers\Api\Myaccount\AccountInfo;
 
 use App\Controllers\BaseController;
 use App\Models\Users;
+use App\Models\Stripe;
 
 class Index extends BaseController
 {
@@ -11,6 +12,7 @@ class Index extends BaseController
 	public function __construct()
     {
 		$this->users = new Users();	
+		$this->stripe = new Stripe();	
     }
 
     public function index()
@@ -105,4 +107,34 @@ class Index extends BaseController
 		die;
 
     }
+
+    public function stripeconnect()
+	{	
+		$post 			= $this->request->getPost();
+		$url 			= base_url().'/myaccount/account';
+		$userdetail 	= getUserDetails($post['user_id']);
+		
+		$stripeconnect 	= $this->stripe->createAccount();
+		if($stripeconnect){
+			$this->users->action(['actionid' => $userdetail['id'], 'userid' => $userdetail['id'], 'stripe_account_id' => $stripeconnect['id']]); 
+			
+			$accountlink = $this->stripe->createAccountLink($stripeconnect['id'], $url, $url);
+			if($accountlink){
+				$json = ['1','Connected Stripe.', $accountlink['url']];
+				//return redirect()->to($accountlink['url']); 
+			}else{
+				$json = ['0', 'Try again Later.', []];		 
+			}
+		}else{
+			$json = ['0', 'Try again Later.', []];		
+		}
+
+		echo json_encode([
+			'status' => $json[0],
+			'message' => $json[1],
+			'result' => $json[2],
+		]);
+
+		die;
+	}
 }
