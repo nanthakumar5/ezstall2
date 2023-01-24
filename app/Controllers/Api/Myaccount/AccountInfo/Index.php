@@ -111,7 +111,7 @@ class Index extends BaseController
     public function stripeconnect()
 	{	
 		$post 			= $this->request->getPost();
-		$url 			= base_url().'/myaccount/account';
+		$url 			= base_url().'/api/stripeconnect'; //print_r($url);die;
 		$userdetail 	= getUserDetails($post['user_id']);
 		
 		$stripeconnect 	= $this->stripe->createAccount();
