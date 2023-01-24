@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Booking;
 use App\Models\Comments;
 use App\Models\Cart;
+use App\Models\Bookingdetails;
 
 class Index extends BaseController
 {
@@ -17,6 +18,7 @@ class Index extends BaseController
 		$this->comments         = new Comments();
 		$this->booking 	        = new Booking();
 		$this->cart 	        = new Cart();
+		$this->bookingdetails 	= new Bookingdetails();
     }
     
     public function listandsearch()
@@ -70,54 +72,6 @@ class Index extends BaseController
 		
     }
     
-    public function detail(){
-        $requestData = $this->request->getPost();
-		$userid 			= (isset($requestData['userid'])) ? $requestData['userid'] : 0;
-
-        $event 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users', 'startingstallprice'],['id' => $requestData['id'], 'type' =>'1']);
-
-		$data['bookings'] 	= $this->booking->getBooking('row', ['booking', 'event'],['user_id' => $userid, 'eventid' => $requestData['id'],'status'=> ['1']]);
-		
-		$data['comments'] 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $requestData['id'],'status'=> ['1']]);
-		
-		if ($data && count($data) > 0){
-			$data['event'] =[
-				'id' 					=> $event['id'], 
-				'user_id'				=> $event['user_id'], 
-				'name' 					=> $event['name'], 
-				'description' 			=> $event['description'], 
-				'location' 				=> $event['location'], 
-				'mobile' 				=> $event['mobile'], 
-				'startingstallprice' 	=> $event['startingstallprice'], 
-				'start_date'        	=> formatdate($event['start_date'],1),
-				'end_date'          	=> formatdate($event['end_date'],1),
-				'start_time' 			=> $event['start_time'], 
-				'end_time' 				=> $event['end_time'],
-				'image' 				=> ($event['image']!='' ? base_url().'/assets/uploads/event/'.$event['image'] : ''),
-				'stallmap' 				=> ($event['stallmap']!='' ? $event['profile_image']: ''),
-				'barn' 					=> $event['barn'],
-				'rvbarn' 				=> $event['rvbarn'],
-				'feed' 					=> $event['feed'],
-				'shaving' 				=> $event['shaving']
-
-			];
-
-			$result[] = $data;
-
-			$json = ['1', count($data).' Record(s) Found', $result];		
-		} else {
-			$json = ['0', 'No Records Found.', []];	
-		}
-		
-      
-        echo json_encode([
-            'status'      => $json[0],
-            'message'     => $json[1],
-            'result'     => $json[2],
-        ]);
-
-        die;
-    }
     
 	
 	public function viewallevents(){ 
@@ -206,4 +160,89 @@ class Index extends BaseController
 
         die;
     }
+
+    public function updatereservation()
+	{  
+		$requestData = $this->request->getPost();
+		if (isset($requestData['updatereservation'])){
+			$updatereservation = json_decode($requestData['updatereservation'], true);
+			
+			foreach($updatereservation as $key => $value){
+				$result = $this->bookingdetails->updatestall(['id' => $key, 'stallid' => $value]);
+			}
+			if($result){
+        	    $json = ['1','Your Stall is Updated Successfully', []];
+        	}else {
+        	    $json = ['0','Try Again', []];; 
+			}
+			echo json_encode([
+            'status'      => $json[0],
+            'message'     => $json[1],
+            'result'     => $json[2],
+	        ]);
+
+	        die;
+		}
+
+		$this->detail();
+	}
+
+	public function detail(){
+        $requestData = $this->request->getPost();
+		$userid 			= (isset($requestData['userid'])) ? $requestData['userid'] : 0;
+
+		if($requestData['bookingid']!=''){
+			$data['booked'] = $this->booking->getBooking('row', ['booking', 'barnstall', 'rvbarnstall'], ['id' => $requestData['bookingid'], 'eventid' => $requestData['id'], 'status'=> ['1']]);
+			if(!$data['booked']){
+				$json = ['0', 'No Records Found.', []];	
+			}
+		}
+
+        $event 		= $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users', 'startingstallprice'],['id' => $requestData['id'], 'type' =>'1']);
+
+		$data['bookings'] 	= $this->booking->getBooking('row', ['booking', 'event'],['user_id' => $userid, 'eventid' => $requestData['id'],'status'=> ['1']]);
+		
+		$data['comments'] 	= $this->comments->getComments('all', ['comments','users','replycomments'],['commentid' => '0', 'eventid' => $requestData['id'],'status'=> ['1']]);
+		
+		if ($data && count($data) > 0){
+			$data['event'] =[
+				'id' 					=> $event['id'], 
+				'user_id'				=> $event['user_id'], 
+				'name' 					=> $event['name'], 
+				'description' 			=> $event['description'], 
+				'location' 				=> $event['location'], 
+				'mobile' 				=> $event['mobile'], 
+				'startingstallprice' 	=> $event['startingstallprice'], 
+				'start_date'        	=> formatdate($event['start_date'],1),
+				'end_date'          	=> formatdate($event['end_date'],1),
+				'start_time' 			=> $event['start_time'], 
+				'end_time' 				=> $event['end_time'],
+				'image' 				=> ($event['image']!='' ? base_url().'/assets/uploads/event/'.$event['image'] : ''),
+				'stallmap' 				=> ($event['stallmap']!='' ? $event['profile_image']: ''),
+				'barn' 					=> $event['barn'],
+				'rvbarn' 				=> $event['rvbarn'],
+				'feed' 					=> $event['feed'],
+				'shaving' 				=> $event['shaving']
+
+			];
+
+			$result[] = $data;
+
+			$json = ['1', count($data).' Record(s) Found', $result];		
+		} else {
+			$json = ['0', 'No Records Found.', []];	
+		}
+		
+      
+        echo json_encode([
+            'status'      => $json[0],
+            'message'     => $json[1],
+            'result'     => $json[2],
+        ]);
+
+        die;
+    }
+
 }
+
+

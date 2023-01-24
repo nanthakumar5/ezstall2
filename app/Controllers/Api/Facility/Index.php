@@ -63,11 +63,44 @@ class Index extends BaseController
         die;
 		
     }
-    
-    public function detail($id)
+
+    public function updatereservation()
+	{  
+		$requestData = $this->request->getPost();
+		if (isset($requestData['updatereservation'])){
+			$updatereservation = json_decode($requestData['updatereservation'], true);
+			
+			foreach($updatereservation as $key => $value){
+				$result = $this->bookingdetails->updatestall(['id' => $key, 'stallid' => $value]);
+			}
+			if($result){
+        	    $json = ['1','Your Stall is Updated Successfully', []];
+        	}else {
+        	    $json = ['0','Try Again', []];; 
+			}
+			echo json_encode([
+            'status'      => $json[0],
+            'message'     => $json[1],
+            'result'     => $json[2],
+	        ]);
+
+	        die;
+		}
+
+		$this->detail();
+	}
+
+	public function detail()
     {
+    	$requestData = $this->request->getPost();
+		if($requestData['bookingid']!=''){
+			$result['booked'] = $this->booking->getBooking('row', ['booking', 'barnstall', 'rvbarnstall'], ['id' => $requestData['bookingid'], 'eventid' => $requestData['id'], 'status'=> ['1']]);
+			if(!$result['booked']){
+				$json = ['0', 'No Records Found.', []];	
+			}
+		}
 		
-		$data = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users', 'startingstallprice'],['id' => $id, 'type' =>'2']);
+		$event = $this->event->getEvent('row', ['event', 'barn', 'stall', 'rvbarn', 'rvstall', 'feed', 'shaving', 'users'],['id' => $requestData['id'], 'type' =>'2']);
 
 		if ($data && count($data) > 0){
 			$result =[];
